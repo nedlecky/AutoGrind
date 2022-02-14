@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("Auto-Grind")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Olymnpus Controls")]
+[assembly: AssemblyCompany("Olympus Controls")]
 [assembly: AssemblyProduct("Auto-Grind")]
 [assembly: AssemblyCopyright("Copyright © 2022")]
 [assembly: AssemblyTrademark("")]

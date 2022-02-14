@@ -34,5 +34,23 @@ namespace Auto_Grind
             this.Text = caption;
 
         }
+
+        private void GrindBtn_Click(object sender, EventArgs e)
+        {
+            OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
+
+        }
+
+        private void EditBtn_Click(object sender, EventArgs e)
+        {
+            OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
+
+        }
+
+        private void SetupBtn_Click(object sender, EventArgs e)
+        {
+            OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
+
+        }
     }
 }
