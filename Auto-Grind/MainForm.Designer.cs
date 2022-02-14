@@ -35,7 +35,12 @@
             this.GrindTab = new System.Windows.Forms.TabPage();
             this.EditTab = new System.Windows.Forms.TabPage();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.LogsTab = new System.Windows.Forms.TabPage();
+            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
+            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
             this.OperationTab.SuspendLayout();
+            this.LogsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -73,10 +78,11 @@
             this.OperationTab.Controls.Add(this.GrindTab);
             this.OperationTab.Controls.Add(this.EditTab);
             this.OperationTab.Controls.Add(this.SetupTab);
+            this.OperationTab.Controls.Add(this.LogsTab);
             this.OperationTab.Location = new System.Drawing.Point(186, 29);
             this.OperationTab.Name = "OperationTab";
             this.OperationTab.SelectedIndex = 0;
-            this.OperationTab.Size = new System.Drawing.Size(586, 355);
+            this.OperationTab.Size = new System.Drawing.Size(720, 549);
             this.OperationTab.TabIndex = 3;
             // 
             // GrindTab
@@ -84,7 +90,7 @@
             this.GrindTab.Location = new System.Drawing.Point(4, 25);
             this.GrindTab.Name = "GrindTab";
             this.GrindTab.Padding = new System.Windows.Forms.Padding(3);
-            this.GrindTab.Size = new System.Drawing.Size(578, 326);
+            this.GrindTab.Size = new System.Drawing.Size(712, 520);
             this.GrindTab.TabIndex = 0;
             this.GrindTab.Text = "Grind";
             this.GrindTab.UseVisualStyleBackColor = true;
@@ -94,7 +100,7 @@
             this.EditTab.Location = new System.Drawing.Point(4, 25);
             this.EditTab.Name = "EditTab";
             this.EditTab.Padding = new System.Windows.Forms.Padding(3);
-            this.EditTab.Size = new System.Drawing.Size(578, 326);
+            this.EditTab.Size = new System.Drawing.Size(712, 520);
             this.EditTab.TabIndex = 1;
             this.EditTab.Text = "Edit";
             this.EditTab.UseVisualStyleBackColor = true;
@@ -103,16 +109,52 @@
             // 
             this.SetupTab.Location = new System.Drawing.Point(4, 25);
             this.SetupTab.Name = "SetupTab";
-            this.SetupTab.Size = new System.Drawing.Size(578, 326);
+            this.SetupTab.Size = new System.Drawing.Size(712, 520);
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
+            // 
+            // LogsTab
+            // 
+            this.LogsTab.Controls.Add(this.richTextBox2);
+            this.LogsTab.Controls.Add(this.richTextBox1);
+            this.LogsTab.Location = new System.Drawing.Point(4, 25);
+            this.LogsTab.Name = "LogsTab";
+            this.LogsTab.Size = new System.Drawing.Size(712, 520);
+            this.LogsTab.TabIndex = 3;
+            this.LogsTab.Text = "Logs";
+            this.LogsTab.UseVisualStyleBackColor = true;
+            // 
+            // richTextBox1
+            // 
+            this.richTextBox1.Location = new System.Drawing.Point(39, 45);
+            this.richTextBox1.Name = "richTextBox1";
+            this.richTextBox1.Size = new System.Drawing.Size(619, 209);
+            this.richTextBox1.TabIndex = 0;
+            this.richTextBox1.Text = "";
+            // 
+            // richTextBox2
+            // 
+            this.richTextBox2.Location = new System.Drawing.Point(34, 284);
+            this.richTextBox2.Name = "richTextBox2";
+            this.richTextBox2.Size = new System.Drawing.Size(619, 209);
+            this.richTextBox2.TabIndex = 1;
+            this.richTextBox2.Text = "";
+            // 
+            // richTextBox3
+            // 
+            this.richTextBox3.Location = new System.Drawing.Point(190, 584);
+            this.richTextBox3.Name = "richTextBox3";
+            this.richTextBox3.Size = new System.Drawing.Size(712, 122);
+            this.richTextBox3.TabIndex = 4;
+            this.richTextBox3.Text = "";
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1072, 487);
+            this.ClientSize = new System.Drawing.Size(927, 720);
+            this.Controls.Add(this.richTextBox3);
             this.Controls.Add(this.OperationTab);
             this.Controls.Add(this.SetupBtn);
             this.Controls.Add(this.EditBtn);
@@ -122,6 +164,7 @@
             this.Text = "The Code Sets This Caption";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.OperationTab.ResumeLayout(false);
+            this.LogsTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -135,6 +178,10 @@
         private System.Windows.Forms.TabPage GrindTab;
         private System.Windows.Forms.TabPage EditTab;
         private System.Windows.Forms.TabPage SetupTab;
+        private System.Windows.Forms.TabPage LogsTab;
+        private System.Windows.Forms.RichTextBox richTextBox2;
+        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox richTextBox3;
     }
 }
 
