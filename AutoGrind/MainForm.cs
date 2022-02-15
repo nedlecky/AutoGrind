@@ -27,6 +27,15 @@ namespace AutoGrind
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
         static SplashForm splashForm;
+        private enum RunState
+        {
+            INIT,
+            IDLE,
+            READY,
+            RUNNING,
+            PAUSED
+        }
+        RunState runState = RunState.INIT;
 
         public MainForm()
         {
@@ -67,8 +76,12 @@ namespace AutoGrind
             HeartbeatTmr.Enabled = true;
             StartupTmr.Interval = 1000;
             StartupTmr.Enabled = true;
+
+            SetRecipeState(RecipeState.NEW);
+            SetState(RunState.IDLE);
+            GrindBtn_Click(null, null);
         }
-        
+
         bool forceClose = false;
         private void CloseTmr_Tick(object sender, EventArgs e)
         {
@@ -119,30 +132,26 @@ namespace AutoGrind
                     }
                 }
                 */
+                if (RecipeRTB.Modified)
+                {
+                    var result = MessageBox.Show("Current recipe has been modified. Save changes?",
+                        "AutoGrind Confirmation",
+                        MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                        SaveRecipeBtn_Click(null, null);
+                    else if (result == DialogResult.Cancel)
+                    {
+                        e.Cancel = true;
+                        return;
+                    }
+                }
 
                 CloseTmr.Interval = 500;
                 CloseTmr.Enabled = true;
                 e.Cancel = true; // Cancel this shutdown- we'll let the close out timer shut us down
                 log.Info("Shutting down in 500mS...");
             }
-        }
-
-        private void GrindBtn_Click(object sender, EventArgs e)
-        {
-            OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
-
-        }
-
-        private void EditBtn_Click(object sender, EventArgs e)
-        {
-            OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
-
-        }
-
-        private void SetupBtn_Click(object sender, EventArgs e)
-        {
-            OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
-
         }
 
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
@@ -164,6 +173,137 @@ namespace AutoGrind
         }
 
         // ========================
+        // START MAIN UI BUTTONS
+        // ========================
+
+        private void SetState(RunState s, bool fEditing=false)
+        {
+            if (runState != s)
+            {
+                runState = s;
+                log.Info("SetState({0})", s.ToString());
+
+                EnableDisableButtons(fEditing);
+            }
+        }
+
+        private void EnableDisableButtons(bool fEditing)
+        {
+            switch (runState)
+            {
+                case RunState.IDLE:
+                    GrindBtn.Enabled = true;
+                    EditBtn.Enabled = true;
+                    SetupBtn.Enabled = true;
+                    LoadBtn.Enabled = true;
+                    StartBtn.Enabled = false;
+                    PauseBtn.Enabled = false;
+                    ContinueBtn.Enabled = false;
+                    StopBtn.Enabled = false;
+                    break;
+                case RunState.READY:
+                    GrindBtn.Enabled = true;
+                    EditBtn.Enabled = true;
+                    SetupBtn.Enabled = true;
+                    LoadBtn.Enabled = true;
+                    StartBtn.Enabled = true;
+                    PauseBtn.Enabled = false;
+                    ContinueBtn.Enabled = false;
+                    StopBtn.Enabled = false;
+                    break;
+                case RunState.RUNNING:
+                    GrindBtn.Enabled = false;
+                    EditBtn.Enabled = false;
+                    SetupBtn.Enabled = false;
+                    LoadBtn.Enabled = false;
+                    StartBtn.Enabled = false;
+                    PauseBtn.Enabled = true;
+                    ContinueBtn.Enabled = false;
+                    StopBtn.Enabled = true;
+                    break;
+                case RunState.PAUSED:
+                    GrindBtn.Enabled = false;
+                    EditBtn.Enabled = false;
+                    SetupBtn.Enabled = false;
+                    LoadBtn.Enabled = false;
+                    StartBtn.Enabled = false;
+                    PauseBtn.Enabled = false;
+                    ContinueBtn.Enabled = true;
+                    StopBtn.Enabled = true;
+                    break;
+            }
+
+            // Set the colors
+            if (fEditing)
+            {
+                GrindBtn.BackColor = GrindBtn.Enabled ? Color.LightGreen : Color.Gray;
+                EditBtn.BackColor = EditBtn.Enabled ? Color.Green : Color.Gray;
+            }
+            else
+            {
+                GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
+                EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
+            }
+            SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
+
+            LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
+            StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
+            PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
+            ContinueBtn.BackColor = ContinueBtn.Enabled ? Color.Green : Color.Gray;
+            StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
+        }
+
+        private void GrindBtn_Click(object sender, EventArgs e)
+        {
+            //SetState(RunState.IDLE);
+            OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
+            GrindBtn.BackColor = Color.Green;
+            EditBtn.BackColor = Color.LightGreen;
+            SetupBtn.BackColor = Color.LightGreen;
+        }
+
+        private void EditBtn_Click(object sender, EventArgs e)
+        {
+            //SetState(RunState.IDLE);
+            OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
+            GrindBtn.BackColor = Color.LightGreen;
+            EditBtn.BackColor = Color.Green;
+            SetupBtn.BackColor = Color.LightGreen;
+        }
+
+        private void SetupBtn_Click(object sender, EventArgs e)
+        {
+            //SetState(RunState.IDLE);
+            OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
+            GrindBtn.BackColor = Color.LightGreen;
+            EditBtn.BackColor = Color.LightGreen;
+            SetupBtn.BackColor = Color.Green;
+        }
+        private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
+        // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
+        {
+            log.Info("Selecting {0}", e.TabPage.Text);
+            switch(e.TabPage.Text)
+            {
+                case "Grind":
+                    GrindBtn_Click(null, null);
+                    break;
+                case "Edit":
+                    EditBtn_Click(null, null);
+                    break;
+                case "Setup":
+                    SetupBtn_Click(null, null);
+                    break;
+            }
+
+        }
+
+        // ========================
+        // START MAIN UI BUTTONS
+        // ========================
+
+
+        // ========================
         // START GRIND
         // ========================
         private void LoadBtn_Click(object sender, EventArgs e)
@@ -172,24 +312,29 @@ namespace AutoGrind
             LoadRecipeBtn_Click(null, null);
         }
 
+
         private void StartBtn_Click(object sender, EventArgs e)
         {
             log.Info("StartBtn_Click(...)");
+            SetState(RunState.RUNNING);
         }
 
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn_Click(...)");
+            SetState(RunState.PAUSED);
         }
 
         private void ContinueBtn_Click(object sender, EventArgs e)
         {
             log.Info("ContinueBtn_Click(...)");
+            SetState(RunState.RUNNING);
         }
 
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
+            SetState(RunState.READY);
         }
         // ========================
         // END GRIND
@@ -198,6 +343,49 @@ namespace AutoGrind
         // ========================
         // START EDIT
         // ========================
+        private enum RecipeState
+        {
+            INIT,
+            NEW,
+            LOADED,
+            MODIFIED
+        }
+        RecipeState recipeState = RecipeState.INIT;
+        private void SetRecipeState(RecipeState s)
+        {
+            if (recipeState != s)
+            {
+                recipeState = s;
+                log.Info("SetRecipeState({0})", s.ToString());
+
+                switch (recipeState)
+                {
+                    case RecipeState.NEW:
+                        NewRecipeBtn.Enabled = false;
+                        LoadRecipeBtn.Enabled = true;
+                        SaveRecipeBtn.Enabled = false;
+                        SaveAsRecipeBtn.Enabled = true;
+                        break;
+                    case RecipeState.LOADED:
+                        NewRecipeBtn.Enabled = true;
+                        LoadRecipeBtn.Enabled = true;
+                        SaveRecipeBtn.Enabled = false;
+                        SaveAsRecipeBtn.Enabled = true;
+                        break;
+                    case RecipeState.MODIFIED:
+                        NewRecipeBtn.Enabled = true;
+                        LoadRecipeBtn.Enabled = true;
+                        SaveRecipeBtn.Enabled = true;
+                        SaveAsRecipeBtn.Enabled = true;
+                        break;
+                }
+                NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
+                LoadRecipeBtn.BackColor = LoadRecipeBtn.Enabled ? Color.Green : Color.Gray;
+                SaveRecipeBtn.BackColor = SaveRecipeBtn.Enabled ? Color.Green : Color.Gray;
+                SaveAsRecipeBtn.BackColor = SaveAsRecipeBtn.Enabled ? Color.Green : Color.Gray;
+            }
+        }
+
         void LoadRecipeFile(string file)
         {
             log.Info("LoadRecipeFile({0})", file);
@@ -219,20 +407,46 @@ namespace AutoGrind
         private void NewRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("NewRecipeBtn_Click(...)");
+            if (RecipeRTB.Modified)
+            {
+                var result = MessageBox.Show("Current recipe has been modified. Save changes?",
+                    "AutoGrind Confirmation",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    SaveRecipeBtn_Click(null, null);
+            }
+
+            SetRecipeState(RecipeState.NEW);
+            SetState(RunState.IDLE,true);
             RecipeFilenameLbl.Text = "Untitled";
             RecipeRTB.Clear();
+            RecipeRoRTB.Clear();
         }
 
         private void LoadRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("LoadRecipeBtn_Click(...)");
+            if (RecipeRTB.Modified)
+            {
+                var result = MessageBox.Show("Current recipe has been modified. Save changes?",
+                    "AutoGrind Confirmation",
+                    MessageBoxButtons.YesNoCancel,
+                    MessageBoxIcon.Question);
+                if (result == DialogResult.Yes)
+                    SaveRecipeBtn_Click(null, null);
+            }
+
             OpenFileDialog dialog = new OpenFileDialog();
             dialog.Title = "Open an AutoHGrind Recipe";
             dialog.Filter = "AutoGrind Recipe Files|*.agr";
             dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
             if (dialog.ShowDialog() == DialogResult.OK)
+            {
                 LoadRecipeFile(dialog.FileName);
-
+                SetRecipeState(RecipeState.LOADED);
+                SetState(RunState.READY,true);
+            }
         }
 
         private void SaveRecipeBtn_Click(object sender, EventArgs e)
@@ -245,6 +459,7 @@ namespace AutoGrind
                 log.Info("Save Recipe program to {0}", RecipeFilenameLbl.Text);
                 RecipeRTB.SaveFile(RecipeFilenameLbl.Text, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
+                SetRecipeState(RecipeState.LOADED);
             }
         }
 
@@ -264,6 +479,11 @@ namespace AutoGrind
                 }
             }
         }
+        private void RecipeRTB_ModifiedChanged(object sender, EventArgs e)
+        {
+            SetRecipeState(RecipeState.MODIFIED);
+        }
+
 
         // ========================
         // END EDIT
@@ -333,6 +553,8 @@ namespace AutoGrind
                 System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Recipes"));
             }
         }
+
+
         // ========================
         // END CONFIG
         // ========================
