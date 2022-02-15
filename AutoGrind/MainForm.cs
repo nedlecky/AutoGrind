@@ -9,6 +9,7 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Microsoft.Win32;
 using NLog;
 
 namespace AutoGrind
@@ -42,6 +43,8 @@ namespace AutoGrind
             // Strtup logging system (which also displays messages
             log = NLog.LogManager.GetCurrentClassLogger();
 
+            LoadPersistent();
+
             for (int i = 0; i < 3; i++)
                 log.Info("==============================================================================================");
             log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
@@ -57,6 +60,64 @@ namespace AutoGrind
             HeartbeatTmr.Enabled = true;
             StartupTmr.Interval = 1000;
             StartupTmr.Enabled = true;
+        }
+        
+        bool forceClose = false;
+        private void CloseTmr_Tick(object sender, EventArgs e)
+        {
+            // First time this fires, tell all the threads to stop
+            //if (++fireCounter == 1)
+            //    EndThreads();
+            //else
+            //{
+            // Second time it fires, we can disconnect and shut down!
+            CloseTmr.Enabled = false;
+            //DisconnectAllDevicesBtn_Click(null, null);
+            //StopJint();
+            //MessageTmr_Tick(null, null);
+            forceClose = true;
+            SaveConfigBtn_Click(null, null);
+            NLog.LogManager.Shutdown(); // Flush and close down internal threads and timers
+            this.Close();
+
+            //}
+        }
+
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            if (forceClose) return;
+
+            if (e.CloseReason == CloseReason.UserClosing)
+            {
+                var result = MessageBox.Show("Do you want to close the application?",
+                                    "AutoGrind Confirmation",
+                                    MessageBoxButtons.YesNo,
+                                    MessageBoxIcon.Question);
+                e.Cancel = (result == DialogResult.No);
+            }
+
+            if (!e.Cancel)
+            {
+                // Check on dirty JavaScript program
+                /*
+                 * if (JavaScriptCodeRTB.Modified)
+                {
+                    var result = MessageBox.Show("JavaScript modified. Save before closing?",
+                                        "LEonard Confirmation",
+                                        MessageBoxButtons.YesNoCancel,
+                                        MessageBoxIcon.Question);
+                    if (result == DialogResult.Yes)
+                    {
+                        SaveJavaProgramBtn_Click(null, null);
+                    }
+                }
+                */
+
+                CloseTmr.Interval = 500;
+                CloseTmr.Enabled = true;
+                e.Cancel = true; // Cancel this shutdown- we'll let the close out timer shut us down
+                log.Info("Shutting down in 500mS...");
+            }
         }
 
         private void GrindBtn_Click(object sender, EventArgs e)
@@ -93,6 +154,61 @@ namespace AutoGrind
 
 
             log.Info("System ready.");
+        }
+
+        private void DefaultConfigBtn_Click(object sender, EventArgs e)
+        {
+            AutoGrindRoot = "\\";
+            AutoGrindRootLbl.Text = AutoGrindRoot;
+        }
+        void LoadPersistent()
+        {
+            // Pull setup info from registry.... these are overwritten on exit or with various config save operations
+            // Note default values are specified here as well
+            log.Info("LoadPersistent()");
+
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+
+            AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
+            AutoGrindRootLbl.Text = AutoGrindRoot;
+
+            //AutoConnectOnLoadChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AutoConnectOnLoadChk.Checked", "False"));
+        }
+
+        void SavePersistent()
+        {
+            log.Info("SavePersistent()");
+
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+
+            AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
+
+            //AppNameKey.SetValue("AutoConnectOnLoadChk.Checked", AutoConnectOnLoadChk.Checked);
+        }
+
+        private void LoadConfigBtn_Click(object sender, EventArgs e)
+        {
+            LoadPersistent();
+
+        }
+
+        private void SaveConfigBtn_Click(object sender, EventArgs e)
+        {
+            SavePersistent();
+        }
+
+        private void ChangeLEonardRootBtn_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.SelectedPath = AutoGrindRoot;
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                log.Info("New LEonardRoot={0}", dialog.SelectedPath);
+                AutoGrindRoot = dialog.SelectedPath;
+                AutoGrindRootLbl.Text = AutoGrindRoot;
+            }
         }
     }
 }
