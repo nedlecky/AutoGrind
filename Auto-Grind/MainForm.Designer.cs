@@ -1,4 +1,4 @@
-﻿namespace Auto_Grind
+﻿namespace AutoGrind
 {
     partial class MainForm
     {
@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.GrindBtn = new System.Windows.Forms.Button();
             this.EditBtn = new System.Windows.Forms.Button();
             this.SetupBtn = new System.Windows.Forms.Button();
@@ -36,16 +37,19 @@
             this.EditTab = new System.Windows.Forms.TabPage();
             this.SetupTab = new System.Windows.Forms.TabPage();
             this.LogsTab = new System.Windows.Forms.TabPage();
-            this.richTextBox1 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox2 = new System.Windows.Forms.RichTextBox();
-            this.richTextBox3 = new System.Windows.Forms.RichTextBox();
+            this.UrLogRTB = new System.Windows.Forms.RichTextBox();
+            this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
+            this.AllLogRTB = new System.Windows.Forms.RichTextBox();
+            this.HeartbeatTmr = new System.Windows.Forms.Timer(this.components);
+            this.timeLbl = new System.Windows.Forms.Label();
+            this.StartupTmr = new System.Windows.Forms.Timer(this.components);
             this.OperationTab.SuspendLayout();
             this.LogsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
             // 
-            this.GrindBtn.Location = new System.Drawing.Point(21, 29);
+            this.GrindBtn.Location = new System.Drawing.Point(12, 54);
             this.GrindBtn.Name = "GrindBtn";
             this.GrindBtn.Size = new System.Drawing.Size(136, 106);
             this.GrindBtn.TabIndex = 0;
@@ -55,7 +59,7 @@
             // 
             // EditBtn
             // 
-            this.EditBtn.Location = new System.Drawing.Point(21, 154);
+            this.EditBtn.Location = new System.Drawing.Point(12, 190);
             this.EditBtn.Name = "EditBtn";
             this.EditBtn.Size = new System.Drawing.Size(136, 106);
             this.EditBtn.TabIndex = 1;
@@ -65,7 +69,7 @@
             // 
             // SetupBtn
             // 
-            this.SetupBtn.Location = new System.Drawing.Point(21, 278);
+            this.SetupBtn.Location = new System.Drawing.Point(12, 325);
             this.SetupBtn.Name = "SetupBtn";
             this.SetupBtn.Size = new System.Drawing.Size(136, 106);
             this.SetupBtn.TabIndex = 2;
@@ -82,7 +86,7 @@
             this.OperationTab.Location = new System.Drawing.Point(186, 29);
             this.OperationTab.Name = "OperationTab";
             this.OperationTab.SelectedIndex = 0;
-            this.OperationTab.Size = new System.Drawing.Size(720, 549);
+            this.OperationTab.Size = new System.Drawing.Size(961, 549);
             this.OperationTab.TabIndex = 3;
             // 
             // GrindTab
@@ -116,45 +120,64 @@
             // 
             // LogsTab
             // 
-            this.LogsTab.Controls.Add(this.richTextBox2);
-            this.LogsTab.Controls.Add(this.richTextBox1);
+            this.LogsTab.Controls.Add(this.UrLogRTB);
+            this.LogsTab.Controls.Add(this.ErrorLogRTB);
             this.LogsTab.Location = new System.Drawing.Point(4, 25);
             this.LogsTab.Name = "LogsTab";
-            this.LogsTab.Size = new System.Drawing.Size(712, 520);
+            this.LogsTab.Size = new System.Drawing.Size(953, 520);
             this.LogsTab.TabIndex = 3;
             this.LogsTab.Text = "Logs";
             this.LogsTab.UseVisualStyleBackColor = true;
             // 
-            // richTextBox1
+            // UrLogRTB
             // 
-            this.richTextBox1.Location = new System.Drawing.Point(39, 45);
-            this.richTextBox1.Name = "richTextBox1";
-            this.richTextBox1.Size = new System.Drawing.Size(619, 209);
-            this.richTextBox1.TabIndex = 0;
-            this.richTextBox1.Text = "";
+            this.UrLogRTB.Location = new System.Drawing.Point(34, 284);
+            this.UrLogRTB.Name = "UrLogRTB";
+            this.UrLogRTB.Size = new System.Drawing.Size(901, 209);
+            this.UrLogRTB.TabIndex = 1;
+            this.UrLogRTB.Text = "";
             // 
-            // richTextBox2
+            // ErrorLogRTB
             // 
-            this.richTextBox2.Location = new System.Drawing.Point(34, 284);
-            this.richTextBox2.Name = "richTextBox2";
-            this.richTextBox2.Size = new System.Drawing.Size(619, 209);
-            this.richTextBox2.TabIndex = 1;
-            this.richTextBox2.Text = "";
+            this.ErrorLogRTB.Location = new System.Drawing.Point(39, 45);
+            this.ErrorLogRTB.Name = "ErrorLogRTB";
+            this.ErrorLogRTB.Size = new System.Drawing.Size(896, 209);
+            this.ErrorLogRTB.TabIndex = 0;
+            this.ErrorLogRTB.Text = "";
             // 
-            // richTextBox3
+            // AllLogRTB
             // 
-            this.richTextBox3.Location = new System.Drawing.Point(190, 584);
-            this.richTextBox3.Name = "richTextBox3";
-            this.richTextBox3.Size = new System.Drawing.Size(712, 122);
-            this.richTextBox3.TabIndex = 4;
-            this.richTextBox3.Text = "";
+            this.AllLogRTB.Location = new System.Drawing.Point(12, 584);
+            this.AllLogRTB.Name = "AllLogRTB";
+            this.AllLogRTB.Size = new System.Drawing.Size(1131, 122);
+            this.AllLogRTB.TabIndex = 4;
+            this.AllLogRTB.Text = "";
+            // 
+            // HeartbeatTmr
+            // 
+            this.HeartbeatTmr.Tick += new System.EventHandler(this.HeartbeatTmr_Tick);
+            // 
+            // timeLbl
+            // 
+            this.timeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.timeLbl.Location = new System.Drawing.Point(12, 9);
+            this.timeLbl.Name = "timeLbl";
+            this.timeLbl.Size = new System.Drawing.Size(168, 26);
+            this.timeLbl.TabIndex = 5;
+            this.timeLbl.Text = "timeLbl";
+            this.timeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // StartupTmr
+            // 
+            this.StartupTmr.Tick += new System.EventHandler(this.StartupTmr_Tick);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(927, 720);
-            this.Controls.Add(this.richTextBox3);
+            this.ClientSize = new System.Drawing.Size(1338, 720);
+            this.Controls.Add(this.timeLbl);
+            this.Controls.Add(this.AllLogRTB);
             this.Controls.Add(this.OperationTab);
             this.Controls.Add(this.SetupBtn);
             this.Controls.Add(this.EditBtn);
@@ -179,9 +202,12 @@
         private System.Windows.Forms.TabPage EditTab;
         private System.Windows.Forms.TabPage SetupTab;
         private System.Windows.Forms.TabPage LogsTab;
-        private System.Windows.Forms.RichTextBox richTextBox2;
-        private System.Windows.Forms.RichTextBox richTextBox1;
-        private System.Windows.Forms.RichTextBox richTextBox3;
+        private System.Windows.Forms.RichTextBox UrLogRTB;
+        private System.Windows.Forms.RichTextBox ErrorLogRTB;
+        private System.Windows.Forms.RichTextBox AllLogRTB;
+        private System.Windows.Forms.Timer HeartbeatTmr;
+        private System.Windows.Forms.Label timeLbl;
+        private System.Windows.Forms.Timer StartupTmr;
     }
 }
 

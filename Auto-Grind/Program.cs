@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Auto_Grind
+namespace AutoGrind
 {
     internal static class Program
     {
