@@ -1,4 +1,11 @@
-﻿using System;
+﻿// Olympus Controls AutoGrind Application
+// For Tosoh Quartz
+//
+// Programmer: Ned Lecky
+// February 2022
+
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -156,8 +163,118 @@ namespace AutoGrind
             log.Info("System ready.");
         }
 
+        // ========================
+        // START GRIND
+        // ========================
+        private void LoadBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("LoadBtn_Click(...)");
+            LoadRecipeBtn_Click(null, null);
+        }
+
+        private void StartBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("StartBtn_Click(...)");
+        }
+
+        private void PauseBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("PauseBtn_Click(...)");
+        }
+
+        private void ContinueBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("ContinueBtn_Click(...)");
+        }
+
+        private void StopBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("StopBtn_Click(...)");
+        }
+        // ========================
+        // END GRIND
+        // ========================
+
+        // ========================
+        // START EDIT
+        // ========================
+        void LoadRecipeFile(string file)
+        {
+            log.Info("LoadRecipeFile({0})", file);
+            RecipeFilenameLbl.Text = file;
+            try
+            {
+                RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
+                // Copy from the edit window to the runtime window
+                RecipeRoRTB.Text = RecipeRTB.Text;
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Can't open {0}", file);
+            }
+
+            RecipeRTB.Modified = false;
+        }
+
+        private void NewRecipeBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("NewRecipeBtn_Click(...)");
+            RecipeFilenameLbl.Text = "Untitled";
+            RecipeRTB.Clear();
+        }
+
+        private void LoadRecipeBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("LoadRecipeBtn_Click(...)");
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Title = "Open an AutoHGrind Recipe";
+            dialog.Filter = "AutoGrind Recipe Files|*.agr";
+            dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
+            if (dialog.ShowDialog() == DialogResult.OK)
+                LoadRecipeFile(dialog.FileName);
+
+        }
+
+        private void SaveRecipeBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("SaveRecipeBtn_Click(...)");
+            if (RecipeFilenameLbl.Text == "Untitled" || RecipeFilenameLbl.Text == "")
+                SaveAsRecipeBtn_Click(null, null);
+            else
+            {
+                log.Info("Save Recipe program to {0}", RecipeFilenameLbl.Text);
+                RecipeRTB.SaveFile(RecipeFilenameLbl.Text, System.Windows.Forms.RichTextBoxStreamType.PlainText);
+                RecipeRTB.Modified = false;
+            }
+        }
+
+        private void SaveAsRecipeBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("SaveAsRecipeBtn_Click(...)");
+            SaveFileDialog dialog = new SaveFileDialog();
+            dialog.Filter = "AutoGrind Recipe Files|*.agr";
+            dialog.Title = "Save an Autogrind Recipe";
+            dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                if (dialog.FileName != "")
+                {
+                    RecipeFilenameLbl.Text = dialog.FileName;
+                    SaveRecipeBtn_Click(null, null);
+                }
+            }
+        }
+
+        // ========================
+        // END EDIT
+        // ========================
+        // ========================
+        // START CONFIG
+        // ========================
+
         private void DefaultConfigBtn_Click(object sender, EventArgs e)
         {
+            log.Info("DefaultConfigBtn_Click(...)");
             AutoGrindRoot = "\\";
             AutoGrindRootLbl.Text = AutoGrindRoot;
         }
@@ -190,25 +307,36 @@ namespace AutoGrind
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
         {
+            log.Info("LoadConfigBtn_Click(...)");
             LoadPersistent();
-
         }
 
         private void SaveConfigBtn_Click(object sender, EventArgs e)
         {
+            log.Info("SaveConfigBtn_Click(...)");
             SavePersistent();
         }
 
         private void ChangeLEonardRootBtn_Click(object sender, EventArgs e)
         {
+            log.Info("ChangeLEonardRootBtn_Click(...)");
             FolderBrowserDialog dialog = new FolderBrowserDialog();
             dialog.SelectedPath = AutoGrindRoot;
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                log.Info("New LEonardRoot={0}", dialog.SelectedPath);
+                log.Info("New AutoGrindRoot={0}", dialog.SelectedPath);
                 AutoGrindRoot = dialog.SelectedPath;
                 AutoGrindRootLbl.Text = AutoGrindRoot;
+
+                // Make standard subdirectories (if they don't exist)
+                System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Logs"));
+                System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Recipes"));
             }
         }
+        // ========================
+        // END CONFIG
+        // ========================
+
+
     }
 }
