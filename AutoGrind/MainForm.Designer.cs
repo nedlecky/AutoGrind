@@ -52,6 +52,8 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.button3 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.DefaultConfigBtn = new System.Windows.Forms.Button();
             this.LoadConfigBtn = new System.Windows.Forms.Button();
@@ -69,6 +71,8 @@
             this.StartupTmr = new System.Windows.Forms.Timer(this.components);
             this.CloseTmr = new System.Windows.Forms.Timer(this.components);
             this.RecipeFilenameLbl = new System.Windows.Forms.Label();
+            this.ExecTmr = new System.Windows.Forms.Timer(this.components);
+            this.KeyboardBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -374,6 +378,8 @@
             // 
             // SetupTab
             // 
+            this.SetupTab.Controls.Add(this.button3);
+            this.SetupTab.Controls.Add(this.button2);
             this.SetupTab.Controls.Add(this.button1);
             this.SetupTab.Controls.Add(this.DefaultConfigBtn);
             this.SetupTab.Controls.Add(this.LoadConfigBtn);
@@ -387,22 +393,49 @@
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
             // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Green;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(516, 146);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(161, 107);
+            this.button3.TabIndex = 77;
+            this.button3.Text = "Set Top of Dome";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Green;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(204, 146);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(174, 107);
+            this.button2.TabIndex = 76;
+            this.button2.Text = "Set Right End of Cylinder";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
             // button1
             // 
+            this.button1.BackColor = System.Drawing.Color.Green;
             this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(20, 146);
+            this.button1.Location = new System.Drawing.Point(29, 146);
             this.button1.Margin = new System.Windows.Forms.Padding(2);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(102, 86);
+            this.button1.Size = new System.Drawing.Size(161, 107);
             this.button1.TabIndex = 75;
-            this.button1.Text = "Grind";
-            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Text = "Set Left End of Cylinder";
+            this.button1.UseVisualStyleBackColor = false;
             // 
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(13, 351);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(13, 396);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(155, 55);
             this.DefaultConfigBtn.TabIndex = 74;
@@ -413,7 +446,7 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-            this.LoadConfigBtn.Location = new System.Drawing.Point(174, 351);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(174, 396);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(118, 55);
             this.LoadConfigBtn.TabIndex = 73;
@@ -424,7 +457,7 @@
             // SaveConfigBtn
             // 
             this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-            this.SaveConfigBtn.Location = new System.Drawing.Point(298, 351);
+            this.SaveConfigBtn.Location = new System.Drawing.Point(298, 396);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(134, 55);
             this.SaveConfigBtn.TabIndex = 72;
@@ -547,11 +580,29 @@
             this.RecipeFilenameLbl.TabIndex = 76;
             this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // ExecTmr
+            // 
+            this.ExecTmr.Tick += new System.EventHandler(this.ExecTmr_Tick);
+            // 
+            // KeyboardBtn
+            // 
+            this.KeyboardBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.KeyboardBtn.ForeColor = System.Drawing.Color.White;
+            this.KeyboardBtn.Location = new System.Drawing.Point(11, 424);
+            this.KeyboardBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.KeyboardBtn.Name = "KeyboardBtn";
+            this.KeyboardBtn.Size = new System.Drawing.Size(102, 86);
+            this.KeyboardBtn.TabIndex = 77;
+            this.KeyboardBtn.Text = "Keyboard";
+            this.KeyboardBtn.UseVisualStyleBackColor = true;
+            this.KeyboardBtn.Click += new System.EventHandler(this.KeyboardBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 645);
+            this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.RecipeFilenameLbl);
             this.Controls.Add(this.timeLbl);
             this.Controls.Add(this.AllLogRTB);
@@ -618,6 +669,10 @@
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Label AngleLbl;
         private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Timer ExecTmr;
+        private System.Windows.Forms.Button KeyboardBtn;
     }
 }
 

@@ -17,12 +17,12 @@ namespace AutoGrind
         public string value { get; set; }
         public string label { get; set; }
 
-        public SetValueForm(string val = "0.000", string lab="??")
+        public SetValueForm(string val = "0.000", string lab = "??")
         {
             InitializeComponent();
             value = val;
             label = lab;
-            ValueLbl.Text = value;
+            ValueTxt.Text = value;
             LabelLbl.Text = "Enter " + label;
         }
         private void SetValueForm_Load(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace AutoGrind
         {
             try
             {
-                double x = Convert.ToDouble(ValueLbl.Text);
+                double x = Convert.ToDouble(ValueTxt.Text);
                 value = x.ToString("0.000");
                 this.DialogResult = DialogResult.OK;
                 log.Info("Setting {0} = {1}", label, value);
@@ -54,69 +54,85 @@ namespace AutoGrind
 
         private void ClearBtn_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text = "";
+            ValueTxt.Text = "0";
+
+        }
+        private void PlusMinusBtn_Click(object sender, EventArgs e)
+        {
+            string current = ValueTxt.Text;
+            if (current.Length == 0) return;
+
+            if (current[0] == '-')
+                ValueTxt.Text = current.Substring(1, current.Length - 1);
+            else
+                ValueTxt.Text = '-' + current;
+
 
         }
         private void ButtonBackspace_Click(object sender, EventArgs e)
         {
-            string current = ValueLbl.Text;
+            string current = ValueTxt.Text;
             if (current.Length > 0)
-                ValueLbl.Text = current.Substring(0, current.Length - 1);
+                ValueTxt.Text = current.Substring(0, current.Length - 1);
         }
 
         private void Button1_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "1";
+            ValueTxt.Text += "1";
         }
 
         private void Button2_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "2";
+            ValueTxt.Text += "2";
         }
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "3";
+            ValueTxt.Text += "3";
         }
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "4";
+            ValueTxt.Text += "4";
         }
 
         private void Button5_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "5";
+            ValueTxt.Text += "5";
         }
 
         private void Button6_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "6";
+            ValueTxt.Text += "6";
         }
 
         private void Button7_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "7";
+            ValueTxt.Text += "7";
         }
 
         private void Button8_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "8";
+            ValueTxt.Text += "8";
         }
 
         private void Button9_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "9";
+            ValueTxt.Text += "9";
         }
 
         private void ButtonPeriod_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += ".";
+            string current = ValueTxt.Text;
+            if (current.Length == 0)
+                ValueTxt.Text = "0.";
+            else if (!ValueTxt.Text.Contains("."))
+                ValueTxt.Text += ".";
         }
 
         private void Button0_Click(object sender, EventArgs e)
         {
-            ValueLbl.Text += "0";
+            ValueTxt.Text += "0";
         }
 
     }

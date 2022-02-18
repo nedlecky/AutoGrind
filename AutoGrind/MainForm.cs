@@ -14,6 +14,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -183,11 +184,11 @@ namespace AutoGrind
                 runState = s;
                 log.Info("SetState({0})", s.ToString());
 
-                EnableDisableButtons(fEditing);
+                EnterRunState(fEditing);
             }
         }
 
-        private void EnableDisableButtons(bool fEditing)
+        private void EnterRunState(bool fEditing)
         {
             switch (runState)
             {
@@ -195,41 +196,53 @@ namespace AutoGrind
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
+                    JogBtn.Enabled = true;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
+                    ExecTmr.Enabled = false;
                     break;
                 case RunState.READY:
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
+                    JogBtn.Enabled = true;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = true;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
+                    ExecTmr.Enabled = false;
                     break;
                 case RunState.RUNNING:
                     GrindBtn.Enabled = false;
                     EditBtn.Enabled = false;
                     SetupBtn.Enabled = false;
+                    JogBtn.Enabled = false;
                     LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = true;
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = true;
+
+                    StartExecutive();
+                    ExecTmr.Interval = 100;
+                    ExecTmr.Enabled = true;
+
                     break;
                 case RunState.PAUSED:
                     GrindBtn.Enabled = false;
                     EditBtn.Enabled = false;
                     SetupBtn.Enabled = false;
+                    JogBtn.Enabled = false;
                     LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = true;
                     StopBtn.Enabled = true;
+                    ExecTmr.Enabled = false;
                     break;
             }
 
@@ -246,6 +259,7 @@ namespace AutoGrind
             }
             SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
 
+            JogBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
             LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
             StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
@@ -279,6 +293,12 @@ namespace AutoGrind
             EditBtn.BackColor = Color.LightGreen;
             SetupBtn.BackColor = Color.Green;
         }
+        private void KeyboardBtn_Click(object sender, EventArgs e)
+        {
+            System.Diagnostics.Process.Start("osk.exe");
+        }
+
+
         private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
         // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
         {
@@ -460,6 +480,8 @@ namespace AutoGrind
                 RecipeRTB.SaveFile(RecipeFilenameLbl.Text, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
                 SetRecipeState(RecipeState.LOADED);
+                // Copy from the edit window to the runtime window
+                RecipeRoRTB.Text = RecipeRTB.Text;
             }
         }
 
@@ -488,6 +510,8 @@ namespace AutoGrind
         // ========================
         // END EDIT
         // ========================
+
+
         // ========================
         // START CONFIG
         // ========================
@@ -588,6 +612,75 @@ namespace AutoGrind
 
         // ========================
         // END CONFIG
+        // ========================
+
+
+
+
+        // ========================
+        // START EXECUTIVE
+        // ========================
+
+        static int currentLine = 0;
+        static int nLines = 0;
+        private void StartExecutive()
+        {
+            nLines = RecipeRoRTB.Lines.Count();
+            currentLine = 0;
+            log.Info("StartExecutive() nLines={0}", nLines);
+        }
+
+        private bool ExecuteLine(string line)
+        {
+            // Fetch the line and replace all 1 or more whitespace with a single space and drop all leading/trainling whitespace
+            string command = Regex.Replace(line, @"\s+", " ").Trim();
+
+            // Blank?
+            if (command.Length < 1)
+            {
+                log.Trace("Line {0} BLANK: {1}", currentLine, command);
+                currentLine++;
+                return true;
+            }
+
+            // Comment?
+            if (command[0]=='#')
+            {
+                log.Trace("Line {0} COMMENT: {1}", currentLine, command);
+                currentLine++;
+                return true;
+            }
+
+            // End??
+            if (command.StartsWith("end"))
+            {
+                log.Trace("{0} END: {1}", currentLine, command);
+                currentLine++;
+                return false;
+            }
+
+            // Home
+            // Grindcircle
+            // Toolchange
+
+            log.Trace("Line {0} Exec: {1}", currentLine, command);
+            currentLine++;
+            return true;
+
+        }
+        private void ExecTmr_Tick(object sender, EventArgs e)
+        {
+            //log.Info("ExecTmr(...) curLine={0}", currentLine);
+            string line = RecipeRoRTB.Lines[currentLine];
+            bool fContinue = ExecuteLine(line);
+
+            if (!fContinue || currentLine >= nLines)
+                SetState(RunState.READY);
+
+        }
+
+        // ========================
+        // END EXECUTIVE
         // ========================
 
 
