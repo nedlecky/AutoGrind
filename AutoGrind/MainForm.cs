@@ -509,6 +509,8 @@ namespace AutoGrind
 
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
+            DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
+            AngleLbl.Text = (string)AppNameKey.GetValue("AngleLbl.Text", "0.000");
 
             //AutoConnectOnLoadChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AutoConnectOnLoadChk.Checked", "False"));
         }
@@ -521,6 +523,8 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
+            AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
+            AppNameKey.SetValue("AngleLbl.Text", AngleLbl.Text);
 
             //AppNameKey.SetValue("AutoConnectOnLoadChk.Checked", AutoConnectOnLoadChk.Checked);
         }
@@ -551,6 +555,33 @@ namespace AutoGrind
                 // Make standard subdirectories (if they don't exist)
                 System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Logs"));
                 System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Recipes"));
+            }
+        }
+
+        private void JogBtn_Click(object sender, EventArgs e)
+        {
+            JoggingForm form = new JoggingForm();
+
+            form.ShowDialog(this);
+        }
+
+        private void DiameterLbl_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(DiameterLbl.Text, "DIAMETER");
+
+            if (form.ShowDialog(this)==DialogResult.OK)
+            {
+                DiameterLbl.Text = form.value;
+            }
+        }
+
+        private void AngleLbl_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(AngleLbl.Text, "ANGLE");
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                AngleLbl.Text = form.value;
             }
         }
 
