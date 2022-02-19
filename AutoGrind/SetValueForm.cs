@@ -12,7 +12,7 @@ namespace AutoGrind
 {
     public partial class SetValueForm : Form
     {
-        private static NLog.Logger log;
+        private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
         public string value { get; set; }
         public string label { get; set; }
@@ -27,7 +27,6 @@ namespace AutoGrind
         }
         private void SetValueForm_Load(object sender, EventArgs e)
         {
-            log = NLog.LogManager.GetCurrentClassLogger();
         }
 
         private void EnterBtn_Click(object sender, EventArgs e)

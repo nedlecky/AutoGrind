@@ -12,6 +12,8 @@ namespace AutoGrind
 {
     public partial class JoggingForm : Form
     {
+        private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public JoggingForm()
         {
             InitializeComponent();
@@ -20,6 +22,11 @@ namespace AutoGrind
         private void ExitBtn_Click(object sender, EventArgs e)
         {
             Close();
+        }
+
+        private void JoggingForm_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

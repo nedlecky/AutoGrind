@@ -59,6 +59,12 @@
             this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.RobotSendBtn = new System.Windows.Forms.Button();
+            this.RobotMessageTxt = new System.Windows.Forms.TextBox();
+            this.RobotDisconnectBtn = new System.Windows.Forms.Button();
+            this.RobotConnectBtn = new System.Windows.Forms.Button();
+            this.RobotIpPortTxt = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.AutoGrindRootLbl = new System.Windows.Forms.Label();
             this.ChangeLEonardRootBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
@@ -73,6 +79,7 @@
             this.RecipeFilenameLbl = new System.Windows.Forms.Label();
             this.ExecTmr = new System.Windows.Forms.Timer(this.components);
             this.KeyboardBtn = new System.Windows.Forms.Button();
+            this.MessageTmr = new System.Windows.Forms.Timer(this.components);
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -467,6 +474,12 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.RobotSendBtn);
+            this.groupBox1.Controls.Add(this.RobotMessageTxt);
+            this.groupBox1.Controls.Add(this.RobotDisconnectBtn);
+            this.groupBox1.Controls.Add(this.RobotConnectBtn);
+            this.groupBox1.Controls.Add(this.RobotIpPortTxt);
+            this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
             this.groupBox1.Controls.Add(this.ChangeLEonardRootBtn);
             this.groupBox1.Controls.Add(this.label1);
@@ -474,15 +487,71 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(572, 98);
+            this.groupBox1.Size = new System.Drawing.Size(710, 98);
             this.groupBox1.TabIndex = 71;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Config";
             // 
+            // RobotSendBtn
+            // 
+            this.RobotSendBtn.Location = new System.Drawing.Point(311, 59);
+            this.RobotSendBtn.Name = "RobotSendBtn";
+            this.RobotSendBtn.Size = new System.Drawing.Size(75, 23);
+            this.RobotSendBtn.TabIndex = 76;
+            this.RobotSendBtn.Text = "Send";
+            this.RobotSendBtn.UseVisualStyleBackColor = true;
+            this.RobotSendBtn.Click += new System.EventHandler(this.RobotSendBtn_Click);
+            // 
+            // RobotMessageTxt
+            // 
+            this.RobotMessageTxt.Location = new System.Drawing.Point(135, 62);
+            this.RobotMessageTxt.Name = "RobotMessageTxt";
+            this.RobotMessageTxt.Size = new System.Drawing.Size(170, 20);
+            this.RobotMessageTxt.TabIndex = 75;
+            this.RobotMessageTxt.Text = "(1,0,0,0,0)";
+            // 
+            // RobotDisconnectBtn
+            // 
+            this.RobotDisconnectBtn.Location = new System.Drawing.Point(392, 34);
+            this.RobotDisconnectBtn.Name = "RobotDisconnectBtn";
+            this.RobotDisconnectBtn.Size = new System.Drawing.Size(75, 23);
+            this.RobotDisconnectBtn.TabIndex = 74;
+            this.RobotDisconnectBtn.Text = "Disconnect";
+            this.RobotDisconnectBtn.UseVisualStyleBackColor = true;
+            this.RobotDisconnectBtn.Click += new System.EventHandler(this.RobotDisconnectBtn_Click);
+            // 
+            // RobotConnectBtn
+            // 
+            this.RobotConnectBtn.Location = new System.Drawing.Point(311, 34);
+            this.RobotConnectBtn.Name = "RobotConnectBtn";
+            this.RobotConnectBtn.Size = new System.Drawing.Size(75, 23);
+            this.RobotConnectBtn.TabIndex = 73;
+            this.RobotConnectBtn.Text = "Connect";
+            this.RobotConnectBtn.UseVisualStyleBackColor = true;
+            this.RobotConnectBtn.Click += new System.EventHandler(this.RobotConnectBtn_Click);
+            // 
+            // RobotIpPortTxt
+            // 
+            this.RobotIpPortTxt.Location = new System.Drawing.Point(135, 36);
+            this.RobotIpPortTxt.Name = "RobotIpPortTxt";
+            this.RobotIpPortTxt.Size = new System.Drawing.Size(170, 20);
+            this.RobotIpPortTxt.TabIndex = 72;
+            this.RobotIpPortTxt.Text = "192.168.25.1:30000";
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(58, 39);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.TabIndex = 71;
+            this.label3.Text = "Robot IP:Port";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // AutoGrindRootLbl
             // 
             this.AutoGrindRootLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AutoGrindRootLbl.Location = new System.Drawing.Point(124, 25);
+            this.AutoGrindRootLbl.Location = new System.Drawing.Point(136, 10);
             this.AutoGrindRootLbl.Name = "AutoGrindRootLbl";
             this.AutoGrindRootLbl.Size = new System.Drawing.Size(385, 23);
             this.AutoGrindRootLbl.TabIndex = 69;
@@ -490,7 +559,7 @@
             // 
             // ChangeLEonardRootBtn
             // 
-            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(515, 25);
+            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(527, 10);
             this.ChangeLEonardRootBtn.Name = "ChangeLEonardRootBtn";
             this.ChangeLEonardRootBtn.Size = new System.Drawing.Size(24, 23);
             this.ChangeLEonardRootBtn.TabIndex = 70;
@@ -501,11 +570,12 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(4, 28);
+            this.label1.Location = new System.Drawing.Point(5, 14);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(125, 13);
             this.label1.TabIndex = 68;
             this.label1.Text = "AutoGrind Root Directory";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // LogsTab
             // 
@@ -597,6 +667,10 @@
             this.KeyboardBtn.UseVisualStyleBackColor = true;
             this.KeyboardBtn.Click += new System.EventHandler(this.KeyboardBtn_Click);
             // 
+            // MessageTmr
+            // 
+            this.MessageTmr.Tick += new System.EventHandler(this.MessageTmr_Tick);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -673,6 +747,13 @@
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Timer ExecTmr;
         private System.Windows.Forms.Button KeyboardBtn;
+        private System.Windows.Forms.Button RobotDisconnectBtn;
+        private System.Windows.Forms.Button RobotConnectBtn;
+        private System.Windows.Forms.TextBox RobotIpPortTxt;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button RobotSendBtn;
+        private System.Windows.Forms.TextBox RobotMessageTxt;
+        private System.Windows.Forms.Timer MessageTmr;
     }
 }
 

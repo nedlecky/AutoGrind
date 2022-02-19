@@ -1,0 +1,59 @@
+ Program
+   BeforeStart
+     start_pose≔get_actual_tcp_pose()
+     MoveJ
+       start_pose
+     socket_close()
+     Wait: 0.25
+     socket_is_open≔ False 
+     command_index≔0
+   Robot Program
+     Loop socket_is_open ≟  False 
+       socket_is_open≔socket_open("192.168.25.1", 30000)
+       Wait: 0.5
+     response≔"Unknown command"
+     command≔socket_read_ascii_float(5)
+     If command[0]≟5
+       socket_send_line("robot_running=True")
+       command_index≔command_index+1
+       socket_set_var("robot_index", command_index)
+       Switch command[1]
+         Case 1
+           MoveL
+             up_pose
+           response≔"moved up"
+         Case 2
+           MoveJ
+             down_pose
+           response≔"moved down"
+         Case 3
+           response≔"close"
+         Case 4
+           response≔"open"
+         Case 50
+           Call AG_50
+         Case 98
+           response≔"socket reset"
+         Case 99
+           response≔"exiting"
+         Default Case
+           response≔"unknown command"
+       socket_send_line("robot_response=" + response + "#robot_running=False")
+       If command[1]≟98
+         Wait: 0.5
+         socket_close()
+         socket_is_open≔ False 
+       If command[1]≟99
+         Wait: 0.5
+         socket_close()
+         socket_is_open≔ False 
+         Halt
+     Else
+       'socket_set_var("robot_index", command_index)'
+   AG_50
+     'Rev 2021_12_02am 01'
+     MoveL
+       Vertical_3
+       Tilted_1
+       Vertical_4
+       response≔"50 success"

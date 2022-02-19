@@ -12,6 +12,8 @@ namespace AutoGrind
 {
     public partial class SplashForm : Form
     {
+        private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public SplashForm()
         {
             InitializeComponent();

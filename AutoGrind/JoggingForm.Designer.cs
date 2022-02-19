@@ -116,6 +116,7 @@
             this.Name = "JoggingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Jog Robot";
+            this.Load += new System.EventHandler(this.JoggingForm_Load);
             this.ResumeLayout(false);
 
         }

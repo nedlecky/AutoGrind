@@ -28,6 +28,8 @@ namespace AutoGrind
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
         static SplashForm splashForm;
+        TcpServer robot = null;
+
         private enum RunState
         {
             INIT,
@@ -83,6 +85,19 @@ namespace AutoGrind
             GrindBtn_Click(null, null);
         }
 
+        private void StartupTmr_Tick(object sender, EventArgs e)
+        {
+            splashForm = new SplashForm();
+            splashForm.Show();
+
+            log.Info("StartupTmr()...");
+            StartupTmr.Enabled = false;
+
+            MessageTmr.Interval = 100;
+            MessageTmr.Enabled = true;
+
+            log.Info("System ready.");
+        }
         bool forceClose = false;
         private void CloseTmr_Tick(object sender, EventArgs e)
         {
@@ -95,7 +110,7 @@ namespace AutoGrind
             CloseTmr.Enabled = false;
             //DisconnectAllDevicesBtn_Click(null, null);
             //StopJint();
-            //MessageTmr_Tick(null, null);
+            MessageTmr_Tick(null, null);
             forceClose = true;
             SaveConfigBtn_Click(null, null);
             NLog.LogManager.Shutdown(); // Flush and close down internal threads and timers
@@ -119,20 +134,6 @@ namespace AutoGrind
 
             if (!e.Cancel)
             {
-                // Check on dirty JavaScript program
-                /*
-                 * if (JavaScriptCodeRTB.Modified)
-                {
-                    var result = MessageBox.Show("JavaScript modified. Save before closing?",
-                                        "LEonard Confirmation",
-                                        MessageBoxButtons.YesNoCancel,
-                                        MessageBoxIcon.Question);
-                    if (result == DialogResult.Yes)
-                    {
-                        SaveJavaProgramBtn_Click(null, null);
-                    }
-                }
-                */
                 if (RecipeRTB.Modified)
                 {
                     var result = MessageBox.Show("Current recipe has been modified. Save changes?",
@@ -161,23 +162,12 @@ namespace AutoGrind
             timeLbl.Text = now;
         }
 
-        private void StartupTmr_Tick(object sender, EventArgs e)
-        {
-            splashForm = new SplashForm();
-            splashForm.Show();
-
-            log.Info("StartupTmr()...");
-            StartupTmr.Enabled = false;
-
-
-            log.Info("System ready.");
-        }
 
         // ========================
         // START MAIN UI BUTTONS
         // ========================
 
-        private void SetState(RunState s, bool fEditing=false)
+        private void SetState(RunState s, bool fEditing = false)
         {
             if (runState != s)
             {
@@ -298,12 +288,11 @@ namespace AutoGrind
             System.Diagnostics.Process.Start("osk.exe");
         }
 
-
         private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
         // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
         {
             log.Info("Selecting {0}", e.TabPage.Text);
-            switch(e.TabPage.Text)
+            switch (e.TabPage.Text)
             {
                 case "Grind":
                     GrindBtn_Click(null, null);
@@ -438,7 +427,7 @@ namespace AutoGrind
             }
 
             SetRecipeState(RecipeState.NEW);
-            SetState(RunState.IDLE,true);
+            SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
             RecipeRTB.Clear();
             RecipeRoRTB.Clear();
@@ -465,7 +454,7 @@ namespace AutoGrind
             {
                 LoadRecipeFile(dialog.FileName);
                 SetRecipeState(RecipeState.LOADED);
-                SetState(RunState.READY,true);
+                SetState(RunState.READY, true);
             }
         }
 
@@ -521,6 +510,7 @@ namespace AutoGrind
             log.Info("DefaultConfigBtn_Click(...)");
             AutoGrindRoot = "\\";
             AutoGrindRootLbl.Text = AutoGrindRoot;
+            RobotIpPortTxt.Text = "192.168.25.1:30000";
         }
         void LoadPersistent()
         {
@@ -531,8 +521,12 @@ namespace AutoGrind
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
+            // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
+            RobotIpPortTxt.Text = (string)AppNameKey.GetValue("RobotIpPortTxt.Text", "192.168.25.1:30000");
+
+            // From Grind Tab
             DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
             AngleLbl.Text = (string)AppNameKey.GetValue("AngleLbl.Text", "0.000");
 
@@ -546,7 +540,11 @@ namespace AutoGrind
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
+            // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
+            AppNameKey.SetValue("RobotIpPortTxt.Text", RobotIpPortTxt.Text);
+
+            // From Grind Tab
             AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
             AppNameKey.SetValue("AngleLbl.Text", AngleLbl.Text);
 
@@ -593,7 +591,7 @@ namespace AutoGrind
         {
             SetValueForm form = new SetValueForm(DiameterLbl.Text, "DIAMETER");
 
-            if (form.ShowDialog(this)==DialogResult.OK)
+            if (form.ShowDialog(this) == DialogResult.OK)
             {
                 DiameterLbl.Text = form.value;
             }
@@ -644,7 +642,7 @@ namespace AutoGrind
             }
 
             // Comment?
-            if (command[0]=='#')
+            if (command[0] == '#')
             {
                 log.Trace("Line {0} COMMENT: {1}", currentLine, command);
                 currentLine++;
@@ -683,6 +681,56 @@ namespace AutoGrind
         // END EXECUTIVE
         // ========================
 
+        // ========================
+        // START ROBOT INTERFACE
+        // ========================
+
+        private void RobotConnectBtn_Click(object sender, EventArgs e)
+        {
+            RobotDisconnectBtn_Click(null, null);
+
+            robot = new TcpServer();
+            if (robot.Connect(RobotIpPortTxt.Text) > 0)
+            {
+                log.Error("Robot server initialization failure");
+            }
+            else
+            {
+                log.Info("Robot connection ready");
+            }
+        }
+
+        private void RobotDisconnectBtn_Click(object sender, EventArgs e)
+        {
+            if (robot != null)
+            {
+                if (robot.IsConnected())
+                    robot.Disconnect();
+                robot = null;
+            }
+        }
+
+        private void RobotSendBtn_Click(object sender, EventArgs e)
+        {
+            if (robot != null)
+                if (robot.IsConnected())
+                {
+                    robot.Send(RobotMessageTxt.Text);
+                }
+        }
+
+        private void MessageTmr_Tick(object sender, EventArgs e)
+        {
+            if (robot != null)
+                if (robot.IsConnected())
+                {
+                    robot.Receive();
+                }
+        }
+
+        // ========================
+        // END ROBOT INTERFACE
+        // ========================
 
     }
 }
