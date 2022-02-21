@@ -24,7 +24,7 @@ namespace AutoGrind
         public int nGetStatusRequests = 0;
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
-        public Action<string, string> receiveCallback { get; set; }
+        public Action<string> receiveCallback { get; set; }
 
         public TcpServer()
         {
@@ -195,8 +195,8 @@ namespace AutoGrind
                         {
                             log.Info("<== {0} Line {1}", cleanLine, lineNo);
 
-                            //if (receiveCallback != null)
-                            //    receiveCallback(cleanLine);
+                            if (receiveCallback != null)
+                                receiveCallback(cleanLine);
                         }
                         lineNo++;
                     }

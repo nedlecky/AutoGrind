@@ -80,12 +80,26 @@
             this.ExecTmr = new System.Windows.Forms.Timer(this.components);
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
+            this.VariableTab = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.ReadVariableBtn = new System.Windows.Forms.Button();
+            this.WriteStringValueTxt = new System.Windows.Forms.TextBox();
+            this.WriteStringValueBtn = new System.Windows.Forms.Button();
+            this.VariableNameTxt = new System.Windows.Forms.TextBox();
+            this.VariablesGrd = new System.Windows.Forms.DataGridView();
+            this.LoadVariablesBtn = new System.Windows.Forms.Button();
+            this.SaveVariablesBtn = new System.Windows.Forms.Button();
+            this.ClearVariablesBtn = new System.Windows.Forms.Button();
+            this.UtcTimeChk = new System.Windows.Forms.CheckBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
             this.SetupTab.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.LogsTab.SuspendLayout();
+            this.VariableTab.SuspendLayout();
+            this.groupBox7.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).BeginInit();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -132,6 +146,7 @@
             this.OperationTab.Controls.Add(this.GrindTab);
             this.OperationTab.Controls.Add(this.EditTab);
             this.OperationTab.Controls.Add(this.SetupTab);
+            this.OperationTab.Controls.Add(this.VariableTab);
             this.OperationTab.Controls.Add(this.LogsTab);
             this.OperationTab.Location = new System.Drawing.Point(140, 37);
             this.OperationTab.Margin = new System.Windows.Forms.Padding(2);
@@ -474,6 +489,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.UtcTimeChk);
             this.groupBox1.Controls.Add(this.RobotSendBtn);
             this.groupBox1.Controls.Add(this.RobotMessageTxt);
             this.groupBox1.Controls.Add(this.RobotDisconnectBtn);
@@ -671,6 +687,117 @@
             // 
             this.MessageTmr.Tick += new System.EventHandler(this.MessageTmr_Tick);
             // 
+            // VariableTab
+            // 
+            this.VariableTab.Controls.Add(this.LoadVariablesBtn);
+            this.VariableTab.Controls.Add(this.SaveVariablesBtn);
+            this.VariableTab.Controls.Add(this.ClearVariablesBtn);
+            this.VariableTab.Controls.Add(this.VariablesGrd);
+            this.VariableTab.Controls.Add(this.groupBox7);
+            this.VariableTab.Location = new System.Drawing.Point(4, 22);
+            this.VariableTab.Name = "VariableTab";
+            this.VariableTab.Size = new System.Drawing.Size(737, 467);
+            this.VariableTab.TabIndex = 4;
+            this.VariableTab.Text = "Variables";
+            this.VariableTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.ReadVariableBtn);
+            this.groupBox7.Controls.Add(this.WriteStringValueTxt);
+            this.groupBox7.Controls.Add(this.WriteStringValueBtn);
+            this.groupBox7.Controls.Add(this.VariableNameTxt);
+            this.groupBox7.Location = new System.Drawing.Point(20, 22);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(650, 49);
+            this.groupBox7.TabIndex = 82;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Manual";
+            // 
+            // ReadVariableBtn
+            // 
+            this.ReadVariableBtn.Location = new System.Drawing.Point(140, 17);
+            this.ReadVariableBtn.Name = "ReadVariableBtn";
+            this.ReadVariableBtn.Size = new System.Drawing.Size(75, 23);
+            this.ReadVariableBtn.TabIndex = 2;
+            this.ReadVariableBtn.Text = "Read";
+            this.ReadVariableBtn.UseVisualStyleBackColor = true;
+            this.ReadVariableBtn.Click += new System.EventHandler(this.ReadVariableBtn_Click);
+            // 
+            // WriteStringValueTxt
+            // 
+            this.WriteStringValueTxt.Location = new System.Drawing.Point(338, 22);
+            this.WriteStringValueTxt.Name = "WriteStringValueTxt";
+            this.WriteStringValueTxt.Size = new System.Drawing.Size(209, 20);
+            this.WriteStringValueTxt.TabIndex = 7;
+            this.WriteStringValueTxt.Text = "Test String";
+            // 
+            // WriteStringValueBtn
+            // 
+            this.WriteStringValueBtn.Location = new System.Drawing.Point(257, 19);
+            this.WriteStringValueBtn.Name = "WriteStringValueBtn";
+            this.WriteStringValueBtn.Size = new System.Drawing.Size(75, 23);
+            this.WriteStringValueBtn.TabIndex = 4;
+            this.WriteStringValueBtn.Text = "Write String";
+            this.WriteStringValueBtn.UseVisualStyleBackColor = true;
+            this.WriteStringValueBtn.Click += new System.EventHandler(this.WriteStringValueBtn_Click);
+            // 
+            // VariableNameTxt
+            // 
+            this.VariableNameTxt.Location = new System.Drawing.Point(6, 19);
+            this.VariableNameTxt.Name = "VariableNameTxt";
+            this.VariableNameTxt.Size = new System.Drawing.Size(128, 20);
+            this.VariableNameTxt.TabIndex = 5;
+            this.VariableNameTxt.Text = "X";
+            // 
+            // VariablesGrd
+            // 
+            this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.VariablesGrd.Location = new System.Drawing.Point(20, 77);
+            this.VariablesGrd.Name = "VariablesGrd";
+            this.VariablesGrd.Size = new System.Drawing.Size(673, 342);
+            this.VariablesGrd.TabIndex = 83;
+            // 
+            // LoadVariablesBtn
+            // 
+            this.LoadVariablesBtn.Location = new System.Drawing.Point(18, 428);
+            this.LoadVariablesBtn.Name = "LoadVariablesBtn";
+            this.LoadVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.LoadVariablesBtn.TabIndex = 86;
+            this.LoadVariablesBtn.Text = "Reload";
+            this.LoadVariablesBtn.UseVisualStyleBackColor = true;
+            this.LoadVariablesBtn.Click += new System.EventHandler(this.LoadVariablesBtn_Click);
+            // 
+            // SaveVariablesBtn
+            // 
+            this.SaveVariablesBtn.Location = new System.Drawing.Point(99, 428);
+            this.SaveVariablesBtn.Name = "SaveVariablesBtn";
+            this.SaveVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.SaveVariablesBtn.TabIndex = 85;
+            this.SaveVariablesBtn.Text = "Save";
+            this.SaveVariablesBtn.UseVisualStyleBackColor = true;
+            this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
+            // 
+            // ClearVariablesBtn
+            // 
+            this.ClearVariablesBtn.Location = new System.Drawing.Point(180, 428);
+            this.ClearVariablesBtn.Name = "ClearVariablesBtn";
+            this.ClearVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.ClearVariablesBtn.TabIndex = 84;
+            this.ClearVariablesBtn.Text = "Clear";
+            this.ClearVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearVariablesBtn.Click += new System.EventHandler(this.ClearVariablesBtn_Click);
+            // 
+            // UtcTimeChk
+            // 
+            this.UtcTimeChk.AutoSize = true;
+            this.UtcTimeChk.Location = new System.Drawing.Point(524, 65);
+            this.UtcTimeChk.Name = "UtcTimeChk";
+            this.UtcTimeChk.Size = new System.Drawing.Size(177, 17);
+            this.UtcTimeChk.TabIndex = 77;
+            this.UtcTimeChk.Text = "Use UTC Time in Time Stamps?";
+            this.UtcTimeChk.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -697,6 +824,10 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.LogsTab.ResumeLayout(false);
+            this.VariableTab.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
+            this.groupBox7.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -754,6 +885,17 @@
         private System.Windows.Forms.Button RobotSendBtn;
         private System.Windows.Forms.TextBox RobotMessageTxt;
         private System.Windows.Forms.Timer MessageTmr;
+        private System.Windows.Forms.TabPage VariableTab;
+        private System.Windows.Forms.Button LoadVariablesBtn;
+        private System.Windows.Forms.Button SaveVariablesBtn;
+        private System.Windows.Forms.Button ClearVariablesBtn;
+        private System.Windows.Forms.DataGridView VariablesGrd;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button ReadVariableBtn;
+        private System.Windows.Forms.TextBox WriteStringValueTxt;
+        private System.Windows.Forms.Button WriteStringValueBtn;
+        private System.Windows.Forms.TextBox VariableNameTxt;
+        private System.Windows.Forms.CheckBox UtcTimeChk;
     }
 }
 

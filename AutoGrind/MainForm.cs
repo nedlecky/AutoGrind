@@ -15,6 +15,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Microsoft.Win32;
@@ -29,6 +30,8 @@ namespace AutoGrind
         private static NLog.Logger log;
         static SplashForm splashForm;
         TcpServer robot = null;
+        static DataTable variables;
+
 
         private enum RunState
         {
@@ -96,6 +99,8 @@ namespace AutoGrind
             MessageTmr.Interval = 100;
             MessageTmr.Enabled = true;
 
+            RobotConnectBtn_Click(null, null);
+
             log.Info("System ready.");
         }
         bool forceClose = false;
@@ -108,7 +113,7 @@ namespace AutoGrind
             //{
             // Second time it fires, we can disconnect and shut down!
             CloseTmr.Enabled = false;
-            //DisconnectAllDevicesBtn_Click(null, null);
+            RobotDisconnectBtn_Click(null, null);
             //StopJint();
             MessageTmr_Tick(null, null);
             forceClose = true;
@@ -469,6 +474,7 @@ namespace AutoGrind
                 RecipeRTB.SaveFile(RecipeFilenameLbl.Text, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
                 SetRecipeState(RecipeState.LOADED);
+                SetState(RunState.READY, true);
                 // Copy from the edit window to the runtime window
                 RecipeRoRTB.Text = RecipeRTB.Text;
             }
@@ -525,12 +531,15 @@ namespace AutoGrind
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
             RobotIpPortTxt.Text = (string)AppNameKey.GetValue("RobotIpPortTxt.Text", "192.168.25.1:30000");
+            UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
+
 
             // From Grind Tab
             DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
             AngleLbl.Text = (string)AppNameKey.GetValue("AngleLbl.Text", "0.000");
 
-            //AutoConnectOnLoadChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AutoConnectOnLoadChk.Checked", "False"));
+            // Also load the variables table
+            LoadVariablesBtn_Click(null, null);
         }
 
         void SavePersistent()
@@ -543,12 +552,14 @@ namespace AutoGrind
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
             AppNameKey.SetValue("RobotIpPortTxt.Text", RobotIpPortTxt.Text);
+            AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
 
             // From Grind Tab
             AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
             AppNameKey.SetValue("AngleLbl.Text", AngleLbl.Text);
 
-            //AppNameKey.SetValue("AutoConnectOnLoadChk.Checked", AutoConnectOnLoadChk.Checked);
+            // Also save the variables table
+            SaveVariablesBtn_Click(null, null);
         }
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -627,10 +638,24 @@ namespace AutoGrind
             currentLine = 0;
             log.Info("StartExecutive() nLines={0}", nLines);
         }
+        /// <summary>
+        /// Read file looking for lines of the form "name=value" and pass then to the variable write function
+        /// </summary>
+        /// <param name="filename">The filename of interest</param>
+        private void ImportFile(string filename)
+        {
+            string[] lines = System.IO.File.ReadAllLines(Path.Combine(AutoGrindRoot,filename));
 
+            foreach (string line in lines)
+            {
+                log.Trace("Import Line: {0}", line);
+                if (line.Contains("="))
+                    WriteVariable(line);
+            }
+        }
         private bool ExecuteLine(string line)
         {
-            // Fetch the line and replace all 1 or more whitespace with a single space and drop all leading/trainling whitespace
+            // Fetch the line and replace all 1 or more whitespace with a single space and drop all leading/trailing whitespace
             string command = Regex.Replace(line, @"\s+", " ").Trim();
 
             // Blank?
@@ -649,7 +674,37 @@ namespace AutoGrind
                 return true;
             }
 
-            // End??
+            // Assignment?
+            if (command.Contains("="))
+            {
+                log.Trace("Line {0} ASSIGNMENT: {1}", currentLine, command);
+                WriteVariable(command);
+                currentLine++;
+                return true;
+            }
+
+            // Clear?
+            if (command.StartsWith("clear"))
+            {
+                log.Trace("{0} CLEAR: {1}", currentLine, command);
+                ClearVariablesBtn_Click(null, null);
+                currentLine++;
+                return true;
+            }
+
+            // Import?
+            if (command.StartsWith("import "))
+            {
+                log.Trace("{0} IMPORT: {1}", currentLine, command);
+                string[] words = command.Split(' ');
+                if (words.Length > 1)
+                    ImportFile(words[1]);
+
+                currentLine++;
+                return true;
+            }
+
+            // End?
             if (command.StartsWith("end"))
             {
                 log.Trace("{0} END: {1}", currentLine, command);
@@ -690,6 +745,7 @@ namespace AutoGrind
             RobotDisconnectBtn_Click(null, null);
 
             robot = new TcpServer();
+            robot.receiveCallback = GeneralCallBack;
             if (robot.Connect(RobotIpPortTxt.Text) > 0)
             {
                 log.Error("Robot server initialization failure");
@@ -718,6 +774,52 @@ namespace AutoGrind
                     robot.Send(RobotMessageTxt.Text);
                 }
         }
+        /// <summary>
+        /// TODO: Clean these up, use consistent string formatting ideas, and the variables
+        /// TODO All of these... the variable name should be prefixed with the unique device name not the message prefix
+        /// Currently expect 0 or more #-separated name=value sequences
+        /// Examples:
+        /// return1=abc
+        /// return1=abc#return2=xyz
+        /// SET name value
+        /// </summary>
+        /// <param name="message"></param>
+        void GeneralCallBack(string message)
+        {
+            //log.Info("GCB<==({0},{1})", message, prefix);
+
+            string[] requests = message.Split('#');
+            foreach (string request in requests)
+            {
+                // {script.....}
+                if (false)//request.StartsWith("{") && request.EndsWith("}"))
+                    ;// ExecuteJavaScript(request.Substring(1, request.Length - 2));
+                else
+                {
+                    // name=value
+                    // TODO not clear what happens if you have
+                    //      name = value
+                    //      name = this is a test
+                    //      name = "this is a test"
+                    if (request.Contains("="))
+                        WriteVariable(request);
+                    else
+                    {
+                        // SET name value
+                        if (request.StartsWith("SET "))
+                        {
+                            string[] s = request.Split(' ');
+                            if (s.Length == 3)
+                                WriteVariable(s[1], s[2]);
+                            else
+                                log.Error("Illegal SET statement: {0}", request);
+                        }
+                        else
+                            log.Error("Illegal GCB command: {0}", request);
+                    }
+                }
+            }
+        }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
@@ -730,6 +832,141 @@ namespace AutoGrind
 
         // ========================
         // END ROBOT INTERFACE
+        // ========================
+
+        // ========================
+        // START VARIABLE SYSTEM
+        // ========================
+
+        string variablesFilename = "Variables.var";
+
+        private void ReadVariableBtn_Click(object sender, EventArgs e)
+        {
+            string name = VariableNameTxt.Text.Trim();
+            log.Debug("Read {0}", name);
+
+            foreach (DataRow row in variables.Rows)
+            {
+                if ((string)row["Name"] == name)
+                {
+                    log.Info("Found {0} = {1}", row["Name"], row["Value"]);
+                    row["IsNew"] = false;
+                    return;
+                }
+            }
+            log.Error("Can't find {0}", name);
+        }
+
+        static readonly object lockObject = new object();
+        /// <summary>
+        /// Update variable 'name' with 'value' if it exists otherwise add it
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="value"></param>
+        public void WriteVariable(string name, string value)
+        {
+            System.Threading.Monitor.Enter(lockObject);
+            string nameTrimmed = name.Trim();
+            log.Info("WriteVariable({0}, {1})", nameTrimmed, value);
+            if (variables == null)
+            {
+                log.Error("variables=null!");
+                return;
+            }
+            string datetime;
+            if (UtcTimeChk.Checked)
+                datetime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
+            else
+                datetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+
+            bool foundVariable = false;
+            foreach (DataRow row in variables.Rows)
+            {
+                if ((string)row["Name"] == nameTrimmed)
+                {
+                    // TODO: This is where it breaks prior to Thread Safety work
+                    row["Value"] = value;
+                    row["IsNew"] = true;
+                    row["TimeStamp"] = datetime;
+                    foundVariable = true;
+                    break;
+                }
+            }
+
+            if (!foundVariable)
+                variables.Rows.Add(new object[] { nameTrimmed, value, true, datetime });
+
+            variables.AcceptChanges();
+            Monitor.Exit(lockObject);
+        }
+
+        /// <summary>
+        /// Takes a "mname=value" string and set variable "name" equal to "value"
+        /// </summary>
+        /// <param name="assignment"></param>
+        public void WriteVariable(string assignment)
+        {
+            string[] s = assignment.Split('=');
+            if (s.Length != 2)
+            {
+                log.Error("WriteVariable({0} is invalid", assignment);
+            }
+            else
+            {
+                WriteVariable(s[0], s[1]);
+            }
+
+        }
+        private void WriteStringValueBtn_Click(object sender, EventArgs e)
+        {
+            string name = VariableNameTxt.Text;
+            string value = WriteStringValueTxt.Text;
+            WriteVariable(name, value);
+        }
+
+        private void LoadVariablesBtn_Click(object sender, EventArgs e)
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", variablesFilename);
+            log.Info("LoadVariables from {0}", filename);
+            ClearVariablesBtn_Click(null, null);
+            try
+            {
+                variables.ReadXml(filename);
+
+            }
+            catch
+            { }
+
+            VariablesGrd.DataSource = variables;
+            foreach (DataGridViewColumn col in VariablesGrd.Columns)
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            foreach (DataRow row in variables.Rows)
+            {
+                row["IsNew"] = false;
+            }
+        }
+
+        private void SaveVariablesBtn_Click(object sender, EventArgs e)
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", variablesFilename);
+            log.Info("SaveVariables to {0}", filename);
+            variables.AcceptChanges();
+            variables.WriteXml(filename, XmlWriteMode.WriteSchema, true);
+        }
+
+        private void ClearVariablesBtn_Click(object sender, EventArgs e)
+        {
+            variables = new DataTable("Variables");
+            DataColumn name = variables.Columns.Add("Name", typeof(System.String));
+            variables.Columns.Add("Value", typeof(System.String));
+            variables.Columns.Add("IsNew", typeof(System.Boolean));
+            variables.Columns.Add("TimeStamp", typeof(System.String));
+            variables.CaseSensitive = true;
+            variables.PrimaryKey = new DataColumn[] { name };
+            VariablesGrd.DataSource = variables;
+        }
+        // ========================
+        // END VARIABLE SYSTEM
         // ========================
 
     }
