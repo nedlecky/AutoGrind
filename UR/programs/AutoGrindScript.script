@@ -1,0 +1,42 @@
+# AutoGrind System Script
+# Version 1.0
+# Programmer: Ned Lecky
+
+global scriptRunning = True
+global counter = 1
+
+def incrCounter(a):
+  global counter = counter + a
+end
+
+# Send CRLF out the socket
+def socket_send_crlf():
+  socket_send_byte(13)
+  socket_send_byte(10)
+end
+
+def return_pose(name,p):
+  socket_send_string(name)
+  socket_send_string("=(")
+  i = 0
+  while i < 6:
+    if i > 0:
+      socket_send_string(",")
+    end
+    socket_send_string(p[i])
+    i = i + 1
+  end
+  socket_send_string(")")
+  socket_send_crlf()end
+
+def return_tcp_offset():
+  p = get_tcp_offset()
+  return_pose("tcp_offset",p)
+  global response = "return_tcp_offset()"
+end
+
+def return_actual_tcp_pose():
+  p = get_actual_tcp_pose()
+  return_pose("actual_tcp_pose",p)
+  global response = "return_actual_tcp_pose()"
+end

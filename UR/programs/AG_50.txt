@@ -1,13 +1,8 @@
  Program
-   BeforeStart
-     'Rev 2021_12_02am 01'
-     start_pose≔get_actual_tcp_pose()
-     MoveJ
-       start_pose
    Robot Program
-     'Rev 2021_12_02am 01'
      MoveL
        Vertical_3
        Tilted_1
        Vertical_4
+       Vertical_3
        response≔"50 success"

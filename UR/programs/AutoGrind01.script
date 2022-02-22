@@ -1,4 +1,4 @@
-def AG_SocketComms():
+def AutoGrind01():
   set_tcp(p[0.0,0.0,0.174,0.0,0.0,0.0])
   set_payload(2.0)
   step_count_dee815f7_5b4a_414f_92de_a896b80426a4 = 0.0
@@ -34,121 +34,172 @@ def AG_SocketComms():
   global Vertical_4_p=p[-.139608417866, -.431276582919, .131081236338, -.001221329928, 3.116276528722, .038891910429]
   global Vertical_4_q=[-1.600700000064136, -1.5575468977702354, -2.0619765024476475, -1.1185765962043455, 1.595100000182046, -0.030999980927620463]
   def AG_50():
-    $ 53 "AG_50" "noBreak"
-    $ 54 "MoveL"
-    $ 55 "Vertical_3" "breakAfter"
+    $ 58 "AG_50" "noBreak"
+    $ 59 "MoveL"
+    $ 60 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 56 "Tilted_1" "breakAfter"
+    $ 61 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 57 "Vertical_4" "breakAfter"
+    $ 62 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 58 "Vertical_3" "breakAfter"
+    $ 63 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 59 "response≔'50 success'"
+    $ 64 "response≔'50 success'"
     global response="50 success"
   end
   $ 1 "BeforeStart"
-  $ 2 "start_pose≔get_actual_tcp_pose()"
-  global start_pose= get_actual_tcp_pose ()
-  $ 3 "MoveJ"
-  $ 4 "start_pose" "breakAfter"
-  movej(start_pose, a=1.3962634015954636, v=1.0471975511965976)
-  $ 5 "socket_close()"
+  $ 2 "Script: AutoGrindScript.script"
+  # AutoGrind System Script
+  # Version 1.0
+  # Programmer: Ned Lecky
+  
+  global scriptRunning = True
+  global counter = 1
+  
+  def incrCounter(a):
+    global counter = counter + a
+  end
+  
+  # Send CRLF out the socket
+  def socket_send_crlf():
+    socket_send_byte(13)
+    socket_send_byte(10)
+  end
+  
+  def return_pose(name,p):
+    socket_send_string(name)
+    socket_send_string("=(")
+    i = 0
+    while i < 6:
+      if i > 0:
+        socket_send_string(",")
+      end
+      socket_send_string(p[i])
+      i = i + 1
+    end
+    socket_send_string(")")
+    socket_send_crlf()end
+  
+  def return_tcp_offset():
+    p = get_tcp_offset();
+    return_pose("tcp_offset",p)
+    global response = "return_tcp_offset()"
+  end
+  
+  def return_actual_tcp_pose():
+    p = get_actual_tcp_pose()
+    return_pose("actual_tcp_pose",p)
+    global response = "return_actual_tcp_pose()"
+  end
+  $ 3 "currentTcpPose≔get_actual_tcp_pose()"
+  global currentTcpPose= get_actual_tcp_pose ()
+  $ 4 "MoveJ"
+  $ 5 "currentTcpPose" "breakAfter"
+  movej(currentTcpPose, a=1.3962634015954636, v=1.0471975511965976)
+  $ 6 "socket_close()"
   socket_close()
-  $ 6 "Wait: 0.25"
+  $ 7 "Wait: 0.25"
   sleep(0.25)
-  $ 7 "socket_is_open≔ False "
+  $ 8 "socket_is_open≔ False "
   global socket_is_open=  False  
-  $ 8 "command_index≔0"
+  $ 9 "command_index≔0"
   global command_index=0
   while (True):
-    $ 9 "Robot Program"
-    $ 10 "Loop socket_is_open ≟  False "
+    $ 10 "Robot Program"
+    $ 11 "Loop socket_is_open ≟  False "
     while (socket_is_open  ==    False  ):
-      $ 11 "socket_is_open≔socket_open('192.168.25.1', 30000)"
+      $ 12 "socket_is_open≔socket_open('192.168.25.1', 30000)"
       global socket_is_open=socket_open("192.168.25.1", 30000)
-      $ 12 "Wait: 0.5"
+      $ 13 "Wait: 0.5"
       sleep(0.5)
     end
-    $ 13 "response≔'Unknown command'"
+    $ 14 "response≔'Unknown command'"
     global response="Unknown command"
-    $ 14 "command≔socket_read_ascii_float(5)"
+    $ 15 "command≔socket_read_ascii_float(5)"
     global command=socket_read_ascii_float(5)
-    $ 15 "If command[0]≥1"
+    $ 16 "If command[0]≥1"
     if (command[0] >= 1):
-      $ 16 "socket_send_line('robot_running=True')"
+      $ 17 "socket_send_line('robot_running=True')"
       socket_send_line("robot_running=True")
-      $ 17 "command_index≔command_index+1"
+      $ 18 "command_index≔command_index+1"
       global command_index=command_index+1
-      $ 18 "socket_set_var('robot_index', command_index)"
+      $ 19 "socket_set_var('robot_index', command_index)"
       socket_set_var("robot_index", command_index)
-      $ 19 "lastCommand≔command"
+      $ 20 "lastCommand≔command"
       global lastCommand=command
-      $ 20 "Switch command[1]"
+      $ 21 "Switch command[1]"
       switch_1 = command[1]
-      $ 21 "Case 1"
+      $ 22 "Case 1"
       if (1 == switch_1):
-        $ 22 "MoveL"
-        $ 23 "up_pose" "breakAfter"
+        $ 23 "MoveL"
+        $ 24 "up_pose" "breakAfter"
         movel(up_pose_p, a=1.2, v=0.25)
-        $ 24 "response≔'moved up'"
+        $ 25 "response≔'moved up'"
         global response="moved up"
       elif (2 == switch_1):
-        $ 25 "Case 2"
-        $ 26 "MoveJ"
-        $ 27 "down_pose" "breakAfter"
+        $ 26 "Case 2"
+        $ 27 "MoveJ"
+        $ 28 "down_pose" "breakAfter"
         movej(get_inverse_kin(down_pose_p, qnear=down_pose_q), a=1.3962634015954636, v=1.0471975511965976)
-        $ 28 "response≔'moved down'"
+        $ 29 "response≔'moved down'"
         global response="moved down"
       elif (3 == switch_1):
-        $ 29 "Case 3"
-        $ 30 "response≔'close'"
+        $ 30 "Case 3"
+        $ 31 "response≔'close'"
         global response="close"
       elif (4 == switch_1):
-        $ 31 "Case 4"
-        $ 32 "response≔'open'"
+        $ 32 "Case 4"
+        $ 33 "response≔'open'"
         global response="open"
+      elif (10 == switch_1):
+        $ 34 "Case 10"
+        $ 35 "return_actual_tcp_pose()"
+        return_actual_tcp_pose()
+      elif (11 == switch_1):
+        $ 36 "Case 11"
+        $ 37 "return_tcp_offset()"
+        return_tcp_offset()
       elif (50 == switch_1):
-        $ 33 "Case 50"
-        $ 34 "Call AG_50"
+        $ 38 "Case 50"
+        $ 39 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 35 "Case 98"
-        $ 36 "response≔'socket reset'"
+        $ 40 "Case 98"
+        $ 41 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 37 "Case 99"
-        $ 38 "response≔'exiting'"
+        $ 42 "Case 99"
+        $ 43 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 39 "Default Case"
-        $ 40 "response≔'unknown command'"
+        $ 44 "Default Case"
+        $ 45 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 41 "socket_send_line('robot_response=' + response + '#robot_running=False')"
+      $ 46 "socket_send_line('robot_response=' + response + '#robot_running=False')"
       socket_send_line("robot_response=" + response + "#robot_running=False")
-      $ 42 "If command[1]≟98"
+      $ 47 "If command[1]≟98"
       if (command[1] == 98):
-        $ 43 "Wait: 0.5"
+        $ 48 "Wait: 0.5"
         sleep(0.5)
-        $ 44 "socket_close()"
+        $ 49 "socket_close()"
         socket_close()
-        $ 45 "socket_is_open≔ False "
+        $ 50 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 46 "If command[1]≟99"
+      $ 51 "If command[1]≟99"
       if (command[1] == 99):
-        $ 47 "Wait: 0.5"
+        $ 52 "Wait: 0.5"
         sleep(0.5)
-        $ 48 "socket_close()"
+        $ 53 "socket_close()"
         socket_close()
-        $ 49 "socket_is_open≔ False "
+        $ 54 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 50 "Halt"
+        $ 55 "Halt"
         halt
       end
     else:
-      $ 51 "Else" "noBreak"
+      $ 56 "Else" "noBreak"
     end
   end
 end

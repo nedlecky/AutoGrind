@@ -1,8 +1,9 @@
  Program
    BeforeStart
-     start_pose≔get_actual_tcp_pose()
+     Script: AutoGrindScript.script
+     currentTcpPose≔get_actual_tcp_pose()
      MoveJ
-       start_pose
+       currentTcpPose
      socket_close()
      Wait: 0.25
      socket_is_open≔ False 
@@ -31,6 +32,10 @@
            response≔"close"
          Case 4
            response≔"open"
+         Case 10
+           return_actual_tcp_pose()
+         Case 11
+           return_tcp_offset()
          Case 50
            Call AG_50
          Case 98
