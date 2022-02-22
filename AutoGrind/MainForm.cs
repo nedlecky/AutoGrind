@@ -753,6 +753,8 @@ namespace AutoGrind
             else
             {
                 log.Info("Robot connection ready");
+                RobotDisconnectBtn.BackColor = Color.Gray;
+                RobotConnectBtn.BackColor = Color.Green;
             }
         }
 
@@ -761,9 +763,14 @@ namespace AutoGrind
             if (robot != null)
             {
                 if (robot.IsConnected())
+                {
+                    robot.Send("(98)");
                     robot.Disconnect();
+                }
                 robot = null;
             }
+            RobotDisconnectBtn.BackColor = Color.Red;
+            RobotConnectBtn.BackColor = Color.Gray;
         }
 
         private void RobotSendBtn_Click(object sender, EventArgs e)
