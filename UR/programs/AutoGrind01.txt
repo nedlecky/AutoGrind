@@ -13,7 +13,7 @@
        socket_is_open≔socket_open("192.168.25.1", 30000)
        Wait: 0.5
      response≔"Unknown command"
-     command≔socket_read_ascii_float(5)
+     command≔socket_read_ascii_float(7)
      If command[0]≥1
        socket_send_line("robot_running=True")
        command_index≔command_index+1
@@ -35,7 +35,15 @@
          Case 10
            return_actual_tcp_pose()
          Case 11
+           return_actual_tcp_pose_RPY()
+         Case 12
            return_tcp_offset()
+         Case 13
+           MoveRelRpy()
+         Case 20
+           return_get_actual_joint_positions()
+         Case 21
+           return_get_actual_joint_positions()
          Case 50
            Call AG_50
          Case 98

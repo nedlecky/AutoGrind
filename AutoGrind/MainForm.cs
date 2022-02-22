@@ -452,7 +452,7 @@ namespace AutoGrind
             }
 
             OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "Open an AutoHGrind Recipe";
+            dialog.Title = "Open an AutoGrind Recipe";
             dialog.Filter = "AutoGrind Recipe Files|*.agr";
             dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
             if (dialog.ShowDialog() == DialogResult.OK)
