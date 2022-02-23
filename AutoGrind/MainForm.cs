@@ -619,7 +619,7 @@ namespace AutoGrind
 
         private void JogBtn_Click(object sender, EventArgs e)
         {
-            JoggingForm form = new JoggingForm(robotServer);
+            JoggingForm form = new JoggingForm(robotServer, "Jog to Defect");
 
             form.ShowDialog(this);
         }
@@ -998,6 +998,25 @@ namespace AutoGrind
             variables.CaseSensitive = true;
             variables.PrimaryKey = new DataColumn[] { name };
             VariablesGrd.DataSource = variables;
+        }
+
+        private void SetLeftBtn_Click(object sender, EventArgs e)
+        {
+            JoggingForm form = new JoggingForm(robotServer, "Set Left End of Cylinder",true);
+
+            form.ShowDialog(this);
+
+            if(form.fSave)
+            {
+                log.Trace("Save left cylinder end");
+
+                if(robotReady)
+                {
+                    robotServer.Send("(20)");
+                    // TODO how to wait for response and then save.....
+                }
+
+            }
         }
 
         // ========================

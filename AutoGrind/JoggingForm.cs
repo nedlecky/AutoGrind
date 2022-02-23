@@ -14,17 +14,29 @@ namespace AutoGrind
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         TcpServer robot;
+        public bool fSave { get; set; }
 
-        public JoggingForm(TcpServer _robot)
+        public JoggingForm(TcpServer _robot, string purpose="General Jogging", bool saveable=false)
         {
             InitializeComponent();
+            PurposeLbl.Text = purpose;  
             robot = _robot;
+            fSave = false;
+            SaveBtn.Enabled = saveable;
+            SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;     
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
         {
+            fSave = false;
             Close();
         }
+        private void SaveBtn_Click(object sender, EventArgs e)
+        {
+            fSave = true;
+            Close();
+        }
+
 
         private void JoggingForm_Load(object sender, EventArgs e)
         {
@@ -127,5 +139,6 @@ namespace AutoGrind
         {
             robot.Send("(15)");
         }
+
     }
 }

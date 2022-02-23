@@ -57,9 +57,9 @@
             this.RobotDisconnectBtn = new System.Windows.Forms.Button();
             this.RobotSendBtn = new System.Windows.Forms.Button();
             this.RobotMessageTxt = new System.Windows.Forms.TextBox();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
+            this.SetDomeBtn = new System.Windows.Forms.Button();
+            this.SetRightBtn = new System.Windows.Forms.Button();
+            this.SetLeftBtn = new System.Windows.Forms.Button();
             this.DefaultConfigBtn = new System.Windows.Forms.Button();
             this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.SaveConfigBtn = new System.Windows.Forms.Button();
@@ -93,6 +93,9 @@
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
             this.RobotStatusLbl = new System.Windows.Forms.Label();
+            this.GotoLeftBtn = new System.Windows.Forms.Button();
+            this.GotoRightBtn = new System.Windows.Forms.Button();
+            this.GotoDomeBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -403,10 +406,13 @@
             // 
             // SetupTab
             // 
+            this.SetupTab.Controls.Add(this.GotoDomeBtn);
+            this.SetupTab.Controls.Add(this.GotoRightBtn);
+            this.SetupTab.Controls.Add(this.GotoLeftBtn);
             this.SetupTab.Controls.Add(this.groupBox2);
-            this.SetupTab.Controls.Add(this.button3);
-            this.SetupTab.Controls.Add(this.button2);
-            this.SetupTab.Controls.Add(this.button1);
+            this.SetupTab.Controls.Add(this.SetDomeBtn);
+            this.SetupTab.Controls.Add(this.SetRightBtn);
+            this.SetupTab.Controls.Add(this.SetLeftBtn);
             this.SetupTab.Controls.Add(this.DefaultConfigBtn);
             this.SetupTab.Controls.Add(this.LoadConfigBtn);
             this.SetupTab.Controls.Add(this.SaveConfigBtn);
@@ -471,44 +477,45 @@
             this.RobotMessageTxt.TabIndex = 75;
             this.RobotMessageTxt.Text = "(1)";
             // 
-            // button3
+            // SetDomeBtn
             // 
-            this.button3.BackColor = System.Drawing.Color.Green;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(516, 146);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(161, 107);
-            this.button3.TabIndex = 77;
-            this.button3.Text = "Set Top of Dome";
-            this.button3.UseVisualStyleBackColor = false;
+            this.SetDomeBtn.BackColor = System.Drawing.Color.Green;
+            this.SetDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetDomeBtn.ForeColor = System.Drawing.Color.White;
+            this.SetDomeBtn.Location = new System.Drawing.Point(460, 146);
+            this.SetDomeBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.SetDomeBtn.Name = "SetDomeBtn";
+            this.SetDomeBtn.Size = new System.Drawing.Size(161, 107);
+            this.SetDomeBtn.TabIndex = 77;
+            this.SetDomeBtn.Text = "Set Top of Dome";
+            this.SetDomeBtn.UseVisualStyleBackColor = false;
             // 
-            // button2
+            // SetRightBtn
             // 
-            this.button2.BackColor = System.Drawing.Color.Green;
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button2.ForeColor = System.Drawing.Color.White;
-            this.button2.Location = new System.Drawing.Point(204, 146);
-            this.button2.Margin = new System.Windows.Forms.Padding(2);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(174, 107);
-            this.button2.TabIndex = 76;
-            this.button2.Text = "Set Right End of Cylinder";
-            this.button2.UseVisualStyleBackColor = false;
+            this.SetRightBtn.BackColor = System.Drawing.Color.Green;
+            this.SetRightBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetRightBtn.ForeColor = System.Drawing.Color.White;
+            this.SetRightBtn.Location = new System.Drawing.Point(29, 257);
+            this.SetRightBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.SetRightBtn.Name = "SetRightBtn";
+            this.SetRightBtn.Size = new System.Drawing.Size(174, 107);
+            this.SetRightBtn.TabIndex = 76;
+            this.SetRightBtn.Text = "Set Right End of Cylinder";
+            this.SetRightBtn.UseVisualStyleBackColor = false;
             // 
-            // button1
+            // SetLeftBtn
             // 
-            this.button1.BackColor = System.Drawing.Color.Green;
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button1.ForeColor = System.Drawing.Color.White;
-            this.button1.Location = new System.Drawing.Point(29, 146);
-            this.button1.Margin = new System.Windows.Forms.Padding(2);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(161, 107);
-            this.button1.TabIndex = 75;
-            this.button1.Text = "Set Left End of Cylinder";
-            this.button1.UseVisualStyleBackColor = false;
+            this.SetLeftBtn.BackColor = System.Drawing.Color.Green;
+            this.SetLeftBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetLeftBtn.ForeColor = System.Drawing.Color.White;
+            this.SetLeftBtn.Location = new System.Drawing.Point(29, 146);
+            this.SetLeftBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.SetLeftBtn.Name = "SetLeftBtn";
+            this.SetLeftBtn.Size = new System.Drawing.Size(174, 107);
+            this.SetLeftBtn.TabIndex = 75;
+            this.SetLeftBtn.Text = "Set Left End of Cylinder";
+            this.SetLeftBtn.UseVisualStyleBackColor = false;
+            this.SetLeftBtn.Click += new System.EventHandler(this.SetLeftBtn_Click);
             // 
             // DefaultConfigBtn
             // 
@@ -823,6 +830,45 @@
             this.RobotStatusLbl.Text = "??";
             this.RobotStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // GotoLeftBtn
+            // 
+            this.GotoLeftBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoLeftBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoLeftBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoLeftBtn.Location = new System.Drawing.Point(217, 146);
+            this.GotoLeftBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoLeftBtn.Name = "GotoLeftBtn";
+            this.GotoLeftBtn.Size = new System.Drawing.Size(87, 107);
+            this.GotoLeftBtn.TabIndex = 79;
+            this.GotoLeftBtn.Text = "Goto";
+            this.GotoLeftBtn.UseVisualStyleBackColor = false;
+            // 
+            // GotoRightBtn
+            // 
+            this.GotoRightBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoRightBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoRightBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoRightBtn.Location = new System.Drawing.Point(217, 257);
+            this.GotoRightBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoRightBtn.Name = "GotoRightBtn";
+            this.GotoRightBtn.Size = new System.Drawing.Size(87, 107);
+            this.GotoRightBtn.TabIndex = 80;
+            this.GotoRightBtn.Text = "Goto";
+            this.GotoRightBtn.UseVisualStyleBackColor = false;
+            // 
+            // GotoDomeBtn
+            // 
+            this.GotoDomeBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoDomeBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoDomeBtn.Location = new System.Drawing.Point(626, 146);
+            this.GotoDomeBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoDomeBtn.Name = "GotoDomeBtn";
+            this.GotoDomeBtn.Size = new System.Drawing.Size(88, 107);
+            this.GotoDomeBtn.TabIndex = 81;
+            this.GotoDomeBtn.Text = "Goto";
+            this.GotoDomeBtn.UseVisualStyleBackColor = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -899,11 +945,11 @@
         private System.Windows.Forms.Button JogBtn;
         private System.Windows.Forms.Label DiameterLbl;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Button SetLeftBtn;
         private System.Windows.Forms.Label AngleLbl;
         private System.Windows.Forms.Label label4;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button SetDomeBtn;
+        private System.Windows.Forms.Button SetRightBtn;
         private System.Windows.Forms.Timer ExecTmr;
         private System.Windows.Forms.Button KeyboardBtn;
         private System.Windows.Forms.Button RobotDisconnectBtn;
@@ -926,6 +972,9 @@
         private System.Windows.Forms.CheckBox UtcTimeChk;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label RobotStatusLbl;
+        private System.Windows.Forms.Button GotoDomeBtn;
+        private System.Windows.Forms.Button GotoRightBtn;
+        private System.Windows.Forms.Button GotoLeftBtn;
     }
 }
 

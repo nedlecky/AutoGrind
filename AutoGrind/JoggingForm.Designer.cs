@@ -46,6 +46,9 @@
             this.label2 = new System.Windows.Forms.Label();
             this.AngleLst = new System.Windows.Forms.ListBox();
             this.ZeroRpyBtn = new System.Windows.Forms.Button();
+            this.FreeDriveBtn = new System.Windows.Forms.Button();
+            this.PurposeLbl = new System.Windows.Forms.Label();
+            this.SaveBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // YminusBtn
@@ -95,10 +98,10 @@
             this.ExitBtn.BackColor = System.Drawing.Color.Green;
             this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(554, 653);
+            this.ExitBtn.Location = new System.Drawing.Point(646, 81);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(260, 86);
+            this.ExitBtn.Size = new System.Drawing.Size(168, 86);
             this.ExitBtn.TabIndex = 4;
             this.ExitBtn.Text = "Exit";
             this.ExitBtn.UseVisualStyleBackColor = false;
@@ -241,7 +244,7 @@
             "0.010",
             "0.025",
             "0.050"});
-            this.DistanceLst.Location = new System.Drawing.Point(396, 139);
+            this.DistanceLst.Location = new System.Drawing.Point(387, 281);
             this.DistanceLst.Name = "DistanceLst";
             this.DistanceLst.Size = new System.Drawing.Size(80, 124);
             this.DistanceLst.TabIndex = 14;
@@ -250,7 +253,7 @@
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(394, 112);
+            this.label1.Location = new System.Drawing.Point(385, 254);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(82, 24);
             this.label1.TabIndex = 15;
@@ -260,7 +263,7 @@
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(394, 542);
+            this.label2.Location = new System.Drawing.Point(383, 447);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(60, 24);
             this.label2.TabIndex = 17;
@@ -277,7 +280,7 @@
             "2.0",
             "5.0",
             "10.0"});
-            this.AngleLst.Location = new System.Drawing.Point(396, 569);
+            this.AngleLst.Location = new System.Drawing.Point(387, 474);
             this.AngleLst.Name = "AngleLst";
             this.AngleLst.Size = new System.Drawing.Size(80, 124);
             this.AngleLst.TabIndex = 16;
@@ -287,14 +290,54 @@
             this.ZeroRpyBtn.BackColor = System.Drawing.Color.Green;
             this.ZeroRpyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZeroRpyBtn.ForeColor = System.Drawing.Color.White;
-            this.ZeroRpyBtn.Location = new System.Drawing.Point(576, 463);
+            this.ZeroRpyBtn.Location = new System.Drawing.Point(400, 620);
             this.ZeroRpyBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroRpyBtn.Name = "ZeroRpyBtn";
-            this.ZeroRpyBtn.Size = new System.Drawing.Size(165, 52);
+            this.ZeroRpyBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ZeroRpyBtn.Size = new System.Drawing.Size(165, 95);
             this.ZeroRpyBtn.TabIndex = 18;
-            this.ZeroRpyBtn.Text = "RPY=0,0,0";
+            this.ZeroRpyBtn.Text = "Align RPY=0,0,0";
             this.ZeroRpyBtn.UseVisualStyleBackColor = false;
             this.ZeroRpyBtn.Click += new System.EventHandler(this.ZeroRpyBtn_Click);
+            // 
+            // FreeDriveBtn
+            // 
+            this.FreeDriveBtn.BackColor = System.Drawing.Color.Green;
+            this.FreeDriveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FreeDriveBtn.ForeColor = System.Drawing.Color.White;
+            this.FreeDriveBtn.Location = new System.Drawing.Point(649, 336);
+            this.FreeDriveBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.FreeDriveBtn.Name = "FreeDriveBtn";
+            this.FreeDriveBtn.Size = new System.Drawing.Size(165, 52);
+            this.FreeDriveBtn.TabIndex = 19;
+            this.FreeDriveBtn.Text = "Free Drive";
+            this.FreeDriveBtn.UseVisualStyleBackColor = false;
+            // 
+            // PurposeLbl
+            // 
+            this.PurposeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PurposeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PurposeLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.PurposeLbl.Location = new System.Drawing.Point(436, 27);
+            this.PurposeLbl.Name = "PurposeLbl";
+            this.PurposeLbl.Size = new System.Drawing.Size(378, 52);
+            this.PurposeLbl.TabIndex = 76;
+            this.PurposeLbl.Text = "General Jogging";
+            this.PurposeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // SaveBtn
+            // 
+            this.SaveBtn.BackColor = System.Drawing.Color.Green;
+            this.SaveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveBtn.ForeColor = System.Drawing.Color.White;
+            this.SaveBtn.Location = new System.Drawing.Point(436, 81);
+            this.SaveBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.SaveBtn.Name = "SaveBtn";
+            this.SaveBtn.Size = new System.Drawing.Size(174, 86);
+            this.SaveBtn.TabIndex = 77;
+            this.SaveBtn.Text = "Save";
+            this.SaveBtn.UseVisualStyleBackColor = false;
+            this.SaveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
             // JoggingForm
             // 
@@ -302,6 +345,9 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 769);
             this.ControlBox = false;
+            this.Controls.Add(this.SaveBtn);
+            this.Controls.Add(this.PurposeLbl);
+            this.Controls.Add(this.FreeDriveBtn);
             this.Controls.Add(this.ZeroRpyBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AngleLst);
@@ -320,7 +366,7 @@
             this.Controls.Add(this.YminusBtn);
             this.Controls.Add(this.ZminusBtn);
             this.Controls.Add(this.ZplusBtn);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "JoggingForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Jog Robot";
@@ -350,5 +396,8 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox AngleLst;
         private System.Windows.Forms.Button ZeroRpyBtn;
+        private System.Windows.Forms.Button FreeDriveBtn;
+        private System.Windows.Forms.Label PurposeLbl;
+        private System.Windows.Forms.Button SaveBtn;
     }
 }
