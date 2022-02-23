@@ -1,6 +1,7 @@
  Program
    BeforeStart
-     Script: AutoGrindScript.script
+     Script: util_script.script
+     Script: ag_script.script
      currentTcpPose≔get_actual_tcp_pose()
      MoveJ
        currentTcpPose
@@ -39,7 +40,11 @@
          Case 12
            return_tcp_offset()
          Case 13
-           MoveRelRpy()
+           movel_RPY_rel()
+         Case 14
+           movej_RPY_rel()
+         Case 15
+           movej_RPY_zero()
          Case 20
            return_get_actual_joint_positions()
          Case 21
@@ -70,4 +75,3 @@
        Tilted_1
        Vertical_4
        Vertical_3
-       response≔"50 success"

@@ -28,37 +28,39 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button3 = new System.Windows.Forms.Button();
+            this.YminusBtn = new System.Windows.Forms.Button();
             this.ZminusBtn = new System.Windows.Forms.Button();
             this.ZplusBtn = new System.Windows.Forms.Button();
             this.ExitBtn = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
-            this.button12 = new System.Windows.Forms.Button();
+            this.YplusBtn = new System.Windows.Forms.Button();
+            this.XminusBtn = new System.Windows.Forms.Button();
+            this.XplusBtn = new System.Windows.Forms.Button();
+            this.RollplusBtn = new System.Windows.Forms.Button();
+            this.RollminusBtn = new System.Windows.Forms.Button();
+            this.PitchplusBtn = new System.Windows.Forms.Button();
+            this.PitchminusBtn = new System.Windows.Forms.Button();
+            this.YawminusBtn = new System.Windows.Forms.Button();
+            this.YawplusBtn = new System.Windows.Forms.Button();
             this.DistanceLst = new System.Windows.Forms.ListBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.AngleLst = new System.Windows.Forms.ListBox();
+            this.ZeroRpyBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
-            // button3
+            // YminusBtn
             // 
-            this.button3.BackColor = System.Drawing.Color.Green;
-            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button3.ForeColor = System.Drawing.Color.White;
-            this.button3.Location = new System.Drawing.Point(69, 229);
-            this.button3.Margin = new System.Windows.Forms.Padding(2);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(102, 86);
-            this.button3.TabIndex = 3;
-            this.button3.Text = "Y-";
-            this.button3.UseVisualStyleBackColor = false;
+            this.YminusBtn.BackColor = System.Drawing.Color.Green;
+            this.YminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.YminusBtn.ForeColor = System.Drawing.Color.White;
+            this.YminusBtn.Location = new System.Drawing.Point(69, 229);
+            this.YminusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.YminusBtn.Name = "YminusBtn";
+            this.YminusBtn.Size = new System.Drawing.Size(102, 86);
+            this.YminusBtn.TabIndex = 3;
+            this.YminusBtn.Text = "Y-";
+            this.YminusBtn.UseVisualStyleBackColor = false;
+            this.YminusBtn.Click += new System.EventHandler(this.YminusBtn_Click);
             // 
             // ZminusBtn
             // 
@@ -102,122 +104,131 @@
             this.ExitBtn.UseVisualStyleBackColor = false;
             this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
             // 
-            // button4
+            // YplusBtn
             // 
-            this.button4.BackColor = System.Drawing.Color.Green;
-            this.button4.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button4.ForeColor = System.Drawing.Color.White;
-            this.button4.Location = new System.Drawing.Point(269, 229);
-            this.button4.Margin = new System.Windows.Forms.Padding(2);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(102, 86);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "Y+";
-            this.button4.UseVisualStyleBackColor = false;
+            this.YplusBtn.BackColor = System.Drawing.Color.Green;
+            this.YplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.YplusBtn.ForeColor = System.Drawing.Color.White;
+            this.YplusBtn.Location = new System.Drawing.Point(269, 229);
+            this.YplusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.YplusBtn.Name = "YplusBtn";
+            this.YplusBtn.Size = new System.Drawing.Size(102, 86);
+            this.YplusBtn.TabIndex = 5;
+            this.YplusBtn.Text = "Y+";
+            this.YplusBtn.UseVisualStyleBackColor = false;
+            this.YplusBtn.Click += new System.EventHandler(this.YplusBtn_Click);
             // 
-            // button5
+            // XminusBtn
             // 
-            this.button5.BackColor = System.Drawing.Color.Green;
-            this.button5.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button5.ForeColor = System.Drawing.Color.White;
-            this.button5.Location = new System.Drawing.Point(168, 139);
-            this.button5.Margin = new System.Windows.Forms.Padding(2);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(102, 86);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "X-";
-            this.button5.UseVisualStyleBackColor = false;
+            this.XminusBtn.BackColor = System.Drawing.Color.Green;
+            this.XminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.XminusBtn.ForeColor = System.Drawing.Color.White;
+            this.XminusBtn.Location = new System.Drawing.Point(168, 139);
+            this.XminusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.XminusBtn.Name = "XminusBtn";
+            this.XminusBtn.Size = new System.Drawing.Size(102, 86);
+            this.XminusBtn.TabIndex = 6;
+            this.XminusBtn.Text = "X-";
+            this.XminusBtn.UseVisualStyleBackColor = false;
+            this.XminusBtn.Click += new System.EventHandler(this.XminusBtn_Click);
             // 
-            // button6
+            // XplusBtn
             // 
-            this.button6.BackColor = System.Drawing.Color.Green;
-            this.button6.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button6.ForeColor = System.Drawing.Color.White;
-            this.button6.Location = new System.Drawing.Point(168, 319);
-            this.button6.Margin = new System.Windows.Forms.Padding(2);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(102, 86);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "X+";
-            this.button6.UseVisualStyleBackColor = false;
+            this.XplusBtn.BackColor = System.Drawing.Color.Green;
+            this.XplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.XplusBtn.ForeColor = System.Drawing.Color.White;
+            this.XplusBtn.Location = new System.Drawing.Point(168, 319);
+            this.XplusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.XplusBtn.Name = "XplusBtn";
+            this.XplusBtn.Size = new System.Drawing.Size(102, 86);
+            this.XplusBtn.TabIndex = 7;
+            this.XplusBtn.Text = "X+";
+            this.XplusBtn.UseVisualStyleBackColor = false;
+            this.XplusBtn.Click += new System.EventHandler(this.XplusBtn_Click);
             // 
-            // button7
+            // RollplusBtn
             // 
-            this.button7.BackColor = System.Drawing.Color.Green;
-            this.button7.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button7.ForeColor = System.Drawing.Color.White;
-            this.button7.Location = new System.Drawing.Point(114, 463);
-            this.button7.Margin = new System.Windows.Forms.Padding(2);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(102, 86);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "Roll+";
-            this.button7.UseVisualStyleBackColor = false;
+            this.RollplusBtn.BackColor = System.Drawing.Color.Green;
+            this.RollplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RollplusBtn.ForeColor = System.Drawing.Color.White;
+            this.RollplusBtn.Location = new System.Drawing.Point(114, 463);
+            this.RollplusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.RollplusBtn.Name = "RollplusBtn";
+            this.RollplusBtn.Size = new System.Drawing.Size(102, 86);
+            this.RollplusBtn.TabIndex = 8;
+            this.RollplusBtn.Text = "Roll+";
+            this.RollplusBtn.UseVisualStyleBackColor = false;
+            this.RollplusBtn.Click += new System.EventHandler(this.RollplusBtn_Click);
             // 
-            // button8
+            // RollminusBtn
             // 
-            this.button8.BackColor = System.Drawing.Color.Green;
-            this.button8.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button8.ForeColor = System.Drawing.Color.White;
-            this.button8.Location = new System.Drawing.Point(220, 463);
-            this.button8.Margin = new System.Windows.Forms.Padding(2);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(102, 86);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "Roll-";
-            this.button8.UseVisualStyleBackColor = false;
+            this.RollminusBtn.BackColor = System.Drawing.Color.Green;
+            this.RollminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RollminusBtn.ForeColor = System.Drawing.Color.White;
+            this.RollminusBtn.Location = new System.Drawing.Point(220, 463);
+            this.RollminusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.RollminusBtn.Name = "RollminusBtn";
+            this.RollminusBtn.Size = new System.Drawing.Size(102, 86);
+            this.RollminusBtn.TabIndex = 9;
+            this.RollminusBtn.Text = "Roll-";
+            this.RollminusBtn.UseVisualStyleBackColor = false;
+            this.RollminusBtn.Click += new System.EventHandler(this.RollminusBtn_Click);
             // 
-            // button9
+            // PitchplusBtn
             // 
-            this.button9.BackColor = System.Drawing.Color.Green;
-            this.button9.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button9.ForeColor = System.Drawing.Color.White;
-            this.button9.Location = new System.Drawing.Point(168, 569);
-            this.button9.Margin = new System.Windows.Forms.Padding(2);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(102, 86);
-            this.button9.TabIndex = 10;
-            this.button9.Text = "Pitch+";
-            this.button9.UseVisualStyleBackColor = false;
+            this.PitchplusBtn.BackColor = System.Drawing.Color.Green;
+            this.PitchplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PitchplusBtn.ForeColor = System.Drawing.Color.White;
+            this.PitchplusBtn.Location = new System.Drawing.Point(168, 569);
+            this.PitchplusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.PitchplusBtn.Name = "PitchplusBtn";
+            this.PitchplusBtn.Size = new System.Drawing.Size(102, 86);
+            this.PitchplusBtn.TabIndex = 10;
+            this.PitchplusBtn.Text = "Pitch+";
+            this.PitchplusBtn.UseVisualStyleBackColor = false;
+            this.PitchplusBtn.Click += new System.EventHandler(this.PitchplusBtn_Click);
             // 
-            // button10
+            // PitchminusBtn
             // 
-            this.button10.BackColor = System.Drawing.Color.Green;
-            this.button10.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button10.ForeColor = System.Drawing.Color.White;
-            this.button10.Location = new System.Drawing.Point(168, 672);
-            this.button10.Margin = new System.Windows.Forms.Padding(2);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(102, 86);
-            this.button10.TabIndex = 11;
-            this.button10.Text = "Pitch-";
-            this.button10.UseVisualStyleBackColor = false;
+            this.PitchminusBtn.BackColor = System.Drawing.Color.Green;
+            this.PitchminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PitchminusBtn.ForeColor = System.Drawing.Color.White;
+            this.PitchminusBtn.Location = new System.Drawing.Point(168, 672);
+            this.PitchminusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.PitchminusBtn.Name = "PitchminusBtn";
+            this.PitchminusBtn.Size = new System.Drawing.Size(102, 86);
+            this.PitchminusBtn.TabIndex = 11;
+            this.PitchminusBtn.Text = "Pitch-";
+            this.PitchminusBtn.UseVisualStyleBackColor = false;
+            this.PitchminusBtn.Click += new System.EventHandler(this.PitchminusBtn_Click);
             // 
-            // button11
+            // YawminusBtn
             // 
-            this.button11.BackColor = System.Drawing.Color.Green;
-            this.button11.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button11.ForeColor = System.Drawing.Color.White;
-            this.button11.Location = new System.Drawing.Point(274, 620);
-            this.button11.Margin = new System.Windows.Forms.Padding(2);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(102, 86);
-            this.button11.TabIndex = 12;
-            this.button11.Text = "Yaw-";
-            this.button11.UseVisualStyleBackColor = false;
+            this.YawminusBtn.BackColor = System.Drawing.Color.Green;
+            this.YawminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.YawminusBtn.ForeColor = System.Drawing.Color.White;
+            this.YawminusBtn.Location = new System.Drawing.Point(274, 620);
+            this.YawminusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.YawminusBtn.Name = "YawminusBtn";
+            this.YawminusBtn.Size = new System.Drawing.Size(102, 86);
+            this.YawminusBtn.TabIndex = 12;
+            this.YawminusBtn.Text = "Yaw-";
+            this.YawminusBtn.UseVisualStyleBackColor = false;
+            this.YawminusBtn.Click += new System.EventHandler(this.YawminusBtn_Click);
             // 
-            // button12
+            // YawplusBtn
             // 
-            this.button12.BackColor = System.Drawing.Color.Green;
-            this.button12.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.button12.ForeColor = System.Drawing.Color.White;
-            this.button12.Location = new System.Drawing.Point(62, 620);
-            this.button12.Margin = new System.Windows.Forms.Padding(2);
-            this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(102, 86);
-            this.button12.TabIndex = 13;
-            this.button12.Text = "Yaw+";
-            this.button12.UseVisualStyleBackColor = false;
+            this.YawplusBtn.BackColor = System.Drawing.Color.Green;
+            this.YawplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.YawplusBtn.ForeColor = System.Drawing.Color.White;
+            this.YawplusBtn.Location = new System.Drawing.Point(62, 620);
+            this.YawplusBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.YawplusBtn.Name = "YawplusBtn";
+            this.YawplusBtn.Size = new System.Drawing.Size(102, 86);
+            this.YawplusBtn.TabIndex = 13;
+            this.YawplusBtn.Text = "Yaw+";
+            this.YawplusBtn.UseVisualStyleBackColor = false;
+            this.YawplusBtn.Click += new System.EventHandler(this.YawplusBtn_Click);
             // 
             // DistanceLst
             // 
@@ -271,27 +282,42 @@
             this.AngleLst.Size = new System.Drawing.Size(80, 124);
             this.AngleLst.TabIndex = 16;
             // 
+            // ZeroRpyBtn
+            // 
+            this.ZeroRpyBtn.BackColor = System.Drawing.Color.Green;
+            this.ZeroRpyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZeroRpyBtn.ForeColor = System.Drawing.Color.White;
+            this.ZeroRpyBtn.Location = new System.Drawing.Point(576, 463);
+            this.ZeroRpyBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.ZeroRpyBtn.Name = "ZeroRpyBtn";
+            this.ZeroRpyBtn.Size = new System.Drawing.Size(165, 52);
+            this.ZeroRpyBtn.TabIndex = 18;
+            this.ZeroRpyBtn.Text = "RPY=0,0,0";
+            this.ZeroRpyBtn.UseVisualStyleBackColor = false;
+            this.ZeroRpyBtn.Click += new System.EventHandler(this.ZeroRpyBtn_Click);
+            // 
             // JoggingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 769);
             this.ControlBox = false;
+            this.Controls.Add(this.ZeroRpyBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.AngleLst);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.DistanceLst);
-            this.Controls.Add(this.button12);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
+            this.Controls.Add(this.YawplusBtn);
+            this.Controls.Add(this.YawminusBtn);
+            this.Controls.Add(this.PitchminusBtn);
+            this.Controls.Add(this.PitchplusBtn);
+            this.Controls.Add(this.RollminusBtn);
+            this.Controls.Add(this.RollplusBtn);
+            this.Controls.Add(this.XplusBtn);
+            this.Controls.Add(this.XminusBtn);
+            this.Controls.Add(this.YplusBtn);
             this.Controls.Add(this.ExitBtn);
-            this.Controls.Add(this.button3);
+            this.Controls.Add(this.YminusBtn);
             this.Controls.Add(this.ZminusBtn);
             this.Controls.Add(this.ZplusBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -306,22 +332,23 @@
 
         #endregion
 
-        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button YminusBtn;
         private System.Windows.Forms.Button ZminusBtn;
         private System.Windows.Forms.Button ZplusBtn;
         private System.Windows.Forms.Button ExitBtn;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button7;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button11;
-        private System.Windows.Forms.Button button12;
+        private System.Windows.Forms.Button YplusBtn;
+        private System.Windows.Forms.Button XminusBtn;
+        private System.Windows.Forms.Button XplusBtn;
+        private System.Windows.Forms.Button RollplusBtn;
+        private System.Windows.Forms.Button RollminusBtn;
+        private System.Windows.Forms.Button PitchplusBtn;
+        private System.Windows.Forms.Button PitchminusBtn;
+        private System.Windows.Forms.Button YawminusBtn;
+        private System.Windows.Forms.Button YawplusBtn;
         private System.Windows.Forms.ListBox DistanceLst;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.ListBox AngleLst;
+        private System.Windows.Forms.Button ZeroRpyBtn;
     }
 }

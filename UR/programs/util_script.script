@@ -9,11 +9,11 @@ def socket_send_crlf():
   socket_send_byte(10)
 end
 
-# Conversion (RPY to AxisAngle)
+# Conversion (RPY(deg) to AxisAngle)
 def RPY_to_AxisAngle(R):
-  Rx = R[3] / 2.0
-  Ry = R[4] / 2.0
-  Rz = R[5] / 2.0
+  Rx = d2r(R[3]) / 2.0
+  Ry = d2r(R[4]) / 2.0
+  Rz = d2r(R[5]) / 2.0
 
   Cx = cos(Rx)
   Sx = sin(Rx)
@@ -94,7 +94,7 @@ def AxisAngle_to_RPY(R):
     Az = atan2(r21, r11)
   end
 
-  Ans = p[R[0], R[1], R[2], Ax, Ay, Az]
+  Ans = p[R[0], R[1], R[2], r2d(Ax), r2d(Ay), r2d(Az)]
 
   return Ans
 end
@@ -106,10 +106,16 @@ def get_actual_tcp_pose_RPY():
   return p2
 end
 
-# movel in RPY vector
-def movel_RPY(p,accel,speed):
+# movel in RPY coordinates
+def movel_RPY(p, accel, speed):
   p1 = RPY_to_AxisAngle(p)
   movel(p1, accel, speed)
+end
+
+# movej in RPY coordinates
+def movej_RPY(p, accel, speed):
+  p1 = RPY_to_AxisAngle(p)
+  movej(p1, accel, speed)
 end
 
 # Add position

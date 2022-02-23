@@ -46,18 +46,37 @@ def return_actual_tcp_pose_RPY():
   global response = "return_actual_tcp_pose_RPY()"
 end
 
-# Send get_actual_joint_positions() to 
+# Send get_actual_joint_positions() to
 def return_get_actual_joint_positions():
   p = get_actual_joint_positions()
   return_pose("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
 end
 
+# Movel relatively in RPY
 def movel_RPY_rel():
-  #global command
-  local p0 = get_actual_tcp_pose_RPY()
-  local p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
-  local p2 = pose_add_RPY(p0, p1)
-  movel_RPY(p2,accel,speed)
+  p0 = get_actual_tcp_pose_RPY()
+  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
+  p2 = pose_add_RPY(p0, p1)
+  movel_RPY(p2, accel, speed)
   global response = "movel_RPY_rel()"
+end
+
+# Movej relatively in RPY
+def movej_RPY_rel():
+  p0 = get_actual_tcp_pose_RPY()
+  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
+  p2 = pose_add_RPY(p0, p1)
+  movej_RPY(p2, accel, speed)
+  global response = "movej_RPY_rel()"
+end
+
+# Movej to 0,0,0, RPY
+def movej_RPY_zero():
+  p0 = get_actual_tcp_pose_RPY()
+  p0[3] = 0
+  p0[4] = 0
+  p0[5] = 0
+  movej_RPY(p0, accel, speed)
+  global response = "movej_RPY_zero()"
 end
