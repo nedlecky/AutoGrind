@@ -1,14 +1,13 @@
 def AG_50():
+  set_gravity([0.0, 0.0, 9.82])
+  set_safety_mode_transition_hardness(1)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
   set_tcp(p[0.0,0.0,0.174,0.0,0.0,0.0])
   set_payload(2.0)
-  step_count_dee815f7_5b4a_414f_92de_a896b80426a4 = 0.0
-  thread Step_Counter_Thread_fb03d06d_c855_488d_af48_5a481e667f1d():
-    while (True):
-      step_count_dee815f7_5b4a_414f_92de_a896b80426a4 = step_count_dee815f7_5b4a_414f_92de_a896b80426a4 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_fb03d06d_c855_488d_af48_5a481e667f1d()
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -16,13 +15,14 @@ def AG_50():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
+  step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = 0.0
+  thread Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9():
+    while (True):
+      step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9()
   global Vertical_3_p=p[-.139608417872, -.431276583102, .028138902829, -.001221359682, 3.116276528482, .038891915637]
   global Vertical_3_q=[-1.6006999999999998, -1.7271, -2.2029999999999994, -0.8079999999999998, 1.5951, -0.030999999999999694]
   global Tilted_1_p=p[-.139608417868, -.431276582996, .028138902982, -.011381173019, 3.019426224372, -.776094768972]
@@ -39,6 +39,4 @@ def AG_50():
   movel(Vertical_4_p, a=1.2, v=0.25)
   $ 6 "Vertical_3" "breakAfter"
   movel(Vertical_3_p, a=1.2, v=0.25)
-  $ 7 "response≔'50 success'"
-  global response="50 success"
 end

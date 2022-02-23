@@ -1,0 +1,202 @@
+# AutoGrind System Script
+# Version 1.0
+# Programmer: Ned Lecky
+
+global scriptRunning = True
+global counter = 1
+Accel = 100
+Speed = 100
+global Speed = 10
+varmsg("Speed", Speed)
+  
+global Accel = 100
+varmsg("Accel", Accel)
+  
+global MaxRealSpeed = 0.3
+global MaxRealAccel = 0.3
+ 
+
+def incrCounter(a):
+  global counter = counter + a
+end
+
+# Send CRLF out the socket
+def socket_send_crlf():
+  socket_send_byte(13)
+  socket_send_byte(10)
+end
+
+def return_pose(name,p):
+  socket_send_string(name)
+  socket_send_string("=(")
+  i = 0
+  while i < 6:
+    if i > 0:
+      socket_send_string(",")
+    end
+    socket_send_string(p[i])
+    i = i + 1
+  end
+  socket_send_string(")")
+  socket_send_crlf()end
+
+def return_tcp_offset():
+  p = get_tcp_offset()
+  return_pose("tcp_offset",p)
+  global response = "return_tcp_offset()"
+end
+
+def return_actual_tcp_pose():
+  p = get_actual_tcp_pose()
+  return_pose("actual_tcp_pose",p)
+  global response = "return_actual_tcp_pose()"
+end
+
+def return_actual_tcp_pose_RPY():
+  p = get_actual_tcp_pose_RPY()
+  return_pose("actual_tcp_pose_RPY",p)
+  global response = "return_actual_tcp_pose_RPY()"
+end
+
+def return_get_actual_joint_positions():
+  p = get_actual_joint_positions()
+  return_pose("actual_joint_positions",p)
+  global response = "return_get_actual_joint_positions()"
+end
+
+def MoveRelRpy():
+  #global command
+  local p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
+  #local p1 = p[0,0,0,0,0,0]
+  local p0 = get_actual_tcp_pose_RPY()
+  local p2 = pose_add_RPY(p0, p1)
+  MoveRPY(p2)
+  global response = "MoveRelRpy()"
+end
+
+ # Conversion (RPY to AxisAngle)
+  def RPY_to_AxisAngle(R):
+    Rx = R[3] / 2.0
+    Ry = R[4] / 2.0
+    Rz = R[5] / 2.0
+  
+    Cx = cos(Rx)
+    Sx = sin(Rx)
+    Cy = cos(Ry)
+    Sy = sin(Ry)
+    Cz = cos(Rz)
+    Sz = sin(Rz)
+  
+    Angle = 2.0 * acos(Cx*Cy*Cz + Sx*Sy*Sz)
+    x = Sx*Cy*Cz - Cx*Sy*Sz
+    y = Cx*Sy*Cz + Sx*Cy*Sz
+    z = -Sx*Sy*Cz + Cx*Cy*Sz
+    Norm = sqrt(x*x + y*y + z*z)
+    if norm(Norm) < 1e-4:
+      Ax = 0
+      Ay = 0
+      Az = 0
+    else:
+    Ratio = Angle / Norm
+    Ax = x * Ratio
+    Ay = y * Ratio
+    Az = z * Ratio
+    end
+    Ans = p[R[0], R[1], R[2], Ax, Ay, Az]
+  
+    return Ans
+  end
+  
+  # Conversion (AxisAngle to RPY)
+  def AxisAngle_to_RPY(R):
+    Rx = R[3]
+    Ry = R[4]
+    Rz = R[5]
+  
+    Angle = sqrt(Rx*Rx + Ry*Ry + Rz*Rz)
+    if Angle < 1e-4:
+      x = 0
+      y = 0
+      z = 1
+    else:
+    x = Rx / Angle
+    y = Ry / Angle
+    z = Rz / Angle
+    end
+    S = sin(Angle)
+    C = cos(Angle)
+    T = 1 - C
+  
+    r11 = T*x*x + C
+    r12 = T*x*y - S*z
+    r13 = T*x*z + S*y
+    r21 = T*x*y + S*z
+    r22 = T*y*y + C
+    r23 = T*y*z - S*x
+    r31 = T*x*z - S*y
+    r32 = T*y*z + S*x
+    r33 = T*z*z + C
+  
+    if r31 > 1:
+      r31 = 1
+    elif r31 < -1:
+      r31 = -1
+    end
+  
+    Ay = asin(-r31)
+    if Ay > d2r(89.9):
+      sinAxMinusAz = (r12 - r23) / (1 - r31)
+      cosAxMinusAz = (r13 + r22) / (1 - r31)
+      Ax = atan2(sinAxMinusAz, cosAxMinusAz)
+      Az =0
+    elif Ay < d2r(-89.9):
+      sinAxPlusAz = (-r12 - r23) / (1 + r31)
+      cosAxPlusAz = (-r13 + r22) / (1 + r31)
+      Ax = atan2(sinAxPlusAz, cosAxPlusAz)
+      Az = 0
+    else:
+      Ax = atan2(r32, r33)
+      Az = atan2(r21, r11)
+    end
+  
+    Ans = p[R[0], R[1], R[2], Ax, Ay, Az]
+  
+    return Ans
+  end
+  
+  # Get position in RPY coordinate
+  def get_actual_tcp_pose_RPY():
+    R = get_actual_tcp_pose()
+    A = AxisAngle_to_RPY(R)
+  
+    return A
+  end
+# Move
+def MoveRPY(Pos):
+    local RealAccel = Accel * MaxRealAccel / 100.0
+    local RealSpeed = Speed * MaxRealSpeed / 100.0
+  
+    A = RPY_to_AxisAngle(Pos)
+    movel(A, RealAccel, RealSpeed)
+end
+  
+  # MoveJ
+  def MoveJ_(Pos):
+    local RealAccel = Accel * MaxRealAccel / 100.0
+    local RealSpeed = Speed * MaxRealSpeed / 100.0
+  
+    movej(Pos, RealAccel, RealSpeed)
+  end
+
+  # Add position
+  def pose_add_RPY(V1, V2):
+    A0 = V1[0] + V2[0]
+    A1 = V1[1] + V2[1]
+    A2 = V1[2] + V2[2]
+    A3 = V1[3] + V2[3]
+    A4 = V1[4] + V2[4]
+    A5 = V1[5] + V2[5]
+    A = p[A0, A1, A2, A3, A4, A5]
+  
+    return A
+  end

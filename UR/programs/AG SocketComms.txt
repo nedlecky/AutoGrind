@@ -33,6 +33,7 @@
            response≔"open"
          Case 50
            Call AG_50
+           response≔"AG50"
          Case 98
            response≔"socket reset"
          Case 99
@@ -57,4 +58,3 @@
        Tilted_1
        Vertical_4
        Vertical_3
-       response≔"50 success"

@@ -1,14 +1,13 @@
 def AG_SocketComms():
+  set_gravity([0.0, 0.0, 9.82])
+  set_safety_mode_transition_hardness(1)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
   set_tcp(p[0.0,0.0,0.174,0.0,0.0,0.0])
   set_payload(2.0)
-  step_count_dee815f7_5b4a_414f_92de_a896b80426a4 = 0.0
-  thread Step_Counter_Thread_fb03d06d_c855_488d_af48_5a481e667f1d():
-    while (True):
-      step_count_dee815f7_5b4a_414f_92de_a896b80426a4 = step_count_dee815f7_5b4a_414f_92de_a896b80426a4 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_fb03d06d_c855_488d_af48_5a481e667f1d()
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -16,13 +15,14 @@ def AG_SocketComms():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
+  step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = 0.0
+  thread Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9():
+    while (True):
+      step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9()
   global up_pose_p=p[-.139608417870, -.431276583025, .128881236186, -.001221359682, 3.116276528482, .038891915637]
   global up_pose_q=[-1.6006999999532772, -1.5602662340053621, -2.0656244038598475, -1.1122093621336546, 1.5951000000012003, -0.030999999953279733]
   global down_pose_p=p[-.139608417867, -.431276582947, .015638902876, -.001221359682, 3.116276528482, .038891915637]
@@ -34,18 +34,16 @@ def AG_SocketComms():
   global Vertical_4_p=p[-.139608417866, -.431276582919, .131081236338, -.001221329928, 3.116276528722, .038891910429]
   global Vertical_4_q=[-1.600700000064136, -1.5575468977702354, -2.0619765024476475, -1.1185765962043455, 1.595100000182046, -0.030999980927620463]
   def AG_50():
-    $ 53 "AG_50" "noBreak"
-    $ 54 "MoveL"
-    $ 55 "Vertical_3" "breakAfter"
+    $ 54 "AG_50" "noBreak"
+    $ 55 "MoveL"
+    $ 56 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 56 "Tilted_1" "breakAfter"
+    $ 57 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 57 "Vertical_4" "breakAfter"
+    $ 58 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 58 "Vertical_3" "breakAfter"
+    $ 59 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 59 "response≔'50 success'"
-    global response="50 success"
   end
   $ 1 "BeforeStart"
   $ 2 "start_pose≔get_actual_tcp_pose()"
@@ -112,43 +110,45 @@ def AG_SocketComms():
         $ 33 "Case 50"
         $ 34 "Call AG_50"
         AG_50()
+        $ 35 "response≔'AG50'"
+        global response="AG50"
       elif (98 == switch_1):
-        $ 35 "Case 98"
-        $ 36 "response≔'socket reset'"
+        $ 36 "Case 98"
+        $ 37 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 37 "Case 99"
-        $ 38 "response≔'exiting'"
+        $ 38 "Case 99"
+        $ 39 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 39 "Default Case"
-        $ 40 "response≔'unknown command'"
+        $ 40 "Default Case"
+        $ 41 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 41 "socket_send_line('robot_response=' + response + '#robot_running=False')"
+      $ 42 "socket_send_line('robot_response=' + response + '#robot_running=False')"
       socket_send_line("robot_response=" + response + "#robot_running=False")
-      $ 42 "If command[1]≟98"
+      $ 43 "If command[1]≟98"
       if (command[1] == 98):
-        $ 43 "Wait: 0.5"
+        $ 44 "Wait: 0.5"
         sleep(0.5)
-        $ 44 "socket_close()"
+        $ 45 "socket_close()"
         socket_close()
-        $ 45 "socket_is_open≔ False "
+        $ 46 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 46 "If command[1]≟99"
+      $ 47 "If command[1]≟99"
       if (command[1] == 99):
-        $ 47 "Wait: 0.5"
+        $ 48 "Wait: 0.5"
         sleep(0.5)
-        $ 48 "socket_close()"
+        $ 49 "socket_close()"
         socket_close()
-        $ 49 "socket_is_open≔ False "
+        $ 50 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 50 "Halt"
+        $ 51 "Halt"
         halt
       end
     else:
-      $ 51 "Else" "noBreak"
+      $ 52 "Else" "noBreak"
     end
   end
 end
