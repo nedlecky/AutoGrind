@@ -29,9 +29,8 @@ namespace AutoGrind
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
         static SplashForm splashForm;
-        TcpServer tcpServer = null;
+        TcpServer robotServer = null;
         static DataTable variables;
-
 
         private enum RunState
         {
@@ -161,25 +160,37 @@ namespace AutoGrind
             }
         }
 
+        bool robotReady = false;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             string now = DateTime.Now.ToString("s");
             timeLbl.Text = now;
 
-            if (tcpServer != null)
+            bool newRobotReady = false;
+            if (robotServer != null)
             {
-                if (tcpServer.IsClientConnected)
+                if (robotServer.IsClientConnected)
+                    newRobotReady = true;
+            }
+
+            if (newRobotReady != robotReady)
+            {
+                robotReady = newRobotReady;
+                if (robotReady)
                 {
+                    log.Info("Change robot connection to READY");
                     RobotStatusLbl.BackColor = Color.Green;
                     RobotStatusLbl.Text = "READY";
+                    SetState(RunState.IDLE, true, true);
                 }
                 else
                 {
+                    log.Info("Change robot connection to WAIT");
                     RobotStatusLbl.BackColor = Color.Yellow;
                     RobotStatusLbl.Text = "WAIT";
+                    SetState(RunState.IDLE, true, true);
                 }
             }
-
         }
 
 
@@ -187,9 +198,9 @@ namespace AutoGrind
         // START MAIN UI BUTTONS
         // ========================
 
-        private void SetState(RunState s, bool fEditing = false)
+        private void SetState(RunState s, bool fEditing = false, bool fForce = false)
         {
-            if (runState != s)
+            if (fForce || runState != s)
             {
                 runState = s;
                 log.Info("SetState({0})", s.ToString());
@@ -206,7 +217,7 @@ namespace AutoGrind
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
-                    JogBtn.Enabled = true;
+                    JogBtn.Enabled = robotReady;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
@@ -218,7 +229,7 @@ namespace AutoGrind
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
-                    JogBtn.Enabled = true;
+                    JogBtn.Enabled = robotReady;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = true;
                     PauseBtn.Enabled = false;
@@ -259,17 +270,17 @@ namespace AutoGrind
             // Set the colors
             if (fEditing)
             {
-                GrindBtn.BackColor = GrindBtn.Enabled ? Color.LightGreen : Color.Gray;
-                EditBtn.BackColor = EditBtn.Enabled ? Color.Green : Color.Gray;
+                //GrindBtn.BackColor = GrindBtn.Enabled ? Color.LightGreen : Color.Gray;
+                //EditBtn.BackColor = EditBtn.Enabled ? Color.Green : Color.Gray;
             }
             else
             {
                 GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
                 EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
+                SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
             }
-            SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
 
-            JogBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
+            JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
             LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
             StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
@@ -608,7 +619,7 @@ namespace AutoGrind
 
         private void JogBtn_Click(object sender, EventArgs e)
         {
-            JoggingForm form = new JoggingForm();
+            JoggingForm form = new JoggingForm(robotServer);
 
             form.ShowDialog(this);
         }
@@ -659,7 +670,7 @@ namespace AutoGrind
         /// <param name="filename">The filename of interest</param>
         private void ImportFile(string filename)
         {
-            string[] lines = System.IO.File.ReadAllLines(Path.Combine(AutoGrindRoot,filename));
+            string[] lines = System.IO.File.ReadAllLines(Path.Combine(AutoGrindRoot, filename));
 
             foreach (string line in lines)
             {
@@ -759,9 +770,9 @@ namespace AutoGrind
         {
             RobotDisconnectBtn_Click(null, null);
 
-            tcpServer = new TcpServer();
-            tcpServer.receiveCallback = GeneralCallBack;
-            if (tcpServer.Connect(RobotIpPortTxt.Text) > 0)
+            robotServer = new TcpServer();
+            robotServer.receiveCallback = GeneralCallBack;
+            if (robotServer.Connect(RobotIpPortTxt.Text) > 0)
             {
                 log.Error("Robot server initialization failure");
             }
@@ -776,14 +787,14 @@ namespace AutoGrind
 
         private void RobotDisconnectBtn_Click(object sender, EventArgs e)
         {
-            if (tcpServer != null)
+            if (robotServer != null)
             {
-                if (tcpServer.IsConnected())
+                if (robotServer.IsConnected())
                 {
-                    tcpServer.Send("(98)");
-                    tcpServer.Disconnect();
+                    robotServer.Send("(98)");
+                    robotServer.Disconnect();
                 }
-                tcpServer = null;
+                robotServer = null;
             }
             RobotStatusLbl.BackColor = Color.Red;
             RobotStatusLbl.Text = "OFF";
@@ -791,10 +802,10 @@ namespace AutoGrind
 
         private void RobotSendBtn_Click(object sender, EventArgs e)
         {
-            if (tcpServer != null)
-                if (tcpServer.IsConnected())
+            if (robotServer != null)
+                if (robotServer.IsConnected())
                 {
-                    tcpServer.Send(RobotMessageTxt.Text);
+                    robotServer.Send(RobotMessageTxt.Text);
                 }
         }
         /// <summary>
@@ -846,10 +857,10 @@ namespace AutoGrind
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            if (tcpServer != null)
-                if (tcpServer.IsConnected())
+            if (robotServer != null)
+                if (robotServer.IsConnected())
                 {
-                    tcpServer.Receive();
+                    robotServer.Receive();
                 }
         }
 
@@ -861,7 +872,7 @@ namespace AutoGrind
         // START VARIABLE SYSTEM
         // ========================
 
-        string variablesFilename = "Variables.var";
+        readonly string variablesFilename = "Variables.var";
 
         private void ReadVariableBtn_Click(object sender, EventArgs e)
         {
