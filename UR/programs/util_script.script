@@ -1,78 +1,12 @@
-# AutoGrind System Script
+# General UR Utilities
+# File: util_script.script
 # Version 1.0
 # Programmer: Ned Lecky
-
-global scriptRunning = True
-global counter = 1
-Accel = 100
-Speed = 100
-global Speed = 10
-varmsg("Speed", Speed)
-
-global Accel = 100
-varmsg("Accel", Accel)
-
-global MaxRealSpeed = 0.3
-global MaxRealAccel = 0.3
-
-
-def incrCounter(a):
-  global counter = counter + a
-end
 
 # Send CRLF out the socket
 def socket_send_crlf():
   socket_send_byte(13)
   socket_send_byte(10)
-end
-
-def return_pose(name, p):
-  socket_send_string(name)
-  socket_send_string("=(")
-  i = 0
-  while i < 6:
-    if i > 0:
-      socket_send_string(",")
-    end
-    socket_send_string(p[i])
-    i = i + 1
-  end
-  socket_send_string(")")
-  socket_send_crlf()
-end
-
-def return_tcp_offset():
-  p = get_tcp_offset()
-  return_pose("tcp_offset", p)
-  global response = "return_tcp_offset()"
-end
-
-def return_actual_tcp_pose():
-  p = get_actual_tcp_pose()
-  return_pose("actual_tcp_pose", p)
-  global response = "return_actual_tcp_pose()"
-end
-
-def return_actual_tcp_pose_RPY():
-  p = get_actual_tcp_pose_RPY()
-  return_pose("actual_tcp_pose_RPY", p)
-  global response = "return_actual_tcp_pose_RPY()"
-end
-
-def return_get_actual_joint_positions():
-  p = get_actual_joint_positions()
-  return_pose("actual_joint_positions", p)
-  global response = "return_get_actual_joint_positions()"
-end
-
-def MoveRelRpy():
-  #global command
-  local p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
-  #local p1 = p[0,0,0,0,0,0]
-  local p0 = get_actual_tcp_pose_RPY()
-  local p2 = pose_add_RPY(p0, p1)
-  MoveRPY(p2)
-  global response = "MoveRelRpy()"
 end
 
 # Conversion (RPY to AxisAngle)
@@ -167,26 +101,15 @@ end
 
 # Get position in RPY coordinate
 def get_actual_tcp_pose_RPY():
-  R = get_actual_tcp_pose()
-  A = AxisAngle_to_RPY(R)
-
-  return A
-end
-# Move
-def MoveRPY(Pos):
-  local RealAccel = Accel * MaxRealAccel / 100.0
-  local RealSpeed = Speed * MaxRealSpeed / 100.0
-
-  A = RPY_to_AxisAngle(Pos)
-  movel(A, RealAccel, RealSpeed)
+  p = get_actual_tcp_pose()
+  p2 = AxisAngle_to_RPY(p)
+  return p2
 end
 
-# MoveJ
-def MoveJ_(Pos):
-  local RealAccel = Accel * MaxRealAccel / 100.0
-  local RealSpeed = Speed * MaxRealSpeed / 100.0
-
-  movej(Pos, RealAccel, RealSpeed)
+# movel in RPY vector
+def movel_RPY(p,accel,speed):
+  p1 = RPY_to_AxisAngle(p)
+  movel(p1, accel, speed)
 end
 
 # Add position

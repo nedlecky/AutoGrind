@@ -29,7 +29,7 @@ namespace AutoGrind
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
         static SplashForm splashForm;
-        TcpServer robot = null;
+        TcpServer tcpServer = null;
         static DataTable variables;
 
 
@@ -165,6 +165,21 @@ namespace AutoGrind
         {
             string now = DateTime.Now.ToString("s");
             timeLbl.Text = now;
+
+            if (tcpServer != null)
+            {
+                if (tcpServer.IsClientConnected)
+                {
+                    RobotStatusLbl.BackColor = Color.Green;
+                    RobotStatusLbl.Text = "READY";
+                }
+                else
+                {
+                    RobotStatusLbl.BackColor = Color.Yellow;
+                    RobotStatusLbl.Text = "WAIT";
+                }
+            }
+
         }
 
 
@@ -744,41 +759,42 @@ namespace AutoGrind
         {
             RobotDisconnectBtn_Click(null, null);
 
-            robot = new TcpServer();
-            robot.receiveCallback = GeneralCallBack;
-            if (robot.Connect(RobotIpPortTxt.Text) > 0)
+            tcpServer = new TcpServer();
+            tcpServer.receiveCallback = GeneralCallBack;
+            if (tcpServer.Connect(RobotIpPortTxt.Text) > 0)
             {
                 log.Error("Robot server initialization failure");
             }
             else
             {
                 log.Info("Robot connection ready");
-                RobotDisconnectBtn.BackColor = Color.Gray;
-                RobotConnectBtn.BackColor = Color.Green;
+
+                RobotStatusLbl.BackColor = Color.Yellow;
+                RobotStatusLbl.Text = "WAIT";
             }
         }
 
         private void RobotDisconnectBtn_Click(object sender, EventArgs e)
         {
-            if (robot != null)
+            if (tcpServer != null)
             {
-                if (robot.IsConnected())
+                if (tcpServer.IsConnected())
                 {
-                    robot.Send("(98)");
-                    robot.Disconnect();
+                    tcpServer.Send("(98)");
+                    tcpServer.Disconnect();
                 }
-                robot = null;
+                tcpServer = null;
             }
-            RobotDisconnectBtn.BackColor = Color.Red;
-            RobotConnectBtn.BackColor = Color.Gray;
+            RobotStatusLbl.BackColor = Color.Red;
+            RobotStatusLbl.Text = "OFF";
         }
 
         private void RobotSendBtn_Click(object sender, EventArgs e)
         {
-            if (robot != null)
-                if (robot.IsConnected())
+            if (tcpServer != null)
+                if (tcpServer.IsConnected())
                 {
-                    robot.Send(RobotMessageTxt.Text);
+                    tcpServer.Send(RobotMessageTxt.Text);
                 }
         }
         /// <summary>
@@ -830,10 +846,10 @@ namespace AutoGrind
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            if (robot != null)
-                if (robot.IsConnected())
+            if (tcpServer != null)
+                if (tcpServer.IsConnected())
                 {
-                    robot.Receive();
+                    tcpServer.Receive();
                 }
         }
 
@@ -972,6 +988,7 @@ namespace AutoGrind
             variables.PrimaryKey = new DataColumn[] { name };
             VariablesGrd.DataSource = variables;
         }
+
         // ========================
         // END VARIABLE SYSTEM
         // ========================

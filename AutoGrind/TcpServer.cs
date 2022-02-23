@@ -25,10 +25,11 @@ namespace AutoGrind
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
         public Action<string> receiveCallback { get; set; }
+        public bool IsClientConnected { get; set; }
 
         public TcpServer()
         {
-            log.Debug("TcpServer()");
+            log.Debug("TcpServer(...)");
         }
 
         ~TcpServer()
@@ -67,6 +68,7 @@ namespace AutoGrind
 
             log.Info("Connect({0},{1})", IP, port);
             if (server != null) Disconnect();
+            IsClientConnected = false;
 
             IPAddress ipAddress = IPAddress.Parse(IP);
             IPEndPoint remoteEP = new IPEndPoint(IPAddressToLong(ipAddress), Int32.Parse(port));
@@ -99,6 +101,7 @@ namespace AutoGrind
 
         void ClientConnected(IAsyncResult result)
         {
+            IsClientConnected = false;
             try
             {
                 TcpListener server = (TcpListener)result.AsyncState;
@@ -109,6 +112,8 @@ namespace AutoGrind
                         client = server.EndAcceptTcpClient(result);
                         stream = client.GetStream();
                         log.Info("Client connected");
+                        IsClientConnected = true;
+
                         //if (onConnectMessage.Length > 0) Send(onConnectMessage);
                     }
                     catch
@@ -146,6 +151,7 @@ namespace AutoGrind
                 client.Close();
                 client = null;
             }
+            IsClientConnected = false;
         }
 
         bool fSendBusy = false;

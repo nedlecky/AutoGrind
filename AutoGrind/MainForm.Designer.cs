@@ -52,6 +52,11 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.RobotConnectBtn = new System.Windows.Forms.Button();
+            this.RobotDisconnectBtn = new System.Windows.Forms.Button();
+            this.RobotSendBtn = new System.Windows.Forms.Button();
+            this.RobotMessageTxt = new System.Windows.Forms.TextBox();
             this.button3 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
@@ -59,15 +64,22 @@
             this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.RobotSendBtn = new System.Windows.Forms.Button();
-            this.RobotMessageTxt = new System.Windows.Forms.TextBox();
-            this.RobotDisconnectBtn = new System.Windows.Forms.Button();
-            this.RobotConnectBtn = new System.Windows.Forms.Button();
+            this.UtcTimeChk = new System.Windows.Forms.CheckBox();
             this.RobotIpPortTxt = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.AutoGrindRootLbl = new System.Windows.Forms.Label();
             this.ChangeLEonardRootBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
+            this.VariableTab = new System.Windows.Forms.TabPage();
+            this.LoadVariablesBtn = new System.Windows.Forms.Button();
+            this.SaveVariablesBtn = new System.Windows.Forms.Button();
+            this.ClearVariablesBtn = new System.Windows.Forms.Button();
+            this.VariablesGrd = new System.Windows.Forms.DataGridView();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.ReadVariableBtn = new System.Windows.Forms.Button();
+            this.WriteStringValueTxt = new System.Windows.Forms.TextBox();
+            this.WriteStringValueBtn = new System.Windows.Forms.Button();
+            this.VariableNameTxt = new System.Windows.Forms.TextBox();
             this.LogsTab = new System.Windows.Forms.TabPage();
             this.UrLogRTB = new System.Windows.Forms.RichTextBox();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
@@ -80,26 +92,17 @@
             this.ExecTmr = new System.Windows.Forms.Timer(this.components);
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
-            this.VariableTab = new System.Windows.Forms.TabPage();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
-            this.ReadVariableBtn = new System.Windows.Forms.Button();
-            this.WriteStringValueTxt = new System.Windows.Forms.TextBox();
-            this.WriteStringValueBtn = new System.Windows.Forms.Button();
-            this.VariableNameTxt = new System.Windows.Forms.TextBox();
-            this.VariablesGrd = new System.Windows.Forms.DataGridView();
-            this.LoadVariablesBtn = new System.Windows.Forms.Button();
-            this.SaveVariablesBtn = new System.Windows.Forms.Button();
-            this.ClearVariablesBtn = new System.Windows.Forms.Button();
-            this.UtcTimeChk = new System.Windows.Forms.CheckBox();
+            this.RobotStatusLbl = new System.Windows.Forms.Label();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
             this.SetupTab.SuspendLayout();
+            this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            this.LogsTab.SuspendLayout();
             this.VariableTab.SuspendLayout();
-            this.groupBox7.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).BeginInit();
+            this.groupBox7.SuspendLayout();
+            this.LogsTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -400,6 +403,7 @@
             // 
             // SetupTab
             // 
+            this.SetupTab.Controls.Add(this.groupBox2);
             this.SetupTab.Controls.Add(this.button3);
             this.SetupTab.Controls.Add(this.button2);
             this.SetupTab.Controls.Add(this.button1);
@@ -414,6 +418,58 @@
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox2
+            // 
+            this.groupBox2.Controls.Add(this.RobotConnectBtn);
+            this.groupBox2.Controls.Add(this.RobotDisconnectBtn);
+            this.groupBox2.Controls.Add(this.RobotSendBtn);
+            this.groupBox2.Controls.Add(this.RobotMessageTxt);
+            this.groupBox2.Location = new System.Drawing.Point(475, 11);
+            this.groupBox2.Name = "groupBox2";
+            this.groupBox2.Size = new System.Drawing.Size(239, 112);
+            this.groupBox2.TabIndex = 78;
+            this.groupBox2.TabStop = false;
+            this.groupBox2.Text = "Robot Config";
+            // 
+            // RobotConnectBtn
+            // 
+            this.RobotConnectBtn.Location = new System.Drawing.Point(6, 19);
+            this.RobotConnectBtn.Name = "RobotConnectBtn";
+            this.RobotConnectBtn.Size = new System.Drawing.Size(75, 38);
+            this.RobotConnectBtn.TabIndex = 73;
+            this.RobotConnectBtn.Text = "Wait for Connect";
+            this.RobotConnectBtn.UseVisualStyleBackColor = true;
+            this.RobotConnectBtn.Click += new System.EventHandler(this.RobotConnectBtn_Click);
+            // 
+            // RobotDisconnectBtn
+            // 
+            this.RobotDisconnectBtn.Location = new System.Drawing.Point(6, 63);
+            this.RobotDisconnectBtn.Name = "RobotDisconnectBtn";
+            this.RobotDisconnectBtn.Size = new System.Drawing.Size(75, 40);
+            this.RobotDisconnectBtn.TabIndex = 74;
+            this.RobotDisconnectBtn.Text = "Disconnect";
+            this.RobotDisconnectBtn.UseVisualStyleBackColor = true;
+            this.RobotDisconnectBtn.Click += new System.EventHandler(this.RobotDisconnectBtn_Click);
+            // 
+            // RobotSendBtn
+            // 
+            this.RobotSendBtn.BackColor = System.Drawing.Color.Transparent;
+            this.RobotSendBtn.Location = new System.Drawing.Point(114, 45);
+            this.RobotSendBtn.Name = "RobotSendBtn";
+            this.RobotSendBtn.Size = new System.Drawing.Size(119, 23);
+            this.RobotSendBtn.TabIndex = 76;
+            this.RobotSendBtn.Text = "Send Command";
+            this.RobotSendBtn.UseVisualStyleBackColor = false;
+            this.RobotSendBtn.Click += new System.EventHandler(this.RobotSendBtn_Click);
+            // 
+            // RobotMessageTxt
+            // 
+            this.RobotMessageTxt.Location = new System.Drawing.Point(114, 19);
+            this.RobotMessageTxt.Name = "RobotMessageTxt";
+            this.RobotMessageTxt.Size = new System.Drawing.Size(119, 20);
+            this.RobotMessageTxt.TabIndex = 75;
+            this.RobotMessageTxt.Text = "(1)";
             // 
             // button3
             // 
@@ -490,10 +546,6 @@
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.UtcTimeChk);
-            this.groupBox1.Controls.Add(this.RobotSendBtn);
-            this.groupBox1.Controls.Add(this.RobotMessageTxt);
-            this.groupBox1.Controls.Add(this.RobotDisconnectBtn);
-            this.groupBox1.Controls.Add(this.RobotConnectBtn);
             this.groupBox1.Controls.Add(this.RobotIpPortTxt);
             this.groupBox1.Controls.Add(this.label3);
             this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
@@ -503,48 +555,20 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(710, 98);
+            this.groupBox1.Size = new System.Drawing.Size(443, 98);
             this.groupBox1.TabIndex = 71;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Config";
+            this.groupBox1.Text = "GeneralConfig";
             // 
-            // RobotSendBtn
+            // UtcTimeChk
             // 
-            this.RobotSendBtn.Location = new System.Drawing.Point(311, 59);
-            this.RobotSendBtn.Name = "RobotSendBtn";
-            this.RobotSendBtn.Size = new System.Drawing.Size(75, 23);
-            this.RobotSendBtn.TabIndex = 76;
-            this.RobotSendBtn.Text = "Send";
-            this.RobotSendBtn.UseVisualStyleBackColor = true;
-            this.RobotSendBtn.Click += new System.EventHandler(this.RobotSendBtn_Click);
-            // 
-            // RobotMessageTxt
-            // 
-            this.RobotMessageTxt.Location = new System.Drawing.Point(135, 62);
-            this.RobotMessageTxt.Name = "RobotMessageTxt";
-            this.RobotMessageTxt.Size = new System.Drawing.Size(170, 20);
-            this.RobotMessageTxt.TabIndex = 75;
-            this.RobotMessageTxt.Text = "(1,0,0,0,0)";
-            // 
-            // RobotDisconnectBtn
-            // 
-            this.RobotDisconnectBtn.Location = new System.Drawing.Point(392, 34);
-            this.RobotDisconnectBtn.Name = "RobotDisconnectBtn";
-            this.RobotDisconnectBtn.Size = new System.Drawing.Size(75, 23);
-            this.RobotDisconnectBtn.TabIndex = 74;
-            this.RobotDisconnectBtn.Text = "Disconnect";
-            this.RobotDisconnectBtn.UseVisualStyleBackColor = true;
-            this.RobotDisconnectBtn.Click += new System.EventHandler(this.RobotDisconnectBtn_Click);
-            // 
-            // RobotConnectBtn
-            // 
-            this.RobotConnectBtn.Location = new System.Drawing.Point(311, 34);
-            this.RobotConnectBtn.Name = "RobotConnectBtn";
-            this.RobotConnectBtn.Size = new System.Drawing.Size(75, 23);
-            this.RobotConnectBtn.TabIndex = 73;
-            this.RobotConnectBtn.Text = "Connect";
-            this.RobotConnectBtn.UseVisualStyleBackColor = true;
-            this.RobotConnectBtn.Click += new System.EventHandler(this.RobotConnectBtn_Click);
+            this.UtcTimeChk.AutoSize = true;
+            this.UtcTimeChk.Location = new System.Drawing.Point(5, 62);
+            this.UtcTimeChk.Name = "UtcTimeChk";
+            this.UtcTimeChk.Size = new System.Drawing.Size(177, 17);
+            this.UtcTimeChk.TabIndex = 77;
+            this.UtcTimeChk.Text = "Use UTC Time in Time Stamps?";
+            this.UtcTimeChk.UseVisualStyleBackColor = true;
             // 
             // RobotIpPortTxt
             // 
@@ -569,13 +593,13 @@
             this.AutoGrindRootLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AutoGrindRootLbl.Location = new System.Drawing.Point(136, 10);
             this.AutoGrindRootLbl.Name = "AutoGrindRootLbl";
-            this.AutoGrindRootLbl.Size = new System.Drawing.Size(385, 23);
+            this.AutoGrindRootLbl.Size = new System.Drawing.Size(267, 23);
             this.AutoGrindRootLbl.TabIndex = 69;
             this.AutoGrindRootLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ChangeLEonardRootBtn
             // 
-            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(527, 10);
+            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(409, 10);
             this.ChangeLEonardRootBtn.Name = "ChangeLEonardRootBtn";
             this.ChangeLEonardRootBtn.Size = new System.Drawing.Size(24, 23);
             this.ChangeLEonardRootBtn.TabIndex = 70;
@@ -592,6 +616,107 @@
             this.label1.TabIndex = 68;
             this.label1.Text = "AutoGrind Root Directory";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // VariableTab
+            // 
+            this.VariableTab.Controls.Add(this.LoadVariablesBtn);
+            this.VariableTab.Controls.Add(this.SaveVariablesBtn);
+            this.VariableTab.Controls.Add(this.ClearVariablesBtn);
+            this.VariableTab.Controls.Add(this.VariablesGrd);
+            this.VariableTab.Controls.Add(this.groupBox7);
+            this.VariableTab.Location = new System.Drawing.Point(4, 22);
+            this.VariableTab.Name = "VariableTab";
+            this.VariableTab.Size = new System.Drawing.Size(737, 467);
+            this.VariableTab.TabIndex = 4;
+            this.VariableTab.Text = "Variables";
+            this.VariableTab.UseVisualStyleBackColor = true;
+            // 
+            // LoadVariablesBtn
+            // 
+            this.LoadVariablesBtn.Location = new System.Drawing.Point(18, 428);
+            this.LoadVariablesBtn.Name = "LoadVariablesBtn";
+            this.LoadVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.LoadVariablesBtn.TabIndex = 86;
+            this.LoadVariablesBtn.Text = "Reload";
+            this.LoadVariablesBtn.UseVisualStyleBackColor = true;
+            this.LoadVariablesBtn.Click += new System.EventHandler(this.LoadVariablesBtn_Click);
+            // 
+            // SaveVariablesBtn
+            // 
+            this.SaveVariablesBtn.Location = new System.Drawing.Point(99, 428);
+            this.SaveVariablesBtn.Name = "SaveVariablesBtn";
+            this.SaveVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.SaveVariablesBtn.TabIndex = 85;
+            this.SaveVariablesBtn.Text = "Save";
+            this.SaveVariablesBtn.UseVisualStyleBackColor = true;
+            this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
+            // 
+            // ClearVariablesBtn
+            // 
+            this.ClearVariablesBtn.Location = new System.Drawing.Point(180, 428);
+            this.ClearVariablesBtn.Name = "ClearVariablesBtn";
+            this.ClearVariablesBtn.Size = new System.Drawing.Size(75, 23);
+            this.ClearVariablesBtn.TabIndex = 84;
+            this.ClearVariablesBtn.Text = "Clear";
+            this.ClearVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearVariablesBtn.Click += new System.EventHandler(this.ClearVariablesBtn_Click);
+            // 
+            // VariablesGrd
+            // 
+            this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.VariablesGrd.Location = new System.Drawing.Point(20, 77);
+            this.VariablesGrd.Name = "VariablesGrd";
+            this.VariablesGrd.Size = new System.Drawing.Size(673, 342);
+            this.VariablesGrd.TabIndex = 83;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.ReadVariableBtn);
+            this.groupBox7.Controls.Add(this.WriteStringValueTxt);
+            this.groupBox7.Controls.Add(this.WriteStringValueBtn);
+            this.groupBox7.Controls.Add(this.VariableNameTxt);
+            this.groupBox7.Location = new System.Drawing.Point(20, 22);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(650, 49);
+            this.groupBox7.TabIndex = 82;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Manual";
+            // 
+            // ReadVariableBtn
+            // 
+            this.ReadVariableBtn.Location = new System.Drawing.Point(140, 17);
+            this.ReadVariableBtn.Name = "ReadVariableBtn";
+            this.ReadVariableBtn.Size = new System.Drawing.Size(75, 23);
+            this.ReadVariableBtn.TabIndex = 2;
+            this.ReadVariableBtn.Text = "Read";
+            this.ReadVariableBtn.UseVisualStyleBackColor = true;
+            this.ReadVariableBtn.Click += new System.EventHandler(this.ReadVariableBtn_Click);
+            // 
+            // WriteStringValueTxt
+            // 
+            this.WriteStringValueTxt.Location = new System.Drawing.Point(338, 22);
+            this.WriteStringValueTxt.Name = "WriteStringValueTxt";
+            this.WriteStringValueTxt.Size = new System.Drawing.Size(209, 20);
+            this.WriteStringValueTxt.TabIndex = 7;
+            this.WriteStringValueTxt.Text = "Test String";
+            // 
+            // WriteStringValueBtn
+            // 
+            this.WriteStringValueBtn.Location = new System.Drawing.Point(257, 19);
+            this.WriteStringValueBtn.Name = "WriteStringValueBtn";
+            this.WriteStringValueBtn.Size = new System.Drawing.Size(75, 23);
+            this.WriteStringValueBtn.TabIndex = 4;
+            this.WriteStringValueBtn.Text = "Write String";
+            this.WriteStringValueBtn.UseVisualStyleBackColor = true;
+            this.WriteStringValueBtn.Click += new System.EventHandler(this.WriteStringValueBtn_Click);
+            // 
+            // VariableNameTxt
+            // 
+            this.VariableNameTxt.Location = new System.Drawing.Point(6, 19);
+            this.VariableNameTxt.Name = "VariableNameTxt";
+            this.VariableNameTxt.Size = new System.Drawing.Size(128, 20);
+            this.VariableNameTxt.TabIndex = 5;
+            this.VariableNameTxt.Text = "X";
             // 
             // LogsTab
             // 
@@ -662,7 +787,7 @@
             this.RecipeFilenameLbl.Location = new System.Drawing.Point(143, 7);
             this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
-            this.RecipeFilenameLbl.Size = new System.Drawing.Size(715, 22);
+            this.RecipeFilenameLbl.Size = new System.Drawing.Size(632, 22);
             this.RecipeFilenameLbl.TabIndex = 76;
             this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -687,122 +812,23 @@
             // 
             this.MessageTmr.Tick += new System.EventHandler(this.MessageTmr_Tick);
             // 
-            // VariableTab
+            // RobotStatusLbl
             // 
-            this.VariableTab.Controls.Add(this.LoadVariablesBtn);
-            this.VariableTab.Controls.Add(this.SaveVariablesBtn);
-            this.VariableTab.Controls.Add(this.ClearVariablesBtn);
-            this.VariableTab.Controls.Add(this.VariablesGrd);
-            this.VariableTab.Controls.Add(this.groupBox7);
-            this.VariableTab.Location = new System.Drawing.Point(4, 22);
-            this.VariableTab.Name = "VariableTab";
-            this.VariableTab.Size = new System.Drawing.Size(737, 467);
-            this.VariableTab.TabIndex = 4;
-            this.VariableTab.Text = "Variables";
-            this.VariableTab.UseVisualStyleBackColor = true;
-            // 
-            // groupBox7
-            // 
-            this.groupBox7.Controls.Add(this.ReadVariableBtn);
-            this.groupBox7.Controls.Add(this.WriteStringValueTxt);
-            this.groupBox7.Controls.Add(this.WriteStringValueBtn);
-            this.groupBox7.Controls.Add(this.VariableNameTxt);
-            this.groupBox7.Location = new System.Drawing.Point(20, 22);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(650, 49);
-            this.groupBox7.TabIndex = 82;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Manual";
-            // 
-            // ReadVariableBtn
-            // 
-            this.ReadVariableBtn.Location = new System.Drawing.Point(140, 17);
-            this.ReadVariableBtn.Name = "ReadVariableBtn";
-            this.ReadVariableBtn.Size = new System.Drawing.Size(75, 23);
-            this.ReadVariableBtn.TabIndex = 2;
-            this.ReadVariableBtn.Text = "Read";
-            this.ReadVariableBtn.UseVisualStyleBackColor = true;
-            this.ReadVariableBtn.Click += new System.EventHandler(this.ReadVariableBtn_Click);
-            // 
-            // WriteStringValueTxt
-            // 
-            this.WriteStringValueTxt.Location = new System.Drawing.Point(338, 22);
-            this.WriteStringValueTxt.Name = "WriteStringValueTxt";
-            this.WriteStringValueTxt.Size = new System.Drawing.Size(209, 20);
-            this.WriteStringValueTxt.TabIndex = 7;
-            this.WriteStringValueTxt.Text = "Test String";
-            // 
-            // WriteStringValueBtn
-            // 
-            this.WriteStringValueBtn.Location = new System.Drawing.Point(257, 19);
-            this.WriteStringValueBtn.Name = "WriteStringValueBtn";
-            this.WriteStringValueBtn.Size = new System.Drawing.Size(75, 23);
-            this.WriteStringValueBtn.TabIndex = 4;
-            this.WriteStringValueBtn.Text = "Write String";
-            this.WriteStringValueBtn.UseVisualStyleBackColor = true;
-            this.WriteStringValueBtn.Click += new System.EventHandler(this.WriteStringValueBtn_Click);
-            // 
-            // VariableNameTxt
-            // 
-            this.VariableNameTxt.Location = new System.Drawing.Point(6, 19);
-            this.VariableNameTxt.Name = "VariableNameTxt";
-            this.VariableNameTxt.Size = new System.Drawing.Size(128, 20);
-            this.VariableNameTxt.TabIndex = 5;
-            this.VariableNameTxt.Text = "X";
-            // 
-            // VariablesGrd
-            // 
-            this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.VariablesGrd.Location = new System.Drawing.Point(20, 77);
-            this.VariablesGrd.Name = "VariablesGrd";
-            this.VariablesGrd.Size = new System.Drawing.Size(673, 342);
-            this.VariablesGrd.TabIndex = 83;
-            // 
-            // LoadVariablesBtn
-            // 
-            this.LoadVariablesBtn.Location = new System.Drawing.Point(18, 428);
-            this.LoadVariablesBtn.Name = "LoadVariablesBtn";
-            this.LoadVariablesBtn.Size = new System.Drawing.Size(75, 23);
-            this.LoadVariablesBtn.TabIndex = 86;
-            this.LoadVariablesBtn.Text = "Reload";
-            this.LoadVariablesBtn.UseVisualStyleBackColor = true;
-            this.LoadVariablesBtn.Click += new System.EventHandler(this.LoadVariablesBtn_Click);
-            // 
-            // SaveVariablesBtn
-            // 
-            this.SaveVariablesBtn.Location = new System.Drawing.Point(99, 428);
-            this.SaveVariablesBtn.Name = "SaveVariablesBtn";
-            this.SaveVariablesBtn.Size = new System.Drawing.Size(75, 23);
-            this.SaveVariablesBtn.TabIndex = 85;
-            this.SaveVariablesBtn.Text = "Save";
-            this.SaveVariablesBtn.UseVisualStyleBackColor = true;
-            this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
-            // 
-            // ClearVariablesBtn
-            // 
-            this.ClearVariablesBtn.Location = new System.Drawing.Point(180, 428);
-            this.ClearVariablesBtn.Name = "ClearVariablesBtn";
-            this.ClearVariablesBtn.Size = new System.Drawing.Size(75, 23);
-            this.ClearVariablesBtn.TabIndex = 84;
-            this.ClearVariablesBtn.Text = "Clear";
-            this.ClearVariablesBtn.UseVisualStyleBackColor = true;
-            this.ClearVariablesBtn.Click += new System.EventHandler(this.ClearVariablesBtn_Click);
-            // 
-            // UtcTimeChk
-            // 
-            this.UtcTimeChk.AutoSize = true;
-            this.UtcTimeChk.Location = new System.Drawing.Point(524, 65);
-            this.UtcTimeChk.Name = "UtcTimeChk";
-            this.UtcTimeChk.Size = new System.Drawing.Size(177, 17);
-            this.UtcTimeChk.TabIndex = 77;
-            this.UtcTimeChk.Text = "Use UTC Time in Time Stamps?";
-            this.UtcTimeChk.UseVisualStyleBackColor = true;
+            this.RobotStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotStatusLbl.Location = new System.Drawing.Point(807, 5);
+            this.RobotStatusLbl.Name = "RobotStatusLbl";
+            this.RobotStatusLbl.Size = new System.Drawing.Size(74, 44);
+            this.RobotStatusLbl.TabIndex = 78;
+            this.RobotStatusLbl.Text = "??";
+            this.RobotStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(905, 645);
+            this.Controls.Add(this.RobotStatusLbl);
             this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.RecipeFilenameLbl);
             this.Controls.Add(this.timeLbl);
@@ -821,13 +847,15 @@
             this.GrindTab.PerformLayout();
             this.EditTab.ResumeLayout(false);
             this.SetupTab.ResumeLayout(false);
+            this.groupBox2.ResumeLayout(false);
+            this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.LogsTab.ResumeLayout(false);
             this.VariableTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).EndInit();
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).EndInit();
+            this.LogsTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -896,6 +924,8 @@
         private System.Windows.Forms.Button WriteStringValueBtn;
         private System.Windows.Forms.TextBox VariableNameTxt;
         private System.Windows.Forms.CheckBox UtcTimeChk;
+        private System.Windows.Forms.GroupBox groupBox2;
+        private System.Windows.Forms.Label RobotStatusLbl;
     }
 }
 
