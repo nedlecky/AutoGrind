@@ -534,7 +534,7 @@ namespace AutoGrind
 
 
         // ========================
-        // START CONFIG
+        // START SETUP
         // ========================
 
         private void DefaultConfigBtn_Click(object sender, EventArgs e)
@@ -644,12 +644,42 @@ namespace AutoGrind
             }
         }
 
+        private void RecordPosition(string prompt, string varName)
+        {
+            JoggingForm form = new JoggingForm(robotServer, prompt, true);
+
+            form.ShowDialog(this);
+
+            if (form.fSave)
+            {
+                log.Trace(prompt);
+
+                if (robotReady)
+                {
+                    copyVariableAtWrite = varName + "=actual_joint_positions";
+                    robotServer.Send("(20)");
+                }
+
+            }
+        }
+        private void SetLeftBtn_Click(object sender, EventArgs e)
+        {
+            RecordPosition("Set Left End of Cylinder", "left_cylinder_end_q");
+        }
+
+        private void SetRightBtn_Click(object sender, EventArgs e)
+        {
+            RecordPosition("Set Right End of Cylinder", "right_cylinder_end_q");
+        }
+
+        private void SetDomeBtn_Click(object sender, EventArgs e)
+        {
+            RecordPosition("Set Dome Top", "dome_top_q");
+        }
 
         // ========================
-        // END CONFIG
+        // END SETUP
         // ========================
-
-
 
 
         // ========================
@@ -892,6 +922,8 @@ namespace AutoGrind
         }
 
         static readonly object lockObject = new object();
+        static string alsoWriteVariableAs = null;
+        static string copyVariableAtWrite = null;
         /// <summary>
         /// Update variable 'name' with 'value' if it exists otherwise add it
         /// </summary>
@@ -932,6 +964,31 @@ namespace AutoGrind
 
             variables.AcceptChanges();
             Monitor.Exit(lockObject);
+
+            // This is a special capability that is not necessarily the best way to handle this!
+            // If you set alsoWriteVariableAs=name, the next WriteVariable will write the same value to name
+            if (alsoWriteVariableAs != null)
+            {
+                string dupName = alsoWriteVariableAs;
+                alsoWriteVariableAs = null; // Let's avoid infinite recursion :)
+                WriteVariable(dupName, value);
+            }
+
+            // Another experiment
+            // Set copyVariableAtWrite to "name1=name2" and when name2 gets written it will also be written to name1
+            if (copyVariableAtWrite!=null)
+            {
+                string[] strings = copyVariableAtWrite.Split('=');
+                if(strings.Length>1)
+                {
+                    if(strings[1]==nameTrimmed)
+                    {
+                        string dupName = copyVariableAtWrite;
+                        copyVariableAtWrite = null; // Let's avoid infinite recursion :)
+                        WriteVariable(strings[0], value);
+                    }
+                }
+            }
         }
 
         /// <summary>
@@ -1000,26 +1057,7 @@ namespace AutoGrind
             VariablesGrd.DataSource = variables;
         }
 
-        private void SetLeftBtn_Click(object sender, EventArgs e)
-        {
-            JoggingForm form = new JoggingForm(robotServer, "Set Left End of Cylinder",true);
-
-            form.ShowDialog(this);
-
-            if(form.fSave)
-            {
-                log.Trace("Save left cylinder end");
-
-                if(robotReady)
-                {
-                    robotServer.Send("(20)");
-                    // TODO how to wait for response and then save.....
-                }
-
-            }
-        }
-
-        // ========================
+         // ========================
         // END VARIABLE SYSTEM
         // ========================
 

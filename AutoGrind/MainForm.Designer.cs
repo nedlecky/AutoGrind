@@ -52,6 +52,9 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.GotoDomeBtn = new System.Windows.Forms.Button();
+            this.GotoRightBtn = new System.Windows.Forms.Button();
+            this.GotoLeftBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
             this.RobotDisconnectBtn = new System.Windows.Forms.Button();
@@ -93,9 +96,6 @@
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
             this.RobotStatusLbl = new System.Windows.Forms.Label();
-            this.GotoLeftBtn = new System.Windows.Forms.Button();
-            this.GotoRightBtn = new System.Windows.Forms.Button();
-            this.GotoDomeBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -425,6 +425,45 @@
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
             // 
+            // GotoDomeBtn
+            // 
+            this.GotoDomeBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoDomeBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoDomeBtn.Location = new System.Drawing.Point(626, 146);
+            this.GotoDomeBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoDomeBtn.Name = "GotoDomeBtn";
+            this.GotoDomeBtn.Size = new System.Drawing.Size(88, 107);
+            this.GotoDomeBtn.TabIndex = 81;
+            this.GotoDomeBtn.Text = "Goto";
+            this.GotoDomeBtn.UseVisualStyleBackColor = false;
+            // 
+            // GotoRightBtn
+            // 
+            this.GotoRightBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoRightBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoRightBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoRightBtn.Location = new System.Drawing.Point(217, 257);
+            this.GotoRightBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoRightBtn.Name = "GotoRightBtn";
+            this.GotoRightBtn.Size = new System.Drawing.Size(87, 107);
+            this.GotoRightBtn.TabIndex = 80;
+            this.GotoRightBtn.Text = "Goto";
+            this.GotoRightBtn.UseVisualStyleBackColor = false;
+            // 
+            // GotoLeftBtn
+            // 
+            this.GotoLeftBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoLeftBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GotoLeftBtn.ForeColor = System.Drawing.Color.White;
+            this.GotoLeftBtn.Location = new System.Drawing.Point(217, 146);
+            this.GotoLeftBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.GotoLeftBtn.Name = "GotoLeftBtn";
+            this.GotoLeftBtn.Size = new System.Drawing.Size(87, 107);
+            this.GotoLeftBtn.TabIndex = 79;
+            this.GotoLeftBtn.Text = "Goto";
+            this.GotoLeftBtn.UseVisualStyleBackColor = false;
+            // 
             // groupBox2
             // 
             this.groupBox2.Controls.Add(this.RobotConnectBtn);
@@ -489,6 +528,7 @@
             this.SetDomeBtn.TabIndex = 77;
             this.SetDomeBtn.Text = "Set Top of Dome";
             this.SetDomeBtn.UseVisualStyleBackColor = false;
+            this.SetDomeBtn.Click += new System.EventHandler(this.SetDomeBtn_Click);
             // 
             // SetRightBtn
             // 
@@ -502,6 +542,7 @@
             this.SetRightBtn.TabIndex = 76;
             this.SetRightBtn.Text = "Set Right End of Cylinder";
             this.SetRightBtn.UseVisualStyleBackColor = false;
+            this.SetRightBtn.Click += new System.EventHandler(this.SetRightBtn_Click);
             // 
             // SetLeftBtn
             // 
@@ -829,45 +870,6 @@
             this.RobotStatusLbl.TabIndex = 78;
             this.RobotStatusLbl.Text = "??";
             this.RobotStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // GotoLeftBtn
-            // 
-            this.GotoLeftBtn.BackColor = System.Drawing.Color.Green;
-            this.GotoLeftBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GotoLeftBtn.ForeColor = System.Drawing.Color.White;
-            this.GotoLeftBtn.Location = new System.Drawing.Point(217, 146);
-            this.GotoLeftBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.GotoLeftBtn.Name = "GotoLeftBtn";
-            this.GotoLeftBtn.Size = new System.Drawing.Size(87, 107);
-            this.GotoLeftBtn.TabIndex = 79;
-            this.GotoLeftBtn.Text = "Goto";
-            this.GotoLeftBtn.UseVisualStyleBackColor = false;
-            // 
-            // GotoRightBtn
-            // 
-            this.GotoRightBtn.BackColor = System.Drawing.Color.Green;
-            this.GotoRightBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GotoRightBtn.ForeColor = System.Drawing.Color.White;
-            this.GotoRightBtn.Location = new System.Drawing.Point(217, 257);
-            this.GotoRightBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.GotoRightBtn.Name = "GotoRightBtn";
-            this.GotoRightBtn.Size = new System.Drawing.Size(87, 107);
-            this.GotoRightBtn.TabIndex = 80;
-            this.GotoRightBtn.Text = "Goto";
-            this.GotoRightBtn.UseVisualStyleBackColor = false;
-            // 
-            // GotoDomeBtn
-            // 
-            this.GotoDomeBtn.BackColor = System.Drawing.Color.Green;
-            this.GotoDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GotoDomeBtn.ForeColor = System.Drawing.Color.White;
-            this.GotoDomeBtn.Location = new System.Drawing.Point(626, 146);
-            this.GotoDomeBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.GotoDomeBtn.Name = "GotoDomeBtn";
-            this.GotoDomeBtn.Size = new System.Drawing.Size(88, 107);
-            this.GotoDomeBtn.TabIndex = 81;
-            this.GotoDomeBtn.Text = "Goto";
-            this.GotoDomeBtn.UseVisualStyleBackColor = false;
             // 
             // MainForm
             // 
