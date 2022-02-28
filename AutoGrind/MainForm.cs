@@ -70,13 +70,6 @@ namespace AutoGrind
                 log.Info("==============================================================================================");
             log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
 
-            log.Info("Sample message for UR");
-            log.Info("UR: Another sample message");
-            log.Error("Test ERROR message");
-            log.Info("==> Sending something");
-            log.Info("<== Receiving something");
-
-
             HeartbeatTmr.Interval = 1000;
             HeartbeatTmr.Enabled = true;
             StartupTmr.Interval = 1000;
@@ -662,6 +655,21 @@ namespace AutoGrind
 
             }
         }
+        private void GotoPosition(string varName)
+        {
+            log.Trace("GotoPosition({0})", varName);
+            if (robotReady)
+            {
+                string q = ReadVariable(varName);
+                if(q != null)
+                {
+                    string msg = "(21," + q.Trim('(');
+                    log.Trace("Sending {0}", msg);
+                    robotServer.Send(msg);
+                }
+            }
+        }
+
         private void SetLeftBtn_Click(object sender, EventArgs e)
         {
             RecordPosition("Set Left End of Cylinder", "left_cylinder_end_q");
@@ -676,6 +684,42 @@ namespace AutoGrind
         {
             RecordPosition("Set Dome Top", "dome_top_q");
         }
+        private void SetHomeBtn_Click(object sender, EventArgs e)
+        {
+            RecordPosition("Set Home Position", "home_q");
+        }
+
+        private void SetToolChangeBtn_Click(object sender, EventArgs e)
+        {
+            RecordPosition("Set Tool Change Position", "tool_change_q");
+        }
+
+        private void GotoLeftBtn_Click(object sender, EventArgs e)
+        {
+            GotoPosition("left_cylinder_end_q");
+        }
+
+        private void GotoRightBtn_Click(object sender, EventArgs e)
+        {
+            GotoPosition("right_cylinder_end_q");
+        }
+
+        private void GotoDomeBtn_Click(object sender, EventArgs e)
+        {
+            GotoPosition("dome_top_q");
+        }
+
+        private void GotoHomeBtn_Click(object sender, EventArgs e)
+        {
+            GotoPosition("home_q");
+        }
+
+        private void GotoToolChangeBtn_Click(object sender, EventArgs e)
+        {
+            GotoPosition("tool_change_q");
+        }
+
+
 
         // ========================
         // END SETUP
@@ -907,18 +951,22 @@ namespace AutoGrind
         private void ReadVariableBtn_Click(object sender, EventArgs e)
         {
             string name = VariableNameTxt.Text.Trim();
-            log.Debug("Read {0}", name);
+            string v = ReadVariable(name);
+        }
 
+        private string ReadVariable(string name)
+        {
             foreach (DataRow row in variables.Rows)
             {
                 if ((string)row["Name"] == name)
                 {
-                    log.Info("Found {0} = {1}", row["Name"], row["Value"]);
+                    log.Trace("ReadVariable({0}) = {1}", row["Name"], row["Value"]);
                     row["IsNew"] = false;
-                    return;
+                    return row["Value"].ToString();
                 }
             }
-            log.Error("Can't find {0}", name);
+            log.Error("ReadVariable({0}) Not Found", name);
+            return null;
         }
 
         static readonly object lockObject = new object();
@@ -976,12 +1024,12 @@ namespace AutoGrind
 
             // Another experiment
             // Set copyVariableAtWrite to "name1=name2" and when name2 gets written it will also be written to name1
-            if (copyVariableAtWrite!=null)
+            if (copyVariableAtWrite != null)
             {
                 string[] strings = copyVariableAtWrite.Split('=');
-                if(strings.Length>1)
+                if (strings.Length > 1)
                 {
-                    if(strings[1]==nameTrimmed)
+                    if (strings[1] == nameTrimmed)
                     {
                         string dupName = copyVariableAtWrite;
                         copyVariableAtWrite = null; // Let's avoid infinite recursion :)
@@ -1057,7 +1105,7 @@ namespace AutoGrind
             VariablesGrd.DataSource = variables;
         }
 
-         // ========================
+        // ========================
         // END VARIABLE SYSTEM
         // ========================
 

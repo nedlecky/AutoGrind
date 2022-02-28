@@ -66,7 +66,7 @@ namespace AutoGrind
             myIp = IP;
             myPort = port;
 
-            log.Info("Connect({0},{1})", IP, port);
+            log.Info("UR Connect({0},{1})", IP, port);
             if (server != null) Disconnect();
             IsClientConnected = false;
 
@@ -80,16 +80,16 @@ namespace AutoGrind
             }
             catch
             {
-                log.Error("Couldn't start server");
+                log.Error("Couldn't start UR server");
                 return 1;
             }
-            log.Info("Server: Waiting for client...");
+            log.Info("Server: Waiting for UR Client...");
             return 0;
         }
 
         public int Disconnect()
         {
-            log.Info("Disconnect()");
+            log.Info("UR Disconnect()");
             CloseConnection();
             if (server != null)
             {
@@ -111,14 +111,14 @@ namespace AutoGrind
                     {
                         client = server.EndAcceptTcpClient(result);
                         stream = client.GetStream();
-                        log.Info("Client connected");
+                        log.Info("UR Client connected");
                         IsClientConnected = true;
 
                         //if (onConnectMessage.Length > 0) Send(onConnectMessage);
                     }
                     catch
                     {
-                        log.Error("Client connection error");
+                        log.Error("UR Client connection error");
                     }
                 }
             }
@@ -138,7 +138,7 @@ namespace AutoGrind
 
         void CloseConnection()
         {
-            log.Debug("CloseConnection()");
+            log.Debug("UR CloseConnection()");
 
             if (stream != null)
             {
@@ -162,14 +162,14 @@ namespace AutoGrind
                 Thread.Sleep(10);
             fSendBusy = true;
 
-            log.Info("==> {0}", response);
+            log.Info("UR==> {0}", response);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);
             }
             catch
             {
-                log.Error("Send(...) could not write to socket");
+                log.Error("Send(...) could not write to UR socket");
             }
             fSendBusy = false;
             return 0;
@@ -180,7 +180,7 @@ namespace AutoGrind
             {
                 if (!IsConnected())
                 {
-                    log.Error("Lost connection");
+                    log.Error("Lost UR connection");
                     Disconnect();
                     Connect(myIp, myPort);
                     return "";
@@ -199,7 +199,7 @@ namespace AutoGrind
                         string cleanLine = line.Trim('\n');
                         if (cleanLine.Length > 0)
                         {
-                            log.Info("<== {0} Line {1}", cleanLine, lineNo);
+                            log.Info("UR<== {0} Line {1}", cleanLine, lineNo);
 
                             if (receiveCallback != null)
                                 receiveCallback(cleanLine);

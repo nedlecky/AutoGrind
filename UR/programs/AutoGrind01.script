@@ -1,13 +1,18 @@
 def AutoGrind01():
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
   set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(0)
-  set_tcp(p[0.0,0.0,0.174,3.141592653589793,0.0,0.0])
-  set_payload(2.0)
+  step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 = 0.0
+  thread Step_Counter_Thread_816a29bf_e870_401c_a84a_f04604e7db20():
+    while (True):
+      step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 = step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_816a29bf_e870_401c_a84a_f04604e7db20()
+  set_gravity([0.0, 0.0, 9.82])
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -15,14 +20,9 @@ def AutoGrind01():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = 0.0
-  thread Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9():
-    while (True):
-      step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9()
+  set_safety_mode_transition_hardness(1)
+  set_tcp(p[0.0,0.0,0.174,3.141592653589793,0.0,0.0])
+  set_payload(2.0)
   global up_pose_p=p[-.139608417870, -.431276583025, .128881236186, -.001221359682, 3.116276528482, .038891915637]
   global up_pose_q=[-1.6006999999532772, -1.5602662340053621, -2.0656244038598475, -1.1122093621336546, 1.5951000000012003, -0.030999999953279733]
   global down_pose_p=p[-.139608417867, -.431276582947, .015638902876, -.001221359682, 3.116276528482, .038891915637]
@@ -262,6 +262,14 @@ def AutoGrind01():
     movej_RPY(p0, accel, speed)
     global response = "movej_RPY_zero()"
   end
+  
+  # Movej to physical joint positions
+  def movej_q():
+    q1 = [command[2], command[3], command[4], command[5], command[6], command[7]]
+    movej(q1, accel, speed)
+    global response = "movej_q()"
+  end
+  
   $ 4 "currentTcpPose≔get_actual_tcp_pose()"
   global currentTcpPose= get_actual_tcp_pose ()
   $ 5 "MoveJ"
@@ -352,8 +360,8 @@ def AutoGrind01():
         return_get_actual_joint_positions()
       elif (21 == switch_1):
         $ 49 "Case 21"
-        $ 50 "return_get_actual_joint_positions()"
-        return_get_actual_joint_positions()
+        $ 50 "movej_q()"
+        movej_q()
       elif (50 == switch_1):
         $ 51 "Case 50"
         $ 52 "Call AG_50"

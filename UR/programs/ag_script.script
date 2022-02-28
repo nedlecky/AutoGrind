@@ -80,3 +80,11 @@ def movej_RPY_zero():
   movej_RPY(p0, accel, speed)
   global response = "movej_RPY_zero()"
 end
+
+# Movej to physical joint positions
+def movej_q():
+  q1 = [command[2], command[3], command[4], command[5], command[6], command[7]]
+  movej(q1, accel, speed)
+  global response = "movej_q()"
+end
+
