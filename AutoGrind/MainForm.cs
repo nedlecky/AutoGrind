@@ -851,12 +851,20 @@ namespace AutoGrind
             }
 
             // speed
-            //if (command.StartsWith("speed"))
-            //{
-            //    log.Trace("{0} speed: {1}", currentLine, command);
-            //    robotServer.Send("30," + command.Substring(9));
-            //    return true;
-            //}
+            if (command.StartsWith("speed"))
+            {
+                log.Trace("{0} speed: {1}", currentLine, command);
+                robotServer.Send("(30," + command.Substring(6) + ")");
+                return true;
+            }
+
+            // accel
+            if (command.StartsWith("accel"))
+            {
+                log.Trace("{0} accel: {1}", currentLine, command);
+                robotServer.Send("(31," + command.Substring(6) + ")");
+                return true;
+            }
 
             // Grindcircle
 
@@ -892,7 +900,7 @@ namespace AutoGrind
             }
             else
             {
-                if (ReadVariable("robot_running") != "False")
+                if (ReadVariable("robot_running") == "True")
                 {
                     log.Trace("Exec waiting for !robot_running");
                 }
@@ -958,6 +966,26 @@ namespace AutoGrind
                     robotServer.Send(RobotMessageTxt.Text);
                 }
         }
+        private void SetSpeedBtn_Click(object sender, EventArgs e)
+        {
+            if (robotServer != null)
+                if (robotServer.IsConnected())
+                {
+                    robotServer.Send("(30," + SpeedTxt.Text + ")");
+                }
+        }
+
+        private void SetAccelBtn_Click(object sender, EventArgs e)
+        {
+            if (robotServer != null)
+                if (robotServer.IsConnected())
+                {
+                    robotServer.Send("(31," + AccelTxt.Text + ")");
+                }
+        }
+
+
+
         /// <summary>
         /// TODO: Clean these up, use consistent string formatting ideas, and the variables
         /// TODO All of these... the variable name should be prefixed with the unique device name not the message prefix
@@ -1179,10 +1207,9 @@ namespace AutoGrind
             variables.CaseSensitive = true;
             variables.PrimaryKey = new DataColumn[] { name };
             VariablesGrd.DataSource = variables;
-
-            WriteVariable("robot_running", "False");
         }
 
+ 
         // ========================
         // END VARIABLE SYSTEM
         // ========================

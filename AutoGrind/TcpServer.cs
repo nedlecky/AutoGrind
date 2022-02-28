@@ -114,7 +114,7 @@ namespace AutoGrind
                         log.Info("UR Client connected");
                         IsClientConnected = true;
 
-                        //if (onConnectMessage.Length > 0) Send(onConnectMessage);
+                        Send("(11)");
                     }
                     catch
                     {

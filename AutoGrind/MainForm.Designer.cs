@@ -60,6 +60,10 @@
             this.GotoRightBtn = new System.Windows.Forms.Button();
             this.GotoLeftBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.AccelTxt = new System.Windows.Forms.TextBox();
+            this.SpeedTxt = new System.Windows.Forms.TextBox();
+            this.SetAccelBtn = new System.Windows.Forms.Button();
+            this.SetSpeedBtn = new System.Windows.Forms.Button();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
             this.RobotDisconnectBtn = new System.Windows.Forms.Button();
             this.RobotSendBtn = new System.Windows.Forms.Button();
@@ -492,10 +496,10 @@
             // 
             // GotoDomeBtn
             // 
-            this.GotoDomeBtn.BackColor = System.Drawing.Color.Green;
+            this.GotoDomeBtn.BackColor = System.Drawing.Color.DarkGray;
             this.GotoDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GotoDomeBtn.ForeColor = System.Drawing.Color.White;
-            this.GotoDomeBtn.Location = new System.Drawing.Point(626, 146);
+            this.GotoDomeBtn.Location = new System.Drawing.Point(409, 113);
             this.GotoDomeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.GotoDomeBtn.Name = "GotoDomeBtn";
             this.GotoDomeBtn.Size = new System.Drawing.Size(88, 70);
@@ -534,16 +538,58 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.AccelTxt);
+            this.groupBox2.Controls.Add(this.SpeedTxt);
+            this.groupBox2.Controls.Add(this.SetAccelBtn);
+            this.groupBox2.Controls.Add(this.SetSpeedBtn);
             this.groupBox2.Controls.Add(this.RobotConnectBtn);
             this.groupBox2.Controls.Add(this.RobotDisconnectBtn);
             this.groupBox2.Controls.Add(this.RobotSendBtn);
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(805, 11);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(239, 205);
+            this.groupBox2.Size = new System.Drawing.Size(239, 230);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Robot Config";
+            this.groupBox2.Text = "Robot Testing";
+            // 
+            // AccelTxt
+            // 
+            this.AccelTxt.Location = new System.Drawing.Point(114, 185);
+            this.AccelTxt.Name = "AccelTxt";
+            this.AccelTxt.Size = new System.Drawing.Size(46, 22);
+            this.AccelTxt.TabIndex = 80;
+            this.AccelTxt.Text = "0.5";
+            // 
+            // SpeedTxt
+            // 
+            this.SpeedTxt.Location = new System.Drawing.Point(114, 142);
+            this.SpeedTxt.Name = "SpeedTxt";
+            this.SpeedTxt.Size = new System.Drawing.Size(46, 22);
+            this.SpeedTxt.TabIndex = 79;
+            this.SpeedTxt.Text = "0.85";
+            // 
+            // SetAccelBtn
+            // 
+            this.SetAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetAccelBtn.Location = new System.Drawing.Point(6, 178);
+            this.SetAccelBtn.Name = "SetAccelBtn";
+            this.SetAccelBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetAccelBtn.TabIndex = 78;
+            this.SetAccelBtn.Text = "Set Accel";
+            this.SetAccelBtn.UseVisualStyleBackColor = false;
+            this.SetAccelBtn.Click += new System.EventHandler(this.SetAccelBtn_Click);
+            // 
+            // SetSpeedBtn
+            // 
+            this.SetSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetSpeedBtn.Location = new System.Drawing.Point(6, 135);
+            this.SetSpeedBtn.Name = "SetSpeedBtn";
+            this.SetSpeedBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetSpeedBtn.TabIndex = 77;
+            this.SetSpeedBtn.Text = "Set Speed";
+            this.SetSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetSpeedBtn.Click += new System.EventHandler(this.SetSpeedBtn_Click);
             // 
             // RobotConnectBtn
             // 
@@ -586,10 +632,10 @@
             // 
             // SetDomeBtn
             // 
-            this.SetDomeBtn.BackColor = System.Drawing.Color.Green;
+            this.SetDomeBtn.BackColor = System.Drawing.Color.DarkGray;
             this.SetDomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetDomeBtn.ForeColor = System.Drawing.Color.White;
-            this.SetDomeBtn.Location = new System.Drawing.Point(498, 146);
+            this.SetDomeBtn.Location = new System.Drawing.Point(281, 113);
             this.SetDomeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SetDomeBtn.Name = "SetDomeBtn";
             this.SetDomeBtn.Size = new System.Drawing.Size(124, 70);
@@ -1053,6 +1099,10 @@
         private System.Windows.Forms.Button SetToolChangeBtn;
         private System.Windows.Forms.Button GotoHomeBtn;
         private System.Windows.Forms.Button SetHomeBtn;
+        private System.Windows.Forms.TextBox AccelTxt;
+        private System.Windows.Forms.TextBox SpeedTxt;
+        private System.Windows.Forms.Button SetAccelBtn;
+        private System.Windows.Forms.Button SetSpeedBtn;
     }
 }
 
