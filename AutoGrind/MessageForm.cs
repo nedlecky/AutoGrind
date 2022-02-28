@@ -12,18 +12,29 @@ namespace AutoGrind
 {
     public partial class MessageForm : Form
     {
+        public DialogResult result = DialogResult.OK;
         public MessageForm(string title, string label)
         {
             InitializeComponent();
             Text = title;
             label1.Text = label;
-
+            result = DialogResult.None;
         }
 
         private void MessageForm_Load(object sender, EventArgs e)
         {
-            //Left = 0;
-            //Top = 500;
+        }
+
+        private void AbortBtn_Click(object sender, EventArgs e)
+        {
+            result = DialogResult.Abort;
+            Close();
+        }
+
+        private void ExitBtn_Click(object sender, EventArgs e)
+        {
+            result = DialogResult.OK;
+            Close();
         }
     }
 }

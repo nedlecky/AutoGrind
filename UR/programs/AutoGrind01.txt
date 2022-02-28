@@ -49,6 +49,10 @@
            return_get_actual_joint_positions()
          Case 21
            movej_q()
+         Case 30
+           set_speed(command[2])
+         Case 31
+           set_accel(command[2])
          Case 50
            Call AG_50
          Case 98

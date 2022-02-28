@@ -34,15 +34,15 @@ def AutoGrind01():
   global Vertical_4_p=p[-.139608417866, -.431276582919, .131081236338, -.001221329928, 3.116276528722, .038891910429]
   global Vertical_4_q=[-1.600700000064136, -1.5575468977702354, -2.0619765024476475, -1.1185765962043455, 1.595100000182046, -0.030999980927620463]
   def AG_50():
-    $ 71 "AG_50" "noBreak"
-    $ 72 "MoveL"
-    $ 73 "Vertical_3" "breakAfter"
+    $ 75 "AG_50" "noBreak"
+    $ 76 "MoveL"
+    $ 77 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 74 "Tilted_1" "breakAfter"
+    $ 78 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 75 "Vertical_4" "breakAfter"
+    $ 79 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 76 "Vertical_3" "breakAfter"
+    $ 80 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
   end
   $ 1 "BeforeStart"
@@ -190,6 +190,26 @@ def AutoGrind01():
   
   global speed = 0.3
   global accel = 0.3
+  
+  # Set speed to s if s<>0. Always returns "speed=[current speed]"
+  def set_speed(s):
+    if s>0:
+      speed = s
+    end
+    socket_send_string("speed=")
+    socket_send_string(speed)
+    global response = "set_speed()"
+  end
+  
+  # Set accel to a if a<>0. Always returns "accel=[current accel]"
+  def set_accel(a):
+    if a>0:
+      accel = a
+    end
+    socket_send_string("accel=")
+    socket_send_string(accel)
+    global response = "set_accel()"
+  end
   
   # Send 6-vectore back to socket as name=(n,n,n,n,n,n)
   def return_pose(name, p):
@@ -362,47 +382,55 @@ def AutoGrind01():
         $ 49 "Case 21"
         $ 50 "movej_q()"
         movej_q()
+      elif (30 == switch_1):
+        $ 51 "Case 30"
+        $ 52 "set_speed(command[2])"
+        set_speed(command[2])
+      elif (31 == switch_1):
+        $ 53 "Case 31"
+        $ 54 "set_accel(command[2])"
+        set_accel(command[2])
       elif (50 == switch_1):
-        $ 51 "Case 50"
-        $ 52 "Call AG_50"
+        $ 55 "Case 50"
+        $ 56 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 53 "Case 98"
-        $ 54 "response≔'socket reset'"
+        $ 57 "Case 98"
+        $ 58 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 55 "Case 99"
-        $ 56 "response≔'exiting'"
+        $ 59 "Case 99"
+        $ 60 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 57 "Default Case"
-        $ 58 "response≔'unknown command'"
+        $ 61 "Default Case"
+        $ 62 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 59 "socket_send_line('robot_response=' + response + '#robot_running=False')"
+      $ 63 "socket_send_line('robot_response=' + response + '#robot_running=False')"
       socket_send_line("robot_response=" + response + "#robot_running=False")
-      $ 60 "If command[1]≟98"
+      $ 64 "If command[1]≟98"
       if (command[1] == 98):
-        $ 61 "Wait: 0.5"
-        sleep(0.5)
-        $ 62 "socket_close()"
-        socket_close()
-        $ 63 "socket_is_open≔ False "
-        global socket_is_open=  False  
-      end
-      $ 64 "If command[1]≟99"
-      if (command[1] == 99):
         $ 65 "Wait: 0.5"
         sleep(0.5)
         $ 66 "socket_close()"
         socket_close()
         $ 67 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 68 "Halt"
+      end
+      $ 68 "If command[1]≟99"
+      if (command[1] == 99):
+        $ 69 "Wait: 0.5"
+        sleep(0.5)
+        $ 70 "socket_close()"
+        socket_close()
+        $ 71 "socket_is_open≔ False "
+        global socket_is_open=  False  
+        $ 72 "Halt"
         halt
       end
     else:
-      $ 69 "Else" "noBreak"
+      $ 73 "Else" "noBreak"
     end
   end
 end

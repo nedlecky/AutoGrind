@@ -540,7 +540,7 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(805, 11);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(239, 120);
+            this.groupBox2.Size = new System.Drawing.Size(239, 205);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Config";

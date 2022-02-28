@@ -31,6 +31,7 @@ namespace AutoGrind
         static SplashForm splashForm;
         TcpServer robotServer = null;
         static DataTable variables;
+        MessageForm messageForm = null;
 
         private enum RunState
         {
@@ -822,21 +823,40 @@ namespace AutoGrind
                 return true;
             }
 
-            // Toolchange
+            // toolchange
             if (command.StartsWith("toolchange"))
             {
                 log.Trace("{0} TOOLCHANGE: {1}", currentLine, command);
                 GotoToolChangeBtn_Click(null, null);
+                messageForm = new MessageForm("Tool Change Prompt","Please install tool for: " + command);
+                messageForm.ShowDialog();
                 return true;
             }
 
-            // SendRobot
+            // sendrobot
             if (command.StartsWith("sendrobot"))
             {
                 log.Trace("{0} SENDROBOT: {1}", currentLine, command);
                 robotServer.Send(command.Substring(9));
                 return true;
             }
+
+            // prompt
+            if (command.StartsWith("prompt"))
+            {
+                log.Trace("{0} PROMPT: {1}", currentLine, command);
+                messageForm = new MessageForm("General Prompt", command.Substring(7));
+                messageForm.ShowDialog();
+                return true;
+            }
+
+            // speed
+            //if (command.StartsWith("speed"))
+            //{
+            //    log.Trace("{0} speed: {1}", currentLine, command);
+            //    robotServer.Send("30," + command.Substring(9));
+            //    return true;
+            //}
 
             // Grindcircle
 
@@ -846,6 +866,26 @@ namespace AutoGrind
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) curLine={0}", currentLine);
+            // Wait for any operator prompt to be cleared
+            if(messageForm!=null)
+            {
+                switch (messageForm.result)
+                {
+                    case DialogResult.None:
+                        return;
+                    case DialogResult.Abort:
+                        log.Error("Operator requested abort from prompt");
+                        SetState(RunState.READY);
+                        messageForm = null;
+                        return;
+                        break;
+                    case DialogResult.OK:
+                        log.Info("Operator says proceed from prompt");
+                        messageForm = null;
+                        break;
+                }
+            }
+
             if (!robotReady)
             {
                 log.Trace("Exec waiting for robotReady");

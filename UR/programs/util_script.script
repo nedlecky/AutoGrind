@@ -9,6 +9,11 @@ def socket_send_crlf():
   socket_send_byte(10)
 end
 
+# Send LF out the socket
+def socket_send_lf():
+  socket_send_byte(10)
+end
+
 # Conversion (RPY(deg) to AxisAngle)
 def RPY_to_AxisAngle(R):
   Rx = d2r(R[3]) / 2.0

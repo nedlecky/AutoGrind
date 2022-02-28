@@ -9,6 +9,28 @@ global response = "unknown"
 global speed = 0.3
 global accel = 0.3
 
+# Set speed to s if s<>0. Always returns "speed=[current speed]"
+def set_speed(s):
+  if s>0:
+    speed = s
+  end
+  socket_send_string("speed=")
+  socket_send_string(speed)
+  socket_send_lf()
+  global response = "set_speed()"
+end
+
+# Set accel to a if a<>0. Always returns "accel=[current accel]"
+def set_accel(a):
+  if a>0:
+    accel = a
+  end
+  socket_send_string("accel=")
+  socket_send_string(accel)
+  socket_send_lf()
+  global response = "set_accel()"
+end
+
 # Send 6-vectore back to socket as name=(n,n,n,n,n,n)
 def return_pose(name, p):
   socket_send_string(name)
@@ -22,7 +44,7 @@ def return_pose(name, p):
     i = i + 1
   end
   socket_send_string(")")
-  socket_send_crlf()
+  socket_send_lf()
 end
 
 # Send get_tcp_offset() result to socket
