@@ -29,7 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.GrindBtn = new System.Windows.Forms.Button();
             this.EditBtn = new System.Windows.Forms.Button();
             this.SetupBtn = new System.Windows.Forms.Button();
@@ -159,6 +158,7 @@
             this.OperationTab.Controls.Add(this.SetupTab);
             this.OperationTab.Controls.Add(this.VariableTab);
             this.OperationTab.Controls.Add(this.LogsTab);
+            this.OperationTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OperationTab.Location = new System.Drawing.Point(140, 37);
             this.OperationTab.Margin = new System.Windows.Forms.Padding(2);
             this.OperationTab.Name = "OperationTab";
@@ -180,11 +180,11 @@
             this.GrindTab.Controls.Add(this.StopBtn);
             this.GrindTab.Controls.Add(this.PauseBtn);
             this.GrindTab.Controls.Add(this.StartBtn);
-            this.GrindTab.Location = new System.Drawing.Point(4, 22);
+            this.GrindTab.Location = new System.Drawing.Point(4, 25);
             this.GrindTab.Margin = new System.Windows.Forms.Padding(2);
             this.GrindTab.Name = "GrindTab";
             this.GrindTab.Padding = new System.Windows.Forms.Padding(2);
-            this.GrindTab.Size = new System.Drawing.Size(1068, 467);
+            this.GrindTab.Size = new System.Drawing.Size(1068, 464);
             this.GrindTab.TabIndex = 0;
             this.GrindTab.Text = "Grind";
             this.GrindTab.UseVisualStyleBackColor = true;
@@ -338,11 +338,11 @@
             this.EditTab.Controls.Add(this.LoadRecipeBtn);
             this.EditTab.Controls.Add(this.SaveRecipeBtn);
             this.EditTab.Controls.Add(this.RecipeRTB);
-            this.EditTab.Location = new System.Drawing.Point(4, 22);
+            this.EditTab.Location = new System.Drawing.Point(4, 25);
             this.EditTab.Margin = new System.Windows.Forms.Padding(2);
             this.EditTab.Name = "EditTab";
             this.EditTab.Padding = new System.Windows.Forms.Padding(2);
-            this.EditTab.Size = new System.Drawing.Size(1068, 467);
+            this.EditTab.Size = new System.Drawing.Size(1068, 464);
             this.EditTab.TabIndex = 1;
             this.EditTab.Text = "Edit";
             this.EditTab.UseVisualStyleBackColor = true;
@@ -426,10 +426,10 @@
             this.SetupTab.Controls.Add(this.LoadConfigBtn);
             this.SetupTab.Controls.Add(this.SaveConfigBtn);
             this.SetupTab.Controls.Add(this.groupBox1);
-            this.SetupTab.Location = new System.Drawing.Point(4, 22);
+            this.SetupTab.Location = new System.Drawing.Point(4, 25);
             this.SetupTab.Margin = new System.Windows.Forms.Padding(2);
             this.SetupTab.Name = "SetupTab";
-            this.SetupTab.Size = new System.Drawing.Size(1068, 467);
+            this.SetupTab.Size = new System.Drawing.Size(1068, 464);
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
@@ -540,7 +540,7 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(805, 11);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(239, 112);
+            this.groupBox2.Size = new System.Drawing.Size(239, 120);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Config";
@@ -549,7 +549,7 @@
             // 
             this.RobotConnectBtn.Location = new System.Drawing.Point(6, 19);
             this.RobotConnectBtn.Name = "RobotConnectBtn";
-            this.RobotConnectBtn.Size = new System.Drawing.Size(75, 38);
+            this.RobotConnectBtn.Size = new System.Drawing.Size(102, 49);
             this.RobotConnectBtn.TabIndex = 73;
             this.RobotConnectBtn.Text = "Wait for Connect";
             this.RobotConnectBtn.UseVisualStyleBackColor = true;
@@ -557,9 +557,9 @@
             // 
             // RobotDisconnectBtn
             // 
-            this.RobotDisconnectBtn.Location = new System.Drawing.Point(6, 63);
+            this.RobotDisconnectBtn.Location = new System.Drawing.Point(6, 74);
             this.RobotDisconnectBtn.Name = "RobotDisconnectBtn";
-            this.RobotDisconnectBtn.Size = new System.Drawing.Size(75, 40);
+            this.RobotDisconnectBtn.Size = new System.Drawing.Size(102, 40);
             this.RobotDisconnectBtn.TabIndex = 74;
             this.RobotDisconnectBtn.Text = "Disconnect";
             this.RobotDisconnectBtn.UseVisualStyleBackColor = true;
@@ -580,7 +580,7 @@
             // 
             this.RobotMessageTxt.Location = new System.Drawing.Point(114, 19);
             this.RobotMessageTxt.Name = "RobotMessageTxt";
-            this.RobotMessageTxt.Size = new System.Drawing.Size(119, 20);
+            this.RobotMessageTxt.Size = new System.Drawing.Size(119, 22);
             this.RobotMessageTxt.TabIndex = 75;
             this.RobotMessageTxt.Text = "(1)";
             // 
@@ -671,7 +671,7 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(570, 98);
+            this.groupBox1.Size = new System.Drawing.Size(626, 98);
             this.groupBox1.TabIndex = 71;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GeneralConfig";
@@ -681,25 +681,25 @@
             this.UtcTimeChk.AutoSize = true;
             this.UtcTimeChk.Location = new System.Drawing.Point(5, 62);
             this.UtcTimeChk.Name = "UtcTimeChk";
-            this.UtcTimeChk.Size = new System.Drawing.Size(177, 17);
+            this.UtcTimeChk.Size = new System.Drawing.Size(219, 20);
             this.UtcTimeChk.TabIndex = 77;
             this.UtcTimeChk.Text = "Use UTC Time in Time Stamps?";
             this.UtcTimeChk.UseVisualStyleBackColor = true;
             // 
             // RobotIpPortTxt
             // 
-            this.RobotIpPortTxt.Location = new System.Drawing.Point(135, 36);
+            this.RobotIpPortTxt.Location = new System.Drawing.Point(166, 36);
             this.RobotIpPortTxt.Name = "RobotIpPortTxt";
-            this.RobotIpPortTxt.Size = new System.Drawing.Size(170, 20);
+            this.RobotIpPortTxt.Size = new System.Drawing.Size(170, 22);
             this.RobotIpPortTxt.TabIndex = 72;
             this.RobotIpPortTxt.Text = "192.168.25.1:30000";
             // 
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(58, 39);
+            this.label3.Location = new System.Drawing.Point(74, 39);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(71, 13);
+            this.label3.Size = new System.Drawing.Size(86, 16);
             this.label3.TabIndex = 71;
             this.label3.Text = "Robot IP:Port";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -707,7 +707,7 @@
             // AutoGrindRootLbl
             // 
             this.AutoGrindRootLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AutoGrindRootLbl.Location = new System.Drawing.Point(136, 10);
+            this.AutoGrindRootLbl.Location = new System.Drawing.Point(166, 10);
             this.AutoGrindRootLbl.Name = "AutoGrindRootLbl";
             this.AutoGrindRootLbl.Size = new System.Drawing.Size(399, 23);
             this.AutoGrindRootLbl.TabIndex = 69;
@@ -715,7 +715,7 @@
             // 
             // ChangeLEonardRootBtn
             // 
-            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(541, 10);
+            this.ChangeLEonardRootBtn.Location = new System.Drawing.Point(590, 11);
             this.ChangeLEonardRootBtn.Name = "ChangeLEonardRootBtn";
             this.ChangeLEonardRootBtn.Size = new System.Drawing.Size(24, 23);
             this.ChangeLEonardRootBtn.TabIndex = 70;
@@ -728,7 +728,7 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(5, 14);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(125, 13);
+            this.label1.Size = new System.Drawing.Size(155, 16);
             this.label1.TabIndex = 68;
             this.label1.Text = "AutoGrind Root Directory";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -740,9 +740,9 @@
             this.VariableTab.Controls.Add(this.ClearVariablesBtn);
             this.VariableTab.Controls.Add(this.VariablesGrd);
             this.VariableTab.Controls.Add(this.groupBox7);
-            this.VariableTab.Location = new System.Drawing.Point(4, 22);
+            this.VariableTab.Location = new System.Drawing.Point(4, 25);
             this.VariableTab.Name = "VariableTab";
-            this.VariableTab.Size = new System.Drawing.Size(1068, 467);
+            this.VariableTab.Size = new System.Drawing.Size(1068, 464);
             this.VariableTab.TabIndex = 4;
             this.VariableTab.Text = "Variables";
             this.VariableTab.UseVisualStyleBackColor = true;
@@ -780,14 +780,6 @@
             // VariablesGrd
             // 
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.VariablesGrd.DefaultCellStyle = dataGridViewCellStyle2;
             this.VariablesGrd.Location = new System.Drawing.Point(20, 77);
             this.VariablesGrd.Name = "VariablesGrd";
             this.VariablesGrd.Size = new System.Drawing.Size(929, 342);
@@ -820,7 +812,7 @@
             // 
             this.WriteStringValueTxt.Location = new System.Drawing.Point(338, 19);
             this.WriteStringValueTxt.Name = "WriteStringValueTxt";
-            this.WriteStringValueTxt.Size = new System.Drawing.Size(209, 20);
+            this.WriteStringValueTxt.Size = new System.Drawing.Size(209, 22);
             this.WriteStringValueTxt.TabIndex = 7;
             this.WriteStringValueTxt.Text = "Test String";
             // 
@@ -838,7 +830,7 @@
             // 
             this.VariableNameTxt.Location = new System.Drawing.Point(6, 19);
             this.VariableNameTxt.Name = "VariableNameTxt";
-            this.VariableNameTxt.Size = new System.Drawing.Size(128, 20);
+            this.VariableNameTxt.Size = new System.Drawing.Size(128, 22);
             this.VariableNameTxt.TabIndex = 5;
             this.VariableNameTxt.Text = "X";
             // 
@@ -846,10 +838,10 @@
             // 
             this.LogsTab.Controls.Add(this.UrLogRTB);
             this.LogsTab.Controls.Add(this.ErrorLogRTB);
-            this.LogsTab.Location = new System.Drawing.Point(4, 22);
+            this.LogsTab.Location = new System.Drawing.Point(4, 25);
             this.LogsTab.Margin = new System.Windows.Forms.Padding(2);
             this.LogsTab.Name = "LogsTab";
-            this.LogsTab.Size = new System.Drawing.Size(1068, 467);
+            this.LogsTab.Size = new System.Drawing.Size(1068, 464);
             this.LogsTab.TabIndex = 3;
             this.LogsTab.Text = "Logs";
             this.LogsTab.UseVisualStyleBackColor = true;

@@ -546,6 +546,10 @@ namespace AutoGrind
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
+            // Window State
+            Left = (Int32)AppNameKey.GetValue("Left", 0);
+            Top = (Int32)AppNameKey.GetValue("Top", 0);
+
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
@@ -567,6 +571,10 @@ namespace AutoGrind
 
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+
+            // Window State
+            AppNameKey.SetValue("Left", Left);
+            AppNameKey.SetValue("Top", Top);
 
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
@@ -661,7 +669,7 @@ namespace AutoGrind
             if (robotReady)
             {
                 string q = ReadVariable(varName);
-                if(q != null)
+                if (q != null)
                 {
                     string msg = "(21," + q.Trim('(');
                     log.Trace("Sending {0}", msg);
@@ -762,7 +770,6 @@ namespace AutoGrind
             if (command.Length < 1)
             {
                 log.Trace("Line {0} BLANK: {1}", currentLine, command);
-                currentLine++;
                 return true;
             }
 
@@ -770,7 +777,6 @@ namespace AutoGrind
             if (command[0] == '#')
             {
                 log.Trace("Line {0} COMMENT: {1}", currentLine, command);
-                currentLine++;
                 return true;
             }
 
@@ -779,7 +785,6 @@ namespace AutoGrind
             {
                 log.Trace("Line {0} ASSIGNMENT: {1}", currentLine, command);
                 WriteVariable(command);
-                currentLine++;
                 return true;
             }
 
@@ -788,7 +793,6 @@ namespace AutoGrind
             {
                 log.Trace("{0} CLEAR: {1}", currentLine, command);
                 ClearVariablesBtn_Click(null, null);
-                currentLine++;
                 return true;
             }
 
@@ -800,7 +804,6 @@ namespace AutoGrind
                 if (words.Length > 1)
                     ImportFile(words[1]);
 
-                currentLine++;
                 return true;
             }
 
@@ -808,28 +811,61 @@ namespace AutoGrind
             if (command.StartsWith("end"))
             {
                 log.Trace("{0} END: {1}", currentLine, command);
-                currentLine++;
                 return false;
             }
 
             // Home
-            // Grindcircle
+            if (command.StartsWith("home"))
+            {
+                log.Trace("{0} HOME: {1}", currentLine, command);
+                GotoHomeBtn_Click(null, null);
+                return true;
+            }
+
             // Toolchange
+            if (command.StartsWith("toolchange"))
+            {
+                log.Trace("{0} TOOLCHANGE: {1}", currentLine, command);
+                GotoToolChangeBtn_Click(null, null);
+                return true;
+            }
 
-            log.Trace("Line {0} Exec: {1}", currentLine, command);
-            currentLine++;
+            // SendRobot
+            if (command.StartsWith("sendrobot"))
+            {
+                log.Trace("{0} SENDROBOT: {1}", currentLine, command);
+                robotServer.Send(command.Substring(9));
+                return true;
+            }
+
+            // Grindcircle
+
+            log.Trace("Unknown Command Line {0} Exec: {1}", currentLine, command);
             return true;
-
         }
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) curLine={0}", currentLine);
-            string line = RecipeRoRTB.Lines[currentLine];
-            bool fContinue = ExecuteLine(line);
+            if (!robotReady)
+            {
+                log.Trace("Exec waiting for robotReady");
+            }
+            else
+            {
+                if (ReadVariable("robot_running") != "False")
+                {
+                    log.Trace("Exec waiting for !robot_running");
+                }
+                else
+                {
+                    string line = RecipeRoRTB.Lines[currentLine];
+                    bool fContinue = ExecuteLine(line);
+                    currentLine++;
 
-            if (!fContinue || currentLine >= nLines)
-                SetState(RunState.READY);
-
+                    if (!fContinue || currentLine >= nLines)
+                        SetState(RunState.READY);
+                }
+            }
         }
 
         // ========================
@@ -1103,6 +1139,8 @@ namespace AutoGrind
             variables.CaseSensitive = true;
             variables.PrimaryKey = new DataColumn[] { name };
             VariablesGrd.DataSource = variables;
+
+            WriteVariable("robot_running", "False");
         }
 
         // ========================
