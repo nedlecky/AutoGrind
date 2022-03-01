@@ -781,38 +781,60 @@ namespace AutoGrind
         /// <summary>
         /// Read file looking for lines of the form "name=value" and pass then to the variable write function
         /// </summary>
-        /// <param name="filename">The filename of interest</param>
-        private void ImportFile(string filename)
+        /// <param name="filename">File to import- assumed to reside in AutoGrindRoot/Recipes</param>
+        /// <returns>true if file import completed successfully</returns>
+        private bool ImportFile(string filename)
         {
-            string[] lines = System.IO.File.ReadAllLines(Path.Combine(AutoGrindRoot, filename));
-
-            foreach (string line in lines)
+            try
             {
-                log.Info("Import Line: {0}", line);
-                if (line.Contains("="))
-                    WriteVariable(line);
+                string[] lines = System.IO.File.ReadAllLines(Path.Combine(AutoGrindRoot, "Recipes", filename));
+
+                foreach (string line in lines)
+                {
+                    log.Info("Import Line: {0}", line);
+                    if (line.Contains("="))
+                        WriteVariable(line);
+                }
+                return true;
             }
+            catch (Exception ex)
+            {
+                log.Error(ex, "ImportFile({0}) failed", filename);
+                return false;
+            }
+        }
+
+        /// <summary>
+        /// Put up MessageForm dialog. Execution will pause until the operator handles the response.
+        /// </summary>
+        /// <param name="message">This is the message to be displayed</param>
+        private void PromptOperator(string message, string heading = "AutoGrind Prompt")
+        {
+            log.Info("Prompting Operator: heading={0} message={1}", heading, message);
+            messageForm = new MessageForm(heading, message);
+            messageForm.ShowDialog();
+            log.Info("Prompting Operator: heading={0} message={1}", heading, message);
         }
         private bool ExecuteLine(string line)
         {
-            // Fetch the line and replace all 1 or more whitespace with a single space and drop all leading/trailing whitespace
+            // Cleanup the line: replace all 2 or more whitespace with a single space and drop all leading/trailing whitespace
             string command = Regex.Replace(line, @"\s+", " ").Trim();
 
-            // Blank?
+            // Blank line
             if (command.Length < 1)
             {
                 log.Info("Line {0} BLANK: {1}", currentLine, command);
                 return true;
             }
 
-            // Comment?
+            // # (comment)
             if (command[0] == '#')
             {
                 log.Info("Line {0} COMMENT: {1}", currentLine, command);
                 return true;
             }
 
-            // Assignment?
+            // = (assignment)
             if (command.Contains("="))
             {
                 log.Info("Line {0} ASSIGNMENT: {1}", currentLine, command);
@@ -820,7 +842,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // Clear?
+            // clear
             if (command.StartsWith("clear"))
             {
                 log.Info("{0} CLEAR: {1}", currentLine, command);
@@ -828,25 +850,30 @@ namespace AutoGrind
                 return true;
             }
 
-            // Import?
+            // import filename?
             if (command.StartsWith("import "))
             {
                 log.Info("{0} IMPORT: {1}", currentLine, command);
                 string[] words = command.Split(' ');
                 if (words.Length > 1)
-                    ImportFile(words[1]);
+                {
+                    if (!ImportFile(words[1]))
+                        PromptOperator(string.Format("File import error: {0}", command));
+                }
+                else
+                    PromptOperator("Invalid import command: {0}", command);
 
                 return true;
             }
 
-            // End?
+            // end
             if (command.StartsWith("end"))
             {
                 log.Info("{0} END: {1}", currentLine, command);
                 return false;
             }
 
-            // Home
+            // home
             if (command.StartsWith("home"))
             {
                 log.Info("{0} HOME: {1}", currentLine, command);
@@ -859,7 +886,7 @@ namespace AutoGrind
             {
                 log.Info("{0} TOOLCHANGE: {1}", currentLine, command);
                 GotoToolChangeBtn_Click(null, null);
-                messageForm = new MessageForm("Tool Change Prompt","Please install tool for: " + command);
+                messageForm = new MessageForm("Tool Change Prompt", "Please install tool for: " + command);
                 messageForm.ShowDialog();
                 return true;
             }
@@ -876,8 +903,8 @@ namespace AutoGrind
             if (command.StartsWith("prompt"))
             {
                 log.Info("{0} PROMPT: {1}", currentLine, command);
-                messageForm = new MessageForm("General Prompt", command.Substring(7));
-                messageForm.ShowDialog();
+                // This just displays the dialog. ExecTmr will wait for it to close
+                PromptOperator(command.Substring(7));
                 return true;
             }
 
@@ -906,20 +933,20 @@ namespace AutoGrind
         {
             //log.Info("ExecTmr(...) curLine={0}", currentLine);
             // Wait for any operator prompt to be cleared
-            if(messageForm!=null)
+            if (messageForm != null)
             {
                 switch (messageForm.result)
                 {
                     case DialogResult.None:
                         return;
                     case DialogResult.Abort:
-                        log.Error("Operator requested abort from prompt");
+                        log.Error("Operator selected \"Abort\" in MessageForm");
                         SetState(RunState.READY);
                         messageForm = null;
                         return;
                         break;
                     case DialogResult.OK:
-                        log.Info("Operator says proceed from prompt");
+                        log.Info("Operator selected \"Continue\" in MessageForm");
                         messageForm = null;
                         break;
                 }
@@ -1116,7 +1143,8 @@ namespace AutoGrind
         {
             System.Threading.Monitor.Enter(lockObject);
             string nameTrimmed = name.Trim();
-            log.Trace("WriteVariable({0}, {1})", nameTrimmed, value);
+            string valueTrimmed = value.Trim();
+            log.Trace("WriteVariable({0}, {1})", nameTrimmed, valueTrimmed);
             if (variables == null)
             {
                 log.Error("variables=null!");
@@ -1134,7 +1162,7 @@ namespace AutoGrind
                 if ((string)row["Name"] == nameTrimmed)
                 {
                     // TODO: This is where it breaks prior to Thread Safety work
-                    row["Value"] = value;
+                    row["Value"] = valueTrimmed;
                     row["IsNew"] = true;
                     row["TimeStamp"] = datetime;
                     foundVariable = true;
@@ -1143,7 +1171,7 @@ namespace AutoGrind
             }
 
             if (!foundVariable)
-                variables.Rows.Add(new object[] { nameTrimmed, value, true, datetime });
+                variables.Rows.Add(new object[] { nameTrimmed, valueTrimmed, true, datetime });
 
             variables.AcceptChanges();
             Monitor.Exit(lockObject);
@@ -1154,7 +1182,7 @@ namespace AutoGrind
             {
                 string dupName = alsoWriteVariableAs;
                 alsoWriteVariableAs = null; // Let's avoid infinite recursion :)
-                WriteVariable(dupName, value);
+                WriteVariable(dupName, valueTrimmed);
             }
 
             // Another experiment
@@ -1168,7 +1196,7 @@ namespace AutoGrind
                     {
                         string dupName = copyVariableAtWrite;
                         copyVariableAtWrite = null; // Let's avoid infinite recursion :)
-                        WriteVariable(strings[0], value);
+                        WriteVariable(strings[0], valueTrimmed);
                     }
                 }
             }
