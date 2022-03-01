@@ -52,6 +52,12 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.TraceRad = new System.Windows.Forms.RadioButton();
+            this.DebugRad = new System.Windows.Forms.RadioButton();
+            this.InfoRad = new System.Windows.Forms.RadioButton();
+            this.WarnRad = new System.Windows.Forms.RadioButton();
+            this.ErrorRad = new System.Windows.Forms.RadioButton();
             this.GotoToolChangeBtn = new System.Windows.Forms.Button();
             this.SetToolChangeBtn = new System.Windows.Forms.Button();
             this.GotoHomeBtn = new System.Windows.Forms.Button();
@@ -108,6 +114,7 @@
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
             this.SetupTab.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.VariableTab.SuspendLayout();
@@ -437,6 +444,79 @@
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.TraceRad);
+            this.groupBox3.Controls.Add(this.DebugRad);
+            this.groupBox3.Controls.Add(this.InfoRad);
+            this.groupBox3.Controls.Add(this.WarnRad);
+            this.groupBox3.Controls.Add(this.ErrorRad);
+            this.groupBox3.Location = new System.Drawing.Point(12, 535);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(123, 164);
+            this.groupBox3.TabIndex = 86;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "On Screen Logging";
+            // 
+            // TraceRad
+            // 
+            this.TraceRad.AutoSize = true;
+            this.TraceRad.Location = new System.Drawing.Point(10, 127);
+            this.TraceRad.Name = "TraceRad";
+            this.TraceRad.Size = new System.Drawing.Size(53, 17);
+            this.TraceRad.TabIndex = 4;
+            this.TraceRad.TabStop = true;
+            this.TraceRad.Text = "Trace";
+            this.TraceRad.UseVisualStyleBackColor = true;
+            this.TraceRad.CheckedChanged += new System.EventHandler(this.TraceRad_CheckedChanged);
+            // 
+            // DebugRad
+            // 
+            this.DebugRad.AutoSize = true;
+            this.DebugRad.Location = new System.Drawing.Point(10, 101);
+            this.DebugRad.Name = "DebugRad";
+            this.DebugRad.Size = new System.Drawing.Size(57, 17);
+            this.DebugRad.TabIndex = 3;
+            this.DebugRad.TabStop = true;
+            this.DebugRad.Text = "Debug";
+            this.DebugRad.UseVisualStyleBackColor = true;
+            this.DebugRad.CheckedChanged += new System.EventHandler(this.DebugRad_CheckedChanged);
+            // 
+            // InfoRad
+            // 
+            this.InfoRad.AutoSize = true;
+            this.InfoRad.Location = new System.Drawing.Point(10, 75);
+            this.InfoRad.Name = "InfoRad";
+            this.InfoRad.Size = new System.Drawing.Size(43, 17);
+            this.InfoRad.TabIndex = 2;
+            this.InfoRad.TabStop = true;
+            this.InfoRad.Text = "Info";
+            this.InfoRad.UseVisualStyleBackColor = true;
+            this.InfoRad.CheckedChanged += new System.EventHandler(this.InfoRad_CheckedChanged);
+            // 
+            // WarnRad
+            // 
+            this.WarnRad.AutoSize = true;
+            this.WarnRad.Location = new System.Drawing.Point(10, 51);
+            this.WarnRad.Name = "WarnRad";
+            this.WarnRad.Size = new System.Drawing.Size(51, 17);
+            this.WarnRad.TabIndex = 1;
+            this.WarnRad.TabStop = true;
+            this.WarnRad.Text = "Warn";
+            this.WarnRad.UseVisualStyleBackColor = true;
+            this.WarnRad.CheckedChanged += new System.EventHandler(this.WarnRad_CheckedChanged);
+            // 
+            // ErrorRad
+            // 
+            this.ErrorRad.AutoSize = true;
+            this.ErrorRad.Location = new System.Drawing.Point(10, 25);
+            this.ErrorRad.Name = "ErrorRad";
+            this.ErrorRad.Size = new System.Drawing.Size(47, 17);
+            this.ErrorRad.TabIndex = 0;
+            this.ErrorRad.Text = "Error";
+            this.ErrorRad.UseVisualStyleBackColor = true;
+            this.ErrorRad.CheckedChanged += new System.EventHandler(this.ErrorRad_CheckedChanged);
             // 
             // GotoToolChangeBtn
             // 
@@ -994,6 +1074,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 765);
+            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.RobotStatusLbl);
             this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.RecipeFilenameLbl);
@@ -1013,6 +1094,8 @@
             this.GrindTab.PerformLayout();
             this.EditTab.ResumeLayout(false);
             this.SetupTab.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -1103,6 +1186,12 @@
         private System.Windows.Forms.TextBox SpeedTxt;
         private System.Windows.Forms.Button SetAccelBtn;
         private System.Windows.Forms.Button SetSpeedBtn;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.RadioButton DebugRad;
+        private System.Windows.Forms.RadioButton InfoRad;
+        private System.Windows.Forms.RadioButton WarnRad;
+        private System.Windows.Forms.RadioButton ErrorRad;
+        private System.Windows.Forms.RadioButton TraceRad;
     }
 }
 

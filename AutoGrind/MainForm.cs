@@ -62,13 +62,14 @@ namespace AutoGrind
 #endif
             this.Text = caption;
 
-            // Strtup logging system (which also displays messages
+            // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
+            InfoRad.Checked = true; // Set logging level to Info (logfile is ALWAYS at Trace)
 
             LoadPersistent();
 
             for (int i = 0; i < 3; i++)
-                log.Info("==============================================================================================");
+                log.Info("===============================================================================================================================================================================================================================");
             log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
 
             HeartbeatTmr.Interval = 1000;
@@ -188,9 +189,9 @@ namespace AutoGrind
         }
 
 
-        // ========================
+        // ===================================================================
         // START MAIN UI BUTTONS
-        // ========================
+        // ===================================================================
 
         private void SetState(RunState s, bool fEditing = false, bool fForce = false)
         {
@@ -332,14 +333,14 @@ namespace AutoGrind
 
         }
 
-        // ========================
+        // ===================================================================
         // START MAIN UI BUTTONS
-        // ========================
+        // ===================================================================
 
 
-        // ========================
+        // ===================================================================
         // START GRIND
-        // ========================
+        // ===================================================================
         private void LoadBtn_Click(object sender, EventArgs e)
         {
             log.Info("LoadBtn_Click(...)");
@@ -370,13 +371,13 @@ namespace AutoGrind
             log.Info("StopBtn_Click(...)");
             SetState(RunState.READY);
         }
-        // ========================
+        // ===================================================================
         // END GRIND
-        // ========================
+        // ===================================================================
 
-        // ========================
+        // ===================================================================
         // START EDIT
-        // ========================
+        // ===================================================================
         private enum RecipeState
         {
             INIT,
@@ -522,14 +523,14 @@ namespace AutoGrind
         }
 
 
-        // ========================
+        // ===================================================================
         // END EDIT
-        // ========================
+        // ===================================================================
 
 
-        // ========================
+        // ===================================================================
         // START SETUP
-        // ========================
+        // ===================================================================
 
         private void DefaultConfigBtn_Click(object sender, EventArgs e)
         {
@@ -728,16 +729,46 @@ namespace AutoGrind
             GotoPosition("tool_change_q");
         }
 
+        private void ChangeLogLevel(string s)
+        {
+            LogManager.Configuration.Variables["myLevel"] = s;
+            LogManager.ReconfigExistingLoggers();
+
+        }
+        private void ErrorRad_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeLogLevel("Error");
+        }
+
+        private void WarnRad_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeLogLevel("Warn");
+        }
+
+        private void InfoRad_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeLogLevel("Info");
+        }
+
+        private void DebugRad_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeLogLevel("Debug");
+        }
+
+        private void TraceRad_CheckedChanged(object sender, EventArgs e)
+        {
+            ChangeLogLevel("Trace");
+        }
 
 
-        // ========================
+        // ===================================================================
         // END SETUP
-        // ========================
+        // ===================================================================
 
 
-        // ========================
+        // ===================================================================
         // START EXECUTIVE
-        // ========================
+        // ===================================================================
 
         static int currentLine = 0;
         static int nLines = 0;
@@ -757,7 +788,7 @@ namespace AutoGrind
 
             foreach (string line in lines)
             {
-                log.Trace("Import Line: {0}", line);
+                log.Info("Import Line: {0}", line);
                 if (line.Contains("="))
                     WriteVariable(line);
             }
@@ -770,21 +801,21 @@ namespace AutoGrind
             // Blank?
             if (command.Length < 1)
             {
-                log.Trace("Line {0} BLANK: {1}", currentLine, command);
+                log.Info("Line {0} BLANK: {1}", currentLine, command);
                 return true;
             }
 
             // Comment?
             if (command[0] == '#')
             {
-                log.Trace("Line {0} COMMENT: {1}", currentLine, command);
+                log.Info("Line {0} COMMENT: {1}", currentLine, command);
                 return true;
             }
 
             // Assignment?
             if (command.Contains("="))
             {
-                log.Trace("Line {0} ASSIGNMENT: {1}", currentLine, command);
+                log.Info("Line {0} ASSIGNMENT: {1}", currentLine, command);
                 WriteVariable(command);
                 return true;
             }
@@ -792,7 +823,7 @@ namespace AutoGrind
             // Clear?
             if (command.StartsWith("clear"))
             {
-                log.Trace("{0} CLEAR: {1}", currentLine, command);
+                log.Info("{0} CLEAR: {1}", currentLine, command);
                 ClearVariablesBtn_Click(null, null);
                 return true;
             }
@@ -800,7 +831,7 @@ namespace AutoGrind
             // Import?
             if (command.StartsWith("import "))
             {
-                log.Trace("{0} IMPORT: {1}", currentLine, command);
+                log.Info("{0} IMPORT: {1}", currentLine, command);
                 string[] words = command.Split(' ');
                 if (words.Length > 1)
                     ImportFile(words[1]);
@@ -811,14 +842,14 @@ namespace AutoGrind
             // End?
             if (command.StartsWith("end"))
             {
-                log.Trace("{0} END: {1}", currentLine, command);
+                log.Info("{0} END: {1}", currentLine, command);
                 return false;
             }
 
             // Home
             if (command.StartsWith("home"))
             {
-                log.Trace("{0} HOME: {1}", currentLine, command);
+                log.Info("{0} HOME: {1}", currentLine, command);
                 GotoHomeBtn_Click(null, null);
                 return true;
             }
@@ -826,7 +857,7 @@ namespace AutoGrind
             // toolchange
             if (command.StartsWith("toolchange"))
             {
-                log.Trace("{0} TOOLCHANGE: {1}", currentLine, command);
+                log.Info("{0} TOOLCHANGE: {1}", currentLine, command);
                 GotoToolChangeBtn_Click(null, null);
                 messageForm = new MessageForm("Tool Change Prompt","Please install tool for: " + command);
                 messageForm.ShowDialog();
@@ -836,7 +867,7 @@ namespace AutoGrind
             // sendrobot
             if (command.StartsWith("sendrobot"))
             {
-                log.Trace("{0} SENDROBOT: {1}", currentLine, command);
+                log.Info("{0} SENDROBOT: {1}", currentLine, command);
                 robotServer.Send(command.Substring(9));
                 return true;
             }
@@ -844,7 +875,7 @@ namespace AutoGrind
             // prompt
             if (command.StartsWith("prompt"))
             {
-                log.Trace("{0} PROMPT: {1}", currentLine, command);
+                log.Info("{0} PROMPT: {1}", currentLine, command);
                 messageForm = new MessageForm("General Prompt", command.Substring(7));
                 messageForm.ShowDialog();
                 return true;
@@ -853,7 +884,7 @@ namespace AutoGrind
             // speed
             if (command.StartsWith("speed"))
             {
-                log.Trace("{0} speed: {1}", currentLine, command);
+                log.Info("{0} speed: {1}", currentLine, command);
                 robotServer.Send("(30," + command.Substring(6) + ")");
                 return true;
             }
@@ -861,14 +892,14 @@ namespace AutoGrind
             // accel
             if (command.StartsWith("accel"))
             {
-                log.Trace("{0} accel: {1}", currentLine, command);
+                log.Info("{0} accel: {1}", currentLine, command);
                 robotServer.Send("(31," + command.Substring(6) + ")");
                 return true;
             }
 
             // Grindcircle
 
-            log.Trace("Unknown Command Line {0} Exec: {1}", currentLine, command);
+            log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
             return true;
         }
         private void ExecTmr_Tick(object sender, EventArgs e)
@@ -916,13 +947,13 @@ namespace AutoGrind
             }
         }
 
-        // ========================
+        // ===================================================================
         // END EXECUTIVE
-        // ========================
+        // ===================================================================
 
-        // ========================
+        // ===================================================================
         // START ROBOT INTERFACE
-        // ========================
+        // ===================================================================
 
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
@@ -1042,13 +1073,13 @@ namespace AutoGrind
                 }
         }
 
-        // ========================
+        // ===================================================================
         // END ROBOT INTERFACE
-        // ========================
+        // ===================================================================
 
-        // ========================
+        // ===================================================================
         // START VARIABLE SYSTEM
-        // ========================
+        // ===================================================================
 
         readonly string variablesFilename = "Variables.var";
 
@@ -1069,7 +1100,7 @@ namespace AutoGrind
                     return row["Value"].ToString();
                 }
             }
-            log.Error("ReadVariable({0}) Not Found", name);
+            //log.Error("ReadVariable({0}) Not Found", name);
             return null;
         }
 
@@ -1085,7 +1116,7 @@ namespace AutoGrind
         {
             System.Threading.Monitor.Enter(lockObject);
             string nameTrimmed = name.Trim();
-            log.Info("WriteVariable({0}, {1})", nameTrimmed, value);
+            log.Trace("WriteVariable({0}, {1})", nameTrimmed, value);
             if (variables == null)
             {
                 log.Error("variables=null!");
@@ -1209,10 +1240,10 @@ namespace AutoGrind
             VariablesGrd.DataSource = variables;
         }
 
- 
-        // ========================
+
+        // ===================================================================
         // END VARIABLE SYSTEM
-        // ========================
+        // ===================================================================
 
     }
 }
