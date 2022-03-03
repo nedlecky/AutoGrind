@@ -135,3 +135,40 @@ def pose_add_RPY(V1, V2):
 
   return A
 end
+
+# Send 6-vectors back to socket as [n,n,n,n,n,n]
+def return_vector(p):
+  socket_send_string("[")
+  i = 0
+  while i < 6:
+    if i > 0:
+      socket_send_string(",")
+    end
+    socket_send_string(p[i])
+    i = i + 1
+  end
+  socket_send_string("]")
+end
+
+# Send 6-element position back to socket as:
+#   (isPose=False) name=[n,n,n,n,n,n]
+#   (isPose=True)name=p[n,n,n,n,n,n]
+def return_position(name, isPose, p):
+  socket_send_string(name)
+  socket_send_string("=")
+  if isPose == True:
+    socket_send_string("p")
+  end
+  return_vector(p)
+  socket_send_lf()
+end
+
+# Return a 6-element vector as a pose name=p[.....]
+def return_pose(name, p):
+  return_position(name, True, p)
+end
+
+# Return a 6-element vector as joint angles name=[.....]
+def return_joints(name, p):
+  return_position(name, False, p)
+end

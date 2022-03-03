@@ -31,22 +31,6 @@ def set_accel(a):
   global response = "set_accel()"
 end
 
-# Send 6-vectore back to socket as name=(n,n,n,n,n,n)
-def return_pose(name, p):
-  socket_send_string(name)
-  socket_send_string("=(")
-  i = 0
-  while i < 6:
-    if i > 0:
-      socket_send_string(",")
-    end
-    socket_send_string(p[i])
-    i = i + 1
-  end
-  socket_send_string(")")
-  socket_send_lf()
-end
-
 # Send get_tcp_offset() result to socket
 def return_tcp_offset():
   p = get_tcp_offset()
@@ -71,7 +55,7 @@ end
 # Send get_actual_joint_positions() to
 def return_get_actual_joint_positions():
   p = get_actual_joint_positions()
-  return_pose("actual_joint_positions", p)
+  return_joints("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
 end
 

@@ -927,6 +927,8 @@ namespace AutoGrind
             // Grindcircle
 
             log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
+            messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);
+            messageForm.ShowDialog();
             return true;
         }
         private void ExecTmr_Tick(object sender, EventArgs e)
