@@ -66,14 +66,24 @@ namespace AutoGrind
             log = NLog.LogManager.GetCurrentClassLogger();
             InfoRad.Checked = true; // Set logging level to Info (logfile is ALWAYS at Trace)
 
+            // TODO: Must do this first to get AutoGrindRoot prior to logger beginning
             LoadPersistent();
 
-            for (int i = 0; i < 3; i++)
-                log.Info("===============================================================================================================================================================================================================================");
-            log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
+            // Set logfile variable in NLog
+            LogManager.Configuration.Variables["LogfileName"] = AutoGrindRoot + "/Logs/AutoGrind.log";
+            LogManager.ReconfigExistingLoggers();
 
+            // Flag that we're starting
+            log.Info("================================================================");
+            log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
+            log.Info(caption);
+            log.Info("================================================================");
+
+            // 1-second tick
             HeartbeatTmr.Interval = 1000;
             HeartbeatTmr.Enabled = true;
+
+            // Real start of everyone will happen shortly
             StartupTmr.Interval = 1000;
             StartupTmr.Enabled = true;
 
@@ -733,7 +743,6 @@ namespace AutoGrind
         {
             LogManager.Configuration.Variables["myLevel"] = s;
             LogManager.ReconfigExistingLoggers();
-
         }
         private void ErrorRad_CheckedChanged(object sender, EventArgs e)
         {

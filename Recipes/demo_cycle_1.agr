@@ -1,0 +1,26 @@
+# FILE: demo_cycle1.agr
+# DATE: 1/19/2022
+# PROGRAMMER: Ned Lecky
+# DESCRIPTION: This example shows direct programming with everything hard coded
+
+# operator is prompted to position tool over defect
+manualposition
+
+# operator is prompted to load 400grit tool with tool and coolant off and robot in tool change position
+loadtool 400grit
+grindcircle 5mm 20N 4times
+grindcircle 7mm 25N 6times
+grindcircle 12mm 27N 8times
+
+loadtool 800grit
+grindcircle 5mm 20N 4times
+grindcircle 7mm 25N 6times
+grindcircle 12mm 27N 8times
+
+loadtool 1500grit
+grindcircle 5mm 20N 4times
+grindcircle 7mm 25N 6times
+grindcircle 12mm 27N 8times
+
+# Return to home position
+home

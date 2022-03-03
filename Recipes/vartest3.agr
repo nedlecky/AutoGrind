@@ -1,0 +1,6 @@
+# vartest3.agr
+
+clear
+import globals_standard.agr
+x2=3
+p1=(1,2,3,4,5,6)

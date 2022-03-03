@@ -1,0 +1,27 @@
+# FILE: globals_standard.agr
+# DATE: 1/19/2022
+# PROGRAMMER: Ned Lecky
+# DESCRIPTION: These are example system variables
+
+left_cylinder_end_q=(-1.59312,-1.97331,-1.76203,-1.00258,1.59529,-0.0234209)
+right_cylinder_end_q=(-1.6118,-1.37721,-2.44043,-0.920732,1.59481,-0.0421043)
+dome_top_q=(-1.57818,-1.63969,-2.20109,-0.896773,1.59567,-0.00848009)
+home_q=(-1.6118,-1.16744,-1.89564,-1.6753,1.59481,-0.0421043)
+tool_change_q=(-1.70345,-1.59462,-2.04585,-2.80069,2.98154,-1.7274)
+
+tool1 = 400grit
+tool2 = 600grit
+tool3 = 1200 grit
+
+diam1 = 5mm
+diam2 = 7mm
+diam3 = 12mm
+diam_demo = 41mm
+
+force1 = 20N
+force2 = 25N
+force3 = 27N
+
+count1 = 4times
+count2 = 6times
+count3 = 8times

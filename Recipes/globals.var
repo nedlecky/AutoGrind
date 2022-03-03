@@ -1,0 +1,4 @@
+# globals.var
+
+globals_a = 13
+globals_b = Test string
