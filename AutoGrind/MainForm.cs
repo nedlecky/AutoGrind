@@ -482,10 +482,12 @@ namespace AutoGrind
                     SaveRecipeBtn_Click(null, null);
             }
 
-            OpenFileDialog dialog = new OpenFileDialog();
-            dialog.Title = "Open an AutoGrind Recipe";
-            dialog.Filter = "AutoGrind Recipe Files|*.agr";
-            dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                Title = "Open an AutoGrind Recipe",
+                Filter = "AutoGrind Recipe Files|*.agr",
+                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes")
+            };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 LoadRecipeFile(dialog.FileName);
@@ -514,10 +516,12 @@ namespace AutoGrind
         private void SaveAsRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("SaveAsRecipeBtn_Click(...)");
-            SaveFileDialog dialog = new SaveFileDialog();
-            dialog.Filter = "AutoGrind Recipe Files|*.agr";
-            dialog.Title = "Save an Autogrind Recipe";
-            dialog.InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
+            SaveFileDialog dialog = new SaveFileDialog()
+            {
+                Filter = "AutoGrind Recipe Files|*.agr",
+                Title = "Save an Autogrind Recipe",
+                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes")
+            };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 if (dialog.FileName != "")
@@ -616,8 +620,10 @@ namespace AutoGrind
         private void ChangeLEonardRootBtn_Click(object sender, EventArgs e)
         {
             log.Info("ChangeLEonardRootBtn_Click(...)");
-            FolderBrowserDialog dialog = new FolderBrowserDialog();
-            dialog.SelectedPath = AutoGrindRoot;
+            FolderBrowserDialog dialog = new FolderBrowserDialog()
+            {
+                SelectedPath = AutoGrindRoot
+            };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 log.Info("New AutoGrindRoot={0}", dialog.SelectedPath);
@@ -955,7 +961,6 @@ namespace AutoGrind
                         SetState(RunState.READY);
                         messageForm = null;
                         return;
-                        break;
                     case DialogResult.OK:
                         log.Info("Operator selected \"Continue\" in MessageForm");
                         messageForm = null;
@@ -997,8 +1002,10 @@ namespace AutoGrind
         {
             RobotDisconnectBtn_Click(null, null);
 
-            robotServer = new TcpServer();
-            robotServer.receiveCallback = GeneralCallBack;
+            robotServer = new TcpServer()
+            {
+                receiveCallback = GeneralCallBack
+            };
             if (robotServer.Connect(RobotIpPortTxt.Text) > 0)
             {
                 log.Error("Robot server initialization failure");
@@ -1124,7 +1131,8 @@ namespace AutoGrind
         private void ReadVariableBtn_Click(object sender, EventArgs e)
         {
             string name = VariableNameTxt.Text.Trim();
-            string v = ReadVariable(name);
+            string value = ReadVariable(name);
+            log.Info("ReadVariableBtn_Click(...) returns {0}={1}", name, value);
         }
 
         private string ReadVariable(string name)
@@ -1205,7 +1213,6 @@ namespace AutoGrind
                 {
                     if (strings[1] == nameTrimmed)
                     {
-                        string dupName = copyVariableAtWrite;
                         copyVariableAtWrite = null; // Let's avoid infinite recursion :)
                         WriteVariable(strings[0], valueTrimmed);
                     }
