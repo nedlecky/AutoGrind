@@ -64,7 +64,7 @@ namespace AutoGrind
 
             // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
-            InfoRad.Checked = true; // Set logging level to Info (logfile is ALWAYS at Trace)
+            TraceRad.Checked = true; // Set screen RTB logging level (logfile is ALWAYS at Trace)
 
             // TODO: Must do this first to get AutoGrindRoot prior to logger beginning
             LoadPersistent();
@@ -128,16 +128,28 @@ namespace AutoGrind
             //}
         }
 
+        /// <summary>
+        /// Put up a YesNo modal dialog with heading AutoGrind Confirmation and a "question", then
+        /// wait for response and return as DialogResult
+        /// </summary>
+        /// <param name="question">Question to display in dialog</param>
+        /// <returns>DialogResult.Yes, .No, or .Cancel</returns>
+        private DialogResult ConfirmMessageBox(string question)
+        {
+            // TODO: Maybe should be a custom dialog like the prompt!
+            DialogResult result = MessageBox.Show(question,
+                     "AutoGrind Confirmation",
+                     MessageBoxButtons.YesNo,
+                     MessageBoxIcon.Question);
+            return result;
+        }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (forceClose) return;
 
             if (e.CloseReason == CloseReason.UserClosing)
             {
-                var result = MessageBox.Show("Do you want to close the application?",
-                                    "AutoGrind Confirmation",
-                                    MessageBoxButtons.YesNo,
-                                    MessageBoxIcon.Question);
+                var result = ConfirmMessageBox("Do you want to close the application?");
                 e.Cancel = (result == DialogResult.No);
             }
 
@@ -145,10 +157,7 @@ namespace AutoGrind
             {
                 if (RecipeRTB.Modified)
                 {
-                    var result = MessageBox.Show("Current recipe has been modified. Save changes?",
-                        "AutoGrind Confirmation",
-                        MessageBoxButtons.YesNo,
-                        MessageBoxIcon.Question);
+                    var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
                     if (result == DialogResult.Yes)
                         SaveRecipeBtn_Click(null, null);
                     else if (result == DialogResult.Cancel)
@@ -176,24 +185,24 @@ namespace AutoGrind
             {
                 if (robotServer.IsClientConnected)
                     newRobotReady = true;
-            }
 
-            if (newRobotReady != robotReady)
-            {
-                robotReady = newRobotReady;
-                if (robotReady)
+                if (newRobotReady != robotReady)
                 {
-                    log.Info("Change robot connection to READY");
-                    RobotStatusLbl.BackColor = Color.Green;
-                    RobotStatusLbl.Text = "READY";
-                    SetState(RunState.IDLE, true, true);
-                }
-                else
-                {
-                    log.Info("Change robot connection to WAIT");
-                    RobotStatusLbl.BackColor = Color.Yellow;
-                    RobotStatusLbl.Text = "WAIT";
-                    SetState(RunState.IDLE, true, true);
+                    robotReady = newRobotReady;
+                    if (robotReady)
+                    {
+                        log.Info("Change robot connection to READY");
+                        RobotStatusLbl.BackColor = Color.Green;
+                        RobotStatusLbl.Text = "READY";
+                        //SetState(RunState.IDLE, true, true);
+                    }
+                    else
+                    {
+                        log.Info("Change robot connection to WAIT");
+                        RobotStatusLbl.BackColor = Color.Yellow;
+                        RobotStatusLbl.Text = "WAIT";
+                        SetState(RunState.IDLE, true, true);
+                    }
                 }
             }
         }
@@ -344,7 +353,7 @@ namespace AutoGrind
         }
 
         // ===================================================================
-        // START MAIN UI BUTTONS
+        // END MAIN UI BUTTONS
         // ===================================================================
 
 
@@ -361,6 +370,11 @@ namespace AutoGrind
         private void StartBtn_Click(object sender, EventArgs e)
         {
             log.Info("StartBtn_Click(...)");
+            if (!robotReady)
+            {
+                var result = ConfirmMessageBox("Robot not connected. Run anyway?");
+                if (result != DialogResult.Yes) return;
+            }
             SetState(RunState.RUNNING);
         }
 
@@ -454,10 +468,7 @@ namespace AutoGrind
             log.Info("NewRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = MessageBox.Show("Current recipe has been modified. Save changes?",
-                    "AutoGrind Confirmation",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question);
+                var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
                 if (result == DialogResult.Yes)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -474,10 +485,7 @@ namespace AutoGrind
             log.Info("LoadRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = MessageBox.Show("Current recipe has been modified. Save changes?",
-                    "AutoGrind Confirmation",
-                    MessageBoxButtons.YesNoCancel,
-                    MessageBoxIcon.Question);
+                var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
                 if (result == DialogResult.Yes)
                     SaveRecipeBtn_Click(null, null);
             }

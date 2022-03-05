@@ -111,15 +111,12 @@ namespace AutoGrind
                     {
                         client = server.EndAcceptTcpClient(result);
                         stream = client.GetStream();
-                        log.Info("UR Client connected");
+                        log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
 
                         Send("(11)");
                     }
-                    catch
-                    {
-                        log.Error("UR Client connection error");
-                    }
+                    catch { }
                 }
             }
             catch
