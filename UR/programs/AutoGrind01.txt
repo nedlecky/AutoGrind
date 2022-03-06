@@ -1,7 +1,8 @@
  Program
    BeforeStart
-     Script: util_script.script
-     Script: ag_script.script
+     Script: agscript_util.script
+     Script: agscript_robot.script
+     Script: agscript_grind.script
      currentTcpPose≔get_actual_tcp_pose()
      MoveJ
        currentTcpPose
@@ -53,6 +54,8 @@
            set_speed(command[2])
          Case 31
            set_accel(command[2])
+         Case 40
+           pattern_grind()
          Case 50
            Call AG_50
          Case 98

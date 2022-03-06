@@ -1,18 +1,4 @@
 def AutoGrind01():
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 = 0.0
-  thread Step_Counter_Thread_816a29bf_e870_401c_a84a_f04604e7db20():
-    while (True):
-      step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 = step_count_0b57cc78_d8bb_4e5d_854c_dc46bf880961 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_816a29bf_e870_401c_a84a_f04604e7db20()
-  set_gravity([0.0, 0.0, 9.82])
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -21,8 +7,22 @@ def AutoGrind01():
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
   set_safety_mode_transition_hardness(1)
+  step_count_6a348ad0_cd75_464b_8624_637662ad2bab = 0.0
+  thread Step_Counter_Thread_5dde3dde_56a3_4bc9_aa29_95b79d347b9a():
+    while (True):
+      step_count_6a348ad0_cd75_464b_8624_637662ad2bab = step_count_6a348ad0_cd75_464b_8624_637662ad2bab + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_5dde3dde_56a3_4bc9_aa29_95b79d347b9a()
   set_tcp(p[0.0,0.0,0.174,3.141592653589793,0.0,0.0])
   set_payload(2.0)
+  set_gravity([0.0, 0.0, 9.82])
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
   global up_pose_p=p[-.139608417870, -.431276583025, .128881236186, -.001221359682, 3.116276528482, .038891915637]
   global up_pose_q=[-1.6006999999532772, -1.5602662340053621, -2.0656244038598475, -1.1122093621336546, 1.5951000000012003, -0.030999999953279733]
   global down_pose_p=p[-.139608417867, -.431276582947, .015638902876, -.001221359682, 3.116276528482, .038891915637]
@@ -34,27 +34,32 @@ def AutoGrind01():
   global Vertical_4_p=p[-.139608417866, -.431276582919, .131081236338, -.001221329928, 3.116276528722, .038891910429]
   global Vertical_4_q=[-1.600700000064136, -1.5575468977702354, -2.0619765024476475, -1.1185765962043455, 1.595100000182046, -0.030999980927620463]
   def AG_50():
-    $ 75 "AG_50" "noBreak"
-    $ 76 "MoveL"
-    $ 77 "Vertical_3" "breakAfter"
-    movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 78 "Tilted_1" "breakAfter"
-    movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 79 "Vertical_4" "breakAfter"
-    movel(Vertical_4_p, a=1.2, v=0.25)
+    $ 78 "AG_50" "noBreak"
+    $ 79 "MoveL"
     $ 80 "Vertical_3" "breakAfter"
+    movel(Vertical_3_p, a=1.2, v=0.25)
+    $ 81 "Tilted_1" "breakAfter"
+    movel(Tilted_1_p, a=1.2, v=0.25)
+    $ 82 "Vertical_4" "breakAfter"
+    movel(Vertical_4_p, a=1.2, v=0.25)
+    $ 83 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
   end
   $ 1 "BeforeStart"
-  $ 2 "Script: util_script.script"
-  # General UR Utilities
-  # File: util_script.script
+  $ 2 "Script: agscript_util.script"
+  # AutoGrind General UR Utilities
+  # File: agscript_util.script
   # Version 1.0
   # Programmer: Ned Lecky
   
   # Send CRLF out the socket
   def socket_send_crlf():
     socket_send_byte(13)
+    socket_send_byte(10)
+  end
+  
+  # Send LF out the socket
+  def socket_send_lf():
     socket_send_byte(10)
   end
   
@@ -179,9 +184,46 @@ def AutoGrind01():
   
     return A
   end
-  $ 3 "Script: ag_script.script"
-  # AutoGrind System UR Program Script Functions
-  # File: ag_script.script
+  
+  # Send 6-vectors back to socket as [n,n,n,n,n,n]
+  def return_vector(p):
+    socket_send_string("[")
+    i = 0
+    while i < 6:
+      if i > 0:
+        socket_send_string(",")
+      end
+      socket_send_string(p[i])
+      i = i + 1
+    end
+    socket_send_string("]")
+  end
+  
+  # Send 6-element position back to socket as:
+  #   (isPose=False) name=[n,n,n,n,n,n]
+  #   (isPose=True)name=p[n,n,n,n,n,n]
+  def return_position(name, isPose, p):
+    socket_send_string(name)
+    socket_send_string("=")
+    if isPose == True:
+      socket_send_string("p")
+    end
+    return_vector(p)
+    socket_send_lf()
+  end
+  
+  # Return a 6-element vector as a pose name=p[.....]
+  def return_pose(name, p):
+    return_position(name, True, p)
+  end
+  
+  # Return a 6-element vector as joint angles name=[.....]
+  def return_joints(name, p):
+    return_position(name, False, p)
+  end
+  $ 3 "Script: agscript_robot.script"
+  # AutoGrind Robot Functions
+  # File: agscript_robot.script
   # Version 1.0
   # Programmer: Ned Lecky
   
@@ -198,6 +240,7 @@ def AutoGrind01():
     end
     socket_send_string("speed=")
     socket_send_string(speed)
+    socket_send_lf()
     global response = "set_speed()"
   end
   
@@ -208,23 +251,8 @@ def AutoGrind01():
     end
     socket_send_string("accel=")
     socket_send_string(accel)
+    socket_send_lf()
     global response = "set_accel()"
-  end
-  
-  # Send 6-vectore back to socket as name=(n,n,n,n,n,n)
-  def return_pose(name, p):
-    socket_send_string(name)
-    socket_send_string("=(")
-    i = 0
-    while i < 6:
-      if i > 0:
-        socket_send_string(",")
-      end
-      socket_send_string(p[i])
-      i = i + 1
-    end
-    socket_send_string(")")
-    socket_send_crlf()
   end
   
   # Send get_tcp_offset() result to socket
@@ -251,7 +279,7 @@ def AutoGrind01():
   # Send get_actual_joint_positions() to
   def return_get_actual_joint_positions():
     p = get_actual_joint_positions()
-    return_pose("actual_joint_positions", p)
+    return_joints("actual_joint_positions", p)
     global response = "return_get_actual_joint_positions()"
   end
   
@@ -289,148 +317,243 @@ def AutoGrind01():
     movej(q1, accel, speed)
     global response = "movej_q()"
   end
+  $ 4 "Script: agscript_grind.script"
+  # AutoGrind Grinding Functions
+  # File: agscript_grind.script
+  # Version 1.0
+  # Programmer: Ned Lecky
   
-  $ 4 "currentTcpPose≔get_actual_tcp_pose()"
+  # Execute the desired pattern grind selected by command[2]
+  def pattern_grind():
+    if command[2] == 1:
+      global response = "Grind box_x_first"
+      box_x_first(command[3], command[4])
+    elif command[2] == 2:
+      global response = "Grind Command 2"
+    elif command[2] == 3:
+      global response = "Grind serpentine_x"
+      serpentine_x_first(command[3], command[4], command[5], command[6])
+    else:
+      global response = "Unknown Grind Command"
+    end
+  end
+  
+  # Grind along a box dx x dy area centered on current XY
+  # Move in X direction first, then y
+  def box_x_first(dx, dy):
+    p0 = get_actual_tcp_pose_RPY()
+    x_init = p0[0]
+    y_init = p0[1]
+    z_init = p0[2]
+    x0 = x_init - dx / 2
+    y0 = y_init - dy / 2
+    x1 = x0 + dx
+    y1 = y0 + dy
+  
+    # Move to offset position bottom left of scan area
+    p1 = p0
+    p1[0] = x0
+    p1[1] = y0
+    movel_RPY(p1, accel, speed)
+  
+    # Advance until contact
+    # AND set p1[2] to the z of the part
+    p1[2] = p1[2] - 0.010
+    movel_RPY(p1, accel, speed)
+  
+    # Turn on tool
+  
+    # Turn on force
+  
+    # Grind box pattern
+    p1[0] = x1
+    movel_RPY(p1, accel, speed)
+    p1[1] = y1
+    movel_RPY(p1, accel, speed)
+    p1[0] = x0
+    movel_RPY(p1, accel, speed)
+    p1[1] = y0
+    movel_RPY(p1, accel, speed)
+  
+    # Turn off force
+  
+    # Lift tool in z
+    p1[2] = p1[2] + 0.010
+    movel_RPY(p1, accel, speed)
+  
+    # Turn off tool
+  
+    # Return robot to initial position
+    p1[0] = x_init
+    p1[1] = y_init
+    p1[2] = z_init
+    movel_RPY(p1, accel, speed)
+  end
+  
+  # Run serpentine xy pattern over dx x dy area centered on current XY moving in x_incr y_incr per pass
+  # Move in X direction first, then y
+  def serpentine_x_first(dx, dy, x_incr, y_incr):
+    p0 = get_actual_tcp_pose_RPY()
+  
+    # Move to offset position bottom left of scan area
+    p1 = p0
+    p1[0] = p0[0] - dx / 2
+    p1[1] = p0[1] - dy / 2
+    movel_RPY(p1, accel, speed)
+  
+    fDone = False
+    while fDone != True:
+      # Move in X direction
+      fDone = True
+    end
+  end
+  
+  
+  $ 5 "currentTcpPose≔get_actual_tcp_pose()"
   global currentTcpPose= get_actual_tcp_pose ()
-  $ 5 "MoveJ"
-  $ 6 "currentTcpPose" "breakAfter"
+  $ 6 "MoveJ"
+  $ 7 "currentTcpPose" "breakAfter"
   movej(currentTcpPose, a=1.3962634015954636, v=1.0471975511965976)
-  $ 7 "socket_close()"
+  $ 8 "socket_close()"
   socket_close()
-  $ 8 "Wait: 0.25"
+  $ 9 "Wait: 0.25"
   sleep(0.25)
-  $ 9 "socket_is_open≔ False "
+  $ 10 "socket_is_open≔ False "
   global socket_is_open=  False  
-  $ 10 "command_index≔0"
+  $ 11 "command_index≔0"
   global command_index=0
   while (True):
-    $ 11 "Robot Program"
-    $ 12 "Loop socket_is_open ≟  False "
+    $ 12 "Robot Program"
+    $ 13 "Loop socket_is_open ≟  False "
     while (socket_is_open  ==    False  ):
-      $ 13 "socket_is_open≔socket_open('192.168.25.1', 30000)"
+      $ 14 "socket_is_open≔socket_open('192.168.25.1', 30000)"
       global socket_is_open=socket_open("192.168.25.1", 30000)
-      $ 14 "Wait: 0.5"
+      $ 15 "Wait: 0.5"
       sleep(0.5)
     end
-    $ 15 "response≔'Unknown command'"
+    $ 16 "response≔'Unknown command'"
     global response="Unknown command"
-    $ 16 "command≔socket_read_ascii_float(7)"
+    $ 17 "command≔socket_read_ascii_float(7)"
     global command=socket_read_ascii_float(7)
-    $ 17 "If command[0]≥1"
+    $ 18 "If command[0]≥1"
     if (command[0] >= 1):
-      $ 18 "socket_send_line('robot_running=True')"
+      $ 19 "socket_send_line('robot_running=True')"
       socket_send_line("robot_running=True")
-      $ 19 "command_index≔command_index+1"
+      $ 20 "command_index≔command_index+1"
       global command_index=command_index+1
-      $ 20 "socket_set_var('robot_index', command_index)"
+      $ 21 "socket_set_var('robot_index', command_index)"
       socket_set_var("robot_index", command_index)
-      $ 21 "lastCommand≔command"
+      $ 22 "lastCommand≔command"
       global lastCommand=command
-      $ 22 "Switch command[1]"
+      $ 23 "Switch command[1]"
       switch_1 = command[1]
-      $ 23 "Case 1"
+      $ 24 "Case 1"
       if (1 == switch_1):
-        $ 24 "MoveL"
-        $ 25 "up_pose" "breakAfter"
+        $ 25 "MoveL"
+        $ 26 "up_pose" "breakAfter"
         movel(up_pose_p, a=1.2, v=0.25)
-        $ 26 "response≔'moved up'"
+        $ 27 "response≔'moved up'"
         global response="moved up"
       elif (2 == switch_1):
-        $ 27 "Case 2"
-        $ 28 "MoveJ"
-        $ 29 "down_pose" "breakAfter"
+        $ 28 "Case 2"
+        $ 29 "MoveJ"
+        $ 30 "down_pose" "breakAfter"
         movej(get_inverse_kin(down_pose_p, qnear=down_pose_q), a=1.3962634015954636, v=1.0471975511965976)
-        $ 30 "response≔'moved down'"
+        $ 31 "response≔'moved down'"
         global response="moved down"
       elif (3 == switch_1):
-        $ 31 "Case 3"
-        $ 32 "response≔'close'"
+        $ 32 "Case 3"
+        $ 33 "response≔'close'"
         global response="close"
       elif (4 == switch_1):
-        $ 33 "Case 4"
-        $ 34 "response≔'open'"
+        $ 34 "Case 4"
+        $ 35 "response≔'open'"
         global response="open"
       elif (10 == switch_1):
-        $ 35 "Case 10"
-        $ 36 "return_actual_tcp_pose()"
+        $ 36 "Case 10"
+        $ 37 "return_actual_tcp_pose()"
         return_actual_tcp_pose()
       elif (11 == switch_1):
-        $ 37 "Case 11"
-        $ 38 "return_actual_tcp_pose_RPY()"
+        $ 38 "Case 11"
+        $ 39 "return_actual_tcp_pose_RPY()"
         return_actual_tcp_pose_RPY()
       elif (12 == switch_1):
-        $ 39 "Case 12"
-        $ 40 "return_tcp_offset()"
+        $ 40 "Case 12"
+        $ 41 "return_tcp_offset()"
         return_tcp_offset()
       elif (13 == switch_1):
-        $ 41 "Case 13"
-        $ 42 "movel_RPY_rel()"
+        $ 42 "Case 13"
+        $ 43 "movel_RPY_rel()"
         movel_RPY_rel()
       elif (14 == switch_1):
-        $ 43 "Case 14"
-        $ 44 "movej_RPY_rel()"
+        $ 44 "Case 14"
+        $ 45 "movej_RPY_rel()"
         movej_RPY_rel()
       elif (15 == switch_1):
-        $ 45 "Case 15"
-        $ 46 "movej_RPY_zero()"
+        $ 46 "Case 15"
+        $ 47 "movej_RPY_zero()"
         movej_RPY_zero()
       elif (20 == switch_1):
-        $ 47 "Case 20"
-        $ 48 "return_get_actual_joint_positions()"
+        $ 48 "Case 20"
+        $ 49 "return_get_actual_joint_positions()"
         return_get_actual_joint_positions()
       elif (21 == switch_1):
-        $ 49 "Case 21"
-        $ 50 "movej_q()"
+        $ 50 "Case 21"
+        $ 51 "movej_q()"
         movej_q()
       elif (30 == switch_1):
-        $ 51 "Case 30"
-        $ 52 "set_speed(command[2])"
+        $ 52 "Case 30"
+        $ 53 "set_speed(command[2])"
         set_speed(command[2])
       elif (31 == switch_1):
-        $ 53 "Case 31"
-        $ 54 "set_accel(command[2])"
+        $ 54 "Case 31"
+        $ 55 "set_accel(command[2])"
         set_accel(command[2])
+      elif (40 == switch_1):
+        $ 56 "Case 40"
+        $ 57 "pattern_grind()"
+        pattern_grind()
       elif (50 == switch_1):
-        $ 55 "Case 50"
-        $ 56 "Call AG_50"
+        $ 58 "Case 50"
+        $ 59 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 57 "Case 98"
-        $ 58 "response≔'socket reset'"
+        $ 60 "Case 98"
+        $ 61 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 59 "Case 99"
-        $ 60 "response≔'exiting'"
+        $ 62 "Case 99"
+        $ 63 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 61 "Default Case"
-        $ 62 "response≔'unknown command'"
+        $ 64 "Default Case"
+        $ 65 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 63 "socket_send_line('robot_response=' + response + '#robot_running=False')"
+      $ 66 "socket_send_line('robot_response=' + response + '#robot_running=False')"
       socket_send_line("robot_response=" + response + "#robot_running=False")
-      $ 64 "If command[1]≟98"
+      $ 67 "If command[1]≟98"
       if (command[1] == 98):
-        $ 65 "Wait: 0.5"
+        $ 68 "Wait: 0.5"
         sleep(0.5)
-        $ 66 "socket_close()"
+        $ 69 "socket_close()"
         socket_close()
-        $ 67 "socket_is_open≔ False "
+        $ 70 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 68 "If command[1]≟99"
+      $ 71 "If command[1]≟99"
       if (command[1] == 99):
-        $ 69 "Wait: 0.5"
+        $ 72 "Wait: 0.5"
         sleep(0.5)
-        $ 70 "socket_close()"
+        $ 73 "socket_close()"
         socket_close()
-        $ 71 "socket_is_open≔ False "
+        $ 74 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 72 "Halt"
+        $ 75 "Halt"
         halt
       end
     else:
-      $ 73 "Else" "noBreak"
+      $ 76 "Else" "noBreak"
     end
   end
 end

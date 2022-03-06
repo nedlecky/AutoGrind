@@ -1,5 +1,5 @@
-# AutoGrind System UR Program Script Functions
-# File: ag_script.script
+# AutoGrind Robot Functions
+# File: agscript_robot.script
 # Version 1.0
 # Programmer: Ned Lecky
 
@@ -93,4 +93,3 @@ def movej_q():
   movej(q1, accel, speed)
   global response = "movej_q()"
 end
-

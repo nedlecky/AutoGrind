@@ -1,0 +1,91 @@
+# AutoGrind Grinding Functions
+# File: agscript_grind.script
+# Version 1.0
+# Programmer: Ned Lecky
+
+# Execute the desired pattern grind selected by command[2]
+def pattern_grind():
+  if command[2] == 1:
+    global response = "Grind box_x_first"
+    box_x_first(command[3], command[4])
+  elif command[2] == 2:
+    global response = "Grind Command 2"
+  elif command[2] == 3:
+    global response = "Grind serpentine_x"
+    serpentine_x_first(command[3], command[4], command[5], command[6])
+  else:
+    global response = "Unknown Grind Command"
+  end
+end
+
+# Grind along a box dx x dy area centered on current XY
+# Move in X direction first, then y
+def box_x_first(dx, dy):
+  p0 = get_actual_tcp_pose_RPY()
+  x_init = p0[0]
+  y_init = p0[1]
+  z_init = p0[2]
+  x0 = x_init - dx / 2
+  y0 = y_init - dy / 2
+  x1 = x0 + dx
+  y1 = y0 + dy
+
+  # Move to offset position bottom left of scan area
+  p1 = p0
+  p1[0] = x0
+  p1[1] = y0
+  movel_RPY(p1, accel, speed)
+
+  # Advance until contact
+  # AND set p1[2] to the z of the part
+  p1[2] = p1[2] - 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn on tool
+
+  # Turn on force
+
+  # Grind box pattern
+  p1[0] = x1
+  movel_RPY(p1, accel, speed)
+  p1[1] = y1
+  movel_RPY(p1, accel, speed)
+  p1[0] = x0
+  movel_RPY(p1, accel, speed)
+  p1[1] = y0
+  movel_RPY(p1, accel, speed)
+
+  # Turn off force
+
+  # Lift tool in z
+  p1[2] = p1[2] + 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn off tool
+
+  # Return robot to initial position
+  p1[0] = x_init
+  p1[1] = y_init
+  p1[2] = z_init
+  movel_RPY(p1, accel, speed)
+end
+
+# Run serpentine xy pattern over dx x dy area centered on current XY moving in x_incr y_incr per pass
+# Move in X direction first, then y
+def serpentine_x_first(dx, dy, x_incr, y_incr):
+  p0 = get_actual_tcp_pose_RPY()
+
+  # Move to offset position bottom left of scan area
+  p1 = p0
+  p1[0] = p0[0] - dx / 2
+  p1[1] = p0[1] - dy / 2
+  movel_RPY(p1, accel, speed)
+
+  fDone = False
+  while fDone != True:
+    # Move in X direction
+    fDone = True
+  end
+end
+
+
