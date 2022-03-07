@@ -1,7 +1,6 @@
 # Regr02
 # General grinding tests
 
-speed 1.0
-accel 1.0
-sendrobot (40,1,0.050,0.050)
-#sendrobot (40,1,0.025,0.010,0.005,0.005)
+speed(1.0)
+accel(0.9)
+sendrobot(40,1,20,40,5)

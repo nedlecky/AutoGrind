@@ -24,7 +24,7 @@ namespace AutoGrind
         public int nGetStatusRequests = 0;
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
-        public Action<string> receiveCallback { get; set; }
+        public Action<string> ReceiveCallback { get; set; }
         public bool IsClientConnected { get; set; }
 
         public TcpServer()
@@ -198,8 +198,7 @@ namespace AutoGrind
                         {
                             log.Info("UR<== {0} Line {1}", cleanLine, lineNo);
 
-                            if (receiveCallback != null)
-                                receiveCallback(cleanLine);
+                            ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                         }
                         lineNo++;
                     }

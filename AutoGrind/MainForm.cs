@@ -578,17 +578,13 @@ namespace AutoGrind
         {
             SetRecipeState(RecipeState.MODIFIED);
         }
-
-
         // ===================================================================
         // END EDIT
         // ===================================================================
 
-
         // ===================================================================
         // START SETUP
         // ===================================================================
-
         private void DefaultConfigBtn_Click(object sender, EventArgs e)
         {
             log.Info("DefaultConfigBtn_Click(...)");
@@ -739,7 +735,7 @@ namespace AutoGrind
                 string q = ReadVariable(varName);
                 if (q != null)
                 {
-                    string msg = "(21," + q.Trim('(');
+                    string msg = "(21," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
                     robotServer.Send(msg);
                 }
@@ -824,17 +820,13 @@ namespace AutoGrind
         {
             ChangeLogLevel("Trace");
         }
-
-
         // ===================================================================
         // END SETUP
         // ===================================================================
 
-
         // ===================================================================
         // START EXECUTIVE
         // ===================================================================
-
         static int currentLine = 0;
         static int nLines = 0;
         private void StartExecutive()
@@ -843,6 +835,7 @@ namespace AutoGrind
             currentLine = 0;
             log.Info("StartExecutive() nLines={0}", nLines);
         }
+
         /// <summary>
         /// Read file looking for lines of the form "name=value" and pass then to the variable write function
         /// </summary>
@@ -878,7 +871,42 @@ namespace AutoGrind
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
             messageForm = new MessageForm(heading, message);
             messageForm.ShowDialog();
-            log.Info("Prompting Operator: heading={0} message={1}", heading, message);
+        }
+
+        /// <summary>
+        /// Return the characters enclosed in the first set of matching ( ) in a string
+        /// Example: "speed (13.0)" returns 13.0 
+        /// </summary>
+        /// <param name="s">input string</param>
+        /// <returns>Characters enclosed in (...) or ""</returns>
+        string ExtractParameters(string s)
+        {
+            try
+            {
+                return s.Split('(', ')')[1];
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Return the characters enclosed in the first set of matching [ ] in a string
+        /// Example: "q[2,3,4,5,6,7]" returns 2,3,4,5,6,7 
+        /// </summary>
+        /// <param name="input">input string</param>
+        /// <returns>Characters enclosed in [...] or ""</returns>
+        string ExtractScalars(string input)
+        {
+            try
+            {
+                return input.Split('[', ']')[1];
+            }
+            catch
+            {
+                return "";
+            }
         }
         private bool ExecuteLine(string line)
         {
@@ -908,7 +936,7 @@ namespace AutoGrind
             }
 
             // clear
-            if (command.StartsWith("clear"))
+            if (command.StartsWith("clear()"))
             {
                 log.Info("{0} CLEAR: {1}", currentLine, command);
                 ClearVariablesBtn_Click(null, null);
@@ -916,13 +944,13 @@ namespace AutoGrind
             }
 
             // import filename?
-            if (command.StartsWith("import "))
+            if (command.StartsWith("import("))
             {
                 log.Info("{0} IMPORT: {1}", currentLine, command);
-                string[] words = command.Split(' ');
-                if (words.Length > 1)
+                string file = ExtractParameters(command);
+                if (file.Length > 1)
                 {
-                    if (!ImportFile(words[1]))
+                    if (!ImportFile(file))
                         PromptOperator(string.Format("File import error: {0}", command));
                 }
                 else
@@ -939,7 +967,7 @@ namespace AutoGrind
             }
 
             // home
-            if (command.StartsWith("home"))
+            if (command.StartsWith("home()"))
             {
                 log.Info("{0} HOME: {1}", currentLine, command);
                 GotoHomeBtn_Click(null, null);
@@ -947,7 +975,7 @@ namespace AutoGrind
             }
 
             // toolchange
-            if (command.StartsWith("toolchange"))
+            if (command.StartsWith("toolchange("))
             {
                 log.Info("{0} TOOLCHANGE: {1}", currentLine, command);
                 GotoToolChangeBtn_Click(null, null);
@@ -957,35 +985,35 @@ namespace AutoGrind
             }
 
             // sendrobot
-            if (command.StartsWith("sendrobot"))
+            if (command.StartsWith("sendrobot("))
             {
                 log.Info("{0} SENDROBOT: {1}", currentLine, command);
-                robotServer.Send(command.Substring(9));
+                robotServer.Send("(" + ExtractParameters(command) + ")");
                 return true;
             }
 
             // prompt
-            if (command.StartsWith("prompt"))
+            if (command.StartsWith("prompt("))
             {
                 log.Info("{0} PROMPT: {1}", currentLine, command);
                 // This just displays the dialog. ExecTmr will wait for it to close
-                PromptOperator(command.Substring(7));
+                PromptOperator(ExtractParameters(command));
                 return true;
             }
 
             // speed
-            if (command.StartsWith("speed"))
+            if (command.StartsWith("speed("))
             {
                 log.Info("{0} speed: {1}", currentLine, command);
-                robotServer.Send("(30," + command.Substring(6) + ")");
+                robotServer.Send("(30," + ExtractParameters(command) + ")");
                 return true;
             }
 
             // accel
-            if (command.StartsWith("accel"))
+            if (command.StartsWith("accel("))
             {
                 log.Info("{0} accel: {1}", currentLine, command);
-                robotServer.Send("(31," + command.Substring(6) + ")");
+                robotServer.Send("(31," + ExtractParameters(command) + ")");
                 return true;
             }
 
@@ -1039,7 +1067,6 @@ namespace AutoGrind
                 }
             }
         }
-
         // ===================================================================
         // END EXECUTIVE
         // ===================================================================
@@ -1047,14 +1074,13 @@ namespace AutoGrind
         // ===================================================================
         // START ROBOT INTERFACE
         // ===================================================================
-
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
             RobotDisconnectBtn_Click(null, null);
 
             robotServer = new TcpServer()
             {
-                receiveCallback = GeneralCallBack
+                ReceiveCallback = GeneralCallBack
             };
             if (robotServer.Connect(RobotIpPortTxt.Text) > 0)
             {
@@ -1129,32 +1155,26 @@ namespace AutoGrind
             string[] requests = message.Split('#');
             foreach (string request in requests)
             {
-                // {script.....}
-                if (false)//request.StartsWith("{") && request.EndsWith("}"))
-                    ;// ExecuteJavaScript(request.Substring(1, request.Length - 2));
+                // name=value
+                // TODO not clear what happens if you have
+                //      name = value
+                //      name = this is a test
+                //      name = "this is a test"
+                if (request.Contains("="))
+                    WriteVariable(request);
                 else
                 {
-                    // name=value
-                    // TODO not clear what happens if you have
-                    //      name = value
-                    //      name = this is a test
-                    //      name = "this is a test"
-                    if (request.Contains("="))
-                        WriteVariable(request);
-                    else
+                    // SET name value
+                    if (request.StartsWith("SET "))
                     {
-                        // SET name value
-                        if (request.StartsWith("SET "))
-                        {
-                            string[] s = request.Split(' ');
-                            if (s.Length == 3)
-                                WriteVariable(s[1], s[2]);
-                            else
-                                log.Error("Illegal SET statement: {0}", request);
-                        }
+                        string[] s = request.Split(' ');
+                        if (s.Length == 3)
+                            WriteVariable(s[1], s[2]);
                         else
-                            log.Error("Illegal GCB command: {0}", request);
+                            log.Error("Illegal SET statement: {0}", request);
                     }
+                    else
+                        log.Error("Illegal GCB command: {0}", request);
                 }
             }
         }
@@ -1341,10 +1361,8 @@ namespace AutoGrind
             log.Error("UR HaltRobotBtn_Click(...)");
             robotServer.Send("(11)");
         }
-
         // ===================================================================
         // END VARIABLE SYSTEM
         // ===================================================================
-
     }
 }

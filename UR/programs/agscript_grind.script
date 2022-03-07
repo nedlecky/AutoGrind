@@ -6,16 +6,16 @@
 global listenerThread = 0
 global threadCount = 0
 global haltCount = 0
-global haltCommand = [0,0]
+global haltCommand = [0, 0]
 
 # Abort system
 thread listener_thread():
-  global haltCommand = [0,0]
+  global haltCommand = [0, 0]
   global haltCount = 0
   while (True):
     global threadCount = threadCount + 1
-    global haltCommand = socket_read_ascii_float(1, timeout=0.1)
-    if haltCommand[0]>0:
+    global haltCommand = socket_read_ascii_float(1, timeout = 0.1)
+    if haltCommand[0] > 0:
       global haltCount = haltCount + 1
     end
   end
@@ -38,12 +38,21 @@ def pattern_grind():
 
   if command[2] == 1:
     global response = "Grind box_x_first"
-    box_x_first(command[3], command[4])
+    global grind_dx_mm = command[3]
+    global grind_dy_mm = command[4]
+    global grind_n_cycles = command[5]
+    box_x_first(grind_dx_mm, grind_dy_mm, grind_n_cycles)
   elif command[2] == 2:
     global response = "Grind Command 2"
   elif command[2] == 3:
     global response = "Grind serpentine_x"
-    serpentine_x_first(command[3], command[4], command[5], command[6])
+    global grind_dx_mm = command[3]
+    global grind_dy_mm = command[4]
+    global grind_xstep_mm = command[3]
+    global grind_ystep_mm = command[4]
+    global grind_n_cycles = command[5]
+    # TODO param def??
+    serpentine_x_first(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
   else:
     global response = "Unknown Grind Command"
   end
@@ -52,17 +61,24 @@ def pattern_grind():
   listenerThread = 0
 end
 
-# Grind along a box dx x dy area centered on current XY
+# Grind along a box dx x dy area centered on current XY. Repeat n times
 # Move in X direction first, then y
-def box_x_first(dx, dy):
+def box_x_first(dx_mm, dy_mm, n_cycles):
+  if n_cycles == 0:
+    return False
+  end
+
+  dx_m = dx_mm / 1000.0
+  dy_m = dy_mm / 1000.0
+
   p0 = get_actual_tcp_pose_RPY()
   x_init = p0[0]
   y_init = p0[1]
   z_init = p0[2]
-  x0 = x_init - dx / 2
-  y0 = y_init - dy / 2
-  x1 = x0 + dx
-  y1 = y0 + dy
+  x0 = x_init - dx_m / 2
+  y0 = y_init - dy_m / 2
+  x1 = x0 + dx_m
+  y1 = y0 + dy_m
 
   # Move to offset position bottom left of scan area
   p1 = p0
@@ -80,25 +96,28 @@ def box_x_first(dx, dy):
   # Turn on force
 
   # Grind box pattern
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    p1[0] = x1
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
 
-  p1[0] = x1
-  if ok_to_proceed():
-    movel_RPY(p1, accel, speed)
-  end
+    p1[1] = y1
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
 
-  p1[1] = y1
-  if ok_to_proceed():
-    movel_RPY(p1, accel, speed)
-  end
+    p1[0] = x0
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
 
-  p1[0] = x0
-  if ok_to_proceed():
-    movel_RPY(p1, accel, speed)
-  end
-
-  p1[1] = y0
-  if ok_to_proceed():
-    movel_RPY(p1, accel, speed)
+    p1[1] = y0
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+    grind_cycle = grind_cycle + 1
   end
 
   # Turn off force
@@ -109,11 +128,9 @@ def box_x_first(dx, dy):
 
   # Turn off tool
 
-  # Return robot to initial position
-  p1[0] = x_init
-  p1[1] = y_init
-  p1[2] = z_init
-  movel_RPY(p1, accel, speed)
+  # Return robot back to initial position
+  movel_RPY(p0, accel, speed)
+  return True
 end
 
 # Run serpentine xy pattern over dx x dy area centered on current XY moving in x_incr y_incr per pass
