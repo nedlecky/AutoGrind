@@ -1,4 +1,13 @@
 def AutoGrind01():
+  set_gravity([0.0, 0.0, 9.82])
+  set_safety_mode_transition_hardness(1)
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_tcp(p[0.0,0.0,0.174,3.141592653589793,0.0,0.0])
+  set_payload(2.0)
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -6,23 +15,14 @@ def AutoGrind01():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  set_safety_mode_transition_hardness(1)
-  step_count_6a348ad0_cd75_464b_8624_637662ad2bab = 0.0
-  thread Step_Counter_Thread_5dde3dde_56a3_4bc9_aa29_95b79d347b9a():
+  step_count_1406fed9_5f54_4104_af1c_25cd25a48f8c = 0.0
+  thread Step_Counter_Thread_83843bf0_0f80_4bc2_9fa9_4e8176a4cd46():
     while (True):
-      step_count_6a348ad0_cd75_464b_8624_637662ad2bab = step_count_6a348ad0_cd75_464b_8624_637662ad2bab + 1.0
+      step_count_1406fed9_5f54_4104_af1c_25cd25a48f8c = step_count_1406fed9_5f54_4104_af1c_25cd25a48f8c + 1.0
       sync()
     end
   end
-  run Step_Counter_Thread_5dde3dde_56a3_4bc9_aa29_95b79d347b9a()
-  set_tcp(p[0.0,0.0,0.174,3.141592653589793,0.0,0.0])
-  set_payload(2.0)
-  set_gravity([0.0, 0.0, 9.82])
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
+  run Step_Counter_Thread_83843bf0_0f80_4bc2_9fa9_4e8176a4cd46()
   global up_pose_p=p[-.139608417870, -.431276583025, .128881236186, -.001221359682, 3.116276528482, .038891915637]
   global up_pose_q=[-1.6006999999532772, -1.5602662340053621, -2.0656244038598475, -1.1122093621336546, 1.5951000000012003, -0.030999999953279733]
   global down_pose_p=p[-.139608417867, -.431276582947, .015638902876, -.001221359682, 3.116276528482, .038891915637]
@@ -323,8 +323,39 @@ def AutoGrind01():
   # Version 1.0
   # Programmer: Ned Lecky
   
+  global listenerThread = 0
+  global threadCount = 0
+  global haltCount = 0
+  global haltCommand = [0,0]
+  
+  # Abort system
+  thread listener_thread():
+    global haltCommand = [0,0]
+    global haltCount = 0
+    while (True):
+      global threadCount = threadCount + 1
+      global haltCommand = socket_read_ascii_float(1, timeout=0.1)
+      if haltCommand[0]>0:
+        global haltCount = haltCount + 1
+      end
+    end
+  
+    return False
+  end
+  
+  def ok_to_proceed():
+    return haltCount == 0
+  end
+  
   # Execute the desired pattern grind selected by command[2]
   def pattern_grind():
+    #global listen_thread
+    if listenerThread > 0:
+      kill listenerThread
+      listenerThread = 0
+    end
+    listenerThread = run listener_thread()
+  
     if command[2] == 1:
       global response = "Grind box_x_first"
       box_x_first(command[3], command[4])
@@ -336,6 +367,9 @@ def AutoGrind01():
     else:
       global response = "Unknown Grind Command"
     end
+  
+    kill listenerThread
+    listenerThread = 0
   end
   
   # Grind along a box dx x dy area centered on current XY
@@ -358,7 +392,7 @@ def AutoGrind01():
   
     # Advance until contact
     # AND set p1[2] to the z of the part
-    p1[2] = p1[2] - 0.010
+    p1[2] = p1[2] - 0.020
     movel_RPY(p1, accel, speed)
   
     # Turn on tool
@@ -366,19 +400,31 @@ def AutoGrind01():
     # Turn on force
   
     # Grind box pattern
+  
     p1[0] = x1
-    movel_RPY(p1, accel, speed)
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+  
     p1[1] = y1
-    movel_RPY(p1, accel, speed)
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+  
     p1[0] = x0
-    movel_RPY(p1, accel, speed)
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+  
     p1[1] = y0
-    movel_RPY(p1, accel, speed)
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
   
     # Turn off force
   
     # Lift tool in z
-    p1[2] = p1[2] + 0.010
+    p1[2] = p1[2] + 0.020
     movel_RPY(p1, accel, speed)
   
     # Turn off tool
@@ -428,8 +474,8 @@ def AutoGrind01():
     while (socket_is_open  ==    False  ):
       $ 14 "socket_is_open≔socket_open('192.168.25.1', 30000)"
       global socket_is_open=socket_open("192.168.25.1", 30000)
-      $ 15 "Wait: 0.5"
-      sleep(0.5)
+      $ 15 "Wait: 1.0"
+      sleep(1.0)
     end
     $ 16 "response≔'Unknown command'"
     global response="Unknown command"

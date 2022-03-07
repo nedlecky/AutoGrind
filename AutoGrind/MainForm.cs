@@ -105,6 +105,14 @@ namespace AutoGrind
 
             RobotConnectBtn_Click(null, null);
 
+            // Load thge last recipe if there was one loaded in LoadPersistent()
+            if (recipeFileToAutoload != "")
+                if (LoadRecipeFile(recipeFileToAutoload))
+                {
+                    SetRecipeState(RecipeState.LOADED);
+                    SetState(RunState.READY, true);
+                }
+
             log.Info("System ready.");
         }
         bool forceClose = false;
@@ -351,6 +359,20 @@ namespace AutoGrind
             }
 
         }
+        private void ClearAllLogRtbBtn_Click(object sender, EventArgs e)
+        {
+            AllLogRTB.Clear();
+        }
+
+        private void ClearUrLogRtbBtn_Click(object sender, EventArgs e)
+        {
+            UrLogRTB.Clear();
+        }
+
+        private void ClearErrorLogRtbBtn_Click(object sender, EventArgs e)
+        {
+            ErrorLogRTB.Clear();
+        }
 
         // ===================================================================
         // END MAIN UI BUTTONS
@@ -445,22 +467,33 @@ namespace AutoGrind
             }
         }
 
-        void LoadRecipeFile(string file)
+
+        /// <summary>
+        /// Load a filename into RecipeRTB and RecibeRoRTB and place the filename in RecipeFilenameLbl.Text
+        /// If the file does nbot exost, clear all of the above and return false. Else return true.
+        /// </summary>
+        /// <param name="file">The file to be loaded.</param>
+        /// <returns></returns>
+        bool LoadRecipeFile(string file)
         {
             log.Info("LoadRecipeFile({0})", file);
-            RecipeFilenameLbl.Text = file;
+            RecipeFilenameLbl.Text = "";
+            RecipeRoRTB.Text = "";
             try
             {
                 RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
+                RecipeRTB.Modified = false;
+                RecipeFilenameLbl.Text = file;
+
                 // Copy from the edit window to the runtime window
                 RecipeRoRTB.Text = RecipeRTB.Text;
+                return true;
             }
             catch (Exception ex)
             {
                 log.Error(ex, "Can't open {0}", file);
+                return false;
             }
-
-            RecipeRTB.Modified = false;
         }
 
         private void NewRecipeBtn_Click(object sender, EventArgs e)
@@ -498,9 +531,11 @@ namespace AutoGrind
             };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
-                LoadRecipeFile(dialog.FileName);
-                SetRecipeState(RecipeState.LOADED);
-                SetState(RunState.READY, true);
+                if (LoadRecipeFile(dialog.FileName))
+                {
+                    SetRecipeState(RecipeState.LOADED);
+                    SetState(RunState.READY, true);
+                }
             }
         }
 
@@ -561,6 +596,7 @@ namespace AutoGrind
             AutoGrindRootLbl.Text = AutoGrindRoot;
             RobotIpPortTxt.Text = "192.168.25.1:30000";
         }
+        private string recipeFileToAutoload = "";
         void LoadPersistent()
         {
             // Pull setup info from registry.... these are overwritten on exit or with various config save operations
@@ -587,6 +623,9 @@ namespace AutoGrind
 
             // Also load the variables table
             LoadVariablesBtn_Click(null, null);
+
+            // Autoload file is the last loaded recipe
+            recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
         }
 
         void SavePersistent()
@@ -611,6 +650,9 @@ namespace AutoGrind
 
             // Also save the variables table
             SaveVariablesBtn_Click(null, null);
+
+            // Save currently loaded recipe
+            AppNameKey.SetValue("RecipeFilenameLbl.Text", RecipeFilenameLbl.Text);
         }
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -1294,6 +1336,11 @@ namespace AutoGrind
             VariablesGrd.DataSource = variables;
         }
 
+        private void HaltRobotBtn_Click(object sender, EventArgs e)
+        {
+            log.Error("UR HaltRobotBtn_Click(...)");
+            robotServer.Send("(11)");
+        }
 
         // ===================================================================
         // END VARIABLE SYSTEM

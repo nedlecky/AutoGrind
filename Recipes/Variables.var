@@ -38,13 +38,13 @@
     <Name>robot_running</Name>
     <Value>False</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-06T08:07:15.926</TimeStamp>
+    <TimeStamp>2022-03-07T10:18:18.529</TimeStamp>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>19</Value>
+    <Value>17</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-06T08:07:13.385</TimeStamp>
+    <TimeStamp>2022-03-07T10:18:15.780</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
@@ -56,13 +56,13 @@
     <Name>robot_response</Name>
     <Value>Grind box_x_first</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-06T08:07:15.921</TimeStamp>
+    <TimeStamp>2022-03-07T10:18:18.506</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose_RPY</Name>
-    <Value>p[-0.177108,-0.446276,0.0281394,-1.42972,1.43704,-179.973]</Value>
+    <Value>p[-0.141948,-0.435956,0.0281389,-1.42972,1.43704,-179.973]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-06T08:06:32.498</TimeStamp>
+    <TimeStamp>2022-03-07T10:17:28.112</TimeStamp>
   </Variables>
   <Variables>
     <Name>tcp_offset</Name>
@@ -80,13 +80,13 @@
     <Name>speed</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-06T08:07:13.025</TimeStamp>
+    <TimeStamp>2022-03-07T10:18:15.598</TimeStamp>
   </Variables>
   <Variables>
     <Name>accel</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-06T08:07:13.233</TimeStamp>
+    <TimeStamp>2022-03-07T10:18:15.705</TimeStamp>
   </Variables>
   <Variables>
     <Name>globals_a</Name>

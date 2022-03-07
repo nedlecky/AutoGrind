@@ -3,8 +3,39 @@
 # Version 1.0
 # Programmer: Ned Lecky
 
+global listenerThread = 0
+global threadCount = 0
+global haltCount = 0
+global haltCommand = [0,0]
+
+# Abort system
+thread listener_thread():
+  global haltCommand = [0,0]
+  global haltCount = 0
+  while (True):
+    global threadCount = threadCount + 1
+    global haltCommand = socket_read_ascii_float(1, timeout=0.1)
+    if haltCommand[0]>0:
+      global haltCount = haltCount + 1
+    end
+  end
+
+  return False
+end
+
+def ok_to_proceed():
+  return haltCount == 0
+end
+
 # Execute the desired pattern grind selected by command[2]
 def pattern_grind():
+  #global listen_thread
+  if listenerThread > 0:
+    kill listenerThread
+    listenerThread = 0
+  end
+  listenerThread = run listener_thread()
+
   if command[2] == 1:
     global response = "Grind box_x_first"
     box_x_first(command[3], command[4])
@@ -16,6 +47,9 @@ def pattern_grind():
   else:
     global response = "Unknown Grind Command"
   end
+
+  kill listenerThread
+  listenerThread = 0
 end
 
 # Grind along a box dx x dy area centered on current XY
@@ -46,14 +80,26 @@ def box_x_first(dx, dy):
   # Turn on force
 
   # Grind box pattern
+
   p1[0] = x1
-  movel_RPY(p1, accel, speed)
+  if ok_to_proceed():
+    movel_RPY(p1, accel, speed)
+  end
+
   p1[1] = y1
-  movel_RPY(p1, accel, speed)
+  if ok_to_proceed():
+    movel_RPY(p1, accel, speed)
+  end
+
   p1[0] = x0
-  movel_RPY(p1, accel, speed)
+  if ok_to_proceed():
+    movel_RPY(p1, accel, speed)
+  end
+
   p1[1] = y0
-  movel_RPY(p1, accel, speed)
+  if ok_to_proceed():
+    movel_RPY(p1, accel, speed)
+  end
 
   # Turn off force
 

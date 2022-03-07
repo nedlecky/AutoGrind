@@ -34,6 +34,7 @@
             this.SetupBtn = new System.Windows.Forms.Button();
             this.OperationTab = new System.Windows.Forms.TabControl();
             this.GrindTab = new System.Windows.Forms.TabPage();
+            this.HaltRobotBtn = new System.Windows.Forms.Button();
             this.AngleLbl = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.DiameterLbl = new System.Windows.Forms.Label();
@@ -52,12 +53,6 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.TraceRad = new System.Windows.Forms.RadioButton();
-            this.DebugRad = new System.Windows.Forms.RadioButton();
-            this.InfoRad = new System.Windows.Forms.RadioButton();
-            this.WarnRad = new System.Windows.Forms.RadioButton();
-            this.ErrorRad = new System.Windows.Forms.RadioButton();
             this.GotoToolChangeBtn = new System.Windows.Forms.Button();
             this.SetToolChangeBtn = new System.Windows.Forms.Button();
             this.GotoHomeBtn = new System.Windows.Forms.Button();
@@ -98,8 +93,18 @@
             this.WriteStringValueBtn = new System.Windows.Forms.Button();
             this.VariableNameTxt = new System.Windows.Forms.TextBox();
             this.LogsTab = new System.Windows.Forms.TabPage();
+            this.groupBox6 = new System.Windows.Forms.GroupBox();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.ClearErrorLogRtbBtn = new System.Windows.Forms.Button();
+            this.ClearUrLogRtbBtn = new System.Windows.Forms.Button();
             this.UrLogRTB = new System.Windows.Forms.RichTextBox();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.TraceRad = new System.Windows.Forms.RadioButton();
+            this.DebugRad = new System.Windows.Forms.RadioButton();
+            this.InfoRad = new System.Windows.Forms.RadioButton();
+            this.WarnRad = new System.Windows.Forms.RadioButton();
+            this.ErrorRad = new System.Windows.Forms.RadioButton();
             this.AllLogRTB = new System.Windows.Forms.RichTextBox();
             this.HeartbeatTmr = new System.Windows.Forms.Timer(this.components);
             this.timeLbl = new System.Windows.Forms.Label();
@@ -110,17 +115,22 @@
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
             this.RobotStatusLbl = new System.Windows.Forms.Label();
+            this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
             this.SetupTab.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.VariableTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).BeginInit();
             this.groupBox7.SuspendLayout();
             this.LogsTab.SuspendLayout();
+            this.groupBox6.SuspendLayout();
+            this.groupBox5.SuspendLayout();
+            this.groupBox3.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -180,6 +190,7 @@
             // 
             // GrindTab
             // 
+            this.GrindTab.Controls.Add(this.HaltRobotBtn);
             this.GrindTab.Controls.Add(this.AngleLbl);
             this.GrindTab.Controls.Add(this.label4);
             this.GrindTab.Controls.Add(this.DiameterLbl);
@@ -199,6 +210,20 @@
             this.GrindTab.TabIndex = 0;
             this.GrindTab.Text = "Grind";
             this.GrindTab.UseVisualStyleBackColor = true;
+            // 
+            // HaltRobotBtn
+            // 
+            this.HaltRobotBtn.BackColor = System.Drawing.Color.Red;
+            this.HaltRobotBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
+            this.HaltRobotBtn.ForeColor = System.Drawing.Color.White;
+            this.HaltRobotBtn.Location = new System.Drawing.Point(744, 374);
+            this.HaltRobotBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.HaltRobotBtn.Name = "HaltRobotBtn";
+            this.HaltRobotBtn.Size = new System.Drawing.Size(159, 86);
+            this.HaltRobotBtn.TabIndex = 78;
+            this.HaltRobotBtn.Text = "Halt Robot";
+            this.HaltRobotBtn.UseVisualStyleBackColor = false;
+            this.HaltRobotBtn.Click += new System.EventHandler(this.HaltRobotBtn_Click);
             // 
             // AngleLbl
             // 
@@ -444,79 +469,6 @@
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
-            // 
-            // groupBox3
-            // 
-            this.groupBox3.Controls.Add(this.TraceRad);
-            this.groupBox3.Controls.Add(this.DebugRad);
-            this.groupBox3.Controls.Add(this.InfoRad);
-            this.groupBox3.Controls.Add(this.WarnRad);
-            this.groupBox3.Controls.Add(this.ErrorRad);
-            this.groupBox3.Location = new System.Drawing.Point(12, 535);
-            this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(123, 164);
-            this.groupBox3.TabIndex = 86;
-            this.groupBox3.TabStop = false;
-            this.groupBox3.Text = "On Screen Logging";
-            // 
-            // TraceRad
-            // 
-            this.TraceRad.AutoSize = true;
-            this.TraceRad.Location = new System.Drawing.Point(10, 127);
-            this.TraceRad.Name = "TraceRad";
-            this.TraceRad.Size = new System.Drawing.Size(53, 17);
-            this.TraceRad.TabIndex = 4;
-            this.TraceRad.TabStop = true;
-            this.TraceRad.Text = "Trace";
-            this.TraceRad.UseVisualStyleBackColor = true;
-            this.TraceRad.CheckedChanged += new System.EventHandler(this.TraceRad_CheckedChanged);
-            // 
-            // DebugRad
-            // 
-            this.DebugRad.AutoSize = true;
-            this.DebugRad.Location = new System.Drawing.Point(10, 101);
-            this.DebugRad.Name = "DebugRad";
-            this.DebugRad.Size = new System.Drawing.Size(57, 17);
-            this.DebugRad.TabIndex = 3;
-            this.DebugRad.TabStop = true;
-            this.DebugRad.Text = "Debug";
-            this.DebugRad.UseVisualStyleBackColor = true;
-            this.DebugRad.CheckedChanged += new System.EventHandler(this.DebugRad_CheckedChanged);
-            // 
-            // InfoRad
-            // 
-            this.InfoRad.AutoSize = true;
-            this.InfoRad.Location = new System.Drawing.Point(10, 75);
-            this.InfoRad.Name = "InfoRad";
-            this.InfoRad.Size = new System.Drawing.Size(43, 17);
-            this.InfoRad.TabIndex = 2;
-            this.InfoRad.TabStop = true;
-            this.InfoRad.Text = "Info";
-            this.InfoRad.UseVisualStyleBackColor = true;
-            this.InfoRad.CheckedChanged += new System.EventHandler(this.InfoRad_CheckedChanged);
-            // 
-            // WarnRad
-            // 
-            this.WarnRad.AutoSize = true;
-            this.WarnRad.Location = new System.Drawing.Point(10, 51);
-            this.WarnRad.Name = "WarnRad";
-            this.WarnRad.Size = new System.Drawing.Size(51, 17);
-            this.WarnRad.TabIndex = 1;
-            this.WarnRad.TabStop = true;
-            this.WarnRad.Text = "Warn";
-            this.WarnRad.UseVisualStyleBackColor = true;
-            this.WarnRad.CheckedChanged += new System.EventHandler(this.WarnRad_CheckedChanged);
-            // 
-            // ErrorRad
-            // 
-            this.ErrorRad.AutoSize = true;
-            this.ErrorRad.Location = new System.Drawing.Point(10, 25);
-            this.ErrorRad.Name = "ErrorRad";
-            this.ErrorRad.Size = new System.Drawing.Size(47, 17);
-            this.ErrorRad.TabIndex = 0;
-            this.ErrorRad.Text = "Error";
-            this.ErrorRad.UseVisualStyleBackColor = true;
-            this.ErrorRad.CheckedChanged += new System.EventHandler(this.ErrorRad_CheckedChanged);
             // 
             // GotoToolChangeBtn
             // 
@@ -962,8 +914,8 @@
             // 
             // LogsTab
             // 
-            this.LogsTab.Controls.Add(this.UrLogRTB);
-            this.LogsTab.Controls.Add(this.ErrorLogRTB);
+            this.LogsTab.Controls.Add(this.groupBox6);
+            this.LogsTab.Controls.Add(this.groupBox5);
             this.LogsTab.Location = new System.Drawing.Point(4, 25);
             this.LogsTab.Margin = new System.Windows.Forms.Padding(2);
             this.LogsTab.Name = "LogsTab";
@@ -972,33 +924,148 @@
             this.LogsTab.Text = "Logs";
             this.LogsTab.UseVisualStyleBackColor = true;
             // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.ErrorLogRTB);
+            this.groupBox6.Controls.Add(this.ClearErrorLogRtbBtn);
+            this.groupBox6.Location = new System.Drawing.Point(3, 239);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(1050, 222);
+            this.groupBox6.TabIndex = 83;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Error Messages";
+            // 
+            // groupBox5
+            // 
+            this.groupBox5.Controls.Add(this.UrLogRTB);
+            this.groupBox5.Controls.Add(this.ClearUrLogRtbBtn);
+            this.groupBox5.Location = new System.Drawing.Point(3, 3);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(1050, 230);
+            this.groupBox5.TabIndex = 82;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Robot Messages";
+            // 
+            // ClearErrorLogRtbBtn
+            // 
+            this.ClearErrorLogRtbBtn.Location = new System.Drawing.Point(6, 21);
+            this.ClearErrorLogRtbBtn.Name = "ClearErrorLogRtbBtn";
+            this.ClearErrorLogRtbBtn.Size = new System.Drawing.Size(75, 48);
+            this.ClearErrorLogRtbBtn.TabIndex = 81;
+            this.ClearErrorLogRtbBtn.Text = "Clear";
+            this.ClearErrorLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearErrorLogRtbBtn.Click += new System.EventHandler(this.ClearErrorLogRtbBtn_Click);
+            // 
+            // ClearUrLogRtbBtn
+            // 
+            this.ClearUrLogRtbBtn.Location = new System.Drawing.Point(6, 20);
+            this.ClearUrLogRtbBtn.Name = "ClearUrLogRtbBtn";
+            this.ClearUrLogRtbBtn.Size = new System.Drawing.Size(75, 48);
+            this.ClearUrLogRtbBtn.TabIndex = 80;
+            this.ClearUrLogRtbBtn.Text = "Clear";
+            this.ClearUrLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearUrLogRtbBtn.Click += new System.EventHandler(this.ClearUrLogRtbBtn_Click);
+            // 
             // UrLogRTB
             // 
             this.UrLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UrLogRTB.Location = new System.Drawing.Point(26, 231);
+            this.UrLogRTB.Location = new System.Drawing.Point(86, 20);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrLogRTB.Name = "UrLogRTB";
-            this.UrLogRTB.Size = new System.Drawing.Size(928, 207);
+            this.UrLogRTB.Size = new System.Drawing.Size(959, 205);
             this.UrLogRTB.TabIndex = 1;
             this.UrLogRTB.Text = "";
             // 
             // ErrorLogRTB
             // 
             this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ErrorLogRTB.Location = new System.Drawing.Point(29, 37);
+            this.ErrorLogRTB.Location = new System.Drawing.Point(86, 24);
             this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ErrorLogRTB.Name = "ErrorLogRTB";
-            this.ErrorLogRTB.Size = new System.Drawing.Size(925, 171);
+            this.ErrorLogRTB.Size = new System.Drawing.Size(959, 193);
             this.ErrorLogRTB.TabIndex = 0;
             this.ErrorLogRTB.Text = "";
+            // 
+            // groupBox3
+            // 
+            this.groupBox3.Controls.Add(this.TraceRad);
+            this.groupBox3.Controls.Add(this.DebugRad);
+            this.groupBox3.Controls.Add(this.InfoRad);
+            this.groupBox3.Controls.Add(this.WarnRad);
+            this.groupBox3.Controls.Add(this.ErrorRad);
+            this.groupBox3.Location = new System.Drawing.Point(9, 362);
+            this.groupBox3.Name = "groupBox3";
+            this.groupBox3.Size = new System.Drawing.Size(123, 164);
+            this.groupBox3.TabIndex = 86;
+            this.groupBox3.TabStop = false;
+            this.groupBox3.Text = "On Screen Logging";
+            // 
+            // TraceRad
+            // 
+            this.TraceRad.AutoSize = true;
+            this.TraceRad.Location = new System.Drawing.Point(10, 127);
+            this.TraceRad.Name = "TraceRad";
+            this.TraceRad.Size = new System.Drawing.Size(53, 17);
+            this.TraceRad.TabIndex = 4;
+            this.TraceRad.TabStop = true;
+            this.TraceRad.Text = "Trace";
+            this.TraceRad.UseVisualStyleBackColor = true;
+            this.TraceRad.CheckedChanged += new System.EventHandler(this.TraceRad_CheckedChanged);
+            // 
+            // DebugRad
+            // 
+            this.DebugRad.AutoSize = true;
+            this.DebugRad.Location = new System.Drawing.Point(10, 101);
+            this.DebugRad.Name = "DebugRad";
+            this.DebugRad.Size = new System.Drawing.Size(57, 17);
+            this.DebugRad.TabIndex = 3;
+            this.DebugRad.TabStop = true;
+            this.DebugRad.Text = "Debug";
+            this.DebugRad.UseVisualStyleBackColor = true;
+            this.DebugRad.CheckedChanged += new System.EventHandler(this.DebugRad_CheckedChanged);
+            // 
+            // InfoRad
+            // 
+            this.InfoRad.AutoSize = true;
+            this.InfoRad.Location = new System.Drawing.Point(10, 75);
+            this.InfoRad.Name = "InfoRad";
+            this.InfoRad.Size = new System.Drawing.Size(43, 17);
+            this.InfoRad.TabIndex = 2;
+            this.InfoRad.TabStop = true;
+            this.InfoRad.Text = "Info";
+            this.InfoRad.UseVisualStyleBackColor = true;
+            this.InfoRad.CheckedChanged += new System.EventHandler(this.InfoRad_CheckedChanged);
+            // 
+            // WarnRad
+            // 
+            this.WarnRad.AutoSize = true;
+            this.WarnRad.Location = new System.Drawing.Point(10, 51);
+            this.WarnRad.Name = "WarnRad";
+            this.WarnRad.Size = new System.Drawing.Size(51, 17);
+            this.WarnRad.TabIndex = 1;
+            this.WarnRad.TabStop = true;
+            this.WarnRad.Text = "Warn";
+            this.WarnRad.UseVisualStyleBackColor = true;
+            this.WarnRad.CheckedChanged += new System.EventHandler(this.WarnRad_CheckedChanged);
+            // 
+            // ErrorRad
+            // 
+            this.ErrorRad.AutoSize = true;
+            this.ErrorRad.Location = new System.Drawing.Point(10, 25);
+            this.ErrorRad.Name = "ErrorRad";
+            this.ErrorRad.Size = new System.Drawing.Size(47, 17);
+            this.ErrorRad.TabIndex = 0;
+            this.ErrorRad.Text = "Error";
+            this.ErrorRad.UseVisualStyleBackColor = true;
+            this.ErrorRad.CheckedChanged += new System.EventHandler(this.ErrorRad_CheckedChanged);
             // 
             // AllLogRTB
             // 
             this.AllLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AllLogRTB.Location = new System.Drawing.Point(140, 534);
+            this.AllLogRTB.Location = new System.Drawing.Point(86, 18);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.AllLogRTB.Name = "AllLogRTB";
-            this.AllLogRTB.Size = new System.Drawing.Size(1076, 220);
+            this.AllLogRTB.Size = new System.Drawing.Size(1115, 198);
             this.AllLogRTB.TabIndex = 4;
             this.AllLogRTB.Text = "";
             // 
@@ -1069,17 +1136,38 @@
             this.RobotStatusLbl.Text = "??";
             this.RobotStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // ClearAllLogRtbBtn
+            // 
+            this.ClearAllLogRtbBtn.Location = new System.Drawing.Point(6, 19);
+            this.ClearAllLogRtbBtn.Name = "ClearAllLogRtbBtn";
+            this.ClearAllLogRtbBtn.Size = new System.Drawing.Size(75, 48);
+            this.ClearAllLogRtbBtn.TabIndex = 79;
+            this.ClearAllLogRtbBtn.Text = "Clear";
+            this.ClearAllLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearAllLogRtbBtn.Click += new System.EventHandler(this.ClearAllLogRtbBtn_Click);
+            // 
+            // groupBox4
+            // 
+            this.groupBox4.Controls.Add(this.ClearAllLogRtbBtn);
+            this.groupBox4.Controls.Add(this.AllLogRTB);
+            this.groupBox4.Location = new System.Drawing.Point(9, 532);
+            this.groupBox4.Name = "groupBox4";
+            this.groupBox4.Size = new System.Drawing.Size(1206, 221);
+            this.groupBox4.TabIndex = 87;
+            this.groupBox4.TabStop = false;
+            this.groupBox4.Text = "All Log Messages";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1227, 765);
+            this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.RobotStatusLbl);
             this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.RecipeFilenameLbl);
             this.Controls.Add(this.timeLbl);
-            this.Controls.Add(this.AllLogRTB);
             this.Controls.Add(this.OperationTab);
             this.Controls.Add(this.SetupBtn);
             this.Controls.Add(this.EditBtn);
@@ -1094,8 +1182,6 @@
             this.GrindTab.PerformLayout();
             this.EditTab.ResumeLayout(false);
             this.SetupTab.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
-            this.groupBox3.PerformLayout();
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.groupBox1.ResumeLayout(false);
@@ -1105,6 +1191,11 @@
             this.groupBox7.ResumeLayout(false);
             this.groupBox7.PerformLayout();
             this.LogsTab.ResumeLayout(false);
+            this.groupBox6.ResumeLayout(false);
+            this.groupBox5.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
+            this.groupBox3.PerformLayout();
+            this.groupBox4.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1192,6 +1283,13 @@
         private System.Windows.Forms.RadioButton WarnRad;
         private System.Windows.Forms.RadioButton ErrorRad;
         private System.Windows.Forms.RadioButton TraceRad;
+        private System.Windows.Forms.Button HaltRobotBtn;
+        private System.Windows.Forms.Button ClearAllLogRtbBtn;
+        private System.Windows.Forms.GroupBox groupBox6;
+        private System.Windows.Forms.GroupBox groupBox5;
+        private System.Windows.Forms.Button ClearErrorLogRtbBtn;
+        private System.Windows.Forms.Button ClearUrLogRtbBtn;
+        private System.Windows.Forms.GroupBox groupBox4;
     }
 }
 
