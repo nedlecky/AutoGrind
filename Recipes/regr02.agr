@@ -1,6 +1,18 @@
 # Regr02
 # General grinding tests
 
-speed(1.0)
-accel(0.9)
-sendrobot(40,1,20,40,5)
+speed(1.5)
+accel(1.5)
+
+# grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
+#grind_flat_rect(40,80,2)
+#grind_flat_rect(20,40,3)
+#grind_flat_rect(5,5,4)
+
+# grind_cyl_rect(grind_dx_mm, grind_dr_deg, grind_radius_mm, grind_n_cycles)
+#grind_cyl_rect(40,20,200,2)
+#grind_cyl_rect(20,10,200,3)
+
+# grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
+grind_flat_serp(100,50,100,10,20)
+grind_flat_serp(100,50,10,50,20)

@@ -36,23 +36,40 @@ def pattern_grind():
   end
   listenerThread = run listener_thread()
 
-  if command[2] == 1:
-    global response = "Grind box_x_first"
+  global grind_cycle = 0
+  global grind_n_cycles = 0
+  global grind_dx_mm = 0
+  global grind_dy_mm = 0
+  global grind_dz_mm = 0
+  global grind_dr_mm = 0
+  global grind_dp_mm = 0
+  global grind_dy_mm = 0
+  global grind_radius_mm = 0
+  global grind_xstep_mm = 0
+  global grind_ystep_mm = 0
+  global grind_rstep_deg = 0
+
+  if command[2] == 10:
+    global response = "grind_flat_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_n_cycles = command[5]
-    box_x_first(grind_dx_mm, grind_dy_mm, grind_n_cycles)
-  elif command[2] == 2:
-    global response = "Grind Command 2"
-  elif command[2] == 3:
-    global response = "Grind serpentine_x"
+    grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
+  elif command[2] == 20:
+    global response = "grind_cyl_rect"
+    global grind_dx_mm = command[3]
+    global grind_dr_deg = command[4]
+    global grind_radius_mm = command[5]
+    global grind_n_cycles = command[6]
+    grind_cyl_rect(grind_dx_mm, grind_dr_deg, grind_radius_mm, grind_n_cycles)
+  elif command[2] == 30:
+    global response = "grind_flat_serp"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
-    global grind_xstep_mm = command[3]
-    global grind_ystep_mm = command[4]
-    global grind_n_cycles = command[5]
-    # TODO param def??
-    serpentine_x_first(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
+    global grind_xstep_mm = command[5]
+    global grind_ystep_mm = command[6]
+    global grind_n_cycles = command[7]
+    grind_flat_serp(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
   else:
     global response = "Unknown Grind Command"
   end
@@ -61,20 +78,21 @@ def pattern_grind():
   listenerThread = 0
 end
 
-# Grind along a box dx x dy area centered on current XY. Repeat n times
-# Move in X direction first, then y
-def box_x_first(dx_mm, dy_mm, n_cycles):
-  if n_cycles == 0:
+# Grind along a flat rect dx_mm x dy_mm centered on current XY. Repeat n_cycles times.
+# Move in x direction first, then y
+def grind_flat_rect(dx_mm, dy_mm, n_cycles):
+  if n_cycles < 1:
     return False
   end
 
+  # Unit conversion
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
 
+  # Find initial position p0 and compute target corners (x,y) 0 and 1
   p0 = get_actual_tcp_pose_RPY()
   x_init = p0[0]
   y_init = p0[1]
-  z_init = p0[2]
   x0 = x_init - dx_m / 2
   y0 = y_init - dy_m / 2
   x1 = x0 + dx_m
@@ -133,22 +151,163 @@ def box_x_first(dx_mm, dy_mm, n_cycles):
   return True
 end
 
-# Run serpentine xy pattern over dx x dy area centered on current XY moving in x_incr y_incr per pass
-# Move in X direction first, then y
-def serpentine_x_first(dx, dy, x_incr, y_incr):
+# Grind along a cylindrical rect dx_mm,dr_deg with radius_mm centered on current XR. Repeat n_cycles times.
+# Move in x direction first, then r
+def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
+  if n_cycles < 1:
+    return False
+  end
+
+  # Unit conversion
+  # TODO not sure what to do with radiuys yet... just adjust TCP??
+  dx_m = dx_mm / 1000.0
+  radius_m = radius_mm / 1000.0
+
+  # Find initial position p0 and compute target corners (x,r) 0 and 1
   p0 = get_actual_tcp_pose_RPY()
+  x_init = p0[0]
+  r_init = p0[3]
+  x0 = x_init - dx_m / 2
+  r0 = r_init - dr_deg / 2
+  x1 = x0 + dx_m
+  r1 = r0 + dr_deg
 
   # Move to offset position bottom left of scan area
   p1 = p0
-  p1[0] = p0[0] - dx / 2
-  p1[1] = p0[1] - dy / 2
+  p1[0] = x0
+  p1[3] = r0
   movel_RPY(p1, accel, speed)
 
-  fDone = False
-  while fDone != True:
-    # Move in X direction
-    fDone = True
+  # Advance until contact
+  # AND set p1[2] to the z of the part
+  p1[2] = p1[2] - 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn on tool
+
+  # Turn on force
+
+  # Grind cylindrical box pattern
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    p1[0] = x1
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+
+    p1[3] = r1
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+
+    p1[0] = x0
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+
+    p1[3] = r0
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+    grind_cycle = grind_cycle + 1
   end
+
+  # Turn off force
+
+  # Lift tool in z
+  p1[2] = p1[2] + 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn off tool
+
+  # Return robot back to initial position
+  movel_RPY(p0, accel, speed)
+  return True
+end
+
+# Grind along a flat serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current XY. Repeat n_cycles times.
+# Move in x direction first, then y
+def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
+  if n_cycles < 1:
+    return False
+  end
+
+  # Unit conversion
+  dx_m = dx_mm / 1000.0
+  dy_m = dy_mm / 1000.0
+  xstep_m = xstep_mm / 1000.0
+  ystep_m = ystep_mm / 1000.0
+
+  # Find initial position p0 and compute target corners (x,y) 0 and 1
+  p0 = get_actual_tcp_pose_RPY()
+  x_init = p0[0]
+  y_init = p0[1]
+  x0 = x_init - dx_m / 2
+  y0 = y_init - dy_m / 2
+  x1 = x0 + dx_m
+  y1 = y0 + dy_m
+
+  # Move to offset position bottom left of scan area
+  p1 = p0
+  p1[0] = x0
+  p1[1] = y0
+  movel_RPY(p1, accel, speed)
+
+  # Advance until contact
+  # AND set p1[2] to the z of the part
+  p1[2] = p1[2] - 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn on tool
+
+  # Turn on force
+
+  # Grind serpentine pattern
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    # Adjust x direction
+    x = p1[0]
+    if x + xstep_m > x1 and xstep_m > 0:
+      xstep_m = -xstep_m
+    end
+    if x + xstep_m < x0 and xstep_m < 0:
+      xstep_m = -xstep_m
+    end
+    
+    # advance x by xstep
+    p1[0] = x + xstep_m
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+
+    # Adjust y direction
+    y = p1[1]
+    if y + ystep_m > y1 and ystep_m > 0:
+      ystep_m = -ystep_m
+    end
+    if y + ystep_m < y0 and ystep_m < 0:
+      ystep_m = -ystep_m
+    end
+    
+    # advance y by ystep
+    p1[1] = y + ystep_m
+    if ok_to_proceed():
+      movel_RPY(p1, accel, speed)
+    end
+    grind_cycle = grind_cycle + 1
+  end
+
+  # Turn off force
+
+  # Lift tool in z
+  p1[2] = p1[2] + 0.020
+  movel_RPY(p1, accel, speed)
+
+  # Turn off tool
+
+  # Return robot back to initial position
+  movel_RPY(p0, accel, speed)
+  return True
 end
 
 

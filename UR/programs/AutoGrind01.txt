@@ -15,7 +15,7 @@
        socket_is_open≔socket_open("192.168.25.1", 30000)
        Wait: 1.0
      response≔"Unknown command"
-     command≔socket_read_ascii_float(7)
+     command≔socket_read_ascii_float(10)
      If command[0]≥1
        socket_send_line("robot_running=True")
        command_index≔command_index+1

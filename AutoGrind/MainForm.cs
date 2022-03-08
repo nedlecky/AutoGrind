@@ -1017,7 +1017,30 @@ namespace AutoGrind
                 return true;
             }
 
-            // Grindcircle
+            // grind_flat_rect
+            // TODO These 30, 31, 40,10 things should be in a lookup
+            if (command.StartsWith("grind_flat_rect("))
+            {
+                log.Info("{0} grind_flat_rect: {1}", currentLine, command);
+                robotServer.Send("(40,10," + ExtractParameters(command) + ")");
+                return true;
+            }
+
+            // grind_cyl_rect
+            if (command.StartsWith("grind_cyl_rect("))
+            {
+                log.Info("{0} grind_cyl_rect: {1}", currentLine, command);
+                robotServer.Send("(40,20," + ExtractParameters(command) + ")");
+                return true;
+            }
+
+            // grind_flat_serp
+            if (command.StartsWith("grind_flat_serp("))
+            {
+                log.Info("{0} grind_flat_serp: {1}", currentLine, command);
+                robotServer.Send("(40,30," + ExtractParameters(command) + ")");
+                return true;
+            }
 
             log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
             messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);

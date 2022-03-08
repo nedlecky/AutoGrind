@@ -25,97 +25,97 @@
   <Variables>
     <Name>x</Name>
     <Value>13</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:07.285</TimeStamp>
   </Variables>
   <Variables>
     <Name>y</Name>
     <Value>25</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:07.395</TimeStamp>
   </Variables>
   <Variables>
     <Name>robot_running</Name>
     <Value>False</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-07T16:09:13.502</TimeStamp>
+    <TimeStamp>2022-03-08T07:12:39.303</TimeStamp>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>11</Value>
+    <Value>5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-07T16:09:13.459</TimeStamp>
+    <TimeStamp>2022-03-08T07:12:23.830</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
     <Value>p[-0.139608,-0.431277,0.0156389,-0.00122136,3.11628,0.0388919]</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:08.872</TimeStamp>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>set_accel()</Value>
+    <Value>grind_flat_serp</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-07T16:09:13.500</TimeStamp>
+    <TimeStamp>2022-03-08T07:12:39.280</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose_RPY</Name>
-    <Value>p[-0.139608,-0.431277,0.0156389,178.57,1.43704,-179.973]</Value>
+    <Value>p[-0.139609,-0.431277,0.0781389,0,-0,3.02556e-14]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-07T16:09:08.971</TimeStamp>
+    <TimeStamp>2022-03-08T07:11:57.439</TimeStamp>
   </Variables>
   <Variables>
     <Name>tcp_offset</Name>
     <Value>p[0,0,0.174,3.14159,0,0]</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:09.079</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_joint_positions</Name>
     <Value>[-1.56951,-3.24498,-1.20639,-3.42755,1.5457,-0.000193787]</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:13.267</TimeStamp>
   </Variables>
   <Variables>
     <Name>speed</Name>
-    <Value>1.15</Value>
+    <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-07T16:09:13.354</TimeStamp>
+    <TimeStamp>2022-03-08T07:12:02.479</TimeStamp>
   </Variables>
   <Variables>
     <Name>accel</Name>
-    <Value>1.23</Value>
+    <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-07T16:09:13.466</TimeStamp>
+    <TimeStamp>2022-03-08T07:12:02.586</TimeStamp>
   </Variables>
   <Variables>
     <Name>globals_a</Name>
     <Value>13</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:14.872</TimeStamp>
   </Variables>
   <Variables>
     <Name>globals_b</Name>
     <Value>Test string</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:14.879</TimeStamp>
   </Variables>
   <Variables>
     <Name>z</Name>
     <Value>21.22</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:14.959</TimeStamp>
   </Variables>
   <Variables>
     <Name>str1</Name>
     <Value>Abc was here</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:15.056</TimeStamp>
   </Variables>
   <Variables>
     <Name>str2</Name>
     <Value>"Test"</Value>
-    <IsNew>true</IsNew>
+    <IsNew>false</IsNew>
     <TimeStamp>2022-03-07T16:09:15.192</TimeStamp>
   </Variables>
 </NewDataSet>
