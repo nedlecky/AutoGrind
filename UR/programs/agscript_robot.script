@@ -10,7 +10,7 @@ global accel = 0.3
 
 # Set speed to s if s<>0. Always returns "speed=[current speed]"
 def set_speed(s):
-  if s>0:
+  if s > 0:
     speed = s
   end
   socket_send_string("speed=")
@@ -21,7 +21,7 @@ end
 
 # Set accel to a if a<>0. Always returns "accel=[current accel]"
 def set_accel(a):
-  if a>0:
+  if a > 0:
     accel = a
   end
   socket_send_string("accel=")
@@ -76,14 +76,35 @@ def movej_RPY_rel():
   global response = "movej_RPY_rel()"
 end
 
+# Movej to R
+def movej_R_only(R = 0):
+  p = get_actual_tcp_pose_RPY()
+  p[3] = R
+  movej_RPY(p, accel, speed)
+  global response = "movej_R_only()"
+end
+# Movej to P
+def movej_P_only(P = 0):
+  p = get_actual_tcp_pose_RPY()
+  p[4] = P
+  movej_RPY(p, accel, speed)
+  global response = "movej_P_only()"
+end
+# Movej to Y
+def movej_Y_only(Y = 0):
+  p = get_actual_tcp_pose_RPY()
+  p[5] = Y
+  movej_RPY(p, accel, speed)
+  global response = "movej_Y_only()"
+end
 # Movej to 0,0,0, RPY
-def movej_RPY_zero():
-  p0 = get_actual_tcp_pose_RPY()
-  p0[3] = 0
-  p0[4] = 0
-  p0[5] = 0
-  movej_RPY(p0, accel, speed)
-  global response = "movej_RPY_zero()"
+def movej_RPY_only(R=0, P=0, Y=0):
+  p = get_actual_tcp_pose_RPY()
+  p[3] = R
+  p[4] = P
+  p[5] = Y
+  movej_RPY(p, accel, speed)
+  global response = "movej_RPY_only()"
 end
 
 # Movej to physical joint positions

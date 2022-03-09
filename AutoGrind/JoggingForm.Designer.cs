@@ -49,6 +49,10 @@
             this.FreeDriveBtn = new System.Windows.Forms.Button();
             this.PurposeLbl = new System.Windows.Forms.Label();
             this.SaveBtn = new System.Windows.Forms.Button();
+            this.ZeroRBtn = new System.Windows.Forms.Button();
+            this.ZeroPBtn = new System.Windows.Forms.Button();
+            this.ZeroYBtn = new System.Windows.Forms.Button();
+            this.FlipRBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // YminusBtn
@@ -290,7 +294,7 @@
             this.ZeroRpyBtn.BackColor = System.Drawing.Color.Green;
             this.ZeroRpyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZeroRpyBtn.ForeColor = System.Drawing.Color.White;
-            this.ZeroRpyBtn.Location = new System.Drawing.Point(400, 620);
+            this.ZeroRpyBtn.Location = new System.Drawing.Point(666, 549);
             this.ZeroRpyBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroRpyBtn.Name = "ZeroRpyBtn";
             this.ZeroRpyBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -339,12 +343,76 @@
             this.SaveBtn.UseVisualStyleBackColor = false;
             this.SaveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
+            // ZeroRBtn
+            // 
+            this.ZeroRBtn.BackColor = System.Drawing.Color.Green;
+            this.ZeroRBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZeroRBtn.ForeColor = System.Drawing.Color.White;
+            this.ZeroRBtn.Location = new System.Drawing.Point(497, 450);
+            this.ZeroRBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.ZeroRBtn.Name = "ZeroRBtn";
+            this.ZeroRBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ZeroRBtn.Size = new System.Drawing.Size(165, 95);
+            this.ZeroRBtn.TabIndex = 78;
+            this.ZeroRBtn.Text = "Align R=0";
+            this.ZeroRBtn.UseVisualStyleBackColor = false;
+            this.ZeroRBtn.Click += new System.EventHandler(this.ZeroRBtn_Click);
+            // 
+            // ZeroPBtn
+            // 
+            this.ZeroPBtn.BackColor = System.Drawing.Color.Green;
+            this.ZeroPBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZeroPBtn.ForeColor = System.Drawing.Color.White;
+            this.ZeroPBtn.Location = new System.Drawing.Point(497, 549);
+            this.ZeroPBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.ZeroPBtn.Name = "ZeroPBtn";
+            this.ZeroPBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ZeroPBtn.Size = new System.Drawing.Size(165, 95);
+            this.ZeroPBtn.TabIndex = 79;
+            this.ZeroPBtn.Text = "Align P=0";
+            this.ZeroPBtn.UseVisualStyleBackColor = false;
+            this.ZeroPBtn.Click += new System.EventHandler(this.ZeroPBtn_Click);
+            // 
+            // ZeroYBtn
+            // 
+            this.ZeroYBtn.BackColor = System.Drawing.Color.Green;
+            this.ZeroYBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZeroYBtn.ForeColor = System.Drawing.Color.White;
+            this.ZeroYBtn.Location = new System.Drawing.Point(497, 648);
+            this.ZeroYBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.ZeroYBtn.Name = "ZeroYBtn";
+            this.ZeroYBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.ZeroYBtn.Size = new System.Drawing.Size(165, 95);
+            this.ZeroYBtn.TabIndex = 80;
+            this.ZeroYBtn.Text = "Align Y=0";
+            this.ZeroYBtn.UseVisualStyleBackColor = false;
+            this.ZeroYBtn.Click += new System.EventHandler(this.ZeroYBtn_Click);
+            // 
+            // FlipRBtn
+            // 
+            this.FlipRBtn.BackColor = System.Drawing.Color.Green;
+            this.FlipRBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FlipRBtn.ForeColor = System.Drawing.Color.White;
+            this.FlipRBtn.Location = new System.Drawing.Point(666, 450);
+            this.FlipRBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.FlipRBtn.Name = "FlipRBtn";
+            this.FlipRBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
+            this.FlipRBtn.Size = new System.Drawing.Size(165, 95);
+            this.FlipRBtn.TabIndex = 81;
+            this.FlipRBtn.Text = "Align R=180";
+            this.FlipRBtn.UseVisualStyleBackColor = false;
+            this.FlipRBtn.Click += new System.EventHandler(this.FlipRBtn_Click);
+            // 
             // JoggingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(847, 769);
             this.ControlBox = false;
+            this.Controls.Add(this.FlipRBtn);
+            this.Controls.Add(this.ZeroYBtn);
+            this.Controls.Add(this.ZeroPBtn);
+            this.Controls.Add(this.ZeroRBtn);
             this.Controls.Add(this.SaveBtn);
             this.Controls.Add(this.PurposeLbl);
             this.Controls.Add(this.FreeDriveBtn);
@@ -399,5 +467,9 @@
         private System.Windows.Forms.Button FreeDriveBtn;
         private System.Windows.Forms.Label PurposeLbl;
         private System.Windows.Forms.Button SaveBtn;
+        private System.Windows.Forms.Button ZeroRBtn;
+        private System.Windows.Forms.Button ZeroPBtn;
+        private System.Windows.Forms.Button ZeroYBtn;
+        private System.Windows.Forms.Button FlipRBtn;
     }
 }

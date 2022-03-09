@@ -16,14 +16,14 @@ namespace AutoGrind
         TcpServer robot;
         public bool fSave { get; set; }
 
-        public JoggingForm(TcpServer _robot, string purpose="General Jogging", bool saveable=false)
+        public JoggingForm(TcpServer _robot, string purpose = "General Jogging", bool saveable = false)
         {
             InitializeComponent();
-            PurposeLbl.Text = purpose;  
+            PurposeLbl.Text = purpose;
             robot = _robot;
             fSave = false;
             SaveBtn.Enabled = saveable;
-            SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;     
+            SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
@@ -135,9 +135,27 @@ namespace AutoGrind
             Jog(p);
         }
 
+        private void ZeroRBtn_Click(object sender, EventArgs e)
+        {
+            robot.Send("(15,0)");
+        }
+        private void FlipRBtn_Click(object sender, EventArgs e)
+        {
+            robot.Send("(15,180)");
+        }
+
+        private void ZeroPBtn_Click(object sender, EventArgs e)
+        {
+            robot.Send("(16,0)");
+        }
+
+        private void ZeroYBtn_Click(object sender, EventArgs e)
+        {
+            robot.Send("(17,0)");
+        }
         private void ZeroRpyBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15)");
+            robot.Send("(18,0,0,0)");
         }
 
     }

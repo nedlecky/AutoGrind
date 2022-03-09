@@ -15,7 +15,7 @@ accel(1.5)
 #grind_cyl_rect(60,40,300,2)
 #grind_cyl_rect(60,40,500,2)
 #grind_cyl_rect(60,40,1000,2) # Works... Getting pretty flat!
-##grind_cyl_rect(60,40,2000,2) # Crashes
+##grind_cyl_rect(60,40,2000,2) # Crashes for radius too large??
 #grind_cyl_rect(20,10,200,3)
 
 # grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
@@ -24,4 +24,7 @@ accel(1.5)
 #grind_flat_serp(100,50,10,50,2)
 
 #grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles)
-grind_cyl_serp(60,40,60,10,400,2)
+#grind_cyl_serp(60,40,60,10,400,2)
+
+#grind_flat_circle(dx_mm, n_cycles)
+grind_flat_circle(40,3)

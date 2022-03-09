@@ -37,14 +37,14 @@
   <Variables>
     <Name>robot_running</Name>
     <Value>False</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-09T11:21:32.771</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-09T17:09:06.897</TimeStamp>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>4</Value>
+    <Value>13</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-09T11:21:20.865</TimeStamp>
+    <TimeStamp>2022-03-09T17:08:55.095</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
@@ -54,15 +54,15 @@
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_cyl_serp</Value>
+    <Value>movej_Y_only()</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-09T11:21:32.769</TimeStamp>
+    <TimeStamp>2022-03-09T17:09:06.895</TimeStamp>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose_RPY</Name>
-    <Value>p[0.125807,-0.463535,0.0683429,1.94314,-15.2353,-142.899]</Value>
+    <Value>p[-0.141462,-0.313121,0.456088,180,1.59518e-09,-3.18055e-15]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-09T11:20:56.248</TimeStamp>
+    <TimeStamp>2022-03-09T17:08:00.045</TimeStamp>
   </Variables>
   <Variables>
     <Name>tcp_offset</Name>
@@ -79,14 +79,14 @@
   <Variables>
     <Name>speed</Name>
     <Value>1.5</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-09T11:21:18.359</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-09T16:52:04.201</TimeStamp>
   </Variables>
   <Variables>
     <Name>accel</Name>
     <Value>1.5</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-09T11:21:18.442</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-09T16:52:04.306</TimeStamp>
   </Variables>
   <Variables>
     <Name>globals_a</Name>

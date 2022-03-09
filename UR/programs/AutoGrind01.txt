@@ -45,7 +45,13 @@
          Case 14
            movej_RPY_rel()
          Case 15
-           movej_RPY_zero()
+           movej_R_only(command[2])
+         Case 16
+           movej_P_only(command[2])
+         Case 17
+           movej_Y_only(command[2])
+         Case 18
+           movej_RPY_only(command[2],command[3],command[4])
          Case 20
            return_get_actual_joint_positions()
          Case 21
