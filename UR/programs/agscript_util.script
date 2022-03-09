@@ -14,8 +14,25 @@ def socket_send_lf():
   socket_send_byte(10)
 end
 
+# New versions using built-in
+def AxisAngle_to_RPY(p0):
+  r0 = [p0[3], p0[4], p0[5]]
+  r1 = rotvec2rpy(r0)
+  p1 = p[p0[0], p0[1], p0[2], r2d(r1[0]), r2d(r1[1]), r2d(r1[2])]
+
+  return p1
+end
+
+def RPY_to_AxisAngle(p0):
+  r0 = [d2r(p0[3]), d2r(p0[4]), d2r(p0[5])]
+  r1 = rpy2rotvec(r0)
+  p1 = p[p0[0], p0[1], p0[2], r1[0], r1[1], r1[2]]
+
+  return p1
+end
+
 # Conversion (RPY(deg) to AxisAngle)
-def RPY_to_AxisAngle(R):
+def old_RPY_to_AxisAngle(R):
   Rx = d2r(R[3]) / 2.0
   Ry = d2r(R[4]) / 2.0
   Rz = d2r(R[5]) / 2.0
@@ -48,7 +65,7 @@ def RPY_to_AxisAngle(R):
 end
 
 # Conversion (AxisAngle to RPY)
-def AxisAngle_to_RPY(R):
+def old_AxisAngle_to_RPY(R):
   Rx = R[3]
   Ry = R[4]
   Rz = R[5]

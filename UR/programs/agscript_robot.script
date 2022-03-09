@@ -3,7 +3,6 @@
 # Version 1.0
 # Programmer: Ned Lecky
 
-global scriptRunning = True
 global response = "unknown"
 
 global speed = 0.3
