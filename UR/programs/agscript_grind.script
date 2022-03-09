@@ -8,6 +8,8 @@ global threadCount = 0
 global haltCount = 0
 global haltCommand = [0, 0]
 
+global tool_length_m = 0.100
+
 # Abort system
 thread listener_thread():
   global haltCommand = [0, 0]
@@ -89,25 +91,18 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
 
-  # Find initial position p0 and compute target corners (x,y) 0 and 1
-  p0 = get_actual_tcp_pose_RPY()
-  x_init = p0[0]
-  y_init = p0[1]
-  x0 = x_init - dx_m / 2
-  y0 = y_init - dy_m / 2
-  x1 = x0 + dx_m
-  y1 = y0 + dy_m
+  # Find initial position p0
+  set_tcp(p[0, 0, tool_length_m, 0, 0, 0])
+  p0 = get_actual_tcp_pose()
 
   # Move to offset position bottom left of scan area
-  p1 = p0
-  p1[0] = x0
-  p1[1] = y0
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Advance until contact
-  # AND set p1[2] to the z of the part
-  p1[2] = p1[2] - 0.020
-  movel_RPY(p1, accel, speed)
+  # Simulated....
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn on tool
 
@@ -116,24 +111,24 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   # Grind box pattern
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    p1[0] = x1
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[dx_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[1] = y1
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[0, dy_m, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[0] = x0
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[-dx_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[1] = y0
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[0, -dy_m, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -141,13 +136,13 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   # Turn off force
 
   # Lift tool in z
-  p1[2] = p1[2] + 0.020
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn off tool
 
   # Return robot back to initial position
-  movel_RPY(p0, accel, speed)
+  movel(p0, accel, speed)
   return True
 end
 
@@ -159,29 +154,22 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
   end
 
   # Unit conversion
-  # TODO not sure what to do with radiuys yet... just adjust TCP??
   dx_m = dx_mm / 1000.0
   radius_m = radius_mm / 1000.0
+  dr_rad = d2r(dr_deg)
 
   # Find initial position p0 and compute target corners (x,r) 0 and 1
-  p0 = get_actual_tcp_pose_RPY()
-  x_init = p0[0]
-  r_init = p0[3]
-  x0 = x_init - dx_m / 2
-  r0 = r_init - dr_deg / 2
-  x1 = x0 + dx_m
-  r1 = r0 + dr_deg
+  set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
+  p0 = get_actual_tcp_pose()
 
   # Move to offset position bottom left of scan area
-  p1 = p0
-  p1[0] = x0
-  p1[3] = r0
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
+  movel(p1, accel, speed)
 
   # Advance until contact
-  # AND set p1[2] to the z of the part
-  p1[2] = p1[2] - 0.020
-  movel_RPY(p1, accel, speed)
+  # Simulated
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn on tool
 
@@ -190,24 +178,24 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
   # Grind cylindrical box pattern
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    p1[0] = x1
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[dx_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[3] = r1
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, dr_rad, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[0] = x0
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[-dx_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
     end
 
-    p1[3] = r0
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -dr_rad, 0, 0])
+      movel(p1, accel, speed)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -215,13 +203,13 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
   # Turn off force
 
   # Lift tool in z
-  p1[2] = p1[2] + 0.020
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn off tool
 
   # Return robot back to initial position
-  movel_RPY(p0, accel, speed)
+  movel(p0, accel, speed)
   return True
 end
 
@@ -237,26 +225,21 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   dy_m = dy_mm / 1000.0
   xstep_m = xstep_mm / 1000.0
   ystep_m = ystep_mm / 1000.0
+  x_grid_count = floor(dx_m / xstep_m)
+  y_grid_count = floor(dy_m / ystep_m)
 
-  # Find initial position p0 and compute target corners (x,y) 0 and 1
-  p0 = get_actual_tcp_pose_RPY()
-  x_init = p0[0]
-  y_init = p0[1]
-  x0 = x_init - dx_m / 2
-  y0 = y_init - dy_m / 2
-  x1 = x0 + dx_m
-  y1 = y0 + dy_m
+  # Find initial position
+  set_tcp(p[0, 0, tool_length_m, 0, 0, 0])
+  p0 = get_actual_tcp_pose()
 
   # Move to offset position bottom left of scan area
-  p1 = p0
-  p1[0] = x0
-  p1[1] = y0
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Advance until contact
-  # AND set p1[2] to the z of the part
-  p1[2] = p1[2] - 0.020
-  movel_RPY(p1, accel, speed)
+  # Simulated....
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn on tool
 
@@ -264,49 +247,64 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
 
   # Grind serpentine pattern
   global grind_cycle = 1
+  x_grid = 0
+  y_grid = 0
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    # Adjust x direction
-    x = p1[0]
-    if x + xstep_m > x1 and xstep_m > 0:
-      xstep_m = -xstep_m
-    end
-    if x + xstep_m < x0 and xstep_m < 0:
-      xstep_m = -xstep_m
-    end
-    
-    # advance x by xstep
-    p1[0] = x + xstep_m
+    # Advance x by xstep_m
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
+      # Track new grid square we're in
+      if xstep_m > 0:
+        x_grid = x_grid + 1
+      else:
+        x_grid = x_grid - 1
+      end
+    end
+    # Adjust x direction
+    if x_grid >= x_grid_count-1 and xstep_m > 0:
+      xstep_m = -xstep_m
+    elif x_grid == 0 and xstep_m < 0:
+      xstep_m = -xstep_m
     end
 
-    # Adjust y direction
-    y = p1[1]
-    if y + ystep_m > y1 and ystep_m > 0:
-      ystep_m = -ystep_m
-    end
-    if y + ystep_m < y0 and ystep_m < 0:
-      ystep_m = -ystep_m
-    end
-    
-    # advance y by ystep
-    p1[1] = y + ystep_m
+    # Advance y by ystep_m
     if ok_to_proceed():
-      movel_RPY(p1, accel, speed)
+      p1 = pose_trans(get_forward_kin(), p[0, ystep_m, 0, 0, 0, 0])
+      movel(p1, accel, speed)
+      # Track new grid square we're in
+      if ystep_m > 0:
+        y_grid = y_grid + 1
+      else:
+        y_grid = y_grid - 1
+      end
     end
-    grind_cycle = grind_cycle + 1
+    # Adjust y direction
+    if y_grid >= y_grid_count-1 and ystep_m > 0:
+      ystep_m = -ystep_m
+    elif y_grid == 0 and ystep_m < 0:
+      ystep_m = -ystep_m
+    end
+
+    # Detect when we've covered all the grid squares!
+    # That's when you reach n-1,n-1 or 0,0
+    if x_grid == x_grid_count - 1 and y_grid == y_grid_count - 1:
+      grind_cycle = grind_cycle + 1
+    elif x_grid == 0 and y_grid == 0:
+      grind_cycle = grind_cycle + 1
+    end
   end
 
   # Turn off force
 
   # Lift tool in z
-  p1[2] = p1[2] + 0.020
-  movel_RPY(p1, accel, speed)
+  p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
+  movel(p1, accel, speed)
 
   # Turn off tool
 
   # Return robot back to initial position
-  movel_RPY(p0, accel, speed)
+  movel(p0, accel, speed)
   return True
 end
 

@@ -202,14 +202,16 @@ namespace AutoGrind
                         log.Info("Change robot connection to READY");
                         RobotStatusLbl.BackColor = Color.Green;
                         RobotStatusLbl.Text = "READY";
-                        //SetState(RunState.IDLE, true, true);
+                        // Restore all button settings with same current state
+                        SetState(runState, true, true);
                     }
                     else
                     {
                         log.Info("Change robot connection to WAIT");
                         RobotStatusLbl.BackColor = Color.Yellow;
                         RobotStatusLbl.Text = "WAIT";
-                        SetState(RunState.IDLE, true, true);
+                        // Restore all button settings with same current state
+                        SetState(runState, true, true);
                     }
                 }
             }
