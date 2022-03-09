@@ -10,6 +10,22 @@ global haltCommand = [0, 0]
 
 global tool_length_m = 0.100
 
+def coolant_flow(on = False):
+
+  return None
+end
+
+def tool_power(on = False):
+
+  return None
+end
+
+def apply_force(on = False):
+
+  return None
+end
+
+
 # Abort system
 thread listener_thread():
   global haltCommand = [0, 0]
@@ -49,7 +65,7 @@ def pattern_grind():
   global grind_radius_mm = 0
   global grind_xstep_mm = 0
   global grind_ystep_mm = 0
-  global grind_rstep_deg = 0
+  global grind_rstep_mm = 0
 
   if command[2] == 10:
     global response = "grind_flat_rect"
@@ -60,10 +76,10 @@ def pattern_grind():
   elif command[2] == 20:
     global response = "grind_cyl_rect"
     global grind_dx_mm = command[3]
-    global grind_dr_deg = command[4]
+    global grind_dr_mm = command[4]
     global grind_radius_mm = command[5]
     global grind_n_cycles = command[6]
-    grind_cyl_rect(grind_dx_mm, grind_dr_deg, grind_radius_mm, grind_n_cycles)
+    grind_cyl_rect(grind_dx_mm, grind_dr_mm, grind_radius_mm, grind_n_cycles)
   elif command[2] == 30:
     global response = "grind_flat_serp"
     global grind_dx_mm = command[3]
@@ -72,6 +88,15 @@ def pattern_grind():
     global grind_ystep_mm = command[6]
     global grind_n_cycles = command[7]
     grind_flat_serp(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
+  elif command[2] == 40:
+    global response = "grind_cyl_serp"
+    global grind_dx_mm = command[3]
+    global grind_dr_mm = command[4]
+    global grind_xstep_mm = command[5]
+    global grind_rstep_mm = command[6]
+    global grind_radius_mm = command[7]
+    global grind_n_cycles = command[8]
+    grind_cyl_serp(grind_dx_mm, grind_dr_mm, grind_xstep_mm, grind_rstep_mm, grind_radius_mm, grind_n_cycles)
   else:
     global response = "Unknown Grind Command"
   end
@@ -80,7 +105,7 @@ def pattern_grind():
   listenerThread = 0
 end
 
-# Grind along a flat rect dx_mm x dy_mm centered on current XY. Repeat n_cycles times.
+# Grind along a flat rect dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.
 # Move in x direction first, then y
 def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   if n_cycles < 1:
@@ -104,9 +129,10 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn on tool
+  tool_power(True)
+  coolant_flow(True)
 
-  # Turn on force
+  apply_force(True)
 
   # Grind box pattern
   global grind_cycle = 1
@@ -133,22 +159,23 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
     grind_cycle = grind_cycle + 1
   end
 
-  # Turn off force
+  apply_force(False)
 
   # Lift tool in z
   p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn off tool
+  coolant_flow(False)
+  tool_power(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
   return True
 end
 
-# Grind along a cylindrical rect dx_mm,dr_deg with radius_mm centered on current XR. Repeat n_cycles times.
+# Grind along a cylindrical rect dx_mm,dr_mm with radius_mm centered on current tool position. Repeat n_cycles times.
 # Move in x direction first, then r
-def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
+def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
   if n_cycles < 1:
     return False
   end
@@ -156,7 +183,7 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
   # Unit conversion
   dx_m = dx_mm / 1000.0
   radius_m = radius_mm / 1000.0
-  dr_rad = d2r(dr_deg)
+  dr_rad = dr_mm / radius_mm
 
   # Find initial position p0 and compute target corners (x,r) 0 and 1
   set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
@@ -171,9 +198,10 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn on tool
+  tool_power(True)
+  coolant_flow(True)
 
-  # Turn on force
+  apply_force(True)
 
   # Grind cylindrical box pattern
   global grind_cycle = 1
@@ -200,20 +228,21 @@ def grind_cyl_rect(dx_mm, dr_deg, radius_mm, n_cycles):
     grind_cycle = grind_cycle + 1
   end
 
-  # Turn off force
+  apply_force(False)
 
   # Lift tool in z
   p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn off tool
+  coolant_flow(False)
+  tool_power(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
   return True
 end
 
-# Grind along a flat serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current XY. Repeat n_cycles times.
+# Grind along a flat serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current tool position. Repeat n_cycles times.
 # Move in x direction first, then y
 def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   if n_cycles < 1:
@@ -241,9 +270,10 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn on tool
+  tool_power(True)
+  coolant_flow(True)
 
-  # Turn on force
+  apply_force(True)
 
   # Grind serpentine pattern
   global grind_cycle = 1
@@ -295,13 +325,112 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
     end
   end
 
-  # Turn off force
+  apply_force(False)
 
   # Lift tool in z
   p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
   movel(p1, accel, speed)
 
-  # Turn off tool
+  coolant_flow(False)
+  tool_power(False)
+
+  # Return robot back to initial position
+  movel(p0, accel, speed)
+  return True
+end
+
+# Grind along a cylindrical serpentine dx_mm,dr_mm incrementing by xstep_mm,rstep_mm centered on current tool position. Repeat n_cycles times.
+# Move in x direction first, then r
+def grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles):
+  if n_cycles < 1:
+    return False
+  end
+
+  # Unit conversion
+  dx_m = dx_mm / 1000.0
+  radius_m = radius_mm / 1000.0
+  dr_rad = dr_mm / radius_mm
+  xstep_m = xstep_mm / 1000.0
+  rstep_rad = dr_mm / radius_mm
+  x_grid_count = floor(dx_mm / xstep_mm)
+  r_grid_count = floor(dr_mm / rstep_mm)
+
+  # Find initial position
+  set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
+  p0 = get_actual_tcp_pose()
+
+  # Move to offset position bottom left of scan area
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
+  movel(p1, accel, speed)
+
+  # Advance until contact
+  # Simulated....
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
+  movel(p1, accel, speed)
+
+  tool_power(True)
+  coolant_flow(True)
+
+  apply_force(True)
+
+  # Grind serpentine pattern
+  global grind_cycle = 1
+  x_grid = 0
+  r_grid = 0
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    # Advance x by xstep_m
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
+      movel(p1, accel, speed)
+      # Track new grid square we're in
+      if xstep_m > 0:
+        x_grid = x_grid + 1
+      else:
+        x_grid = x_grid - 1
+      end
+    end
+    # Adjust x direction
+    if x_grid >= x_grid_count-1 and xstep_m > 0:
+      xstep_m = -xstep_m
+    elif x_grid == 0 and xstep_m < 0:
+      xstep_m = -xstep_m
+    end
+
+    # Advance r by rstep_rad
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, rstep_rad, 0, 0])
+      movel(p1, accel, speed)
+      # Track new grid square we're in
+      if rstep_rad > 0:
+        r_grid = r_grid + 1
+      else:
+        r_grid = r_grid - 1
+      end
+    end
+    # Adjust r direction
+    if r_grid >= r_grid_count-1 and rstep_rad > 0:
+      rstep_rad = -rstep_rad
+    elif r_grid == 0 and rstep_rad < 0:
+      rstep_rad = -rstep_rad
+    end
+
+    # Detect when we've covered all the grid squares!
+    # That's when you reach n-1,n-1 or 0,0
+    if x_grid == x_grid_count - 1 and r_grid == r_grid_count - 1:
+      grind_cycle = grind_cycle + 1
+    elif r_grid == 0 and r_grid == 0:
+      grind_cycle = grind_cycle + 1
+    end
+  end
+
+  apply_force(False)
+
+  # Lift tool in z
+  p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
+  movel(p1, accel, speed)
+
+  coolant_flow(False)
+  tool_power(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)

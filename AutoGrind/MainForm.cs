@@ -1044,6 +1044,14 @@ namespace AutoGrind
                 return true;
             }
 
+            // grind_cyl_serp
+            if (command.StartsWith("grind_cyl_serp("))
+            {
+                log.Info("{0} grind_cyl_serp: {1}", currentLine, command);
+                robotServer.Send("(40,40," + ExtractParameters(command) + ")");
+                return true;
+            }
+
             log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
             messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);
             messageForm.ShowDialog();

@@ -5,16 +5,23 @@ speed(1.5)
 accel(1.5)
 
 # grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
-grind_flat_rect(40,80,2)
+#grind_flat_rect(40,80,2)
 #grind_flat_rect(20,40,3)
 #grind_flat_rect(5,5,4)
 
-# grind_cyl_rect(grind_dx_mm, grind_dr_deg, grind_radius_mm, grind_n_cycles)
-grind_cyl_rect(40,20,200,2)
-grind_cyl_rect(40,20,300,2)
+# grind_cyl_rect(grind_dx_mm, grind_dr_mm, grind_radius_mm, grind_n_cycles)
+#grind_cyl_rect(60,40,100,2)
+#grind_cyl_rect(60,40,200,2)
+#grind_cyl_rect(60,40,300,2)
+#grind_cyl_rect(60,40,500,2)
+#grind_cyl_rect(60,40,1000,2) # Works... Getting pretty flat!
+##grind_cyl_rect(60,40,2000,2) # Crashes
 #grind_cyl_rect(20,10,200,3)
 
 # grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
-grind_flat_serp(100,50,100,10,3)
-grind_flat_serp(100,50,10,50,3)
+#grind_flat_serp(100,50,100,10,3)
+#grind_flat_serp(100,50,10,50,3)
 #grind_flat_serp(100,50,10,50,2)
+
+#grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles)
+grind_cyl_serp(60,40,60,10,400,2)
