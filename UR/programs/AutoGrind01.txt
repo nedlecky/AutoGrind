@@ -22,40 +22,20 @@
        socket_set_var("robot_index", command_index)
        lastCommand≔command
        Switch command[1]
-         Case 1
-           MoveL
-             up_pose
-           response≔"moved up"
-         Case 2
-           MoveJ
-             down_pose
-           response≔"moved down"
-         Case 3
-           response≔"close"
-         Case 4
-           response≔"open"
          Case 10
            return_actual_tcp_pose()
-         Case 11
-           return_actual_tcp_pose_RPY()
          Case 12
            return_tcp_offset()
          Case 13
-           movel_RPY_rel()
-         Case 14
-           movej_RPY_rel()
+           movel_relative(p[command[2], command[3], command[4], command[5], command[6], command[7]])
          Case 15
-           movej_R_only(command[2])
-         Case 16
-           movej_P_only(command[2])
-         Case 17
-           movej_Y_only(command[2])
+           movel_one_only(command[2],command[3])
          Case 18
-           movej_RPY_only(command[2],command[3],command[4])
+           movel_rot_only(command[2],command[3],command[4])
          Case 20
            return_get_actual_joint_positions()
          Case 21
-           movej_q()
+           movej_q([command[2], command[3], command[4], command[5], command[6], command[7]])
          Case 30
            set_speed(command[2])
          Case 31

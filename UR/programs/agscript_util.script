@@ -15,21 +15,21 @@ def socket_send_lf():
 end
 
 # New versions using built-in
-def AxisAngle_to_RPY(p0):
-  r0 = [p0[3], p0[4], p0[5]]
-  r1 = rotvec2rpy(r0)
-  p1 = p[p0[0], p0[1], p0[2], r2d(r1[0]), r2d(r1[1]), r2d(r1[2])]
+#def AxisAngle_to_RPY(p0):
+#  r0 = [p0[3], p0[4], p0[5]]
+#  r1 = rotvec2rpy(r0)
+#  p1 = p[p0[0], p0[1], p0[2], r2d(r1[0]), r2d(r1[1]), r2d(r1[2])]
+#
+#  return p1
+#end
 
-  return p1
-end
-
-def RPY_to_AxisAngle(p0):
-  r0 = [d2r(p0[3]), d2r(p0[4]), d2r(p0[5])]
-  r1 = rpy2rotvec(r0)
-  p1 = p[p0[0], p0[1], p0[2], r1[0], r1[1], r1[2]]
-
-  return p1
-end
+#def RPY_to_AxisAngle(p0):
+#  r0 = [d2r(p0[3]), d2r(p0[4]), d2r(p0[5])]
+#  r1 = rpy2rotvec(r0)
+#  p1 = p[p0[0], p0[1], p0[2], r1[0], r1[1], r1[2]]
+#
+#  return p1
+#end
 
 # Conversion (RPY(deg) to AxisAngle)
 def old_RPY_to_AxisAngle(R):
@@ -122,36 +122,36 @@ def old_AxisAngle_to_RPY(R):
 end
 
 # Get position in RPY coordinate
-def get_actual_tcp_pose_RPY():
-  p = get_actual_tcp_pose()
-  p2 = AxisAngle_to_RPY(p)
-  return p2
-end
+#def get_actual_tcp_pose_RPY():
+#  p = get_actual_tcp_pose()
+#  p2 = AxisAngle_to_RPY(p)
+#  return p2
+#end
 
 # movel in RPY coordinates
-def movel_RPY(p, accel, speed):
-  p1 = RPY_to_AxisAngle(p)
-  movel(p1, accel, speed)
-end
+#def movel_RPY(p, accel, speed):
+#  p1 = RPY_to_AxisAngle(p)
+#  movel(p1, accel, speed)
+#end
 
 # movej in RPY coordinates
-def movej_RPY(p, accel, speed):
-  p1 = RPY_to_AxisAngle(p)
-  movej(p1, accel, speed)
-end
+#def movej_RPY(p, accel, speed):
+#  p1 = RPY_to_AxisAngle(p)
+#  movej(p1, accel, speed)
+#end
 
 # Add position
-def pose_add_RPY(V1, V2):
-  A0 = V1[0] + V2[0]
-  A1 = V1[1] + V2[1]
-  A2 = V1[2] + V2[2]
-  A3 = V1[3] + V2[3]
-  A4 = V1[4] + V2[4]
-  A5 = V1[5] + V2[5]
-  A = p[A0, A1, A2, A3, A4, A5]
-
-  return A
-end
+#def pose_add_RPY(V1, V2):
+#  A0 = V1[0] + V2[0]
+#  A1 = V1[1] + V2[1]
+#  A2 = V1[2] + V2[2]
+#  A3 = V1[3] + V2[3]
+#  A4 = V1[4] + V2[4]
+#  A5 = V1[5] + V2[5]
+#  A = p[A0, A1, A2, A3, A4, A5]
+#
+#  return A
+#end
 
 # Send 6-vectors back to socket as [n,n,n,n,n,n]
 def return_vector(p):

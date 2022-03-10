@@ -45,11 +45,11 @@ def return_actual_tcp_pose():
 end
 
 # Send return_actual_tcp_pose_RPY() to socket
-def return_actual_tcp_pose_RPY():
-  p = get_actual_tcp_pose_RPY()
-  return_pose("actual_tcp_pose_RPY", p)
-  global response = "return_actual_tcp_pose_RPY()"
-end
+#def return_actual_tcp_pose_RPY():
+#  p = get_actual_tcp_pose_RPY()
+#  return_pose("actual_tcp_pose_RPY", p)
+#  global response = "return_actual_tcp_pose_RPY()"
+#end
 
 # Send get_actual_joint_positions() to
 def return_get_actual_joint_positions():
@@ -59,57 +59,51 @@ def return_get_actual_joint_positions():
 end
 
 # Movel relatively in RPY
-def movel_RPY_rel():
-  p0 = get_actual_tcp_pose_RPY()
-  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
-  p2 = pose_add_RPY(p0, p1)
-  movel_RPY(p2, accel, speed)
-  global response = "movel_RPY_rel()"
+#def movel_RPY_rel():
+#  p0 = get_actual_tcp_pose_RPY()
+#  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
+#  p2 = pose_add_RPY(p0, p1)
+#  movel_RPY(p2, accel, speed)
+#  global response = "movel_RPY_rel()"
+#end
+
+# Movel relatively
+def movel_relative(p1):
+  p0 = get_actual_tcp_pose()
+  p2 = pose_add(p0, p1)
+  movel(p2, accel, speed)
+  global response = "movel_relative()"
 end
 
 # Movej relatively in RPY
-def movej_RPY_rel():
-  p0 = get_actual_tcp_pose_RPY()
-  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
-  p2 = pose_add_RPY(p0, p1)
-  movej_RPY(p2, accel, speed)
-  global response = "movej_RPY_rel()"
+#def movej_RPY_rel():
+#  p0 = get_actual_tcp_pose_RPY()
+#  p1 = p[command[2], command[3], command[4], command[5], command[6], command[7]]
+#  p2 = pose_add_RPY(p0, p1)
+#  movej_RPY(p2, accel, speed)
+#  global response = "movej_RPY_rel()"
+#end
+
+# Change one element of current pose and movel there
+def movel_one_only(index=0, val = 0):
+  p = get_actual_tcp_pose()
+  p[index] = val
+  movel(p, accel, speed)
+  global response = "movel_one_only()"
 end
 
-# Movej to R
-def movej_R_only(R = 0):
-  p = get_actual_tcp_pose_RPY()
-  p[3] = R
-  movej_RPY(p, accel, speed)
-  global response = "movej_R_only()"
-end
-# Movej to P
-def movej_P_only(P = 0):
-  p = get_actual_tcp_pose_RPY()
-  p[4] = P
-  movej_RPY(p, accel, speed)
-  global response = "movej_P_only()"
-end
-# Movej to Y
-def movej_Y_only(Y = 0):
-  p = get_actual_tcp_pose_RPY()
-  p[5] = Y
-  movej_RPY(p, accel, speed)
-  global response = "movej_Y_only()"
-end
-# Movej to 0,0,0, RPY
-def movej_RPY_only(R=0, P=0, Y=0):
-  p = get_actual_tcp_pose_RPY()
-  p[3] = R
-  p[4] = P
-  p[5] = Y
-  movej_RPY(p, accel, speed)
-  global response = "movej_RPY_only()"
+# Change only rotation elements of current pose and movel there
+def movel_rot_only(r1=0, r2=0, r3=0):
+  p = get_actual_tcp_pose()
+  p[3] = r1
+  p[4] = r2
+  p[5] = r3
+  movel(p, accel, speed)
+  global response = "movel_rot_only()"
 end
 
 # Movej to physical joint positions
-def movej_q():
-  q1 = [command[2], command[3], command[4], command[5], command[6], command[7]]
-  movej(q1, accel, speed)
+def movej_q(q):
+  movej(q, accel, speed)
   global response = "movej_q()"
 end

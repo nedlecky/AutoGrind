@@ -44,6 +44,14 @@ namespace AutoGrind
             AngleLst.SelectedIndex = 2;
         }
 
+        private double d2r(double d)
+        {
+            return d * Math.PI / 180.0;
+        }
+        private double r2d(double r)
+        {
+            return r * 180.0 / Math.PI;
+        }
         private void Jog(double[] p)
         {
             string command = "(13";
@@ -96,62 +104,62 @@ namespace AutoGrind
         private void RollplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, angle, 0, 0 };
+            double[] p = new double[] { 0, 0, 0, d2r(angle), 0, 0 };
             Jog(p);
         }
 
         private void RollminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, -angle, 0, 0 };
+            double[] p = new double[] { 0, 0, 0, -d2r(angle), 0, 0 };
             Jog(p);
         }
 
         private void PitchplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, angle, 0 };
+            double[] p = new double[] { 0, 0, 0, 0, d2r(angle), 0 };
             Jog(p);
         }
 
         private void PitchminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, -angle, 0 };
+            double[] p = new double[] { 0, 0, 0, 0, -d2r(angle), 0 };
             Jog(p);
         }
 
         private void YawplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, 0, angle };
+            double[] p = new double[] { 0, 0, 0, 0, 0, d2r(angle) };
             Jog(p);
         }
 
         private void YawminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, 0, -angle };
+            double[] p = new double[] { 0, 0, 0, 0, 0, -d2r(angle) };
             Jog(p);
         }
 
         private void ZeroRBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,0)");
+            robot.Send("(15,3,0)");
         }
         private void FlipRBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,180)");
+            robot.Send("(15,3," + d2r(180).ToString() + ")");
         }
 
         private void ZeroPBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(16,0)");
+            robot.Send("(15,4,0)");
         }
 
         private void ZeroYBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(17,0)");
+            robot.Send("(15,5,0)");
         }
         private void ZeroRpyBtn_Click(object sender, EventArgs e)
         {
