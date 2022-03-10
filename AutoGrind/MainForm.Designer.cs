@@ -94,11 +94,11 @@
             this.VariableNameTxt = new System.Windows.Forms.TextBox();
             this.LogsTab = new System.Windows.Forms.TabPage();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
-            this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.ClearErrorLogRtbBtn = new System.Windows.Forms.Button();
-            this.ClearUrLogRtbBtn = new System.Windows.Forms.Button();
-            this.UrLogRTB = new System.Windows.Forms.RichTextBox();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
+            this.ClearErrorLogRtbBtn = new System.Windows.Forms.Button();
+            this.groupBox5 = new System.Windows.Forms.GroupBox();
+            this.UrLogRTB = new System.Windows.Forms.RichTextBox();
+            this.ClearUrLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.TraceRad = new System.Windows.Forms.RadioButton();
             this.DebugRad = new System.Windows.Forms.RadioButton();
@@ -117,6 +117,8 @@
             this.RobotStatusLbl = new System.Windows.Forms.Label();
             this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.IsSystemChk = new System.Windows.Forms.CheckBox();
+            this.ClearAllVariablesBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -813,6 +815,7 @@
             // 
             // VariableTab
             // 
+            this.VariableTab.Controls.Add(this.ClearAllVariablesBtn);
             this.VariableTab.Controls.Add(this.LoadVariablesBtn);
             this.VariableTab.Controls.Add(this.SaveVariablesBtn);
             this.VariableTab.Controls.Add(this.ClearVariablesBtn);
@@ -865,13 +868,14 @@
             // 
             // groupBox7
             // 
+            this.groupBox7.Controls.Add(this.IsSystemChk);
             this.groupBox7.Controls.Add(this.ReadVariableBtn);
             this.groupBox7.Controls.Add(this.WriteStringValueTxt);
             this.groupBox7.Controls.Add(this.WriteStringValueBtn);
             this.groupBox7.Controls.Add(this.VariableNameTxt);
             this.groupBox7.Location = new System.Drawing.Point(20, 22);
             this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(650, 49);
+            this.groupBox7.Size = new System.Drawing.Size(785, 49);
             this.groupBox7.TabIndex = 82;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Manual";
@@ -935,16 +939,15 @@
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Error Messages";
             // 
-            // groupBox5
+            // ErrorLogRTB
             // 
-            this.groupBox5.Controls.Add(this.UrLogRTB);
-            this.groupBox5.Controls.Add(this.ClearUrLogRtbBtn);
-            this.groupBox5.Location = new System.Drawing.Point(3, 3);
-            this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(1050, 230);
-            this.groupBox5.TabIndex = 82;
-            this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Robot Messages";
+            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ErrorLogRTB.Location = new System.Drawing.Point(86, 24);
+            this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.ErrorLogRTB.Name = "ErrorLogRTB";
+            this.ErrorLogRTB.Size = new System.Drawing.Size(959, 193);
+            this.ErrorLogRTB.TabIndex = 0;
+            this.ErrorLogRTB.Text = "";
             // 
             // ClearErrorLogRtbBtn
             // 
@@ -956,15 +959,16 @@
             this.ClearErrorLogRtbBtn.UseVisualStyleBackColor = true;
             this.ClearErrorLogRtbBtn.Click += new System.EventHandler(this.ClearErrorLogRtbBtn_Click);
             // 
-            // ClearUrLogRtbBtn
+            // groupBox5
             // 
-            this.ClearUrLogRtbBtn.Location = new System.Drawing.Point(6, 20);
-            this.ClearUrLogRtbBtn.Name = "ClearUrLogRtbBtn";
-            this.ClearUrLogRtbBtn.Size = new System.Drawing.Size(75, 48);
-            this.ClearUrLogRtbBtn.TabIndex = 80;
-            this.ClearUrLogRtbBtn.Text = "Clear";
-            this.ClearUrLogRtbBtn.UseVisualStyleBackColor = true;
-            this.ClearUrLogRtbBtn.Click += new System.EventHandler(this.ClearUrLogRtbBtn_Click);
+            this.groupBox5.Controls.Add(this.UrLogRTB);
+            this.groupBox5.Controls.Add(this.ClearUrLogRtbBtn);
+            this.groupBox5.Location = new System.Drawing.Point(3, 3);
+            this.groupBox5.Name = "groupBox5";
+            this.groupBox5.Size = new System.Drawing.Size(1050, 230);
+            this.groupBox5.TabIndex = 82;
+            this.groupBox5.TabStop = false;
+            this.groupBox5.Text = "Robot Messages";
             // 
             // UrLogRTB
             // 
@@ -976,15 +980,15 @@
             this.UrLogRTB.TabIndex = 1;
             this.UrLogRTB.Text = "";
             // 
-            // ErrorLogRTB
+            // ClearUrLogRtbBtn
             // 
-            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ErrorLogRTB.Location = new System.Drawing.Point(86, 24);
-            this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
-            this.ErrorLogRTB.Name = "ErrorLogRTB";
-            this.ErrorLogRTB.Size = new System.Drawing.Size(959, 193);
-            this.ErrorLogRTB.TabIndex = 0;
-            this.ErrorLogRTB.Text = "";
+            this.ClearUrLogRtbBtn.Location = new System.Drawing.Point(6, 20);
+            this.ClearUrLogRtbBtn.Name = "ClearUrLogRtbBtn";
+            this.ClearUrLogRtbBtn.Size = new System.Drawing.Size(75, 48);
+            this.ClearUrLogRtbBtn.TabIndex = 80;
+            this.ClearUrLogRtbBtn.Text = "Clear";
+            this.ClearUrLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearUrLogRtbBtn.Click += new System.EventHandler(this.ClearUrLogRtbBtn_Click);
             // 
             // groupBox3
             // 
@@ -1157,6 +1161,26 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "All Log Messages";
             // 
+            // IsSystemChk
+            // 
+            this.IsSystemChk.AutoSize = true;
+            this.IsSystemChk.Location = new System.Drawing.Point(562, 21);
+            this.IsSystemChk.Name = "IsSystemChk";
+            this.IsSystemChk.Size = new System.Drawing.Size(132, 20);
+            this.IsSystemChk.TabIndex = 8;
+            this.IsSystemChk.Text = "System Variable?";
+            this.IsSystemChk.UseVisualStyleBackColor = true;
+            // 
+            // ClearAllVariablesBtn
+            // 
+            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(261, 428);
+            this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
+            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(132, 23);
+            this.ClearAllVariablesBtn.TabIndex = 87;
+            this.ClearAllVariablesBtn.Text = "Clear All";
+            this.ClearAllVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1290,6 +1314,8 @@
         private System.Windows.Forms.Button ClearErrorLogRtbBtn;
         private System.Windows.Forms.Button ClearUrLogRtbBtn;
         private System.Windows.Forms.GroupBox groupBox4;
+        private System.Windows.Forms.CheckBox IsSystemChk;
+        private System.Windows.Forms.Button ClearAllVariablesBtn;
     }
 }
 

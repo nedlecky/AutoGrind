@@ -11,6 +11,7 @@
                 <xs:element name="Value" type="xs:string" minOccurs="0" />
                 <xs:element name="IsNew" type="xs:boolean" minOccurs="0" />
                 <xs:element name="TimeStamp" type="xs:string" minOccurs="0" />
+                <xs:element name="IsSystem" type="xs:boolean" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -23,195 +24,73 @@
     </xs:element>
   </xs:schema>
   <Variables>
-    <Name>x</Name>
-    <Value>13</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:29.465</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>y</Name>
-    <Value>25</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:29.575</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>robot_running</Name>
-    <Value>False</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:27.473</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>robot_index</Name>
-    <Value>19</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:25.856</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>actual_tcp_pose</Name>
-    <Value>p[0.142398,-0.601776,0.351841,6.27085e-06,3.76851e-06,-3.67341e-06]</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:32.710</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>robot_response</Name>
-    <Value>movej_q()</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:27.458</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>tcp_offset</Name>
-    <Value>p[0,0,0.1,3.14159,0,0]</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:32.949</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>actual_joint_positions</Name>
-    <Value>[1.58589,-1.30286,1.35616,-1.62409,-1.5708,3.15669]</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:36.133</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>speed</Name>
-    <Value>1.5</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:17.760</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>accel</Name>
-    <Value>1.23</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:36.329</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>globals_a</Name>
-    <Value>13</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:43.060</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>globals_b</Name>
-    <Value>Test string</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:43.066</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>z</Name>
-    <Value>21.22</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:43.143</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>str1</Name>
-    <Value>Abc was here</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:43.276</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>str2</Name>
-    <Value>"Test"</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:20:43.363</TimeStamp>
-  </Variables>
-  <Variables>
     <Name>left_cylinder_end_q</Name>
     <Value>[1.74678,-1.13365,1.57094,-2.00809,-1.5708,3.31758]</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-10T06:22:01.784</TimeStamp>
+    <TimeStamp>2022-03-10T07:41:19.930</TimeStamp>
+    <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>right_cylinder_end_q</Name>
     <Value>[1.33482,-1.23525,1.71883,-2.05438,-1.5708,2.90562]</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-10T06:22:01.912</TimeStamp>
+    <TimeStamp>2022-03-10T07:41:26.498</TimeStamp>
+    <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>home_q</Name>
     <Value>[1.58589,-1.30286,1.35616,-1.62409,-1.5708,3.15669]</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.004</TimeStamp>
+    <TimeStamp>2022-03-10T07:41:34.368</TimeStamp>
+    <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>tool_change_q</Name>
     <Value>[1.59085,-1.41425,1.60182,-3.29424,-1.59084,3.14229]</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.132</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-10T07:40:18.759</TimeStamp>
+    <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
-    <Name>tool1</Name>
-    <Value>400grit</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.330</TimeStamp>
+    <Name>robot_running</Name>
+    <Value>False</Value>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-10T08:45:28.744</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
-    <Name>tool2</Name>
-    <Value>600grit</Value>
+    <Name>robot_index</Name>
+    <Value>4</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.452</TimeStamp>
+    <TimeStamp>2022-03-10T08:45:23.603</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
-    <Name>tool3</Name>
-    <Value>1200 grit</Value>
+    <Name>actual_tcp_pose</Name>
+    <Value>p[0.142398,-0.601776,0.351841,6.27094e-06,3.76851e-06,-3.6734e-06]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.551</TimeStamp>
+    <TimeStamp>2022-03-10T08:45:09.819</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
-    <Name>diam1</Name>
-    <Value>5mm</Value>
+    <Name>robot_response</Name>
+    <Value>grind_flat_circle</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.776</TimeStamp>
+    <TimeStamp>2022-03-10T08:45:28.735</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
-    <Name>diam2</Name>
-    <Value>7mm</Value>
+    <Name>robot_speed</Name>
+    <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:02.879</TimeStamp>
+    <TimeStamp>2022-03-10T08:45:20.788</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
-    <Name>diam3</Name>
-    <Value>12mm</Value>
+    <Name>robot_accel</Name>
+    <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.003</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>diam_demo</Name>
-    <Value>41mm</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.104</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>force1</Name>
-    <Value>20N</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.329</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>force2</Name>
-    <Value>25N</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.426</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>force3</Name>
-    <Value>27N</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.551</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>count1</Name>
-    <Value>4times</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.757</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>count2</Name>
-    <Value>6times</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.871</TimeStamp>
-  </Variables>
-  <Variables>
-    <Name>count3</Name>
-    <Value>8times</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-10T06:22:03.979</TimeStamp>
+    <TimeStamp>2022-03-10T08:45:20.870</TimeStamp>
+    <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

@@ -1,4 +1,4 @@
 # vartest2.agr
-# clear()
+clear()
 x3 = 3
 p2 = p[1,2,3,4,5,6]

@@ -13,7 +13,7 @@ def set_speed(s):
   if s > 0:
     speed = s
   end
-  socket_send_string("speed=")
+  socket_send_string("robot_speed=")
   socket_send_string(speed)
   socket_send_lf()
   global response = "set_speed()"
@@ -24,7 +24,7 @@ def set_accel(a):
   if a > 0:
     accel = a
   end
-  socket_send_string("accel=")
+  socket_send_string("robot_accel=")
   socket_send_string(accel)
   socket_send_lf()
   global response = "set_accel()"

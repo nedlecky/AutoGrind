@@ -419,6 +419,12 @@ namespace AutoGrind
             log.Info("StopBtn_Click(...)");
             SetState(RunState.READY);
         }
+        private void HaltRobotBtn_Click(object sender, EventArgs e)
+        {
+            log.Error("UR HaltRobotBtn_Click(...)");
+            robotServer.Send("(10)");
+        }
+
         // ===================================================================
         // END GRIND
         // ===================================================================
@@ -724,6 +730,7 @@ namespace AutoGrind
                 if (robotReady)
                 {
                     copyVariableAtWrite = varName + "=actual_joint_positions";
+                    isSystemCopyWrite = true;
                     robotServer.Send("(20)");
                 }
 
@@ -1007,7 +1014,9 @@ namespace AutoGrind
             if (command.StartsWith("speed("))
             {
                 log.Info("{0} speed: {1}", currentLine, command);
-                robotServer.Send("(30," + ExtractParameters(command) + ")");
+                string param = ExtractParameters(command);
+                robotServer.Send("(30," + param + ")");
+                SpeedTxt.Text = param;
                 return true;
             }
 
@@ -1015,7 +1024,9 @@ namespace AutoGrind
             if (command.StartsWith("accel("))
             {
                 log.Info("{0} accel: {1}", currentLine, command);
-                robotServer.Send("(31," + ExtractParameters(command) + ")");
+                string param = ExtractParameters(command);
+                robotServer.Send("(31," +param + ")");
+                AccelTxt.Text = param;  
                 return true;
             }
 
@@ -1064,6 +1075,8 @@ namespace AutoGrind
             messageForm.ShowDialog();
             return true;
         }
+
+        int logFilter = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) curLine={0}", currentLine);
@@ -1088,16 +1101,24 @@ namespace AutoGrind
 
             if (!robotReady)
             {
-                log.Trace("Exec waiting for robotReady");
+                // Only log this one time!
+                if(logFilter!=1)
+                    log.Trace("Exec waiting for robotReady");
+                logFilter = 1;
             }
             else
             {
                 if (ReadVariable("robot_running") == "True")
                 {
-                    log.Trace("Exec waiting for !robot_running");
+                    // Only log this one time!
+                    if (logFilter!=2)
+                        log.Trace("Exec waiting for !robot_running");
+                    logFilter = 2;
                 }
                 else
                 {
+                    // Resets such that the above log messages will happen
+                    logFilter = 3;
                     string line = RecipeRoRTB.Lines[currentLine];
                     bool fContinue = ExecuteLine(line);
                     currentLine++;
@@ -1263,12 +1284,15 @@ namespace AutoGrind
         static readonly object lockObject = new object();
         static string alsoWriteVariableAs = null;
         static string copyVariableAtWrite = null;
+        static bool isSystemAlsoWrite = false;
+        static bool isSystemCopyWrite = false;
         /// <summary>
-        /// Update variable 'name' with 'value' if it exists otherwise add it
+        /// Update variable 'name' with 'value' if it exists otherwise add it. Also set system flag
         /// </summary>
         /// <param name="name"></param>
         /// <param name="value"></param>
-        public void WriteVariable(string name, string value)
+        /// <param name="isSystem"></param>
+        public void WriteVariable(string name, string value, bool isSystem = false)
         {
             System.Threading.Monitor.Enter(lockObject);
             string nameTrimmed = name.Trim();
@@ -1294,13 +1318,14 @@ namespace AutoGrind
                     row["Value"] = valueTrimmed;
                     row["IsNew"] = true;
                     row["TimeStamp"] = datetime;
+                    row["IsSystem"] = isSystem;
                     foundVariable = true;
                     break;
                 }
             }
 
             if (!foundVariable)
-                variables.Rows.Add(new object[] { nameTrimmed, valueTrimmed, true, datetime });
+                variables.Rows.Add(new object[] { nameTrimmed, valueTrimmed, true, datetime, isSystem });
 
             variables.AcceptChanges();
             Monitor.Exit(lockObject);
@@ -1311,7 +1336,8 @@ namespace AutoGrind
             {
                 string dupName = alsoWriteVariableAs;
                 alsoWriteVariableAs = null; // Let's avoid infinite recursion :)
-                WriteVariable(dupName, valueTrimmed);
+                WriteVariable(dupName, valueTrimmed, isSystemAlsoWrite);
+                isSystemAlsoWrite = false;
             }
 
             // Another experiment
@@ -1324,7 +1350,8 @@ namespace AutoGrind
                     if (strings[1] == nameTrimmed)
                     {
                         copyVariableAtWrite = null; // Let's avoid infinite recursion :)
-                        WriteVariable(strings[0], valueTrimmed);
+                        WriteVariable(strings[0], valueTrimmed, isSystemCopyWrite);
+                        isSystemCopyWrite = false;
                     }
                 }
             }
@@ -1334,7 +1361,7 @@ namespace AutoGrind
         /// Takes a "mname=value" string and set variable "name" equal to "value"
         /// </summary>
         /// <param name="assignment"></param>
-        public void WriteVariable(string assignment)
+        public void WriteVariable(string assignment, bool isSystem = false)
         {
             string[] s = assignment.Split('=');
             if (s.Length != 2)
@@ -1343,7 +1370,7 @@ namespace AutoGrind
             }
             else
             {
-                WriteVariable(s[0], s[1]);
+                WriteVariable(s[0], s[1], isSystem);
             }
 
         }
@@ -1351,14 +1378,15 @@ namespace AutoGrind
         {
             string name = VariableNameTxt.Text;
             string value = WriteStringValueTxt.Text;
-            WriteVariable(name, value);
+            bool fSystem = IsSystemChk.Checked;
+            WriteVariable(name, value, fSystem);
         }
 
         private void LoadVariablesBtn_Click(object sender, EventArgs e)
         {
             string filename = Path.Combine(AutoGrindRoot, "Recipes", variablesFilename);
             log.Info("LoadVariables from {0}", filename);
-            ClearVariablesBtn_Click(null, null);
+            ClearAndInitializeVariables();
             try
             {
                 variables.ReadXml(filename);
@@ -1384,23 +1412,45 @@ namespace AutoGrind
             variables.WriteXml(filename, XmlWriteMode.WriteSchema, true);
         }
 
+        private bool DeleteNonSystemVariable()
+        {
+            foreach (DataRow row in variables.Rows)
+            {
+                if (row["IsSystem"].ToString() != "True")
+                {
+                    log.Debug("Delete {0}", row["Name"]);
+                    row.Delete();
+                    variables.AcceptChanges();
+                    return true;
+                }
+            }
+            return false;
+        }
         private void ClearVariablesBtn_Click(object sender, EventArgs e)
+        {
+            while (DeleteNonSystemVariable()) ;
+            variables.AcceptChanges();
+        }
+
+        private void ClearAndInitializeVariables()
         {
             variables = new DataTable("Variables");
             DataColumn name = variables.Columns.Add("Name", typeof(System.String));
             variables.Columns.Add("Value", typeof(System.String));
             variables.Columns.Add("IsNew", typeof(System.Boolean));
             variables.Columns.Add("TimeStamp", typeof(System.String));
+            variables.Columns.Add("IsSystem", typeof(System.Boolean));
             variables.CaseSensitive = true;
             variables.PrimaryKey = new DataColumn[] { name };
             VariablesGrd.DataSource = variables;
         }
 
-        private void HaltRobotBtn_Click(object sender, EventArgs e)
+        private void ClearAllVariablesBtn_Click(object sender, EventArgs e)
         {
-            log.Error("UR HaltRobotBtn_Click(...)");
-            robotServer.Send("(11)");
+            if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INLUDING system variables. Proceed?"))
+                ClearAndInitializeVariables();
         }
+
         // ===================================================================
         // END VARIABLE SYSTEM
         // ===================================================================
