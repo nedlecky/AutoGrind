@@ -1,0 +1,5 @@
+speed(1.5)
+accel(1.5)
+
+#grind_flat_spiral(grind_dx_mm, grind_dx2_mm, grind_n_spirals, grind_n_cycles)
+grind_flat_spiral(60,20,5,4)

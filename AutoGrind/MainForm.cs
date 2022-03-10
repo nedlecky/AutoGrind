@@ -1069,6 +1069,13 @@ namespace AutoGrind
                 robotServer.Send("(40,50," + ExtractParameters(command) + ")");
                 return true;
             }
+            // grind_flat_spiral
+            if (command.StartsWith("grind_flat_spiral("))
+            {
+                log.Info("{0} grind_flat_spiral: {1}", currentLine, command);
+                robotServer.Send("(40,60," + ExtractParameters(command) + ")");
+                return true;
+            }
 
             log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
             messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);

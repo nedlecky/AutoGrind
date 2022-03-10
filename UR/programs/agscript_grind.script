@@ -71,11 +71,11 @@ def pattern_grind():
   global grind_cycle = 0
   global grind_n_cycles = 0
   global grind_dx_mm = 0
+  global grind_dx2_mm = 0
   global grind_dy_mm = 0
   global grind_dz_mm = 0
   global grind_dr_mm = 0
-  #global grind_dP_mm = 0
-  #global grind_dY_mm = 0
+  global grind_n_spirals = 0
   global grind_radius_mm = 0
   global grind_xstep_mm = 0
   global grind_ystep_mm = 0
@@ -116,6 +116,13 @@ def pattern_grind():
     global grind_dx_mm = command[3]
     global grind_n_cycles = command[4]
     grind_flat_circle(grind_dx_mm, grind_n_cycles)
+  elif command[2] == 60:
+    global response = "grind_flat_spiral"
+    global grind_dx_mm = command[3]
+    global grind_dx2_mm = command[4]
+    global grind_n_spirals = command[5]
+    global grind_n_cycles = command[6]
+    grind_flat_spiral(grind_dx_mm, grind_dx2_mm, grind_n_spirals, grind_n_cycles)
   else:
     global response = "Unknown Grind Command"
   end
@@ -476,6 +483,70 @@ def grind_flat_circle(dx_mm, n_cycles):
     end
 
     grind_cycle = grind_cycle + 1
+  end
+
+  apply_force(False)
+  contact_part(False)
+  coolant_flow(False)
+  tool_power(False)
+
+  # Return robot back to initial position
+  movel(p0, accel, speed)
+  return True
+end
+
+# Grind along a flat spiral diam dx_mm to dx2_mm in n_spirals rotations centered on current tool position. Repeat n_cycles times.
+def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
+  if n_cycles < 1:
+    return True
+  end
+
+  # Unit conversion
+  dx_m = dx_mm / 1000.0
+  dx2_m = dx2_mm / 1000.0
+  n_points = ceil(dx_mm * 1.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
+  radius_m = dx_m / 2          # Circle radius is half of specified dx
+  radius2_m = dx2_m / 2
+
+  # Find initial position p0
+  set_tcp(p[0, 0, tool_length_m, 0, 0, 0])  #
+  p0 = get_actual_tcp_pose()
+
+  # Move to offset position east edge of circle
+  p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
+  movel(p1, accel, speed)
+
+  if not contact_part(True):
+    movel(p0, accel, speed)
+    return False
+  end
+  # We're in contact at east side... compute where contact position would be at center of circle
+  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
+  tool_power(True)
+  coolant_flow(True)
+  apply_force(True)
+
+  # Grind spiral pattern
+  n_total_points = n_spirals * n_points
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    i = 0
+    while ok_to_proceed() and i <= n_total_points:
+      theta = d2r(360.0 * (i % n_points) / n_points)
+      r_instantaneous = i * (radius2_m - radius_m) / n_total_points + radius_m
+      x = r_instantaneous * cos(theta)
+      y = r_instantaneous * sin(theta)
+
+      p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
+      movel(p1, accel, speed, 0.005)
+      i = i + 1
+    end
+
+    grind_cycle = grind_cycle + 1
+    # Next cycle- swap diameters so we go in/out/in etc.
+    old_radius_m = radius_m
+    radius_m = radius2_m
+    radius2_m = old_radius_m
   end
 
   apply_force(False)
