@@ -55,49 +55,49 @@
     <Name>robot_running</Name>
     <Value>False</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-11T06:05:13.205</TimeStamp>
+    <TimeStamp>2022-03-11T06:36:03.867</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>18</Value>
+    <Value>19</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:05:07.521</TimeStamp>
+    <TimeStamp>2022-03-11T06:35:57.516</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.142397,-0.601668,0.351784,1.04271,2.28869e-08,-2.23092e-08]</Value>
+    <Value>p[0.142398,-0.601776,0.351841,6.27081e-06,3.76849e-06,-3.67339e-06]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:01:54.911</TimeStamp>
+    <TimeStamp>2022-03-11T06:34:10.826</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_flat_rect</Value>
+    <Value>grind_sphere_rect</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:05:13.202</TimeStamp>
+    <TimeStamp>2022-03-11T06:36:03.840</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:05:07.022</TimeStamp>
+    <TimeStamp>2022-03-11T06:35:41.543</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
     <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:05:07.152</TimeStamp>
+    <TimeStamp>2022-03-11T06:35:41.661</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_dryrun</Name>
     <Value>0</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:05:07.286</TimeStamp>
+    <TimeStamp>2022-03-11T06:35:41.827</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

@@ -104,8 +104,8 @@ def pattern_grind():
   global grind_dx_mm = 0
   global grind_dx2_mm = 0
   global grind_dy_mm = 0
-  global grind_dz_mm = 0
-  global grind_dr_mm = 0
+  #global grind_dz_mm = 0
+  #global grind_dr_mm = 0
   global grind_n_spirals = 0
   global grind_radius_mm = 0
   global grind_xstep_mm = 0
@@ -127,10 +127,17 @@ def pattern_grind():
   elif command[2] == 20:
     global response = "grind_cyl_rect"
     global grind_dx_mm = command[3]
-    global grind_dr_mm = command[4]
+    global grind_dy_mm = command[4]
     global grind_radius_mm = command[5]
     global grind_n_cycles = command[6]
-    grind_cyl_rect(grind_dx_mm, grind_dr_mm, grind_radius_mm, grind_n_cycles)
+    grind_cyl_rect(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
+  elif command[2] == 25:
+    global response = "grind_sphere_rect"
+    global grind_dx_mm = command[3]
+    global grind_dy_mm = command[4]
+    global grind_radius_mm = command[5]
+    global grind_n_cycles = command[6]
+    grind_sphere_rect(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
   elif command[2] == 30:
     global response = "grind_flat_serp"
     global grind_dx_mm = command[3]
@@ -142,12 +149,12 @@ def pattern_grind():
   elif command[2] == 40:
     global response = "grind_cyl_serp"
     global grind_dx_mm = command[3]
-    global grind_dr_mm = command[4]
+    global grind_dy_mm = command[4]
     global grind_xstep_mm = command[5]
-    global grind_rstep_mm = command[6]
+    global grind_ystep_mm = command[6]
     global grind_radius_mm = command[7]
     global grind_n_cycles = command[8]
-    grind_cyl_serp(grind_dx_mm, grind_dr_mm, grind_xstep_mm, grind_rstep_mm, grind_radius_mm, grind_n_cycles)
+    grind_cyl_serp(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_radius_mm, grind_n_cycles)
   elif command[2] == 50:
     global response = "grind_flat_circle"
     global grind_dx_mm = command[3]
@@ -224,9 +231,9 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   return True
 end
 
-# Grind along a cylindrical rect dx_mm,dr_mm with radius_mm centered on current tool position. Repeat n_cycles times.
+# Grind along a cylindrical rect dx_mm,dy_mm with radius_mm centered on current tool position. Repeat n_cycles times.
 # Move in x direction first, then r
-def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
+def grind_cyl_rect(dx_mm, dy_mm, radius_mm, n_cycles):
   if n_cycles < 1:
     return False
   end
@@ -234,14 +241,14 @@ def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
   # Unit conversion
   dx_m = dx_mm / 1000.0
   radius_m = radius_mm / 1000.0
-  dr_rad = dr_mm / radius_mm
+  drx_rad = dy_mm / radius_mm
 
   # Find initial position p0
   set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
   p0 = get_actual_tcp_pose()
 
   # Move to offset position bottom left of scan area
-  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
   movel(p1, accel, speed)
 
   if not set_grinding_state(True):
@@ -258,7 +265,7 @@ def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, dr_rad, 0, 0])
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, drx_rad, 0, 0])
       movel(p1, accel, speed)
     end
 
@@ -268,7 +275,64 @@ def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -dr_rad, 0, 0])
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad, 0, 0])
+      movel(p1, accel, speed)
+    end
+    grind_cycle = grind_cycle + 1
+  end
+
+  set_grinding_state(False)
+
+  # Return robot back to initial position
+  movel(p0, accel, speed)
+  return True
+end
+
+# Grind along a cylindrical rect dx_mm,dy_mm with radius_mm centered on current tool position. Repeat n_cycles times.
+# Move in x direction first, then r
+def grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycles):
+  if n_cycles < 1:
+    return False
+  end
+
+  # Unit conversion
+  radius_m = radius_mm / 1000.0
+  drx_rad = dx_mm / radius_mm
+  dry_rad = dy_mm / radius_mm
+
+  # Find initial position p0
+  set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
+  p0 = get_actual_tcp_pose()
+
+  # Move to offset position bottom left of scan area
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
+  movel(p1, accel, speed)
+
+  if not set_grinding_state(True):
+    movel(p0, accel, speed)
+    return False
+  end
+
+  # Grind cylindrical box pattern
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, drx_rad, 0, 0])
+      movel(p1, accel, speed)
+    end
+
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, 0, dry_rad, 0])
+      movel(p1, accel, speed)
+    end
+
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad, 0, 0])
+      movel(p1, accel, speed)
+    end
+
+    if ok_to_proceed():
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, 0, -dry_rad, 0])
       movel(p1, accel, speed)
     end
     grind_cycle = grind_cycle + 1
@@ -366,9 +430,9 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   return True
 end
 
-# Grind along a cylindrical serpentine dx_mm,dr_mm incrementing by xstep_mm,rstep_mm centered on current tool position. Repeat n_cycles times.
+# Grind along a cylindrical serpentine dx_mm,dy_mm incrementing by xstep_mm,rstep_mm centered on current tool position. Repeat n_cycles times.
 # Move in x direction first, then r
-def grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles):
+def grind_cyl_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
   if n_cycles < 1:
     return False
   end
@@ -376,18 +440,18 @@ def grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles):
   # Unit conversion
   dx_m = dx_mm / 1000.0
   radius_m = radius_mm / 1000.0
-  dr_rad = dr_mm / radius_mm
+  drx_rad = dy_mm / radius_mm
   xstep_m = xstep_mm / 1000.0
-  rstep_rad = dr_mm / radius_mm
+  rstep_rad = ystep_mm / radius_mm
   x_grid_count = floor(dx_mm / xstep_mm)
-  r_grid_count = floor(dr_mm / rstep_mm)
+  r_grid_count = floor(dy_mm / ystep_mm)
 
   # Find initial position
   set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
   p0 = get_actual_tcp_pose()
 
   # Move to offset position bottom left of scan area
-  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
+  p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
   movel(p1, accel, speed)
 
   if not set_grinding_state(True):

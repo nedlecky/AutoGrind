@@ -1063,6 +1063,14 @@ namespace AutoGrind
                 return true;
             }
 
+            // grind_sphere_rect
+            if (command.StartsWith("grind_sphere_rect("))
+            {
+                log.Info("{0} grind_sphere_rect: {1}", currentLine, command);
+                robotServer.Send("(40,25," + ExtractParameters(command) + ")");
+                return true;
+            }
+
             // grind_flat_serp
             if (command.StartsWith("grind_flat_serp("))
             {
