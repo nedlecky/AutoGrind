@@ -3,12 +3,13 @@
 
 speed(1.5)
 accel(1.5)
+grind_dryrun(0)
 
 # grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
 grind_flat_rect(40,80,2)
 #grind_flat_rect(20,40,3)
 #grind_flat_rect(5,5,4)
-
+end
 # grind_cyl_rect(grind_dx_mm, grind_dr_mm, grind_radius_mm, grind_n_cycles)
 grind_cyl_rect(60,40,100,2)
 #grind_cyl_rect(60,40,200,2)

@@ -10,12 +10,14 @@ global haltCommand = [0, 0]
 
 global tool_length_m = 0.100
 
-def coolant_flow(on = False):
+global grind_dryrun = 0
+
+def tool_power(on = False):
 
   return None
 end
 
-def tool_power(on = False):
+def coolant_flow(on = False):
 
   return None
 end
@@ -32,6 +34,8 @@ def contact_part(on = False):
     # Simulated....
     p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
     movel(p1, accel, speed)
+
+    # TODO if fails should return to initial position
   else:
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
     movel(p1, accel, speed)
@@ -39,6 +43,33 @@ def contact_part(on = False):
 
   return True
 end
+
+# Setup for grinding
+global grinding_state = False
+def set_grinding_state(on = False):
+  if on and not grinding_state:
+    if grind_dryrun == 1:
+      return True
+    end
+    if not contact_part(True):
+      return False
+    end
+    tool_power(True)
+    coolant_flow(True)
+    apply_force(True)
+    grinding_state = True
+    return True
+  elif not on and grinding_state:
+    apply_force(False)
+    contact_part(False)
+    coolant_flow(False)
+    tool_power(False)
+    grinding_state = False
+    return True
+  end
+  return True
+end
+
 
 # Abort system
 thread listener_thread():
@@ -81,7 +112,13 @@ def pattern_grind():
   global grind_ystep_mm = 0
   global grind_rstep_mm = 0
 
-  if command[2] == 10:
+  if command[2] == 1:
+    global response = "grind_dryrun"
+    global grind_dryrun = command[3]
+    socket_send_string("grind_dryrun=")
+    socket_send_string(grind_dryrun)
+    socket_send_lf()
+  elif command[2] == 10:
     global response = "grind_flat_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -150,13 +187,10 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind box pattern
   global grind_cycle = 1
@@ -183,10 +217,7 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
     grind_cycle = grind_cycle + 1
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
@@ -213,13 +244,10 @@ def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind cylindrical box pattern
   global grind_cycle = 1
@@ -246,10 +274,7 @@ def grind_cyl_rect(dx_mm, dr_mm, radius_mm, n_cycles):
     grind_cycle = grind_cycle + 1
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
@@ -279,13 +304,10 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind serpentine pattern
   global grind_cycle = 1
@@ -337,10 +359,7 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
     end
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
@@ -371,13 +390,10 @@ def grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -dr_rad / 2, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind serpentine pattern
   global grind_cycle = 1
@@ -429,10 +445,7 @@ def grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles):
     end
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
@@ -458,17 +471,14 @@ def grind_flat_circle(dx_mm, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  # We're in contact at east side... compute where contact position would be at center of circle
-  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind circle pattern
+  # We're in contact at east side... compute where contact position would be at center of circle
+  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     i = 1
@@ -485,10 +495,7 @@ def grind_flat_circle(dx_mm, n_cycles):
     grind_cycle = grind_cycle + 1
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)
@@ -516,17 +523,14 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
   p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
   movel(p1, accel, speed)
 
-  if not contact_part(True):
+  if not set_grinding_state(True):
     movel(p0, accel, speed)
     return False
   end
-  # We're in contact at east side... compute where contact position would be at center of circle
-  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
-  tool_power(True)
-  coolant_flow(True)
-  apply_force(True)
 
   # Grind spiral pattern
+  # We're in contact at east side... compute where contact position would be at center of circle
+  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
   n_total_points = n_spirals * n_points
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -549,10 +553,7 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
     radius2_m = old_radius_m
   end
 
-  apply_force(False)
-  contact_part(False)
-  coolant_flow(False)
-  tool_power(False)
+  set_grinding_state(False)
 
   # Return robot back to initial position
   movel(p0, accel, speed)

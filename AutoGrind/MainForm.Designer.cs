@@ -83,11 +83,13 @@
             this.ChangeLEonardRootBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.VariableTab = new System.Windows.Forms.TabPage();
+            this.ClearAllVariablesBtn = new System.Windows.Forms.Button();
             this.LoadVariablesBtn = new System.Windows.Forms.Button();
             this.SaveVariablesBtn = new System.Windows.Forms.Button();
             this.ClearVariablesBtn = new System.Windows.Forms.Button();
             this.VariablesGrd = new System.Windows.Forms.DataGridView();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.IsSystemChk = new System.Windows.Forms.CheckBox();
             this.ReadVariableBtn = new System.Windows.Forms.Button();
             this.WriteStringValueTxt = new System.Windows.Forms.TextBox();
             this.WriteStringValueBtn = new System.Windows.Forms.Button();
@@ -117,8 +119,7 @@
             this.RobotStatusLbl = new System.Windows.Forms.Label();
             this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.IsSystemChk = new System.Windows.Forms.CheckBox();
-            this.ClearAllVariablesBtn = new System.Windows.Forms.Button();
+            this.DryrunChk = new System.Windows.Forms.CheckBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -192,6 +193,7 @@
             // 
             // GrindTab
             // 
+            this.GrindTab.Controls.Add(this.DryrunChk);
             this.GrindTab.Controls.Add(this.HaltRobotBtn);
             this.GrindTab.Controls.Add(this.AngleLbl);
             this.GrindTab.Controls.Add(this.label4);
@@ -828,6 +830,16 @@
             this.VariableTab.Text = "Variables";
             this.VariableTab.UseVisualStyleBackColor = true;
             // 
+            // ClearAllVariablesBtn
+            // 
+            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(261, 428);
+            this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
+            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(132, 23);
+            this.ClearAllVariablesBtn.TabIndex = 87;
+            this.ClearAllVariablesBtn.Text = "Clear All";
+            this.ClearAllVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
+            // 
             // LoadVariablesBtn
             // 
             this.LoadVariablesBtn.Location = new System.Drawing.Point(18, 428);
@@ -879,6 +891,16 @@
             this.groupBox7.TabIndex = 82;
             this.groupBox7.TabStop = false;
             this.groupBox7.Text = "Manual";
+            // 
+            // IsSystemChk
+            // 
+            this.IsSystemChk.AutoSize = true;
+            this.IsSystemChk.Location = new System.Drawing.Point(562, 21);
+            this.IsSystemChk.Name = "IsSystemChk";
+            this.IsSystemChk.Size = new System.Drawing.Size(132, 20);
+            this.IsSystemChk.TabIndex = 8;
+            this.IsSystemChk.Text = "System Variable?";
+            this.IsSystemChk.UseVisualStyleBackColor = true;
             // 
             // ReadVariableBtn
             // 
@@ -1161,25 +1183,16 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "All Log Messages";
             // 
-            // IsSystemChk
+            // DryrunChk
             // 
-            this.IsSystemChk.AutoSize = true;
-            this.IsSystemChk.Location = new System.Drawing.Point(562, 21);
-            this.IsSystemChk.Name = "IsSystemChk";
-            this.IsSystemChk.Size = new System.Drawing.Size(132, 20);
-            this.IsSystemChk.TabIndex = 8;
-            this.IsSystemChk.Text = "System Variable?";
-            this.IsSystemChk.UseVisualStyleBackColor = true;
-            // 
-            // ClearAllVariablesBtn
-            // 
-            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(261, 428);
-            this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
-            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(132, 23);
-            this.ClearAllVariablesBtn.TabIndex = 87;
-            this.ClearAllVariablesBtn.Text = "Clear All";
-            this.ClearAllVariablesBtn.UseVisualStyleBackColor = true;
-            this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
+            this.DryrunChk.AutoSize = true;
+            this.DryrunChk.Location = new System.Drawing.Point(937, 31);
+            this.DryrunChk.Name = "DryrunChk";
+            this.DryrunChk.Size = new System.Drawing.Size(100, 20);
+            this.DryrunChk.TabIndex = 79;
+            this.DryrunChk.Text = "Grind Dryrun";
+            this.DryrunChk.UseVisualStyleBackColor = true;
+            this.DryrunChk.CheckedChanged += new System.EventHandler(this.DryrunChk_CheckedChanged);
             // 
             // MainForm
             // 
@@ -1316,6 +1329,7 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox IsSystemChk;
         private System.Windows.Forms.Button ClearAllVariablesBtn;
+        private System.Windows.Forms.CheckBox DryrunChk;
     }
 }
 

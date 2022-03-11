@@ -390,6 +390,14 @@ namespace AutoGrind
             LoadRecipeBtn_Click(null, null);
         }
 
+        private void DryrunChk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (robotServer != null)
+                if (robotServer.IsConnected())
+                {
+                    robotServer.Send(String.Format("(40,1,{0})", DryrunChk.Checked ? 1 : 0));
+                }
+        }
 
         private void StartBtn_Click(object sender, EventArgs e)
         {
@@ -1025,8 +1033,16 @@ namespace AutoGrind
             {
                 log.Info("{0} accel: {1}", currentLine, command);
                 string param = ExtractParameters(command);
-                robotServer.Send("(31," +param + ")");
-                AccelTxt.Text = param;  
+                robotServer.Send("(31," + param + ")");
+                AccelTxt.Text = param;
+                return true;
+            }
+
+            // grind_dryrun
+            if (command.StartsWith("grind_dryrun("))
+            {
+                log.Info("{0} grind_dryrun: {1}", currentLine, command);
+                robotServer.Send("(40,1," + ExtractParameters(command) + ")");
                 return true;
             }
 
@@ -1109,7 +1125,7 @@ namespace AutoGrind
             if (!robotReady)
             {
                 // Only log this one time!
-                if(logFilter!=1)
+                if (logFilter != 1)
                     log.Trace("Exec waiting for robotReady");
                 logFilter = 1;
             }
@@ -1118,7 +1134,7 @@ namespace AutoGrind
                 if (ReadVariable("robot_running") == "True")
                 {
                     // Only log this one time!
-                    if (logFilter!=2)
+                    if (logFilter != 2)
                         log.Trace("Exec waiting for !robot_running");
                     logFilter = 2;
                 }
@@ -1457,6 +1473,7 @@ namespace AutoGrind
             if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INLUDING system variables. Proceed?"))
                 ClearAndInitializeVariables();
         }
+
 
         // ===================================================================
         // END VARIABLE SYSTEM
