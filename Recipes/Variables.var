@@ -60,44 +60,65 @@
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>19</Value>
+    <Value>26</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:35:57.516</TimeStamp>
+    <TimeStamp>2022-03-12T07:38:09.516</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.142398,-0.601776,0.351841,6.27081e-06,3.76849e-06,-3.67339e-06]</Value>
+    <Value>p[0.142398,-0.601776,0.351841,7.04231e-06,3.38421e-06,-3.52124e-06]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:34:10.826</TimeStamp>
+    <TimeStamp>2022-03-12T07:36:08.292</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
     <Value>grind_sphere_rect</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:36:03.840</TimeStamp>
+    <TimeStamp>2022-03-12T07:38:15.730</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:35:41.543</TimeStamp>
+    <TimeStamp>2022-03-12T07:37:53.773</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
     <Value>1.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:35:41.661</TimeStamp>
+    <TimeStamp>2022-03-12T07:37:53.941</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_dryrun</Name>
-    <Value>0</Value>
+    <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-11T06:35:41.827</TimeStamp>
+    <TimeStamp>2022-03-12T07:37:54.106</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>robot_busy</Name>
+    <Value>False</Value>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-12T07:38:15.735</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_in_process</Name>
+    <Value>False</Value>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-12T07:10:46.343</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_busy</Name>
+    <Value>False</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-12T07:38:15.703</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

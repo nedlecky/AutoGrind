@@ -114,7 +114,10 @@ namespace AutoGrind
                         log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
 
+                        // Send some connect questions to query position,. speed, and accel
                         Send("(10)");
+                        Send("(30,0)");
+                        Send("(31,0)");
                     }
                     catch { }
                 }

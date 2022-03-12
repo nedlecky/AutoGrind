@@ -13,27 +13,27 @@ namespace AutoGrind
     public partial class JoggingForm : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        TcpServer robot;
-        public bool fSave { get; set; }
+        readonly TcpServer robot;
+        public bool ShouldSave { get; set; }
 
         public JoggingForm(TcpServer _robot, string purpose = "General Jogging", bool saveable = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;
             robot = _robot;
-            fSave = false;
+            ShouldSave = false;
             SaveBtn.Enabled = saveable;
             SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
         {
-            fSave = false;
+            ShouldSave = false;
             Close();
         }
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            fSave = true;
+            ShouldSave = true;
             Close();
         }
 

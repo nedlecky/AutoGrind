@@ -119,7 +119,11 @@
             this.RobotStatusLbl = new System.Windows.Forms.Label();
             this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.DryrunChk = new System.Windows.Forms.CheckBox();
+            this.GrindBusyLbl = new System.Windows.Forms.Label();
+            this.RobotBusyLbl = new System.Windows.Forms.Label();
+            this.RobotSpeedLbl = new System.Windows.Forms.Label();
+            this.RobotAccelLbl = new System.Windows.Forms.Label();
+            this.GrindDryrunBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -193,7 +197,6 @@
             // 
             // GrindTab
             // 
-            this.GrindTab.Controls.Add(this.DryrunChk);
             this.GrindTab.Controls.Add(this.HaltRobotBtn);
             this.GrindTab.Controls.Add(this.AngleLbl);
             this.GrindTab.Controls.Add(this.label4);
@@ -1155,11 +1158,11 @@
             // 
             this.RobotStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotStatusLbl.Location = new System.Drawing.Point(1138, 9);
+            this.RobotStatusLbl.Location = new System.Drawing.Point(1221, 7);
             this.RobotStatusLbl.Name = "RobotStatusLbl";
-            this.RobotStatusLbl.Size = new System.Drawing.Size(74, 44);
+            this.RobotStatusLbl.Size = new System.Drawing.Size(86, 44);
             this.RobotStatusLbl.TabIndex = 78;
-            this.RobotStatusLbl.Text = "??";
+            this.RobotStatusLbl.Text = "Connect Status";
             this.RobotStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // ClearAllLogRtbBtn
@@ -1183,22 +1186,71 @@
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "All Log Messages";
             // 
-            // DryrunChk
+            // GrindBusyLbl
             // 
-            this.DryrunChk.AutoSize = true;
-            this.DryrunChk.Location = new System.Drawing.Point(937, 31);
-            this.DryrunChk.Name = "DryrunChk";
-            this.DryrunChk.Size = new System.Drawing.Size(100, 20);
-            this.DryrunChk.TabIndex = 79;
-            this.DryrunChk.Text = "Grind Dryrun";
-            this.DryrunChk.UseVisualStyleBackColor = true;
-            this.DryrunChk.CheckedChanged += new System.EventHandler(this.DryrunChk_CheckedChanged);
+            this.GrindBusyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindBusyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindBusyLbl.Location = new System.Drawing.Point(1221, 122);
+            this.GrindBusyLbl.Name = "GrindBusyLbl";
+            this.GrindBusyLbl.Size = new System.Drawing.Size(86, 44);
+            this.GrindBusyLbl.TabIndex = 88;
+            this.GrindBusyLbl.Text = "Grind Busy";
+            this.GrindBusyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotBusyLbl
+            // 
+            this.RobotBusyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotBusyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotBusyLbl.Location = new System.Drawing.Point(1221, 62);
+            this.RobotBusyLbl.Name = "RobotBusyLbl";
+            this.RobotBusyLbl.Size = new System.Drawing.Size(86, 44);
+            this.RobotBusyLbl.TabIndex = 89;
+            this.RobotBusyLbl.Text = "Robot Busy";
+            this.RobotBusyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotSpeedLbl
+            // 
+            this.RobotSpeedLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSpeedLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotSpeedLbl.Location = new System.Drawing.Point(1221, 306);
+            this.RobotSpeedLbl.Name = "RobotSpeedLbl";
+            this.RobotSpeedLbl.Size = new System.Drawing.Size(86, 44);
+            this.RobotSpeedLbl.TabIndex = 90;
+            this.RobotSpeedLbl.Text = "Speed ???";
+            this.RobotSpeedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotAccelLbl
+            // 
+            this.RobotAccelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotAccelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotAccelLbl.Location = new System.Drawing.Point(1221, 372);
+            this.RobotAccelLbl.Name = "RobotAccelLbl";
+            this.RobotAccelLbl.Size = new System.Drawing.Size(86, 44);
+            this.RobotAccelLbl.TabIndex = 91;
+            this.RobotAccelLbl.Text = "Accel ???";
+            this.RobotAccelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // GrindDryrunBtn
+            // 
+            this.GrindDryrunBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindDryrunBtn.Location = new System.Drawing.Point(1221, 171);
+            this.GrindDryrunBtn.Name = "GrindDryrunBtn";
+            this.GrindDryrunBtn.Size = new System.Drawing.Size(86, 57);
+            this.GrindDryrunBtn.TabIndex = 93;
+            this.GrindDryrunBtn.Text = "Grind Dryrun";
+            this.GrindDryrunBtn.UseVisualStyleBackColor = true;
+            this.GrindDryrunBtn.Click += new System.EventHandler(this.GrindDryrunBtn_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1227, 765);
+            this.ClientSize = new System.Drawing.Size(1310, 765);
+            this.Controls.Add(this.GrindDryrunBtn);
+            this.Controls.Add(this.RobotAccelLbl);
+            this.Controls.Add(this.RobotSpeedLbl);
+            this.Controls.Add(this.RobotBusyLbl);
+            this.Controls.Add(this.GrindBusyLbl);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.RobotStatusLbl);
@@ -1329,7 +1381,11 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox IsSystemChk;
         private System.Windows.Forms.Button ClearAllVariablesBtn;
-        private System.Windows.Forms.CheckBox DryrunChk;
+        private System.Windows.Forms.Label GrindBusyLbl;
+        private System.Windows.Forms.Label RobotBusyLbl;
+        private System.Windows.Forms.Label RobotSpeedLbl;
+        private System.Windows.Forms.Label RobotAccelLbl;
+        private System.Windows.Forms.Button GrindDryrunBtn;
     }
 }
 

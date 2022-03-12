@@ -10,7 +10,7 @@ global haltCommand = [0, 0]
 
 global tool_length_m = 0.100
 
-global grind_dryrun = 0
+global grind_dryrun = False
 
 def tool_power(on = False):
 
@@ -33,12 +33,12 @@ def contact_part(on = False):
     # Advance until contact
     # Simulated....
     p1 = pose_trans(get_forward_kin(), p[0, 0, 0.020, 0, 0, 0])
-    movel(p1, accel, speed)
+    movel(p1, robot_accel, robot_speed)
 
     # TODO if fails should return to initial position
   else:
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.020, 0, 0, 0])
-    movel(p1, accel, speed)
+    movel(p1, robot_accel, robot_speed)
   end
 
   return True
@@ -48,7 +48,7 @@ end
 global grinding_state = False
 def set_grinding_state(on = False):
   if on and not grinding_state:
-    if grind_dryrun == 1:
+    if grind_dryrun:
       return True
     end
     if not contact_part(True):
@@ -69,7 +69,6 @@ def set_grinding_state(on = False):
   end
   return True
 end
-
 
 # Abort system
 thread listener_thread():
@@ -99,13 +98,13 @@ def pattern_grind():
   end
   listenerThread = run listener_thread()
 
+  global grind_busy = True
+  socket_send_line("grind_busy=True")
   global grind_cycle = 0
   global grind_n_cycles = 0
   global grind_dx_mm = 0
   global grind_dx2_mm = 0
   global grind_dy_mm = 0
-  #global grind_dz_mm = 0
-  #global grind_dr_mm = 0
   global grind_n_spirals = 0
   global grind_radius_mm = 0
   global grind_xstep_mm = 0
@@ -113,11 +112,14 @@ def pattern_grind():
   global grind_rstep_mm = 0
 
   if command[2] == 1:
-    global response = "grind_dryrun"
-    global grind_dryrun = command[3]
-    socket_send_string("grind_dryrun=")
-    socket_send_string(grind_dryrun)
-    socket_send_lf()
+    global response = "set grind_dryrun"
+    if command[3] > 0:
+      global grind_dryrun = True
+      socket_send_line("grind_dryrun=True")
+    else:
+      global grind_dryrun = False
+      socket_send_line("grind_dryrun=False")
+    end
   elif command[2] == 10:
     global response = "grind_flat_rect"
     global grind_dx_mm = command[3]
@@ -173,6 +175,8 @@ def pattern_grind():
 
   kill listenerThread
   listenerThread = 0
+  global grind_busy = False
+  socket_send_line("grind_busy=False")
 end
 
 # Grind along a flat rect dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.
@@ -192,10 +196,10 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
 
   # Move to offset position bottom left of scan area
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -204,22 +208,22 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[dx_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, dy_m, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[-dx_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, -dy_m, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -227,7 +231,7 @@ def grind_flat_rect(dx_mm, dy_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -249,10 +253,10 @@ def grind_cyl_rect(dx_mm, dy_mm, radius_mm, n_cycles):
 
   # Move to offset position bottom left of scan area
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -261,22 +265,22 @@ def grind_cyl_rect(dx_mm, dy_mm, radius_mm, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[dx_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, drx_rad, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[-dx_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -284,7 +288,7 @@ def grind_cyl_rect(dx_mm, dy_mm, radius_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -306,10 +310,10 @@ def grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycles):
 
   # Move to offset position bottom left of scan area
   p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -318,22 +322,22 @@ def grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, drx_rad, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, 0, dry_rad, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, 0, -dry_rad, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -341,7 +345,7 @@ def grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -366,10 +370,10 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
 
   # Move to offset position bottom left of scan area
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -381,7 +385,7 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
     # Advance x by xstep_m
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
       # Track new grid square we're in
       if xstep_m > 0:
         x_grid = x_grid + 1
@@ -399,7 +403,7 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
     # Advance y by ystep_m
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, ystep_m, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
       # Track new grid square we're in
       if ystep_m > 0:
         y_grid = y_grid + 1
@@ -426,7 +430,7 @@ def grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -452,10 +456,10 @@ def grind_cyl_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
 
   # Move to offset position bottom left of scan area
   p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -467,7 +471,7 @@ def grind_cyl_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
     # Advance x by xstep_m
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
       # Track new grid square we're in
       if xstep_m > 0:
         x_grid = x_grid + 1
@@ -485,7 +489,7 @@ def grind_cyl_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
     # Advance r by rstep_rad
     if ok_to_proceed():
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0, rstep_rad, 0, 0])
-      movel(p1, accel, speed)
+      movel(p1, robot_accel, robot_speed)
       # Track new grid square we're in
       if rstep_rad > 0:
         r_grid = r_grid + 1
@@ -512,7 +516,7 @@ def grind_cyl_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -533,10 +537,10 @@ def grind_flat_circle(dx_mm, n_cycles):
 
   # Move to offset position east edge of circle
   p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -552,7 +556,7 @@ def grind_flat_circle(dx_mm, n_cycles):
       y = radius_m * sin(theta)
 
       p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
-      movel(p1, accel, speed, 0.005)
+      movel(p1, robot_accel, robot_speed, 0.005)
       i = i + 1
     end
 
@@ -562,7 +566,7 @@ def grind_flat_circle(dx_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 
@@ -585,10 +589,10 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
 
   # Move to offset position east edge of circle
   p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
-  movel(p1, accel, speed)
+  movel(p1, robot_accel, robot_speed)
 
   if not set_grinding_state(True):
-    movel(p0, accel, speed)
+    movel(p0, robot_accel, robot_speed)
     return False
   end
 
@@ -606,7 +610,7 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
       y = r_instantaneous * sin(theta)
 
       p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
-      movel(p1, accel, speed, 0.005)
+      movel(p1, robot_accel, robot_speed, 0.005)
       i = i + 1
     end
 
@@ -620,7 +624,7 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, accel, speed)
+  movel(p0, robot_accel, robot_speed)
   return True
 end
 

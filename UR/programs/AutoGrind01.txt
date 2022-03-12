@@ -17,7 +17,7 @@
      response≔"Unknown command"
      command≔socket_read_ascii_float(10)
      If command[0]≥1
-       socket_send_line("robot_running=True")
+       socket_send_line("robot_busy=True")
        command_index≔command_index+1
        socket_set_var("robot_index", command_index)
        lastCommand≔command
@@ -50,7 +50,7 @@
            response≔"exiting"
          Default Case
            response≔"unknown command"
-       socket_send_line("robot_response=" + response + "#robot_running=False")
+       socket_send_line("robot_response=" + response + "#robot_busy=False")
        If command[1]≟98
          Wait: 0.5
          socket_close()

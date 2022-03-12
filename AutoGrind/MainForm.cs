@@ -390,14 +390,16 @@ namespace AutoGrind
             LoadRecipeBtn_Click(null, null);
         }
 
-        private void DryrunChk_CheckedChanged(object sender, EventArgs e)
+
+        private void GrindDryrunBtn_Click(object sender, EventArgs e)
         {
             if (robotServer != null)
                 if (robotServer.IsConnected())
                 {
-                    robotServer.Send(String.Format("(40,1,{0})", DryrunChk.Checked ? 1 : 0));
+                    robotServer.Send(String.Format("(40,1,{0})", GrindDryrunBtn.BackColor != Color.Green ? 0 : 1));
                 }
         }
+
 
         private void StartBtn_Click(object sender, EventArgs e)
         {
@@ -731,7 +733,7 @@ namespace AutoGrind
 
             form.ShowDialog(this);
 
-            if (form.fSave)
+            if (form.ShouldSave)
             {
                 log.Trace(prompt);
 
@@ -1139,11 +1141,11 @@ namespace AutoGrind
             }
             else
             {
-                if (ReadVariable("robot_running") == "True")
+                if (ReadVariable("robot_busy") == "True")
                 {
                     // Only log this one time!
                     if (logFilter != 2)
-                        log.Trace("Exec waiting for !robot_running");
+                        log.Trace("Exec waiting for !robot_busy");
                     logFilter = 2;
                 }
                 else
@@ -1312,6 +1314,19 @@ namespace AutoGrind
             return null;
         }
 
+
+        private Color BusyColorFromBooleanName(string name)
+        {
+            switch (name)
+            {
+                case "True":
+                    return Color.Red;
+                case "False":
+                    return Color.Green;
+                default:
+                    return Color.Yellow;
+            }
+        }
         static readonly object lockObject = new object();
         static string alsoWriteVariableAs = null;
         static string copyVariableAtWrite = null;
@@ -1331,7 +1346,7 @@ namespace AutoGrind
             log.Trace("WriteVariable({0}, {1})", nameTrimmed, valueTrimmed);
             if (variables == null)
             {
-                log.Error("variables=null!");
+                log.Error("variables == null!!??");
                 return;
             }
             string datetime;
@@ -1357,6 +1372,26 @@ namespace AutoGrind
 
             if (!foundVariable)
                 variables.Rows.Add(new object[] { nameTrimmed, valueTrimmed, true, datetime, isSystem });
+
+            // Update real-time annunciators
+            switch (nameTrimmed)
+            {
+                case "robot_busy":
+                    RobotBusyLbl.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                    break;
+                case "grind_busy":
+                    GrindBusyLbl.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                    break;
+                case "robot_speed":
+                    RobotSpeedLbl.Text = "Speed\n" + valueTrimmed;
+                    break;
+                case "robot_accel":
+                    RobotAccelLbl.Text = "Accel\n" + valueTrimmed;
+                    break;
+                case "grind_dryrun":
+                    GrindDryrunBtn.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                    break;
+            }
 
             variables.AcceptChanges();
             Monitor.Exit(lockObject);
@@ -1481,7 +1516,6 @@ namespace AutoGrind
             if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INLUDING system variables. Proceed?"))
                 ClearAndInitializeVariables();
         }
-
 
         // ===================================================================
         // END VARIABLE SYSTEM
