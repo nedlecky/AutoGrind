@@ -60,51 +60,51 @@
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>26</Value>
+    <Value>4</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:38:09.516</TimeStamp>
+    <TimeStamp>2022-03-12T18:23:43.063</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.142398,-0.601776,0.351841,7.04231e-06,3.38421e-06,-3.52124e-06]</Value>
+    <Value>p[0.142889,-0.601951,0.35228,-0.00021321,-0.000526059,-0.000102788]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:36:08.292</TimeStamp>
+    <TimeStamp>2022-03-12T18:23:27.562</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_sphere_rect</Value>
+    <Value>exiting</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:38:15.730</TimeStamp>
+    <TimeStamp>2022-03-12T18:23:43.127</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
-    <Value>1.5</Value>
+    <Value>0.3</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:37:53.773</TimeStamp>
+    <TimeStamp>2022-03-12T18:23:27.731</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
-    <Value>1.5</Value>
+    <Value>0.3</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:37:53.941</TimeStamp>
+    <TimeStamp>2022-03-12T18:23:27.906</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_dryrun</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:37:54.106</TimeStamp>
+    <TimeStamp>2022-03-12T18:11:48.859</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_busy</Name>
     <Value>False</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-12T07:38:15.735</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-12T18:23:43.152</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
@@ -118,7 +118,7 @@
     <Name>grind_busy</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T07:38:15.703</TimeStamp>
+    <TimeStamp>2022-03-12T18:12:06.245</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

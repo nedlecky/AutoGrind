@@ -1,13 +1,15 @@
 def AG_50():
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  set_tcp(p[0.0,0.0,0.174,0.0,0.0,0.0])
+  set_tcp(p[0.0,0.0,0.1,3.141592653589793,0.0,0.0])
   set_payload(2.0)
+  step_count_80ca3340_be0f_485b_b5f6_d0f23eb4131f = 0.0
+  thread Step_Counter_Thread_f8839622_9f7f_4642_a971_8a51eb577eb7():
+    while (True):
+      step_count_80ca3340_be0f_485b_b5f6_d0f23eb4131f = step_count_80ca3340_be0f_485b_b5f6_d0f23eb4131f + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_f8839622_9f7f_4642_a971_8a51eb577eb7()
+  set_safety_mode_transition_hardness(1)
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -15,28 +17,28 @@ def AG_50():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = 0.0
-  thread Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9():
-    while (True):
-      step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db = step_count_2ff4ff91_27f6_468c_98ff_cd9984a1e3db + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_99152403_cb4f_4887_9bfe_90d8a35f95d9()
-  global Vertical_3_p=p[-.139608417872, -.431276583102, .028138902829, -.001221359682, 3.116276528482, .038891915637]
-  global Vertical_3_q=[-1.6006999999999998, -1.7271, -2.2029999999999994, -0.8079999999999998, 1.5951, -0.030999999999999694]
-  global Tilted_1_p=p[-.139608417868, -.431276582996, .028138902982, -.011381173019, 3.019426224372, -.776094768972]
-  global Tilted_1_q=[-1.6143181432207498, -1.730963551856462, -2.588173794846753, 0.1085536174237972, 1.6168206000396343, -0.039262279865630134]
-  global Vertical_4_p=p[-.139608417866, -.431276582919, .131081236338, -.001221329928, 3.116276528722, .038891910429]
-  global Vertical_4_q=[-1.600700000064136, -1.5575468977702354, -2.0619765024476475, -1.1185765962043455, 1.595100000182046, -0.030999980927620463]
+  set_gravity([0.0, 0.0, 9.82])
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  global Vertical_1_p=p[.138885408770, -.597734994115, .345465728645, .020328607375, .009472346729, .004936256276]
+  global Vertical_1_q=[1.5825845003128052, -1.3035788101008912, 1.3692634741412562, -1.6159240208067835, -1.5805562178241175, 3.148454189300537]
+  global Tilted_2_p=p[.138883686744, -.597728142783, .345429622193, -.448043800451, .010443563975, .002601926233]
+  global Tilted_2_q=[1.5845965147018433, -1.4651393455317994, 1.7312191168414515, -2.2846466503539027, -1.5859773794757288, 3.1494011878967285]
+  global Vertical_2_p=p[.138907887118, -.597724961045, .477595501516, .000033070909, -.000020568314, .002680866690]
+  global Vertical_2_q=[1.5797940492630005, -1.280219630604126, 1.0041268507586878, -1.2945302587798615, -1.5720770994769495, 3.1477832794189453]
+  global Vertical_5_p=p[.138875969234, -.597730539026, .130475163479, .000006847317, .000017170136, .002581409666]
+  global Vertical_5_q=[1.5792073011398315, -1.1477825206569214, 1.743450943623678, -2.1663156948485316, -1.570512596760885, 3.1478190422058105]
   $ 1 "Robot Program"
   $ 2 "MoveL"
-  $ 3 "Vertical_3" "breakAfter"
-  movel(Vertical_3_p, a=1.2, v=0.25)
-  $ 4 "Tilted_1" "breakAfter"
-  movel(Tilted_1_p, a=1.2, v=0.25)
-  $ 5 "Vertical_4" "breakAfter"
-  movel(Vertical_4_p, a=1.2, v=0.25)
-  $ 6 "Vertical_3" "breakAfter"
-  movel(Vertical_3_p, a=1.2, v=0.25)
+  $ 3 "Vertical_1" "breakAfter"
+  movel(Vertical_1_p, a=1.2, v=0.25)
+  $ 4 "Tilted_2" "breakAfter"
+  movel(Tilted_2_p, a=1.2, v=0.25)
+  $ 5 "Vertical_2" "breakAfter"
+  movel(Vertical_2_p, a=1.2, v=0.25)
+  $ 6 "Vertical_5" "breakAfter"
+  movel(Vertical_5_p, a=1.2, v=0.25)
 end

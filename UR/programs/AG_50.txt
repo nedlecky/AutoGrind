@@ -1,7 +1,7 @@
  Program
    Robot Program
      MoveL
-       Vertical_3
-       Tilted_1
-       Vertical_4
-       Vertical_3
+       Vertical_1
+       Tilted_2
+       Vertical_2
+       Vertical_5
