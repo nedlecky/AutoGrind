@@ -1,6 +1,8 @@
 # Regr03
-Start:
 # Label and jumping tests
+
+Start:
+speed(1.5)
 NiceLabel3:
 jump(a4label)
 a=3
@@ -10,7 +12,7 @@ jump(a4label)
 Label2: # With comment
 
 a4label:
-
+speed(1.0)
 a = 3
-#jump(Start)
+jump(Start)
 End:

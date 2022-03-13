@@ -162,7 +162,7 @@ namespace AutoGrind
                 Thread.Sleep(10);
             fSendBusy = true;
 
-            log.Info("UR==> {0}", response);
+            log.Debug("UR==> {0}", response);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);
@@ -199,7 +199,7 @@ namespace AutoGrind
                         string cleanLine = line.Trim('\n');
                         if (cleanLine.Length > 0)
                         {
-                            log.Info("UR<== {0} Line {1}", cleanLine, lineNo);
+                            log.Debug("UR<== {0} Line {1}", cleanLine, lineNo);
 
                             ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                         }

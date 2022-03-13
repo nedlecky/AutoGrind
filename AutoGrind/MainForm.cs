@@ -64,7 +64,6 @@ namespace AutoGrind
 
             // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
-            TraceRad.Checked = true; // Set screen RTB logging level (logfile is ALWAYS at Trace)
 
             // TODO: Must do this first to get AutoGrindRoot prior to logger beginning
             LoadPersistent();
@@ -646,6 +645,8 @@ namespace AutoGrind
             RobotIpPortTxt.Text = (string)AppNameKey.GetValue("RobotIpPortTxt.Text", "192.168.25.1:30000");
             UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
 
+            // Debug Level selection
+            DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "INFO");
 
             // From Grind Tab
             DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
@@ -673,6 +674,9 @@ namespace AutoGrind
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
             AppNameKey.SetValue("RobotIpPortTxt.Text", RobotIpPortTxt.Text);
             AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
+
+            // Debug Level selection
+            AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
 
             // From Grind Tab
             AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
@@ -831,30 +835,11 @@ namespace AutoGrind
             LogManager.Configuration.Variables["myLevel"] = s;
             LogManager.ReconfigExistingLoggers();
         }
-        private void ErrorRad_CheckedChanged(object sender, EventArgs e)
+        private void DebugLevelCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeLogLevel("Error");
+            ChangeLogLevel(DebugLevelCombo.Text);
         }
 
-        private void WarnRad_CheckedChanged(object sender, EventArgs e)
-        {
-            ChangeLogLevel("Warn");
-        }
-
-        private void InfoRad_CheckedChanged(object sender, EventArgs e)
-        {
-            ChangeLogLevel("Info");
-        }
-
-        private void DebugRad_CheckedChanged(object sender, EventArgs e)
-        {
-            ChangeLogLevel("Debug");
-        }
-
-        private void TraceRad_CheckedChanged(object sender, EventArgs e)
-        {
-            ChangeLogLevel("Trace");
-        }
         // ===================================================================
         // END SETUP
         // ===================================================================
@@ -881,19 +866,18 @@ namespace AutoGrind
         Dictionary<string, int> labels;
         private bool BuildLabelTable()
         {
-            log.Info("BuildLabelTable()");
+            log.Debug("BuildLabelTable()");
 
             labels = new Dictionary<string, int>();
 
             int lineNo = 0;
             foreach (string line in RecipeRoRTB.Lines)
             {
-                log.Info("{0:000}: {1}", lineNo, line);
                 var label = IsLineALabel(line);
                 if (label.Success)
                 {
                     labels.Add(label.Value, lineNo);
-                    log.Trace("Found label {0:000}: {1}", lineNo, label.Value);
+                    log.Debug("Found label {0:000}: {1}", lineNo, label.Value);
                 }
                 lineNo++;
             }
@@ -988,46 +972,61 @@ namespace AutoGrind
                 return "";
             }
         }
+
+        Dictionary<string, string> robotAlias = new Dictionary<string, string>
+        {
+            {"speed",                 "30"},
+            {"accel",                 "31" },
+            {"grind_contact_enabled", "40,1" },
+            {"grind_flat_rect",       "40,10" },
+            {"grind_cyl_rect",        "40,20" },
+            {"grind_sphere_rect",     "40,25" },
+            {"grind_flat_serp",       "40,30" },
+            {"grind_cyl_serp",        "40,40" },
+            {"grind_flat_circle",     "40,50" },
+            {"grind_flat_spiral",     "40,60" },
+        };
+        private void LogInterpret(string command, string line)
+        {
+            log.Info("EXEC {0:0000}: [{1}] {2}", currentLine, command.ToUpper(), line);
+        }
         private bool ExecuteLine(string line)
         {
             CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line);
 
-            // Cleanup the line: replace all 2 or more whitespace with a single space and drop all leading/trailing whitespace
+            // 1) Ignore comments: drop anything from # onward in the line
+            int index = line.IndexOf("#");
+            if (index >= 0)
+                line = line.Substring(0, index);
+
+            // 2) Cleanup the line: replace all 2 or more whitespace with a single space and drop all leading/trailing whitespace
             string command = Regex.Replace(line, @"\s+", " ").Trim();
 
-            // Blank line
+            // Skip blank lines or lines that previously had only comments
             if (command.Length < 1)
             {
-                log.Info("Line {0} BLANK: {1}", currentLine, command);
-                return true;
-            }
-
-            // # (comment)
-            if (command[0] == '#')
-            {
-                log.Info("Line {0} COMMENT: {1}", currentLine, command);
                 return true;
             }
 
             // = (assignment)
             if (command.Contains("="))
             {
-                log.Info("Line {0} ASSIGNMENT: {1}", currentLine, command);
+                LogInterpret("assignment", command);
                 WriteVariable(command);
                 return true;
             }
 
-            // Is line a label?
+            // Is line a label? If so, we ignore it!
             if (IsLineALabel(command).Success)
             {
-                log.Info("Line {0} LABEL: {1}", currentLine, command);
+                LogInterpret("LABEL", command);
                 return true;
             }
 
             // clear
-            if (command.StartsWith("clear()"))
+            if (command == "clear()")
             {
-                log.Info("{0} CLEAR: {1}", currentLine, command);
+                LogInterpret("clear", command);
                 ClearVariablesBtn_Click(null, null);
                 return true;
             }
@@ -1035,7 +1034,7 @@ namespace AutoGrind
             // import filename?
             if (command.StartsWith("import("))
             {
-                log.Info("{0} IMPORT: {1}", currentLine, command);
+                LogInterpret("import", command);
                 string file = ExtractParameters(command);
                 if (file.Length > 1)
                 {
@@ -1054,9 +1053,9 @@ namespace AutoGrind
                 string labelName = ExtractParameters(command);
 
                 int jumpLine;
-                if(labels.TryGetValue(labelName, out jumpLine))
+                if (labels.TryGetValue(labelName, out jumpLine))
                 {
-                    log.Info("{0} JUMP: {1}={2:000}", currentLine, command, jumpLine);
+                    log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", currentLine, command, jumpLine);
                     currentLine = jumpLine;
                     return true;
                 }
@@ -1070,16 +1069,16 @@ namespace AutoGrind
             }
 
             // end
-            if (command.StartsWith("end"))
+            if (command == "end()")
             {
-                log.Info("{0} END: {1}", currentLine, command);
+                LogInterpret("end", command);
                 return false;
             }
 
             // home
-            if (command.StartsWith("home()"))
+            if (command == "home()")
             {
-                log.Info("{0} HOME: {1}", currentLine, command);
+                LogInterpret("home", command);
                 GotoHomeBtn_Click(null, null);
                 return true;
             }
@@ -1087,111 +1086,47 @@ namespace AutoGrind
             // toolchange
             if (command.StartsWith("toolchange("))
             {
-                log.Info("{0} TOOLCHANGE: {1}", currentLine, command);
+                LogInterpret("toolchange", command);
                 GotoToolChangeBtn_Click(null, null);
                 messageForm = new MessageForm("Tool Change Prompt", "Please install tool for: " + command);
                 messageForm.ShowDialog();
                 return true;
             }
 
-            // sendrobot
-            if (command.StartsWith("sendrobot("))
-            {
-                log.Info("{0} SENDROBOT: {1}", currentLine, command);
-                robotServer.Send("(" + ExtractParameters(command) + ")");
-                return true;
-            }
-
             // prompt
             if (command.StartsWith("prompt("))
             {
-                log.Info("{0} PROMPT: {1}", currentLine, command);
+                LogInterpret("prompt", command);
                 // This just displays the dialog. ExecTmr will wait for it to close
                 PromptOperator(ExtractParameters(command));
                 return true;
             }
 
-            // speed
-            if (command.StartsWith("speed("))
+            // sendrobot
+            if (command.StartsWith("sendrobot("))
             {
-                log.Info("{0} speed: {1}", currentLine, command);
-                string param = ExtractParameters(command);
-                robotServer.Send("(30," + param + ")");
-                SpeedTxt.Text = param;
+                LogInterpret("sendrobot", command);
+                robotServer.Send("(" + ExtractParameters(command) + ")");
                 return true;
             }
 
-            // accel
-            if (command.StartsWith("accel("))
-            {
-                log.Info("{0} accel: {1}", currentLine, command);
-                string param = ExtractParameters(command);
-                robotServer.Send("(31," + param + ")");
-                AccelTxt.Text = param;
-                return true;
-            }
+            // All of the robot aliases
+            // speed(1.1) ==> robotServer.Send("(30,1.1)")
+            // grind_contact_enabled(0) ==> robotServer.Send("(40,1,0)")
+            // etc.
 
-            // grind_contact_enabled
-            if (command.StartsWith("grind_contact_enabled("))
+            int openParenIndex = command.IndexOf("(");
+            int closeParenIndex = command.IndexOf(")");
+            if (openParenIndex > -1 && closeParenIndex > openParenIndex)
             {
-                log.Info("{0} grind_contact_enabled: {1}", currentLine, command);
-                robotServer.Send("(40,1," + ExtractParameters(command) + ")");
-                return true;
-            }
-
-            // grind_flat_rect
-            // TODO These 30, 31, 40,10 things should be in a lookup
-            if (command.StartsWith("grind_flat_rect("))
-            {
-                log.Info("{0} grind_flat_rect: {1}", currentLine, command);
-                robotServer.Send("(40,10," + ExtractParameters(command) + ")");
-                return true;
-            }
-
-            // grind_cyl_rect
-            if (command.StartsWith("grind_cyl_rect("))
-            {
-                log.Info("{0} grind_cyl_rect: {1}", currentLine, command);
-                robotServer.Send("(40,20," + ExtractParameters(command) + ")");
-                return true;
-            }
-
-            // grind_sphere_rect
-            if (command.StartsWith("grind_sphere_rect("))
-            {
-                log.Info("{0} grind_sphere_rect: {1}", currentLine, command);
-                robotServer.Send("(40,25," + ExtractParameters(command) + ")");
-                return true;
-            }
-
-            // grind_flat_serp
-            if (command.StartsWith("grind_flat_serp("))
-            {
-                log.Info("{0} grind_flat_serp: {1}", currentLine, command);
-                robotServer.Send("(40,30," + ExtractParameters(command) + ")");
-                return true;
-            }
-
-            // grind_cyl_serp
-            if (command.StartsWith("grind_cyl_serp("))
-            {
-                log.Info("{0} grind_cyl_serp: {1}", currentLine, command);
-                robotServer.Send("(40,40," + ExtractParameters(command) + ")");
-                return true;
-            }
-            // grind_flat_circle
-            if (command.StartsWith("grind_flat_circle("))
-            {
-                log.Info("{0} grind_flat_circle: {1}", currentLine, command);
-                robotServer.Send("(40,50," + ExtractParameters(command) + ")");
-                return true;
-            }
-            // grind_flat_spiral
-            if (command.StartsWith("grind_flat_spiral("))
-            {
-                log.Info("{0} grind_flat_spiral: {1}", currentLine, command);
-                robotServer.Send("(40,60," + ExtractParameters(command) + ")");
-                return true;
+                string commandInRecipe = command.Substring(0, openParenIndex);
+                string commandToRobot;
+                if (robotAlias.TryGetValue(commandInRecipe, out commandToRobot))
+                {
+                    LogInterpret(commandInRecipe, command);
+                    robotServer.Send("(" + commandToRobot + "," + ExtractParameters(command) + ")");
+                    return true;
+                }
             }
 
             log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
@@ -1477,9 +1412,11 @@ namespace AutoGrind
                     break;
                 case "robot_speed":
                     RobotSpeedLbl.Text = "Speed\n" + valueTrimmed;
+                    SpeedTxt.Text = valueTrimmed;
                     break;
                 case "robot_accel":
                     RobotAccelLbl.Text = "Accel\n" + valueTrimmed;
+                    AccelTxt.Text = valueTrimmed;
                     break;
                 case "grind_contact_enabled":
                     GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
