@@ -119,11 +119,12 @@
             this.RobotStatusLbl = new System.Windows.Forms.Label();
             this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.GrindBusyLbl = new System.Windows.Forms.Label();
-            this.RobotBusyLbl = new System.Windows.Forms.Label();
+            this.GrindReadyLbl = new System.Windows.Forms.Label();
+            this.RobotReadyLbl = new System.Windows.Forms.Label();
             this.RobotSpeedLbl = new System.Windows.Forms.Label();
             this.RobotAccelLbl = new System.Windows.Forms.Label();
-            this.GrindDryrunBtn = new System.Windows.Forms.Button();
+            this.GrindContactEnabledBtn = new System.Windows.Forms.Button();
+            this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -191,12 +192,13 @@
             this.OperationTab.Margin = new System.Windows.Forms.Padding(2);
             this.OperationTab.Name = "OperationTab";
             this.OperationTab.SelectedIndex = 0;
-            this.OperationTab.Size = new System.Drawing.Size(1076, 493);
+            this.OperationTab.Size = new System.Drawing.Size(1076, 561);
             this.OperationTab.TabIndex = 3;
             this.OperationTab.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.OperationTab_Selecting);
             // 
             // GrindTab
             // 
+            this.GrindTab.Controls.Add(this.CurrentLineLbl);
             this.GrindTab.Controls.Add(this.HaltRobotBtn);
             this.GrindTab.Controls.Add(this.AngleLbl);
             this.GrindTab.Controls.Add(this.label4);
@@ -213,7 +215,7 @@
             this.GrindTab.Margin = new System.Windows.Forms.Padding(2);
             this.GrindTab.Name = "GrindTab";
             this.GrindTab.Padding = new System.Windows.Forms.Padding(2);
-            this.GrindTab.Size = new System.Drawing.Size(1068, 464);
+            this.GrindTab.Size = new System.Drawing.Size(1068, 532);
             this.GrindTab.TabIndex = 0;
             this.GrindTab.Text = "Grind";
             this.GrindTab.UseVisualStyleBackColor = true;
@@ -223,7 +225,7 @@
             this.HaltRobotBtn.BackColor = System.Drawing.Color.Red;
             this.HaltRobotBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
             this.HaltRobotBtn.ForeColor = System.Drawing.Color.White;
-            this.HaltRobotBtn.Location = new System.Drawing.Point(744, 374);
+            this.HaltRobotBtn.Location = new System.Drawing.Point(744, 427);
             this.HaltRobotBtn.Margin = new System.Windows.Forms.Padding(2);
             this.HaltRobotBtn.Name = "HaltRobotBtn";
             this.HaltRobotBtn.Size = new System.Drawing.Size(159, 86);
@@ -279,7 +281,7 @@
             this.JogBtn.BackColor = System.Drawing.Color.Green;
             this.JogBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
             this.JogBtn.ForeColor = System.Drawing.Color.White;
-            this.JogBtn.Location = new System.Drawing.Point(12, 377);
+            this.JogBtn.Location = new System.Drawing.Point(12, 430);
             this.JogBtn.Margin = new System.Windows.Forms.Padding(2);
             this.JogBtn.Name = "JogBtn";
             this.JogBtn.Size = new System.Drawing.Size(247, 86);
@@ -291,12 +293,12 @@
             // RecipeRoRTB
             // 
             this.RecipeRoRTB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRoRTB.Location = new System.Drawing.Point(12, 60);
+            this.RecipeRoRTB.Location = new System.Drawing.Point(12, 92);
             this.RecipeRoRTB.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRoRTB.Name = "RecipeRoRTB";
             this.RecipeRoRTB.ReadOnly = true;
             this.RecipeRoRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRoRTB.Size = new System.Drawing.Size(891, 313);
+            this.RecipeRoRTB.Size = new System.Drawing.Size(891, 334);
             this.RecipeRoRTB.TabIndex = 72;
             this.RecipeRoRTB.Text = "";
             // 
@@ -320,7 +322,7 @@
             this.LoadBtn.BackColor = System.Drawing.Color.Gray;
             this.LoadBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
             this.LoadBtn.ForeColor = System.Drawing.Color.White;
-            this.LoadBtn.Location = new System.Drawing.Point(300, 377);
+            this.LoadBtn.Location = new System.Drawing.Point(300, 430);
             this.LoadBtn.Margin = new System.Windows.Forms.Padding(2);
             this.LoadBtn.Name = "LoadBtn";
             this.LoadBtn.Size = new System.Drawing.Size(247, 86);
@@ -1091,7 +1093,7 @@
             // AllLogRTB
             // 
             this.AllLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AllLogRTB.Location = new System.Drawing.Point(86, 18);
+            this.AllLogRTB.Location = new System.Drawing.Point(86, 19);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.AllLogRTB.Name = "AllLogRTB";
             this.AllLogRTB.Size = new System.Drawing.Size(1115, 198);
@@ -1156,8 +1158,10 @@
             // 
             // RobotStatusLbl
             // 
+            this.RobotStatusLbl.BackColor = System.Drawing.Color.Gray;
             this.RobotStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotStatusLbl.ForeColor = System.Drawing.Color.White;
             this.RobotStatusLbl.Location = new System.Drawing.Point(1221, 7);
             this.RobotStatusLbl.Name = "RobotStatusLbl";
             this.RobotStatusLbl.Size = new System.Drawing.Size(86, 44);
@@ -1179,34 +1183,38 @@
             // 
             this.groupBox4.Controls.Add(this.ClearAllLogRtbBtn);
             this.groupBox4.Controls.Add(this.AllLogRTB);
-            this.groupBox4.Location = new System.Drawing.Point(9, 532);
+            this.groupBox4.Location = new System.Drawing.Point(9, 603);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(1206, 221);
             this.groupBox4.TabIndex = 87;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "All Log Messages";
             // 
-            // GrindBusyLbl
+            // GrindReadyLbl
             // 
-            this.GrindBusyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GrindBusyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindBusyLbl.Location = new System.Drawing.Point(1221, 122);
-            this.GrindBusyLbl.Name = "GrindBusyLbl";
-            this.GrindBusyLbl.Size = new System.Drawing.Size(86, 44);
-            this.GrindBusyLbl.TabIndex = 88;
-            this.GrindBusyLbl.Text = "Grind Busy";
-            this.GrindBusyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.GrindReadyLbl.BackColor = System.Drawing.Color.Gray;
+            this.GrindReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindReadyLbl.ForeColor = System.Drawing.Color.White;
+            this.GrindReadyLbl.Location = new System.Drawing.Point(1221, 122);
+            this.GrindReadyLbl.Name = "GrindReadyLbl";
+            this.GrindReadyLbl.Size = new System.Drawing.Size(86, 44);
+            this.GrindReadyLbl.TabIndex = 88;
+            this.GrindReadyLbl.Text = "Grind Ready";
+            this.GrindReadyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // RobotBusyLbl
+            // RobotReadyLbl
             // 
-            this.RobotBusyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotBusyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotBusyLbl.Location = new System.Drawing.Point(1221, 62);
-            this.RobotBusyLbl.Name = "RobotBusyLbl";
-            this.RobotBusyLbl.Size = new System.Drawing.Size(86, 44);
-            this.RobotBusyLbl.TabIndex = 89;
-            this.RobotBusyLbl.Text = "Robot Busy";
-            this.RobotBusyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.RobotReadyLbl.BackColor = System.Drawing.Color.Gray;
+            this.RobotReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotReadyLbl.ForeColor = System.Drawing.Color.White;
+            this.RobotReadyLbl.Location = new System.Drawing.Point(1221, 62);
+            this.RobotReadyLbl.Name = "RobotReadyLbl";
+            this.RobotReadyLbl.Size = new System.Drawing.Size(86, 44);
+            this.RobotReadyLbl.TabIndex = 89;
+            this.RobotReadyLbl.Text = "Robot Ready";
+            this.RobotReadyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RobotSpeedLbl
             // 
@@ -1230,27 +1238,38 @@
             this.RobotAccelLbl.Text = "Accel ???";
             this.RobotAccelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // GrindDryrunBtn
+            // GrindContactEnabledBtn
             // 
-            this.GrindDryrunBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindDryrunBtn.Location = new System.Drawing.Point(1221, 171);
-            this.GrindDryrunBtn.Name = "GrindDryrunBtn";
-            this.GrindDryrunBtn.Size = new System.Drawing.Size(86, 57);
-            this.GrindDryrunBtn.TabIndex = 93;
-            this.GrindDryrunBtn.Text = "Grind Dryrun";
-            this.GrindDryrunBtn.UseVisualStyleBackColor = true;
-            this.GrindDryrunBtn.Click += new System.EventHandler(this.GrindDryrunBtn_Click);
+            this.GrindContactEnabledBtn.BackColor = System.Drawing.Color.Gray;
+            this.GrindContactEnabledBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindContactEnabledBtn.ForeColor = System.Drawing.Color.White;
+            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(1221, 171);
+            this.GrindContactEnabledBtn.Name = "GrindContactEnabledBtn";
+            this.GrindContactEnabledBtn.Size = new System.Drawing.Size(86, 69);
+            this.GrindContactEnabledBtn.TabIndex = 93;
+            this.GrindContactEnabledBtn.Text = "Grind Contact Enabled";
+            this.GrindContactEnabledBtn.UseVisualStyleBackColor = false;
+            this.GrindContactEnabledBtn.Click += new System.EventHandler(this.GrindContactEnabledBtn_Click);
+            // 
+            // CurrentLineLbl
+            // 
+            this.CurrentLineLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CurrentLineLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentLineLbl.Location = new System.Drawing.Point(12, 60);
+            this.CurrentLineLbl.Name = "CurrentLineLbl";
+            this.CurrentLineLbl.Size = new System.Drawing.Size(891, 30);
+            this.CurrentLineLbl.TabIndex = 79;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1310, 765);
-            this.Controls.Add(this.GrindDryrunBtn);
+            this.ClientSize = new System.Drawing.Size(1310, 836);
+            this.Controls.Add(this.GrindContactEnabledBtn);
             this.Controls.Add(this.RobotAccelLbl);
             this.Controls.Add(this.RobotSpeedLbl);
-            this.Controls.Add(this.RobotBusyLbl);
-            this.Controls.Add(this.GrindBusyLbl);
+            this.Controls.Add(this.RobotReadyLbl);
+            this.Controls.Add(this.GrindReadyLbl);
             this.Controls.Add(this.groupBox4);
             this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.RobotStatusLbl);
@@ -1381,11 +1400,12 @@
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.CheckBox IsSystemChk;
         private System.Windows.Forms.Button ClearAllVariablesBtn;
-        private System.Windows.Forms.Label GrindBusyLbl;
-        private System.Windows.Forms.Label RobotBusyLbl;
+        private System.Windows.Forms.Label GrindReadyLbl;
+        private System.Windows.Forms.Label RobotReadyLbl;
         private System.Windows.Forms.Label RobotSpeedLbl;
         private System.Windows.Forms.Label RobotAccelLbl;
-        private System.Windows.Forms.Button GrindDryrunBtn;
+        private System.Windows.Forms.Button GrindContactEnabledBtn;
+        private System.Windows.Forms.Label CurrentLineLbl;
     }
 }
 

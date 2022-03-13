@@ -18,7 +18,6 @@ namespace AutoGrind
         string myPort;
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-        public bool DryRun { get; set; } = false;
         const int inputBufferLen = 128000;
         byte[] inputBuffer = new byte[inputBufferLen];
         public int nGetStatusRequests = 0;
@@ -114,10 +113,11 @@ namespace AutoGrind
                         log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
 
-                        // Send some connect questions to query position,. speed, and accel
-                        Send("(10)");
-                        Send("(30,0)");
-                        Send("(31,0)");
+                        // Send some connect questions to query position, speed, and accel
+                        Send("(10)");     // Query position
+                        Send("(30,0)");   // Query speed
+                        Send("(31,0)");   // Query accel
+                        Send("(40,1,0)"); // Set contact enabled = False
                     }
                     catch { }
                 }

@@ -208,7 +208,7 @@ namespace AutoGrind
                     else
                     {
                         log.Info("Change robot connection to WAIT");
-                        RobotStatusLbl.BackColor = Color.Yellow;
+                        RobotStatusLbl.BackColor = Color.Red;
                         RobotStatusLbl.Text = "WAIT";
                         // Restore all button settings with same current state
                         SetState(runState, true, true);
@@ -248,6 +248,7 @@ namespace AutoGrind
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
+                    CurrentLineLbl.Text = "";
                     break;
                 case RunState.READY:
                     GrindBtn.Enabled = true;
@@ -260,6 +261,7 @@ namespace AutoGrind
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
+                    CurrentLineLbl.Text = "";
                     break;
                 case RunState.RUNNING:
                     GrindBtn.Enabled = false;
@@ -271,6 +273,7 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     ContinueBtn.Enabled = false;
                     StopBtn.Enabled = true;
+                    CurrentLineLbl.Text = "";
 
                     StartExecutive();
                     ExecTmr.Interval = 100;
@@ -391,12 +394,12 @@ namespace AutoGrind
         }
 
 
-        private void GrindDryrunBtn_Click(object sender, EventArgs e)
+        private void GrindContactEnabledBtn_Click(object sender, EventArgs e)
         {
             if (robotServer != null)
                 if (robotServer.IsConnected())
                 {
-                    robotServer.Send(String.Format("(40,1,{0})", GrindDryrunBtn.BackColor != Color.Green ? 0 : 1));
+                    robotServer.Send(String.Format("(40,1,{0})", GrindContactEnabledBtn.BackColor != Color.Green ? 1 : 0));
                 }
         }
 
@@ -929,6 +932,8 @@ namespace AutoGrind
         }
         private bool ExecuteLine(string line)
         {
+            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line); 
+            
             // Cleanup the line: replace all 2 or more whitespace with a single space and drop all leading/trailing whitespace
             string command = Regex.Replace(line, @"\s+", " ").Trim();
 
@@ -1040,10 +1045,10 @@ namespace AutoGrind
                 return true;
             }
 
-            // grind_dryrun
-            if (command.StartsWith("grind_dryrun("))
+            // grind_contact_enabled
+            if (command.StartsWith("grind_contact_enabled("))
             {
-                log.Info("{0} grind_dryrun: {1}", currentLine, command);
+                log.Info("{0} grind_contact_enabled: {1}", currentLine, command);
                 robotServer.Send("(40,1," + ExtractParameters(command) + ")");
                 return true;
             }
@@ -1141,11 +1146,11 @@ namespace AutoGrind
             }
             else
             {
-                if (ReadVariable("robot_busy") == "True")
+                if (ReadVariable("robot_ready") != "True")
                 {
                     // Only log this one time!
                     if (logFilter != 2)
-                        log.Trace("Exec waiting for !robot_busy");
+                        log.Trace("Exec waiting for robot_ready");
                     logFilter = 2;
                 }
                 else
@@ -1157,7 +1162,9 @@ namespace AutoGrind
                     currentLine++;
 
                     if (!fContinue || currentLine >= nLines)
+                    {
                         SetState(RunState.READY);
+                    }
                 }
             }
         }
@@ -1184,7 +1191,7 @@ namespace AutoGrind
             {
                 log.Info("Robot connection ready");
 
-                RobotStatusLbl.BackColor = Color.Yellow;
+                RobotStatusLbl.BackColor = Color.Red;
                 RobotStatusLbl.Text = "WAIT";
             }
         }
@@ -1315,14 +1322,14 @@ namespace AutoGrind
         }
 
 
-        private Color BusyColorFromBooleanName(string name)
+        private Color ColorFromBooleanName(string name)
         {
             switch (name)
             {
                 case "True":
-                    return Color.Red;
-                case "False":
                     return Color.Green;
+                case "False":
+                    return Color.Red;
                 default:
                     return Color.Yellow;
             }
@@ -1376,11 +1383,11 @@ namespace AutoGrind
             // Update real-time annunciators
             switch (nameTrimmed)
             {
-                case "robot_busy":
-                    RobotBusyLbl.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                case "robot_ready":
+                    RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
-                case "grind_busy":
-                    GrindBusyLbl.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                case "grind_ready":
+                    GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
                 case "robot_speed":
                     RobotSpeedLbl.Text = "Speed\n" + valueTrimmed;
@@ -1388,8 +1395,8 @@ namespace AutoGrind
                 case "robot_accel":
                     RobotAccelLbl.Text = "Accel\n" + valueTrimmed;
                     break;
-                case "grind_dryrun":
-                    GrindDryrunBtn.BackColor = BusyColorFromBooleanName(valueTrimmed);
+                case "grind_contact_enabled":
+                    GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
             }
 

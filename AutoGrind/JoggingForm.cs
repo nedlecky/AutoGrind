@@ -44,11 +44,11 @@ namespace AutoGrind
             AngleLst.SelectedIndex = 2;
         }
 
-        private double d2r(double d)
+        private double Deg2Rad(double d)
         {
             return d * Math.PI / 180.0;
         }
-        private double r2d(double r)
+        private double Rad2Deg(double r)
         {
             return r * 180.0 / Math.PI;
         }
@@ -104,42 +104,42 @@ namespace AutoGrind
         private void RollplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, d2r(angle), 0, 0 };
+            double[] p = new double[] { 0, 0, 0, Deg2Rad(angle), 0, 0 };
             Jog(p);
         }
 
         private void RollminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, -d2r(angle), 0, 0 };
+            double[] p = new double[] { 0, 0, 0, -Deg2Rad(angle), 0, 0 };
             Jog(p);
         }
 
         private void PitchplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, d2r(angle), 0 };
+            double[] p = new double[] { 0, 0, 0, 0, Deg2Rad(angle), 0 };
             Jog(p);
         }
 
         private void PitchminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, -d2r(angle), 0 };
+            double[] p = new double[] { 0, 0, 0, 0, -Deg2Rad(angle), 0 };
             Jog(p);
         }
 
         private void YawplusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, 0, d2r(angle) };
+            double[] p = new double[] { 0, 0, 0, 0, 0, Deg2Rad(angle) };
             Jog(p);
         }
 
         private void YawminusBtn_Click(object sender, EventArgs e)
         {
             double angle = Convert.ToDouble(AngleLst.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, 0, 0, 0, -d2r(angle) };
+            double[] p = new double[] { 0, 0, 0, 0, 0, -Deg2Rad(angle) };
             Jog(p);
         }
 
@@ -149,7 +149,7 @@ namespace AutoGrind
         }
         private void FlipRBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,3," + d2r(180).ToString() + ")");
+            robot.Send("(15,3," + Deg2Rad(180).ToString() + ")");
         }
 
         private void ZeroPBtn_Click(object sender, EventArgs e)

@@ -8,9 +8,11 @@ global threadCount = 0
 global haltCount = 0
 global haltCommand = [0, 0]
 
+# TODO this should come from the TCP selected for the current tool
 global tool_length_m = 0.100
 
-global grind_dryrun = False
+global grind_ready = True
+global grind_contact_enabled = False
 
 def tool_power(on = False):
 
@@ -48,7 +50,7 @@ end
 global grinding_state = False
 def set_grinding_state(on = False):
   if on and not grinding_state:
-    if grind_dryrun:
+    if not grind_contact_enabled:
       return True
     end
     if not contact_part(True):
@@ -91,15 +93,15 @@ end
 
 # Execute the desired pattern grind selected by command[2]
 def pattern_grind():
-  #global listen_thread
+  global grind_ready = False
+  socket_send_line("grind_ready=False")
+
   if listenerThread > 0:
     kill listenerThread
     listenerThread = 0
   end
   listenerThread = run listener_thread()
 
-  global grind_busy = True
-  socket_send_line("grind_busy=True")
   global grind_cycle = 0
   global grind_n_cycles = 0
   global grind_dx_mm = 0
@@ -112,13 +114,13 @@ def pattern_grind():
   global grind_rstep_mm = 0
 
   if command[2] == 1:
-    global response = "set grind_dryrun"
+    global response = "set grind_contact_enabled"
     if command[3] > 0:
-      global grind_dryrun = True
-      socket_send_line("grind_dryrun=True")
+      global grind_contact_enabled = True
+      socket_send_line("grind_contact_enabled=True")
     else:
-      global grind_dryrun = False
-      socket_send_line("grind_dryrun=False")
+      global grind_contact_enabled = False
+      socket_send_line("grind_contact_enabled=False")
     end
   elif command[2] == 10:
     global response = "grind_flat_rect"
@@ -175,8 +177,9 @@ def pattern_grind():
 
   kill listenerThread
   listenerThread = 0
-  global grind_busy = False
-  socket_send_line("grind_busy=False")
+
+  global grind_ready = True
+  socket_send_line("grind_ready=True")
 end
 
 # Grind along a flat rect dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.
@@ -556,7 +559,7 @@ def grind_flat_circle(dx_mm, n_cycles):
       y = radius_m * sin(theta)
 
       p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
-      movel(p1, robot_accel, robot_speed, 0.005)
+      movel(p1, a=robot_accel, v=robot_speed, r=0.005)
       i = i + 1
     end
 
@@ -610,7 +613,7 @@ def grind_flat_spiral(dx_mm, dx2_mm, n_spirals, n_cycles):
       y = r_instantaneous * sin(theta)
 
       p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
-      movel(p1, robot_accel, robot_speed, 0.005)
+      movel(p1, a=robot_accel, v=robot_speed, r=0.005)
       i = i + 1
     end
 

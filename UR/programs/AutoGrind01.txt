@@ -6,18 +6,19 @@
      currentTcpPose≔get_actual_tcp_pose()
      MoveJ
        currentTcpPose
-     socket_close()
-     Wait: 0.25
+     'socket_close()'
+     'Wait: 0.25'
      socket_is_open≔ False 
      command_index≔0
    Robot Program
      Loop socket_is_open ≟  False 
+       Wait: 0.25
+       socket_close()
        socket_is_open≔socket_open("192.168.0.252", 30000)
-       Wait: 1.0
      response≔"Unknown command"
      command≔socket_read_ascii_float(10)
      If command[0]≥1
-       socket_send_line("robot_busy=True")
+       socket_send_line("robot_ready=False")
        command_index≔command_index+1
        socket_set_var("robot_index", command_index)
        lastCommand≔command
@@ -50,7 +51,7 @@
            response≔"exiting"
          Default Case
            response≔"unknown command"
-       socket_send_line("robot_response=" + response + "#robot_busy=False")
+       socket_send_line("robot_response=" + response + "#robot_ready=True")
        If command[1]≟98
          Wait: 0.5
          socket_close()
@@ -64,7 +65,7 @@
        'socket_set_var("robot_index", command_index)'
    AG_50
      MoveL
-       Vertical_1
-       Tilted_2
-       Vertical_2
-       Vertical_5
+       Vertical_3
+       Tilted_1
+       Vertical_4
+       Vertical_6

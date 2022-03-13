@@ -60,51 +60,51 @@
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>4</Value>
+    <Value>31</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:43.063</TimeStamp>
+    <TimeStamp>2022-03-13T08:15:53.473</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.142889,-0.601951,0.35228,-0.00021321,-0.000526059,-0.000102788]</Value>
+    <Value>p[0.0890991,-0.683623,0.36544,-0.429295,0.0183007,-0.109971]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:27.562</TimeStamp>
+    <TimeStamp>2022-03-13T08:13:49.439</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>exiting</Value>
+    <Value>grind_sphere_rect</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:43.127</TimeStamp>
+    <TimeStamp>2022-03-13T08:15:58.706</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
-    <Value>0.3</Value>
+    <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:27.731</TimeStamp>
+    <TimeStamp>2022-03-13T08:14:09.038</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
-    <Value>0.3</Value>
+    <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:27.906</TimeStamp>
+    <TimeStamp>2022-03-13T08:14:09.144</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_dryrun</Name>
     <Value>False</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:11:48.859</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-13T07:01:12.939</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_busy</Name>
     <Value>False</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:23:43.152</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-13T06:45:27.258</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
@@ -116,9 +116,30 @@
   </Variables>
   <Variables>
     <Name>grind_busy</Name>
+    <Value>True</Value>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-12T18:54:28.345</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>robot_ready</Name>
+    <Value>True</Value>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-13T08:15:58.709</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_ready</Name>
+    <Value>True</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-13T08:15:58.697</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_contact_enabled</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-12T18:12:06.245</TimeStamp>
+    <TimeStamp>2022-03-13T08:13:49.626</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

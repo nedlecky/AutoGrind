@@ -5,8 +5,8 @@
 
 global response = "unknown"
 
-global robot_speed = 0.3
-global robot_accel = 0.3
+global robot_speed = 1.0
+global robot_accel = 1.0
 
 # Set speed to s if s<>0. Always returns "speed=[current speed]"
 def set_speed(s):
