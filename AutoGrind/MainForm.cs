@@ -151,6 +151,15 @@ namespace AutoGrind
                      MessageBoxIcon.Question);
             return result;
         }
+        private DialogResult ErrorMessageBox(string message)
+        {
+            // TODO: Maybe should be a custom dialog like the prompt!
+            DialogResult result = MessageBox.Show(message,
+                     "AutoGrind Error",
+                     MessageBoxButtons.OK,
+                     MessageBoxIcon.Error);
+            return result;
+        }
         protected override void OnFormClosing(FormClosingEventArgs e)
         {
             if (forceClose) return;
@@ -275,9 +284,13 @@ namespace AutoGrind
                     StopBtn.Enabled = true;
                     CurrentLineLbl.Text = "";
 
-                    StartExecutive();
-                    ExecTmr.Interval = 100;
-                    ExecTmr.Enabled = true;
+                    if (StartExecutive())
+                    {
+                        ExecTmr.Interval = 100;
+                        ExecTmr.Enabled = true;
+                    }
+                    else
+                        SetState(RunState.READY);
 
                     break;
                 case RunState.PAUSED:
@@ -849,13 +862,58 @@ namespace AutoGrind
         // ===================================================================
         // START EXECUTIVE
         // ===================================================================
+
+        /// <summary>
+        /// Is the line a recipe label? TYhis means starting with alpha, followed by 0 or more alphanum, followed by :
+        /// </summary>
+        /// <param name="line">Input Line</param>
+        /// <returns>(bool Success, string Value if matched else null)</returns>
+        private (bool Success, string Value) IsLineALabel(string line)
+        {
+            Regex regex = new Regex("^[A-Za-z][A-Za-z0-9]+:");
+            Match match = regex.Match(line);
+            if (match.Success)
+                return (true, match.Value.Trim(':'));
+            else
+                return (false, null);
+        }
+
+        Dictionary<string, int> labels;
+        private bool BuildLabelTable()
+        {
+            log.Info("BuildLabelTable()");
+
+            labels = new Dictionary<string, int>();
+
+            int lineNo = 0;
+            foreach (string line in RecipeRoRTB.Lines)
+            {
+                log.Info("{0:000}: {1}", lineNo, line);
+                var label = IsLineALabel(line);
+                if (label.Success)
+                {
+                    labels.Add(label.Value, lineNo);
+                    log.Trace("Found label {0:000}: {1}", lineNo, label.Value);
+                }
+                lineNo++;
+            }
+
+            return true;
+        }
         static int currentLine = 0;
         static int nLines = 0;
-        private void StartExecutive()
+        private bool StartExecutive()
         {
             nLines = RecipeRoRTB.Lines.Count();
             currentLine = 0;
             log.Info("StartExecutive() nLines={0}", nLines);
+            if (!BuildLabelTable())
+            {
+                ErrorMessageBox("Error parsing labels from file");
+                return false;
+
+            }
+            return true;
         }
 
         /// <summary>
@@ -932,8 +990,8 @@ namespace AutoGrind
         }
         private bool ExecuteLine(string line)
         {
-            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line); 
-            
+            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line);
+
             // Cleanup the line: replace all 2 or more whitespace with a single space and drop all leading/trailing whitespace
             string command = Regex.Replace(line, @"\s+", " ").Trim();
 
@@ -959,6 +1017,13 @@ namespace AutoGrind
                 return true;
             }
 
+            // Is line a label?
+            if (IsLineALabel(command).Success)
+            {
+                log.Info("Line {0} LABEL: {1}", currentLine, command);
+                return true;
+            }
+
             // clear
             if (command.StartsWith("clear()"))
             {
@@ -981,6 +1046,27 @@ namespace AutoGrind
                     PromptOperator("Invalid import command: {0}", command);
 
                 return true;
+            }
+
+            // jump
+            if (command.StartsWith("jump("))
+            {
+                string labelName = ExtractParameters(command);
+
+                int jumpLine;
+                if(labels.TryGetValue(labelName, out jumpLine))
+                {
+                    log.Info("{0} JUMP: {1}={2:000}", currentLine, command, jumpLine);
+                    currentLine = jumpLine;
+                    return true;
+                }
+                else
+                {
+                    log.Error("Unknown Label specified in jump Line {0} Exec: {1}", currentLine, command);
+                    messageForm = new MessageForm("Illegal Jump Command", "Illegal Recipe line: " + command);
+                    messageForm.ShowDialog();
+                    return true;
+                }
             }
 
             // end

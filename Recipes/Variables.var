@@ -60,37 +60,37 @@
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>31</Value>
+    <Value>89</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:15:53.473</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.202</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.0890991,-0.683623,0.36544,-0.429295,0.0183007,-0.109971]</Value>
+    <Value>p[9.28115e-06,-0.499986,0.140728,5.5743e-05,-1.5364e-05,3.24195e-05]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:13:49.439</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.047</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_sphere_rect</Value>
+    <Value>set grind_contact_enabled</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:15:58.706</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.245</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:14:09.038</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.107</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:14:09.144</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.154</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
@@ -125,21 +125,28 @@
     <Name>robot_ready</Name>
     <Value>True</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-13T08:15:58.709</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.250</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_ready</Name>
     <Value>True</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:15:58.697</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.233</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_contact_enabled</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-13T08:13:49.626</TimeStamp>
+    <TimeStamp>2022-03-13T12:48:45.223</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>a</Name>
+    <Value>3</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-13T12:50:51.441</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

@@ -1,0 +1,16 @@
+# Regr03
+Start:
+# Label and jumping tests
+NiceLabel3:
+jump(a4label)
+a=3
+NotLabel:
+a=5
+jump(a4label)
+Label2: # With comment
+
+a4label:
+
+a = 3
+#jump(Start)
+End:
