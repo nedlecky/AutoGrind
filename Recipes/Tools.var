@@ -14,10 +14,10 @@
                 <xs:element name="rx_m" type="xs:double" minOccurs="0" />
                 <xs:element name="ry_m" type="xs:double" minOccurs="0" />
                 <xs:element name="rz_m" type="xs:double" minOccurs="0" />
-                <xs:element name="Mass_kg" type="xs:double" minOccurs="0" />
-                <xs:element name="Cx_m" type="xs:double" minOccurs="0" />
-                <xs:element name="Cy_m" type="xs:double" minOccurs="0" />
-                <xs:element name="Cz_m" type="xs:double" minOccurs="0" />
+                <xs:element name="mass_kg" type="xs:double" minOccurs="0" />
+                <xs:element name="cogx_m" type="xs:double" minOccurs="0" />
+                <xs:element name="cogy_m" type="xs:double" minOccurs="0" />
+                <xs:element name="cogz_m" type="xs:double" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -30,16 +30,16 @@
     </xs:element>
   </xs:schema>
   <Tools>
-    <Name>fred</Name>
-    <x_m>1</x_m>
-    <y_m>2</y_m>
-    <z_m>3</z_m>
-    <rx_m>4</rx_m>
-    <ry_m>5</ry_m>
-    <rz_m>6</rz_m>
-    <Mass_kg>7</Mass_kg>
-    <Cx_m>8</Cx_m>
-    <Cy_m>9</Cy_m>
-    <Cz_m>10</Cz_m>
+    <Name>default</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.175</z_m>
+    <rx_m>0</rx_m>
+    <ry_m>-3.1415926535897931</ry_m>
+    <rz_m>0</rz_m>
+    <mass_kg>2.4</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.08</cogz_m>
   </Tools>
 </NewDataSet>

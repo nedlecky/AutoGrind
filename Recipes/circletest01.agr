@@ -1,0 +1,18 @@
+# Testing
+
+set_speed(0.4)
+set_accel(0.4)
+set_blend(0.003)
+
+select_tool(default)
+
+jump(test)
+end()
+
+#grind_contact_enabled(0)
+
+test:
+grind_flat_circle(80,2)
+grind_flat_circle(40,2)
+grind_flat_circle(20,2)
+grind_flat_circle(10,5)

@@ -38,9 +38,7 @@
          Case 21
            movej_q([command[2], command[3], command[4], command[5], command[6], command[7]])
          Case 30
-           set_speed(command[2])
-         Case 31
-           set_accel(command[2])
+           set_variable()
          Case 40
            pattern_grind()
          Case 50

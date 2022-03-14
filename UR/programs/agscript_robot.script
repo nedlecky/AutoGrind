@@ -7,27 +7,69 @@ global response = "unknown"
 
 global robot_speed = 1.0
 global robot_accel = 1.0
+global robot_blend = 0.001
+global robot_tcp = p[0, 0, 0, 0, 0, 0]
+global robot_mass = 0
+global robot_cog = [0, 0, 0]
 
-# Set speed to s if s<>0. Always returns "speed=[current speed]"
-def set_speed(s):
-  if s > 0:
-    robot_speed = s
+# Set interface... allows validation and limits
+def set_variable():
+  if command[2] == 1:
+    # Set speed to s if s>0. Always returns "speed=[current speed]"
+    s = command[3]
+    if s > 0:
+      robot_speed = s
+    end
+    socket_send_string("robot_speed=")
+    socket_send_string(robot_speed)
+    socket_send_lf()
+    global response = "set_speed()"
+  elif command[2] == 2:
+    # Set accel to a if a>0. Always returns "accel=[current accel]"
+    a = command[3]
+    if a > 0:
+      robot_accel = a
+    end
+    socket_send_string("robot_accel=")
+    socket_send_string(robot_accel)
+    socket_send_lf()
+    global response = "set_accel()"
+  elif command[2] == 3:
+    # Set blend to b if b>=0. Always returns "blend=[current blend]"
+    b = command[3]
+    if b >= 0:
+      robot_blend = b
+    end
+    socket_send_string("robot_blend=")
+    socket_send_string(robot_blend)
+    socket_send_lf()
+    global response = "set_blend()"
+  elif command[2] == 10:
+    # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
+    if command[3] > -10:
+      robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
+      set_tcp(robot_tcp)
+    end
+    return_pose("robot_tcp", get_tcp_offset())
+    global response = "set_tcp()"
+  elif command[2] == 11:
+    # set_payload if command[3] > 0. Always return robot_m and robot_cog
+    if command[3] > 0:
+      robot_mass = command[3]
+      robot_cog = [command[4], command[5], command[6]]
+      set_payload(robot_mass, robot_cog)
+    end
+    socket_send_string("robot_mass=")
+    socket_send_string(robot_mass)
+    socket_send_lf()
+    socket_send_string("robot_cog=")
+    return_vector(robot_cog, 3)
+    socket_send_lf()
+    global response = "set_payload()"
+  else:
+    global response = "set_variable ERROR"
   end
-  socket_send_string("robot_speed=")
-  socket_send_string(robot_speed)
-  socket_send_lf()
-  global response = "set_speed()"
-end
 
-# Set accel to a if a<>0. Always returns "accel=[current accel]"
-def set_accel(a):
-  if a > 0:
-    robot_accel = a
-  end
-  socket_send_string("robot_accel=")
-  socket_send_string(robot_accel)
-  socket_send_lf()
-  global response = "set_accel()"
 end
 
 # Send get_tcp_offset() result to socket
@@ -60,7 +102,7 @@ def movel_relative(p1):
 end
 
 # Change one element of current pose and movel there
-def movel_one_only(index=0, val = 0):
+def movel_one_only(index = 0, val = 0):
   p = get_actual_tcp_pose()
   p[index] = val
   movel(p, robot_accel, robot_speed)
@@ -68,7 +110,7 @@ def movel_one_only(index=0, val = 0):
 end
 
 # Change only rotation elements of current pose and movel there
-def movel_rot_only(r1=0, r2=0, r3=0):
+def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
   p = get_actual_tcp_pose()
   p[3] = r1
   p[4] = r2

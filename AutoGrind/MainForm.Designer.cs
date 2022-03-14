@@ -126,6 +126,12 @@
             this.LoadToolsBtn = new System.Windows.Forms.Button();
             this.SaveToolsBtn = new System.Windows.Forms.Button();
             this.ClearToolsBtn = new System.Windows.Forms.Button();
+            this.RobotBlendLbl = new System.Windows.Forms.Label();
+            this.BlendTxt = new System.Windows.Forms.TextBox();
+            this.SetBlendBtn = new System.Windows.Forms.Button();
+            this.groupBox10 = new System.Windows.Forms.GroupBox();
+            this.ClearExecLogRtbBtn = new System.Windows.Forms.Button();
+            this.ExecLogRTB = new System.Windows.Forms.RichTextBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -144,6 +150,7 @@
             this.groupBox8.SuspendLayout();
             this.groupBox9.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
+            this.groupBox10.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -569,6 +576,8 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.BlendTxt);
+            this.groupBox2.Controls.Add(this.SetBlendBtn);
             this.groupBox2.Controls.Add(this.AccelTxt);
             this.groupBox2.Controls.Add(this.SpeedTxt);
             this.groupBox2.Controls.Add(this.SetAccelBtn);
@@ -579,7 +588,7 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(388, 133);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(239, 230);
+            this.groupBox2.Size = new System.Drawing.Size(239, 261);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
@@ -924,7 +933,7 @@
             this.RobotSpeedLbl.Name = "RobotSpeedLbl";
             this.RobotSpeedLbl.Size = new System.Drawing.Size(86, 44);
             this.RobotSpeedLbl.TabIndex = 90;
-            this.RobotSpeedLbl.Text = "Speed ???";
+            this.RobotSpeedLbl.Text = "Speed\r\n???";
             this.RobotSpeedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RobotAccelLbl
@@ -935,7 +944,7 @@
             this.RobotAccelLbl.Name = "RobotAccelLbl";
             this.RobotAccelLbl.Size = new System.Drawing.Size(86, 44);
             this.RobotAccelLbl.TabIndex = 91;
-            this.RobotAccelLbl.Text = "Accel ???";
+            this.RobotAccelLbl.Text = "Accel\r\n???";
             this.RobotAccelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GrindContactEnabledBtn
@@ -1092,6 +1101,7 @@
             // 
             // logPage
             // 
+            this.logPage.Controls.Add(this.groupBox10);
             this.logPage.Controls.Add(this.groupBox5);
             this.logPage.Controls.Add(this.groupBox4);
             this.logPage.Controls.Add(this.groupBox6);
@@ -1108,9 +1118,9 @@
             this.groupBox5.Controls.Add(this.ClearUrLogRtbBtn);
             this.groupBox5.Controls.Add(this.UrLogRTB);
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox5.Location = new System.Drawing.Point(16, 360);
+            this.groupBox5.Location = new System.Drawing.Point(6, 560);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(813, 386);
+            this.groupBox5.Size = new System.Drawing.Size(813, 281);
             this.groupBox5.TabIndex = 89;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Robot Messages";
@@ -1131,7 +1141,7 @@
             this.UrLogRTB.Location = new System.Drawing.Point(5, 15);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrLogRTB.Name = "UrLogRTB";
-            this.UrLogRTB.Size = new System.Drawing.Size(802, 366);
+            this.UrLogRTB.Size = new System.Drawing.Size(802, 259);
             this.UrLogRTB.TabIndex = 1;
             this.UrLogRTB.Text = "";
             // 
@@ -1140,9 +1150,9 @@
             this.groupBox4.Controls.Add(this.ClearAllLogRtbBtn);
             this.groupBox4.Controls.Add(this.AllLogRTB);
             this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox4.Location = new System.Drawing.Point(16, 10);
+            this.groupBox4.Location = new System.Drawing.Point(6, 10);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(814, 344);
+            this.groupBox4.Size = new System.Drawing.Size(814, 254);
             this.groupBox4.TabIndex = 88;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "All Log Messages";
@@ -1163,7 +1173,7 @@
             this.AllLogRTB.Location = new System.Drawing.Point(6, 20);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.AllLogRTB.Name = "AllLogRTB";
-            this.AllLogRTB.Size = new System.Drawing.Size(801, 319);
+            this.AllLogRTB.Size = new System.Drawing.Size(801, 226);
             this.AllLogRTB.TabIndex = 4;
             this.AllLogRTB.Text = "";
             // 
@@ -1172,9 +1182,9 @@
             this.groupBox6.Controls.Add(this.ClearErrorLogRtbBtn);
             this.groupBox6.Controls.Add(this.ErrorLogRTB);
             this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox6.Location = new System.Drawing.Point(16, 752);
+            this.groupBox6.Location = new System.Drawing.Point(6, 847);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(819, 342);
+            this.groupBox6.Size = new System.Drawing.Size(819, 255);
             this.groupBox6.TabIndex = 84;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Error Messages";
@@ -1195,7 +1205,7 @@
             this.ErrorLogRTB.Location = new System.Drawing.Point(6, 20);
             this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ErrorLogRTB.Name = "ErrorLogRTB";
-            this.ErrorLogRTB.Size = new System.Drawing.Size(801, 307);
+            this.ErrorLogRTB.Size = new System.Drawing.Size(801, 228);
             this.ErrorLogRTB.TabIndex = 0;
             this.ErrorLogRTB.Text = "";
             // 
@@ -1270,11 +1280,74 @@
             this.ClearToolsBtn.UseVisualStyleBackColor = true;
             this.ClearToolsBtn.Click += new System.EventHandler(this.ClearToolsBtn_Click);
             // 
+            // RobotBlendLbl
+            // 
+            this.RobotBlendLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotBlendLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotBlendLbl.Location = new System.Drawing.Point(9, 813);
+            this.RobotBlendLbl.Name = "RobotBlendLbl";
+            this.RobotBlendLbl.Size = new System.Drawing.Size(86, 44);
+            this.RobotBlendLbl.TabIndex = 95;
+            this.RobotBlendLbl.Text = "Blend\r\n???";
+            this.RobotBlendLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // BlendTxt
+            // 
+            this.BlendTxt.Location = new System.Drawing.Point(114, 228);
+            this.BlendTxt.Name = "BlendTxt";
+            this.BlendTxt.Size = new System.Drawing.Size(46, 22);
+            this.BlendTxt.TabIndex = 82;
+            this.BlendTxt.Text = "0.5";
+            // 
+            // SetBlendBtn
+            // 
+            this.SetBlendBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetBlendBtn.Location = new System.Drawing.Point(6, 221);
+            this.SetBlendBtn.Name = "SetBlendBtn";
+            this.SetBlendBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetBlendBtn.TabIndex = 81;
+            this.SetBlendBtn.Text = "Set Blend";
+            this.SetBlendBtn.UseVisualStyleBackColor = false;
+            this.SetBlendBtn.Click += new System.EventHandler(this.SetBlendBtn_Click);
+            // 
+            // groupBox10
+            // 
+            this.groupBox10.Controls.Add(this.ClearExecLogRtbBtn);
+            this.groupBox10.Controls.Add(this.ExecLogRTB);
+            this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox10.Location = new System.Drawing.Point(6, 270);
+            this.groupBox10.Name = "groupBox10";
+            this.groupBox10.Size = new System.Drawing.Size(813, 284);
+            this.groupBox10.TabIndex = 90;
+            this.groupBox10.TabStop = false;
+            this.groupBox10.Text = "Recipe Execution Messages";
+            // 
+            // ClearExecLogRtbBtn
+            // 
+            this.ClearExecLogRtbBtn.Location = new System.Drawing.Point(732, 15);
+            this.ClearExecLogRtbBtn.Name = "ClearExecLogRtbBtn";
+            this.ClearExecLogRtbBtn.Size = new System.Drawing.Size(75, 30);
+            this.ClearExecLogRtbBtn.TabIndex = 80;
+            this.ClearExecLogRtbBtn.Text = "Clear";
+            this.ClearExecLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearExecLogRtbBtn.Click += new System.EventHandler(this.ClearExecLogRtbBtn_Click);
+            // 
+            // ExecLogRTB
+            // 
+            this.ExecLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExecLogRTB.Location = new System.Drawing.Point(5, 15);
+            this.ExecLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.ExecLogRTB.Name = "ExecLogRTB";
+            this.ExecLogRTB.Size = new System.Drawing.Size(802, 264);
+            this.ExecLogRTB.TabIndex = 1;
+            this.ExecLogRTB.Text = "";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1161);
+            this.Controls.Add(this.RobotBlendLbl);
             this.Controls.Add(this.MonitorTab);
             this.Controls.Add(this.GrindContactEnabledBtn);
             this.Controls.Add(this.RobotAccelLbl);
@@ -1317,6 +1390,7 @@
             this.groupBox8.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
+            this.groupBox10.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1420,6 +1494,12 @@
         private System.Windows.Forms.Button LoadToolsBtn;
         private System.Windows.Forms.Button SaveToolsBtn;
         private System.Windows.Forms.Button ClearToolsBtn;
+        private System.Windows.Forms.TextBox BlendTxt;
+        private System.Windows.Forms.Button SetBlendBtn;
+        private System.Windows.Forms.Label RobotBlendLbl;
+        private System.Windows.Forms.GroupBox groupBox10;
+        private System.Windows.Forms.Button ClearExecLogRtbBtn;
+        private System.Windows.Forms.RichTextBox ExecLogRTB;
     }
 }
 

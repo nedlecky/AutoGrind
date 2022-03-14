@@ -1,0 +1,11 @@
+# Testing
+
+set_speed(0.8)
+set_accel(0.9)
+set_blend(0.002)
+
+jump(Testing)
+
+prompt(Testing jumped over me)
+
+Testing:

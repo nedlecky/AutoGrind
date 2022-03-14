@@ -237,7 +237,7 @@ namespace AutoGrind
             if (fForce || runState != s)
             {
                 runState = s;
-                log.Info("SetState({0})", s.ToString());
+                log.Info("EXEC SetState({0})", s.ToString());
 
                 EnterRunState(fEditing);
             }
@@ -382,6 +382,12 @@ namespace AutoGrind
         {
             AllLogRTB.Clear();
         }
+
+        private void ClearExecLogRtbBtn_Click(object sender, EventArgs e)
+        {
+            ExecLogRTB.Clear();
+        }
+
 
         private void ClearUrLogRtbBtn_Click(object sender, EventArgs e)
         {
@@ -889,10 +895,10 @@ namespace AutoGrind
         {
             nLines = RecipeRoRTB.Lines.Count();
             currentLine = 0;
-            log.Info("StartExecutive() nLines={0}", nLines);
+            log.Info("EXEC Starting with nLines={0}", nLines);
             if (!BuildLabelTable())
             {
-                ErrorMessageBox("Error parsing labels from file");
+                ErrorMessageBox("Error parsing labels from recipe.");
                 return false;
 
             }
@@ -974,8 +980,11 @@ namespace AutoGrind
 
         Dictionary<string, string> robotAlias = new Dictionary<string, string>
         {
-            {"speed",                 "30"},
-            {"accel",                 "31" },
+            {"set_speed",             "30,1"},
+            {"set_accel",             "30,2" },
+            {"set_blend",             "30,3" },
+            {"set_tcp",               "30,10" },
+            {"set_payload",           "30,11" },
             {"grind_contact_enabled", "40,1" },
             {"grind_flat_rect",       "40,10" },
             {"grind_cyl_rect",        "40,20" },
@@ -985,13 +994,14 @@ namespace AutoGrind
             {"grind_flat_circle",     "40,50" },
             {"grind_flat_spiral",     "40,60" },
         };
-        private void LogInterpret(string command, string line)
+        private void LogInterpret(string command, int lineNumber, string line)
         {
-            log.Info("EXEC {0:0000}: [{1}] {2}", currentLine, command.ToUpper(), line);
+            log.Info("EXEC {0:0000}: [{1}] {2}", lineNumber, command.ToUpper(), line);
         }
-        private bool ExecuteLine(string line)
+        private bool ExecuteLine(int lineNumber, string line)
         {
             CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line);
+            string origLine = line;
 
             // 1) Ignore comments: drop anything from # onward in the line
             int index = line.IndexOf("#");
@@ -1004,13 +1014,14 @@ namespace AutoGrind
             // Skip blank lines or lines that previously had only comments
             if (command.Length < 1)
             {
+                log.Info("EXEC {0:0000}: [REM] {1}", lineNumber, origLine);
                 return true;
             }
 
             // = (assignment)
             if (command.Contains("="))
             {
-                LogInterpret("assignment", command);
+                LogInterpret("assign", lineNumber, command);
                 WriteVariable(command);
                 return true;
             }
@@ -1018,14 +1029,14 @@ namespace AutoGrind
             // Is line a label? If so, we ignore it!
             if (IsLineALabel(command).Success)
             {
-                LogInterpret("LABEL", command);
+                LogInterpret("label", lineNumber, command);
                 return true;
             }
 
             // clear
             if (command == "clear()")
             {
-                LogInterpret("clear", command);
+                LogInterpret("clear", lineNumber, command);
                 ClearVariablesBtn_Click(null, null);
                 return true;
             }
@@ -1033,7 +1044,7 @@ namespace AutoGrind
             // import filename?
             if (command.StartsWith("import("))
             {
-                LogInterpret("import", command);
+                LogInterpret("import", lineNumber, command);
                 string file = ExtractParameters(command);
                 if (file.Length > 1)
                 {
@@ -1054,15 +1065,14 @@ namespace AutoGrind
                 int jumpLine;
                 if (labels.TryGetValue(labelName, out jumpLine))
                 {
-                    log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", currentLine, command, jumpLine);
+                    log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", lineNumber, command, jumpLine);
                     currentLine = jumpLine;
                     return true;
                 }
                 else
                 {
-                    log.Error("Unknown Label specified in jump Line {0} Exec: {1}", currentLine, command);
-                    messageForm = new MessageForm("Illegal Jump Command", "Illegal Recipe line: " + command);
-                    messageForm.ShowDialog();
+                    log.Error("Unknown Label specified in jump Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator("Illegal Jump Command: " + command);
                     return true;
                 }
             }
@@ -1070,32 +1080,44 @@ namespace AutoGrind
             // end
             if (command == "end()")
             {
-                LogInterpret("end", command);
+                LogInterpret("end", lineNumber, command);
                 return false;
             }
 
             // home
             if (command == "home()")
             {
-                LogInterpret("home", command);
+                LogInterpret("home", lineNumber, command);
                 GotoHomeBtn_Click(null, null);
                 return true;
             }
 
             // toolchange
-            if (command.StartsWith("toolchange("))
+            if (command.StartsWith("select_tool("))
             {
-                LogInterpret("toolchange", command);
-                GotoToolChangeBtn_Click(null, null);
-                messageForm = new MessageForm("Tool Change Prompt", "Please install tool for: " + command);
-                messageForm.ShowDialog();
+                LogInterpret("select_tool", lineNumber, command);
+                DataRow row = FindTool(ExtractParameters(command));
+                if (row == null)
+                {
+                    log.Error("Unknown tool specified in Exec: {0.000} {1}", lineNumber, command);
+                    PromptOperator("Illegal select_tool command: " + command);
+                    return true;
+                }
+                else
+                {
+                    GotoToolChangeBtn_Click(null, null);
+                    ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_m"], row["ry_m"], row["rz_m"]));
+                    ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
+                    messageForm = new MessageForm("Tool Change Prompt", "Please install tool for: " + command);
+                    messageForm.ShowDialog();
+                }
                 return true;
             }
 
             // prompt
             if (command.StartsWith("prompt("))
             {
-                LogInterpret("prompt", command);
+                LogInterpret("prompt", lineNumber, command);
                 // This just displays the dialog. ExecTmr will wait for it to close
                 PromptOperator(ExtractParameters(command));
                 return true;
@@ -1104,7 +1126,7 @@ namespace AutoGrind
             // sendrobot
             if (command.StartsWith("sendrobot("))
             {
-                LogInterpret("sendrobot", command);
+                LogInterpret("sendrobot", lineNumber, command);
                 robotServer.Send("(" + ExtractParameters(command) + ")");
                 return true;
             }
@@ -1122,13 +1144,13 @@ namespace AutoGrind
                 string commandToRobot;
                 if (robotAlias.TryGetValue(commandInRecipe, out commandToRobot))
                 {
-                    LogInterpret(commandInRecipe, command);
+                    LogInterpret(commandInRecipe, lineNumber, command);
                     robotServer.Send("(" + commandToRobot + "," + ExtractParameters(command) + ")");
                     return true;
                 }
             }
 
-            log.Error("Unknown Command Line {0} Exec: {1}", currentLine, command);
+            log.Error("Unknown Command Line {0} Exec: {1}", lineNumber, command);
             messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);
             messageForm.ShowDialog();
             return true;
@@ -1178,11 +1200,12 @@ namespace AutoGrind
                     // Resets such that the above log messages will happen
                     logFilter = 3;
                     string line = RecipeRoRTB.Lines[currentLine];
-                    bool fContinue = ExecuteLine(line);
+                    bool fContinue = ExecuteLine(currentLine, line);
                     currentLine++;
 
                     if (!fContinue || currentLine >= nLines)
                     {
+                        log.Info("EXEC Reached end of file");
                         SetState(RunState.READY);
                     }
                 }
@@ -1257,6 +1280,15 @@ namespace AutoGrind
                 }
         }
 
+
+        private void SetBlendBtn_Click(object sender, EventArgs e)
+        {
+            if (robotServer != null)
+                if (robotServer.IsConnected())
+                {
+                    robotServer.Send("(32," + BlendTxt.Text + ")");
+                }
+        }
 
 
         /// <summary>
@@ -1417,6 +1449,10 @@ namespace AutoGrind
                     RobotAccelLbl.Text = "Accel\n" + valueTrimmed;
                     AccelTxt.Text = valueTrimmed;
                     break;
+                case "robot_blend":
+                    RobotBlendLbl.Text = "Blend\n" + valueTrimmed;
+                    BlendTxt.Text = valueTrimmed;
+                    break;
                 case "grind_contact_enabled":
                     GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
@@ -1542,7 +1578,7 @@ namespace AutoGrind
 
         private void ClearAllVariablesBtn_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INLUDING system variables. Proceed?"))
+            if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INCLUDING system variables. Proceed?"))
                 ClearAndInitializeVariables();
         }
 
@@ -1565,12 +1601,13 @@ namespace AutoGrind
             tools.Columns.Add("rx_m", typeof(System.Double));
             tools.Columns.Add("ry_m", typeof(System.Double));
             tools.Columns.Add("rz_m", typeof(System.Double));
-            tools.Columns.Add("Mass_kg", typeof(System.Double));
-            tools.Columns.Add("Cx_m", typeof(System.Double));
-            tools.Columns.Add("Cy_m", typeof(System.Double));
-            tools.Columns.Add("Cz_m", typeof(System.Double));
+            tools.Columns.Add("mass_kg", typeof(System.Double));
+            tools.Columns.Add("cogx_m", typeof(System.Double));
+            tools.Columns.Add("cogy_m", typeof(System.Double));
+            tools.Columns.Add("cogz_m", typeof(System.Double));
             tools.CaseSensitive = true;
             tools.PrimaryKey = new DataColumn[] { name };
+
             ToolsGrd.DataSource = tools;
         }
         private void LoadToolsBtn_Click(object sender, EventArgs e)
@@ -1604,8 +1641,26 @@ namespace AutoGrind
         private void ClearToolsBtn_Click(object sender, EventArgs e)
         {
             if (DialogResult.Yes == ConfirmMessageBox("This will clear all tools. Proceed?"))
+            {
+
                 ClearAndInitializeTools();
+                tools.Rows.Add(new object[] { "default", 0, 0, 0.175, 0, -Math.PI, 0, 2.4, 0, 0, 0.080 });
+            }
         }
+
+        private DataRow FindTool(string name)
+        {
+            foreach (DataRow row in tools.Rows)
+            {
+                if ((string)row["Name"] == name)
+                {
+                    log.Trace("FindTool({0}) = {1}", row["Name"], row.ToString());
+                    return row;
+                }
+            }
+            return null;
+        }
+
 
         // ===================================================================
         // END TOOL SYSTEM
