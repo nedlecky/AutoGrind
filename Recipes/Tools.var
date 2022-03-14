@@ -1,0 +1,45 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="Tools" msdata:CaseSensitive="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="Tools" msdata:CaseSensitive="True">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Name" type="xs:string" />
+                <xs:element name="x_m" type="xs:double" minOccurs="0" />
+                <xs:element name="y_m" type="xs:double" minOccurs="0" />
+                <xs:element name="z_m" type="xs:double" minOccurs="0" />
+                <xs:element name="rx_m" type="xs:double" minOccurs="0" />
+                <xs:element name="ry_m" type="xs:double" minOccurs="0" />
+                <xs:element name="rz_m" type="xs:double" minOccurs="0" />
+                <xs:element name="Mass_kg" type="xs:double" minOccurs="0" />
+                <xs:element name="Cx_m" type="xs:double" minOccurs="0" />
+                <xs:element name="Cy_m" type="xs:double" minOccurs="0" />
+                <xs:element name="Cz_m" type="xs:double" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+      <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//Tools" />
+        <xs:field xpath="Name" />
+      </xs:unique>
+    </xs:element>
+  </xs:schema>
+  <Tools>
+    <Name>fred</Name>
+    <x_m>1</x_m>
+    <y_m>2</y_m>
+    <z_m>3</z_m>
+    <rx_m>4</rx_m>
+    <ry_m>5</ry_m>
+    <rz_m>6</rz_m>
+    <Mass_kg>7</Mass_kg>
+    <Cx_m>8</Cx_m>
+    <Cy_m>9</Cy_m>
+    <Cz_m>10</Cz_m>
+  </Tools>
+</NewDataSet>

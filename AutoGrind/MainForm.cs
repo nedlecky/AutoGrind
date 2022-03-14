@@ -30,8 +30,10 @@ namespace AutoGrind
         private static NLog.Logger log;
         static SplashForm splashForm;
         TcpServer robotServer = null;
-        static DataTable variables;
         MessageForm messageForm = null;
+
+        static DataTable variables;
+        static DataTable tools;
 
         private enum RunState
         {
@@ -104,7 +106,7 @@ namespace AutoGrind
 
             RobotConnectBtn_Click(null, null);
 
-            // Load thge last recipe if there was one loaded in LoadPersistent()
+            // Load the last recipe if there was one loaded in LoadPersistent()
             if (recipeFileToAutoload != "")
                 if (LoadRecipeFile(recipeFileToAutoload))
                 {
@@ -652,6 +654,9 @@ namespace AutoGrind
             DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
             AngleLbl.Text = (string)AppNameKey.GetValue("AngleLbl.Text", "0.000");
 
+            // Also load the tools table
+            LoadToolsBtn_Click(null, null);
+
             // Also load the variables table
             LoadVariablesBtn_Click(null, null);
 
@@ -681,6 +686,9 @@ namespace AutoGrind
             // From Grind Tab
             AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
             AppNameKey.SetValue("AngleLbl.Text", AngleLbl.Text);
+
+            // Also save the tools table
+            SaveToolsBtn_Click(null, null);
 
             // Also save the variables table
             SaveVariablesBtn_Click(null, null);
@@ -791,10 +799,6 @@ namespace AutoGrind
             RecordPosition("Set Right End of Cylinder", "right_cylinder_end_q");
         }
 
-        private void SetDomeBtn_Click(object sender, EventArgs e)
-        {
-            RecordPosition("Set Dome Top", "dome_top_q");
-        }
         private void SetHomeBtn_Click(object sender, EventArgs e)
         {
             RecordPosition("Set Home Position", "home_q");
@@ -813,11 +817,6 @@ namespace AutoGrind
         private void GotoRightBtn_Click(object sender, EventArgs e)
         {
             GotoPosition("right_cylinder_end_q");
-        }
-
-        private void GotoDomeBtn_Click(object sender, EventArgs e)
-        {
-            GotoPosition("dome_top_q");
         }
 
         private void GotoHomeBtn_Click(object sender, EventArgs e)
@@ -1549,6 +1548,67 @@ namespace AutoGrind
 
         // ===================================================================
         // END VARIABLE SYSTEM
+        // ===================================================================
+
+        // ===================================================================
+        // START TOOL SYSTEM
+        // ===================================================================
+
+        readonly string toolsFilename = "Tools.var";
+        private void ClearAndInitializeTools()
+        {
+            tools = new DataTable("Tools");
+            DataColumn name = tools.Columns.Add("Name", typeof(System.String));
+            tools.Columns.Add("x_m", typeof(System.Double));
+            tools.Columns.Add("y_m", typeof(System.Double));
+            tools.Columns.Add("z_m", typeof(System.Double));
+            tools.Columns.Add("rx_m", typeof(System.Double));
+            tools.Columns.Add("ry_m", typeof(System.Double));
+            tools.Columns.Add("rz_m", typeof(System.Double));
+            tools.Columns.Add("Mass_kg", typeof(System.Double));
+            tools.Columns.Add("Cx_m", typeof(System.Double));
+            tools.Columns.Add("Cy_m", typeof(System.Double));
+            tools.Columns.Add("Cz_m", typeof(System.Double));
+            tools.CaseSensitive = true;
+            tools.PrimaryKey = new DataColumn[] { name };
+            ToolsGrd.DataSource = tools;
+        }
+        private void LoadToolsBtn_Click(object sender, EventArgs e)
+
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", toolsFilename);
+            log.Info("LoadTools from {0}", filename);
+            ClearAndInitializeTools();
+            try
+            {
+                tools.ReadXml(filename);
+
+            }
+            catch
+            { }
+
+            ToolsGrd.DataSource = tools;
+            foreach (DataGridViewColumn col in ToolsGrd.Columns)
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+
+        private void SaveToolsBtn_Click(object sender, EventArgs e)
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", toolsFilename);
+            log.Info("SaveTools to {0}", filename);
+            tools.AcceptChanges();
+            tools.WriteXml(filename, XmlWriteMode.WriteSchema, true);
+        }
+
+        private void ClearToolsBtn_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.Yes == ConfirmMessageBox("This will clear all tools. Proceed?"))
+                ClearAndInitializeTools();
+        }
+
+        // ===================================================================
+        // END TOOL SYSTEM
         // ===================================================================
     }
 }
