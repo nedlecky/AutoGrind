@@ -980,19 +980,29 @@ namespace AutoGrind
 
         Dictionary<string, string> robotAlias = new Dictionary<string, string>
         {
+            // SETTINGS
             {"set_speed",             "30,1"},
             {"set_accel",             "30,2" },
             {"set_blend",             "30,3" },
             {"set_tcp",               "30,10" },
             {"set_payload",           "30,11" },
             {"grind_contact_enabled", "40,1" },
+
+            // RECTANGLUR GRINDS
             {"grind_flat_rect",       "40,10" },
-            {"grind_cyl_rect",        "40,20" },
-            {"grind_sphere_rect",     "40,25" },
-            {"grind_flat_serp",       "40,30" },
-            {"grind_cyl_serp",        "40,40" },
-            {"grind_flat_circle",     "40,50" },
-            {"grind_flat_spiral",     "40,60" },
+            {"grind_cyl_rect",        "40,11" },
+            {"grind_sphere_rect",     "40,12" },
+
+            // SERPENTINE GRINDS
+            {"grind_flat_serp",       "40,20" },
+            {"grind_cyl_serp",        "40,21" },
+
+            // CIRCLAR GRINDS
+            {"grind_flat_circle",     "40,30" },
+            {"grind_sphere_circle",   "40,31" },
+
+            // SPIRAL GRINDS
+            {"grind_flat_spiral",     "40,40" },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {

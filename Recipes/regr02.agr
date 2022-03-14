@@ -1,14 +1,33 @@
 # Regr02
 # General grinding tests
 
-speed(1.0)
-accel(1.0)
+#set_tool(default)
+set_speed(0.4)
+set_accel(0.4)
+set_blend(0.003)
 
+jump(final)
+
+# FLAT GRINDS
 # grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
 grind_flat_rect(40,80,2)
 grind_flat_rect(20,40,3)
 #grind_flat_rect(5,5,4)
 
+# grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
+grind_flat_serp(100,50,100,10,3)
+grind_flat_serp(100,50,10,50,3)
+#grind_flat_serp(100,50,10,50,2)
+
+# grind_flat_circle(dx_mm, n_cycles)
+grind_flat_circle(60,3)
+grind_flat_circle(40,3)
+
+# grind_flat_spiral(grind_dx_mm, grind_dx2_mm, grind_n_spirals, grind_n_cycles)
+grind_flat_spiral(60,20,5,4)
+
+
+# CYLINDRICAL GRINDS
 # grind_cyl_rect(grind_dx_mm, grind_dr_mm, grind_radius_mm, grind_n_cycles)
 grind_cyl_rect(60,40,100,2)
 grind_cyl_rect(60,40,200,2)
@@ -18,20 +37,20 @@ grind_cyl_rect(60,40,200,2)
 ##grind_cyl_rect(60,40,2000,2) # Crashes for radius too large??
 #grind_cyl_rect(20,10,200,3)
 
-# grind_flat_serp(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
-grind_flat_serp(100,50,100,10,3)
-grind_flat_serp(100,50,10,50,3)
-#grind_flat_serp(100,50,10,50,2)
+# grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles)
+grind_cyl_serp(20,20,20,4,300,2)
+grind_cyl_serp(20,20,4,20,300,2)
 
-#grind_cyl_serp(dx_mm, dr_mm, xstep_mm, rstep_mm, radius_mm, n_cycles)
-#
+doit:
+# SPHERE
+# grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycle
+grind_sphere_rect(30,30,200,3)
+grind_sphere_rect(30,30,400,3)
 
-#grind_flat_circle(dx_mm, n_cycles)
-grind_flat_circle(60,3)
-grind_flat_circle(40,3)
+final:
+# grind_sphere_circle(grind_dx_mm, grind_radius_mm, grind_n_cycles)
+grind_sphere_circle(30, 300, 2)
+grind_sphere_circle(40, 400, 2)
 
-#grind_flat_spiral(grind_dx_mm, grind_dx2_mm, grind_n_spirals, grind_n_cycles)
-grind_flat_spiral(60,20,5,4)
 
-#grind_sphere_rect(dx_mm, dy_mm, radius_mm, n_cycle
-grind_sphere_rect(30,30,200,3):
+

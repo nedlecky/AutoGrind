@@ -9,7 +9,7 @@ global haltCount = 0
 global haltCommand = [0, 0]
 
 # TODO this should come from the TCP selected for the current tool
-global tool_length_m = 0.100
+global tool_length_m = 0.175
 
 global grind_ready = True
 global grind_contact_enabled = False
@@ -122,27 +122,31 @@ def pattern_grind():
       global grind_contact_enabled = False
       socket_send_line("grind_contact_enabled=False")
     end
+
+  # RECTANGLAR GRINDS
   elif command[2] == 10:
     global response = "grind_flat_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_n_cycles = command[5]
     grind_flat_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
-  elif command[2] == 20:
+  elif command[2] == 11:
     global response = "grind_cyl_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_radius_mm = command[5]
     global grind_n_cycles = command[6]
     grind_cyl_rect(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
-  elif command[2] == 25:
+  elif command[2] == 12:
     global response = "grind_sphere_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_radius_mm = command[5]
     global grind_n_cycles = command[6]
     grind_sphere_rect(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
-  elif command[2] == 30:
+
+  # SERPENTINE GRINDS
+  elif command[2] == 20:
     global response = "grind_flat_serp"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -150,7 +154,7 @@ def pattern_grind():
     global grind_ystep_mm = command[6]
     global grind_n_cycles = command[7]
     grind_flat_serp(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
-  elif command[2] == 40:
+  elif command[2] == 21:
     global response = "grind_cyl_serp"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -159,12 +163,23 @@ def pattern_grind():
     global grind_radius_mm = command[7]
     global grind_n_cycles = command[8]
     grind_cyl_serp(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_radius_mm, grind_n_cycles)
-  elif command[2] == 50:
+
+  # CIRCULAR GRINDS
+  elif command[2] == 30:
     global response = "grind_flat_circle"
     global grind_dx_mm = command[3]
     global grind_n_cycles = command[4]
     grind_flat_circle(grind_dx_mm, grind_n_cycles)
-  elif command[2] == 60:
+  elif command[2] == 31:
+    global response = "grind_sphere_circle"
+    global grind_dx_mm = command[3]
+    global grind_dy_mm = command[4]
+    global grind_radius_mm = command[5]
+    global grind_n_cycles = command[6]
+    grind_sphere_circle(grind_dx_mm, grind_radius_mm, grind_n_cycles)
+
+  # SPIRAL GRINDS
+  elif command[2] == 40:
     global response = "grind_flat_spiral"
     global grind_dx_mm = command[3]
     global grind_dx2_mm = command[4]
@@ -560,6 +575,59 @@ def grind_flat_circle(dx_mm, n_cycles):
       y = radius_m * sin(theta)
 
       p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
+      movel(p1, a=robot_accel, v=robot_speed, r=robot_blend)
+      i = i + 1
+    end
+
+    grind_cycle = grind_cycle + 1
+  end
+
+  set_grinding_state(False)
+
+  # Return robot back to initial position
+  movel(p0, a=robot_accel, v=robot_speed)
+  return True
+end
+
+# Grind along a shperical circle diam dx_mm centered on current tool position. Repeat n_cycles times.
+def grind_sphere_circle(dx_mm, sphere_radius_mm, n_cycles):
+  if n_cycles < 1:
+    return True
+  end
+
+  # Unit conversion
+  dx_m = dx_mm / 1000.0
+  n_points = ceil(dx_mm * 1.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
+  radius_m = dx_m / 2          # Circle radius is half of specified dx
+  sphere_radius_m = sphere_radius_mm / 1000
+
+  # Find initial position p0
+  set_tcp(p[0, 0, tool_length_m + sphere_radius_m, 0, 0, 0])  #
+  p0 = get_actual_tcp_pose()
+
+  # Move to offset position east edge of circle
+  p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
+  movel(p1, a=robot_accel, v=robot_speed)
+
+  if not set_grinding_state(True):
+    movel(p0, a=robot_accel, v=robot_speed)
+    return False
+  end
+
+  # Grind circle pattern
+  # We're in contact at east side... compute where contact position would be at center of circle
+  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
+  global grind_cycle = 1
+  while (ok_to_proceed() and grind_cycle <= n_cycles):
+    i = 1
+    while ok_to_proceed() and i <= n_points:
+      theta = d2r(360.0 * i / n_points)
+      x = radius_m * cos(theta)
+      rx = x / sphere_radius_m
+      y = radius_m * sin(theta)
+      ry = y / sphere_radius_m
+
+      p1 = pose_trans(p_center, p[0, 0, 0, rx, ry, 0])
       movel(p1, a=robot_accel, v=robot_speed, r=robot_blend)
       i = i + 1
     end
