@@ -1108,7 +1108,7 @@ namespace AutoGrind
             }
 
             // jump_gt_zero
-            if (command.StartsWith("jump_not_zero("))
+            if (command.StartsWith("jump_gt_zero("))
             {
                 string[] parameters = ExtractParameters(command).Split(',');
                 bool wasSuccessful = false;

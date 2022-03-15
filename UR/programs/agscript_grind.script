@@ -20,10 +20,7 @@ def contact_part(on = False, enabled = False):
   if on:
     if enabled:
       # Advance until contact
-
-
-
-      return True
+      return touchoff()
     else:
       # Simulated....
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0.010, 0, 0, 0])
@@ -617,7 +614,7 @@ def grind_circle_sphere(dx_mm, sphere_radius_mm, n_cycles):
   p0 = get_actual_tcp_pose()
 
   # Move to offset position east edge of circle
-  p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
+  p1 = pose_trans(get_forward_kin(), p[0, 0, 0, radius_m / sphere_radius_m, 0, 0])
   movel(p1, a = robot_accel, v = robot_speed)
 
   if not set_grinding_state(True):
@@ -627,7 +624,7 @@ def grind_circle_sphere(dx_mm, sphere_radius_mm, n_cycles):
 
   # Grind circle pattern
   # We're in contact at east side... compute where contact position would be at center of circle
-  p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
+  p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -radius_m / sphere_radius_m, 0, 0])
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     i = 1
