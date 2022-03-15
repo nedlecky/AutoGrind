@@ -251,6 +251,7 @@ namespace AutoGrind
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
+                    ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = false;
@@ -264,6 +265,7 @@ namespace AutoGrind
                     GrindBtn.Enabled = true;
                     EditBtn.Enabled = true;
                     SetupBtn.Enabled = true;
+                    ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
                     LoadBtn.Enabled = true;
                     StartBtn.Enabled = true;
@@ -277,6 +279,7 @@ namespace AutoGrind
                     GrindBtn.Enabled = false;
                     EditBtn.Enabled = false;
                     SetupBtn.Enabled = false;
+                    ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
                     LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
@@ -285,19 +288,15 @@ namespace AutoGrind
                     StopBtn.Enabled = true;
                     CurrentLineLbl.Text = "";
 
-                    if (StartExecutive())
-                    {
-                        ExecTmr.Interval = 100;
-                        ExecTmr.Enabled = true;
-                    }
-                    else
-                        SetState(RunState.READY);
+                    ExecTmr.Interval = 100;
+                    ExecTmr.Enabled = true;
 
                     break;
                 case RunState.PAUSED:
                     GrindBtn.Enabled = false;
                     EditBtn.Enabled = false;
                     SetupBtn.Enabled = false;
+                    ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
                     LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
@@ -319,6 +318,7 @@ namespace AutoGrind
                 GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
                 EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
                 SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
+                ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
             }
 
             JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
@@ -359,6 +359,12 @@ namespace AutoGrind
         {
             System.Diagnostics.Process.Start("osk.exe");
         }
+
+        private void ExitBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
 
         private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
         // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
@@ -432,12 +438,18 @@ namespace AutoGrind
                 var result = ConfirmMessageBox("Robot not connected. Run anyway?");
                 if (result != DialogResult.Yes) return;
             }
-            SetState(RunState.RUNNING);
+
+            SetCurrentLine(-1);
+            if (!BuildLabelTable())
+                ErrorMessageBox("Error parsing labels from recipe.");
+            else
+                SetState(RunState.RUNNING);
         }
 
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn_Click(...)");
+            robotServer.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.PAUSED);
         }
 
@@ -450,13 +462,10 @@ namespace AutoGrind
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
+            robotServer.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.READY);
         }
-        private void HaltRobotBtn_Click(object sender, EventArgs e)
-        {
-            log.Error("UR HaltRobotBtn_Click(...)");
-            robotServer.Send("(10)");
-        }
+
 
         // ===================================================================
         // END GRIND
@@ -889,19 +898,29 @@ namespace AutoGrind
 
             return true;
         }
-        static int currentLine = 0;
-        static int nLines = 0;
+
+        /// <summary>
+        /// Set the lineCurrentlyExecuting to n and highlight it in the RecipRoRTB
+        /// </summary>
+        /// <param name="n">Line number to start executing</param>
+        private void SetCurrentLine(int n)
+        {
+            lineCurrentlyExecuting = n;
+
+            if (n >= 0 && n < RecipeRTB.Lines.Count())
+            {
+                int start = RecipeRoRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
+                int length = RecipeRoRTB.Lines[lineCurrentlyExecuting].Length;
+                //RecipeRoRTB.Select(start,0);
+                //RecipeRoRTB.ScrollToCaret();
+                RecipeRoRTB.Select(start, length);
+            }
+        }
+
+
+        static int lineCurrentlyExecuting = 0;
         private bool StartExecutive()
         {
-            nLines = RecipeRoRTB.Lines.Count();
-            currentLine = 0;
-            log.Info("EXEC Starting with nLines={0}", nLines);
-            if (!BuildLabelTable())
-            {
-                ErrorMessageBox("Error parsing labels from recipe.");
-                return false;
-
-            }
             return true;
         }
 
@@ -981,28 +1000,28 @@ namespace AutoGrind
         Dictionary<string, string> robotAlias = new Dictionary<string, string>
         {
             // SETTINGS
-            {"set_speed",             "30,1"},
-            {"set_accel",             "30,2" },
-            {"set_blend",             "30,3" },
-            {"set_tcp",               "30,10" },
-            {"set_payload",           "30,11" },
-            {"grind_contact_enabled", "40,1" },
+            {"set_speed",                   "30,1"  },
+            {"set_accel",                   "30,2"  },
+            {"set_blend",                   "30,3"  },
+            {"set_tcp",                     "30,10" },
+            {"set_payload",                 "30,11" },
+            {"grind_contact_enabled",       "40,1"  },
 
             // RECTANGLUR GRINDS
-            {"grind_flat_rect",       "40,10" },
-            {"grind_cyl_rect",        "40,11" },
-            {"grind_sphere_rect",     "40,12" },
+            {"grind_rect_flat",             "40,10" },
+            {"grind_rect_cylinder",         "40,11" },
+            {"grind_rect_sphere",           "40,12" },
 
             // SERPENTINE GRINDS
-            {"grind_flat_serp",       "40,20" },
-            {"grind_cyl_serp",        "40,21" },
+            {"grind_serpentine_flat",       "40,20" },
+            {"grind_serpentine_cylinder",   "40,21" },
 
             // CIRCLAR GRINDS
-            {"grind_flat_circle",     "40,30" },
-            {"grind_sphere_circle",   "40,31" },
+            {"grind_circle_flat",           "40,30" },
+            {"grind_circle_sphere",         "40,31" },
 
             // SPIRAL GRINDS
-            {"grind_flat_spiral",     "40,40" },
+            {"grind_spiral_flat",           "40,40" },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1010,7 +1029,7 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
-            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", currentLine, line);
+            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", lineCurrentlyExecuting, line);
             string origLine = line;
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -1076,7 +1095,7 @@ namespace AutoGrind
                 if (labels.TryGetValue(labelName, out jumpLine))
                 {
                     log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", lineNumber, command, jumpLine);
-                    currentLine = jumpLine;
+                    SetCurrentLine(jumpLine);
                     return true;
                 }
                 else
@@ -1209,14 +1228,21 @@ namespace AutoGrind
                 {
                     // Resets such that the above log messages will happen
                     logFilter = 3;
-                    string line = RecipeRoRTB.Lines[currentLine];
-                    bool fContinue = ExecuteLine(currentLine, line);
-                    currentLine++;
-
-                    if (!fContinue || currentLine >= nLines)
+                    if (lineCurrentlyExecuting+1 >= RecipeRoRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
                         SetState(RunState.READY);
+                    }
+                    else
+                    {
+                        SetCurrentLine(lineCurrentlyExecuting + 1);
+                        string line = RecipeRoRTB.Lines[lineCurrentlyExecuting];
+                        bool fContinue = ExecuteLine(lineCurrentlyExecuting, line);
+                        if (!fContinue)
+                        {
+                            log.Info("EXEC Aborting execution");
+                            SetState(RunState.READY);
+                        }
                     }
                 }
             }
@@ -1670,7 +1696,6 @@ namespace AutoGrind
             }
             return null;
         }
-
 
         // ===================================================================
         // END TOOL SYSTEM
