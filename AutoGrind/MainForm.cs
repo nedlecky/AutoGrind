@@ -1768,7 +1768,7 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "default", 0, 0, 0.175, 0, -Math.PI, 0, 2.4, 0, 0, 0.080 });
+                tools.Rows.Add(new object[] { "default", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050 });
             }
         }
 

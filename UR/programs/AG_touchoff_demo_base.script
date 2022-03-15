@@ -1,21 +1,14 @@
-def AG_touchoff_demo():
+def AG_touchoff_demo_base():
+  set_gravity([0.0, 0.0, 9.82])
   set_safety_mode_transition_hardness(1)
-  set_tcp(p[0.0,0.0,0.175,3.1416,0.0,0.0])
-  set_payload(2.0)
-  step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = 0.0
-  thread Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018():
+  step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c = 0.0
+  thread Step_Counter_Thread_0a05c531_3290_445a_98b8_a797716a237b():
     while (True):
-      step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 + 1.0
+      step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c = step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c + 1.0
       sync()
     end
   end
-  run Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018()
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  set_gravity([0.0, 0.0, 9.82])
+  run Step_Counter_Thread_0a05c531_3290_445a_98b8_a797716a237b()
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -23,6 +16,13 @@ def AG_touchoff_demo():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_tcp(p[0.0,0.0,0.175,3.1416,0.0,0.0])
+  set_payload(2.0)
   def calculate_point_to_move_towards(feature, direction, position_distance):
     local posDir=[direction[0], direction[1], direction[2]]
     if (norm(posDir) < 1e-6):

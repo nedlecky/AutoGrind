@@ -1,0 +1,85 @@
+def AG_touchoff_demo_tcp():
+  set_gravity([0.0, 0.0, 9.82])
+  set_safety_mode_transition_hardness(1)
+  step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c = 0.0
+  thread Step_Counter_Thread_0a05c531_3290_445a_98b8_a797716a237b():
+    while (True):
+      step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c = step_count_fa94237b_a899_4fd3_ac43_f234bcf0b72c + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_0a05c531_3290_445a_98b8_a797716a237b()
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
+  set_payload(1.0, [0.0, 0.0, 0.05])
+  def calculate_point_to_move_towards(feature, direction, position_distance):
+    local posDir=[direction[0], direction[1], direction[2]]
+    if (norm(posDir) < 1e-6):
+      return get_target_waypoint()
+    end
+    local direction_vector_normalized=normalize(posDir)
+    local displacement_pose=p[direction_vector_normalized[0] * position_distance,direction_vector_normalized[1] * position_distance,direction_vector_normalized[2] * position_distance,0,0,0]
+    local wanted_displacement_in_base_frame=pose_sub(pose_trans(feature, displacement_pose), feature)
+    return pose_add(get_target_waypoint(), wanted_displacement_in_base_frame)
+  end
+  $ 1 "BeforeStart"
+  $ 2 "start_p≔get_actual_tcp_pose()"
+  global start_p= get_actual_tcp_pose ()
+  $ 3 "MoveJ"
+  $ 4 "start_p" "breakAfter"
+  movej(start_p, a=1.3962634015954636, v=1.0471975511965976)
+  $ 7 "Robot Program"
+  $ 8 "MoveL"
+  $ 9 "Direction: Tool Z+"
+  global move_thread_flag_9=0
+  thread move_thread_9():
+    enter_critical
+    move_thread_flag_9 = 1
+    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,1.0], 0.025)
+    movel(towardsPos, a=0.5, v=0.02)
+    move_thread_flag_9 = 2
+    exit_critical
+  end
+  move_thread_flag_9 = 0
+  move_thread_han_9 = run move_thread_9()
+  while (True):
+    local targetTcpDirection=get_target_tcp_speed()
+    local stepsToRetract=tool_contact(direction=targetTcpDirection)
+    if (stepsToRetract > 0):
+      kill move_thread_han_9
+      stopl(1.0)
+      local backTrackMovement=get_actual_joint_positions_history(stepsToRetract)
+      local contactPose=get_forward_kin(backTrackMovement)
+      local posDir=[targetTcpDirection[0],targetTcpDirection[1],targetTcpDirection[2]]
+      local retractTo=contactPose
+      if (norm(posDir) > 1e-6):
+        local normalizedPosDir=normalize(posDir)
+        local additionalRetraction=p[normalizedPosDir[0] * 0.001, normalizedPosDir[1] * 0.001, normalizedPosDir[2] * 0.001, 0, 0, 0]
+        retractTo = pose_sub(contactPose, additionalRetraction)
+      end
+      movel(retractTo, a=1.0, v=0.1)
+      $ 10 "Until (tool_contact_detection)"
+      break
+    end
+    sleep(1.0E-10)
+    if (move_thread_flag_9 > 1):
+      join move_thread_han_9
+      $ 11 "Until (distance)"
+      $ 12 "Popup: No part encountered"
+      popup("No part encountered", "Message", False, False, blocking=True)
+      break
+    end
+    sync()
+  end
+end

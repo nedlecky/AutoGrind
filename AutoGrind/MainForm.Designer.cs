@@ -132,6 +132,9 @@
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
             this.RobotBlendLbl = new System.Windows.Forms.Label();
             this.ExitBtn = new System.Windows.Forms.Button();
+            this.button1 = new System.Windows.Forms.Button();
+            this.button2 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -208,6 +211,9 @@
             // 
             // GrindTab
             // 
+            this.GrindTab.Controls.Add(this.button3);
+            this.GrindTab.Controls.Add(this.button2);
+            this.GrindTab.Controls.Add(this.button1);
             this.GrindTab.Controls.Add(this.CurrentLineLbl);
             this.GrindTab.Controls.Add(this.AngleLbl);
             this.GrindTab.Controls.Add(this.label4);
@@ -285,7 +291,7 @@
             this.JogBtn.BackColor = System.Drawing.Color.Green;
             this.JogBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
             this.JogBtn.ForeColor = System.Drawing.Color.White;
-            this.JogBtn.Location = new System.Drawing.Point(258, 64);
+            this.JogBtn.Location = new System.Drawing.Point(476, 64);
             this.JogBtn.Margin = new System.Windows.Forms.Padding(2);
             this.JogBtn.Name = "JogBtn";
             this.JogBtn.Size = new System.Drawing.Size(247, 86);
@@ -1341,6 +1347,45 @@
             this.ExitBtn.UseVisualStyleBackColor = false;
             this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
             // 
+            // button1
+            // 
+            this.button1.BackColor = System.Drawing.Color.Green;
+            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
+            this.button1.ForeColor = System.Drawing.Color.White;
+            this.button1.Location = new System.Drawing.Point(13, 64);
+            this.button1.Margin = new System.Windows.Forms.Padding(2);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(125, 86);
+            this.button1.TabIndex = 80;
+            this.button1.Text = "Set P1";
+            this.button1.UseVisualStyleBackColor = false;
+            // 
+            // button2
+            // 
+            this.button2.BackColor = System.Drawing.Color.Green;
+            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
+            this.button2.ForeColor = System.Drawing.Color.White;
+            this.button2.Location = new System.Drawing.Point(142, 64);
+            this.button2.Margin = new System.Windows.Forms.Padding(2);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(125, 86);
+            this.button2.TabIndex = 81;
+            this.button2.Text = "Set P1";
+            this.button2.UseVisualStyleBackColor = false;
+            // 
+            // button3
+            // 
+            this.button3.BackColor = System.Drawing.Color.Green;
+            this.button3.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
+            this.button3.ForeColor = System.Drawing.Color.White;
+            this.button3.Location = new System.Drawing.Point(271, 64);
+            this.button3.Margin = new System.Windows.Forms.Padding(2);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(125, 86);
+            this.button3.TabIndex = 82;
+            this.button3.Text = "Set P3";
+            this.button3.UseVisualStyleBackColor = false;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1500,6 +1545,9 @@
         private System.Windows.Forms.Button ClearExecLogRtbBtn;
         private System.Windows.Forms.RichTextBox ExecLogRTB;
         private System.Windows.Forms.Button ExitBtn;
+        private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button1;
     }
 }
 

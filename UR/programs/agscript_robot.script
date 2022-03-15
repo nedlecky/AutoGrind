@@ -127,7 +127,7 @@ end
 
 
 # Move to touchoff
-# 
+#
 def calculate_point_to_move_towards(feature, direction, position_distance):
   local posDir = [direction[0], direction[1], direction[2]]
   if (norm(posDir) < 1e-6):
@@ -140,12 +140,12 @@ def calculate_point_to_move_towards(feature, direction, position_distance):
 end
 #$ 7 "Robot Program"
 #$ 8 "MoveL"
-#$ 9 "Direction: Base Z-"
+#$ 9 "Direction: Tool Z+"
 global move_thread_flag = 0
 thread move_thread():
   enter_critical
   move_thread_flag = 1
-  local towardsPos = calculate_point_to_move_towards(p[0.0, 0.0, 0.0, 0.0, 0.0, 0.0], [0.0, 0.0, -1.0], 0.025)
+  local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
   movel(towardsPos, a = 0.5, v = 0.02)
   move_thread_flag = 2
   exit_critical
@@ -169,8 +169,8 @@ def touchoff():
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
       movel(retractTo, a = 1.0, v = 0.1)
-      return True
       #$ 10 "Until (tool_contact_detection)"
+      return True
       break
     end
     sleep(1.0E-10)

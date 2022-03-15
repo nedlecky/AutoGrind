@@ -1,0 +1,12 @@
+ Program
+   BeforeStart
+     start_p≔get_actual_tcp_pose()
+     MoveJ
+       start_p
+     'MoveL'
+   Robot Program
+     MoveL
+       Direction: Tool Z+
+         Until (tool_contact_detection)
+         Until (distance)
+           Popup: No part encountered
