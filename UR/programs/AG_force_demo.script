@@ -1,0 +1,158 @@
+def AG_force_demo():
+  set_safety_mode_transition_hardness(1)
+  set_tcp(p[0.0,0.0,0.175,3.1416,0.0,0.0])
+  set_payload(2.0)
+  step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = 0.0
+  thread Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018():
+    while (True):
+      step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018()
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_gravity([0.0, 0.0, 9.82])
+  set_standard_analog_input_domain(0, 1)
+  set_standard_analog_input_domain(1, 1)
+  set_tool_analog_input_domain(0, 1)
+  set_tool_analog_input_domain(1, 1)
+  set_analog_outputdomain(0, 0)
+  set_analog_outputdomain(1, 0)
+  set_input_actions_to_default()
+  global lift_p=p[.000009281153, -.499986405438, .140728154825, .000055694718, -.000015364011, .000032419467]
+  global lift_q=[1.3001211881637573, -1.5019636911204834, 1.9538257757769983, -2.0224653683104457, -1.5700591246234339, 2.8711280822753906]
+  global neutral_p=p[.000016608045, -.499989968771, .036690712500, .000013721607, -.000000220155, -.000000595068]
+  global neutral_q=[1.3000131845474243, -1.348571853046753, 2.092989746724264, -2.3150655231871546, -1.5698679129229944, 2.8715128898620605]
+  def calculate_point_to_move_towards(feature, direction, position_distance):
+    local posDir=[direction[0], direction[1], direction[2]]
+    if (norm(posDir) < 1e-6):
+      return get_target_waypoint()
+    end
+    local direction_vector_normalized=normalize(posDir)
+    local displacement_pose=p[direction_vector_normalized[0] * position_distance,direction_vector_normalized[1] * position_distance,direction_vector_normalized[2] * position_distance,0,0,0]
+    local wanted_displacement_in_base_frame=pose_sub(pose_trans(feature, displacement_pose), feature)
+    return pose_add(get_target_waypoint(), wanted_displacement_in_base_frame)
+  end
+  global plusy_from_p=p[-.000185190033, -.500839112064, .023865951106, -.003448852750, .001051056304, .000140440363]
+  global plusy_to_p=p[-.000166041671, -.587774652823, .024153005708, -.003421829984, .001007893236, .000139466640]
+  global plus_rx_from_p=p[.000016968364, -.499992861342, .140739515734, .000029070226, -.000020372297, .000056482206]
+  global plus_rx_to_p=p[.000000318853, -.499984396485, .140719686440, .709335525604, .000011093211, -.000027827357]
+  $ 1 "BeforeStart"
+  $ 2 "start_p≔get_actual_tcp_pose()"
+  global start_p= get_actual_tcp_pose ()
+  $ 3 "MoveJ"
+  $ 4 "start_p" "breakAfter"
+  movej(start_p, a=1.3962634015954636, v=1.0471975511965976)
+  $ 5 "Robot Program"
+  $ 6 "MoveL"
+  $ 7 "lift" "breakAfter"
+  movel(lift_p, a=1.2, v=0.25)
+  $ 8 "Wait: 0.5"
+  sleep(0.5)
+  $ 9 "neutral" "breakAfter"
+  movel(neutral_p, a=1.2, v=0.25)
+  $ 10 "MoveL"
+  $ 11 "Direction: Tool Z-"
+  global move_thread_flag_11=0
+  thread move_thread_11():
+    enter_critical
+    move_thread_flag_11 = 1
+    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,-1.0], 1000.0)
+    movel(towardsPos, a=0.5, v=0.01)
+    move_thread_flag_11 = 2
+    exit_critical
+  end
+  move_thread_flag_11 = 0
+  move_thread_han_11 = run move_thread_11()
+  while (True):
+    local targetTcpDirection=get_target_tcp_speed()
+    local stepsToRetract=tool_contact(direction=targetTcpDirection)
+    if (stepsToRetract > 0):
+      kill move_thread_han_11
+      stopl(0.5)
+      local backTrackMovement=get_actual_joint_positions_history(stepsToRetract)
+      local contactPose=get_forward_kin(backTrackMovement)
+      local posDir=[targetTcpDirection[0],targetTcpDirection[1],targetTcpDirection[2]]
+      local retractTo=contactPose
+      if (norm(posDir) > 1e-6):
+        local normalizedPosDir=normalize(posDir)
+        local additionalRetraction=p[normalizedPosDir[0] * 0.001, normalizedPosDir[1] * 0.001, normalizedPosDir[2] * 0.001, 0, 0, 0]
+        retractTo = pose_sub(contactPose, additionalRetraction)
+      end
+      movel(retractTo, a=0.5, v=0.1)
+      $ 12 "Until (tool_contact_detection)"
+      break
+    end
+    sync()
+  end
+  $ 13 "Force"
+  sleep(0.02)
+  zero_ftsensor()
+  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, -5.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  $ 14 "Wait: 0.5" "noBreak"
+  sleep(0.5)
+  $ 15 "MoveL" "noBreak"
+  $ 16 "plusy" "noBreak"
+  movel(pose_add(get_target_tcp_pose(), pose_sub(plusy_to_p, plusy_from_p)), a=1.2, v=0.01)
+  end_force_mode()
+  stopl(5.0)
+  $ 17 "MoveL"
+  $ 18 "lift" "breakAfter"
+  movel(lift_p, a=1.2, v=0.25)
+  $ 19 "Wait: 0.5"
+  sleep(0.5)
+  $ 20 "neutral" "breakAfter"
+  movel(neutral_p, a=1.2, v=0.25)
+  $ 21 "MoveL"
+  $ 22 "Direction: Tool Z-"
+  global move_thread_flag_22=0
+  thread move_thread_22():
+    enter_critical
+    move_thread_flag_22 = 1
+    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,-1.0], 1000.0)
+    movel(towardsPos, a=0.5, v=0.01)
+    move_thread_flag_22 = 2
+    exit_critical
+  end
+  move_thread_flag_22 = 0
+  move_thread_han_22 = run move_thread_22()
+  while (True):
+    local targetTcpDirection=get_target_tcp_speed()
+    local stepsToRetract=tool_contact(direction=targetTcpDirection)
+    if (stepsToRetract > 0):
+      kill move_thread_han_22
+      stopl(0.5)
+      local backTrackMovement=get_actual_joint_positions_history(stepsToRetract)
+      local contactPose=get_forward_kin(backTrackMovement)
+      local posDir=[targetTcpDirection[0],targetTcpDirection[1],targetTcpDirection[2]]
+      local retractTo=contactPose
+      if (norm(posDir) > 1e-6):
+        local normalizedPosDir=normalize(posDir)
+        local additionalRetraction=p[normalizedPosDir[0] * 0.001, normalizedPosDir[1] * 0.001, normalizedPosDir[2] * 0.001, 0, 0, 0]
+        retractTo = pose_sub(contactPose, additionalRetraction)
+      end
+      movel(retractTo, a=0.5, v=0.1)
+      $ 23 "Until (tool_contact_detection)"
+      break
+    end
+    sync()
+  end
+  $ 24 "Force"
+  sleep(0.02)
+  zero_ftsensor()
+  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, -10.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  $ 25 "Wait: 0.5" "noBreak"
+  sleep(0.5)
+  $ 26 "MoveL" "noBreak"
+  $ 27 "plus_rx" "noBreak"
+  movel(pose_add(get_target_tcp_pose(), pose_sub(plus_rx_to_p, plus_rx_from_p)), a=1.2, v=0.01)
+  end_force_mode()
+  stopl(5.0)
+  $ 28 "MoveL"
+  $ 29 "lift" "breakAfter"
+  movel(lift_p, a=1.2, v=0.25)
+end

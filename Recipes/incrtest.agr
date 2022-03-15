@@ -1,0 +1,25 @@
+# incr test
+
+a=3
+
+a = 4
+
+a++
+a++
+
+count=3
+
+jump(happy)
+
+kevin++
+
+
+end()
+
+happy:
+b--
+
+fred++
+jerry--
+count--
+jump_not_zero(count,happy)

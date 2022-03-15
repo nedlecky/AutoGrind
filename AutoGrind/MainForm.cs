@@ -1047,11 +1047,12 @@ namespace AutoGrind
                 return true;
             }
 
-            // = (assignment)
-            if (command.Contains("="))
+            // =, incr, decr (assignment, ++, --)
+            if (command.Contains("=") || command.Contains("++") || command.Contains("--"))
             {
                 LogInterpret("assign", lineNumber, command);
-                WriteVariable(command);
+                if (!WriteVariable(command))
+                    PromptOperator(String.Format("Invalid assignment command: {0}", command));
                 return true;
             }
 
@@ -1081,7 +1082,7 @@ namespace AutoGrind
                         PromptOperator(string.Format("File import error: {0}", command));
                 }
                 else
-                    PromptOperator("Invalid import command: {0}", command);
+                    PromptOperator(String.Format("Invalid import command: {0}", command));
 
                 return true;
             }
@@ -1102,6 +1103,64 @@ namespace AutoGrind
                 {
                     log.Error("Unknown Label specified in jump Line {0} Exec: {1}", lineNumber, command);
                     PromptOperator("Illegal Jump Command: " + command);
+                    return true;
+                }
+            }
+
+            // jump_gt_zero
+            if (command.StartsWith("jump_not_zero("))
+            {
+                string[] parameters = ExtractParameters(command).Split(',');
+                bool wasSuccessful = false;
+                if (parameters.Length != 2)
+                {
+                    PromptOperator("Expected jump_gt_zero(variable,label):\nNot " + command);
+                    return true;
+                }
+                else
+                {
+                    string variableName = parameters[0];
+                    string labelName = parameters[1];
+
+                    int jumpLine;
+                    if (!labels.TryGetValue(labelName, out jumpLine))
+                    {
+                        PromptOperator("Expected jump_gt_zero(variable,label):\nLabel not found: " + labelName);
+                        return true;
+                    }
+                    else
+                    {
+                        string value = ReadVariable(variableName);
+                        if (value == null)
+                        {
+                            PromptOperator("Expected jump_gt_zero(variable,label):\nVariable not found: " + variableName);
+                            return true;
+                        }
+                        else
+                        {
+                            try
+                            {
+                                double val = Convert.ToDouble(value);
+                                if (val > 0.0)
+                                {
+                                    log.Info("EXEC {0:0000}: [JUMPNOTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
+                                    SetCurrentLine(jumpLine);
+                                }
+                                wasSuccessful = true;
+                                return true;
+                            }
+                            catch
+                            {
+                                PromptOperator(String.Format("Could not convert jump_not_zero variable: {0} = {1}\nFrom: {2}",variableName, value, command));
+                                return true;
+                            }
+                        }
+                        
+                    }
+                }
+                if(!wasSuccessful)
+                {
+                    PromptOperator("Illegal jump_not_zero command: " + command);
                     return true;
                 }
             }
@@ -1228,7 +1287,7 @@ namespace AutoGrind
                 {
                     // Resets such that the above log messages will happen
                     logFilter = 3;
-                    if (lineCurrentlyExecuting+1 >= RecipeRoRTB.Lines.Count())
+                    if (lineCurrentlyExecuting + 1 >= RecipeRoRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
                         SetState(RunState.READY);
@@ -1433,7 +1492,7 @@ namespace AutoGrind
         /// <param name="name"></param>
         /// <param name="value"></param>
         /// <param name="isSystem"></param>
-        public void WriteVariable(string name, string value, bool isSystem = false)
+        public bool WriteVariable(string name, string value, bool isSystem = false)
         {
             System.Threading.Monitor.Enter(lockObject);
             string nameTrimmed = name.Trim();
@@ -1442,7 +1501,7 @@ namespace AutoGrind
             if (variables == null)
             {
                 log.Error("variables == null!!??");
-                return;
+                return false;
             }
             string datetime;
             if (UtcTimeChk.Checked)
@@ -1522,24 +1581,53 @@ namespace AutoGrind
                     }
                 }
             }
+            return true;
         }
 
         /// <summary>
-        /// Takes a "mname=value" string and set variable "name" equal to "value"
+        /// Takes a "name=value" string and set variable "name" equal to "value"  ALSO: will handle name++ and name--
         /// </summary>
-        /// <param name="assignment"></param>
-        public void WriteVariable(string assignment, bool isSystem = false)
+        /// <param name="assignment">Variable to be modified</param>
+        public bool WriteVariable(string assignment, bool isSystem = false)
         {
+            bool wasSuccessful = false;
             string[] s = assignment.Split('=');
-            if (s.Length != 2)
+            if (s.Length == 2)
             {
-                log.Error("WriteVariable({0} is invalid", assignment);
+                wasSuccessful = WriteVariable(s[0], s[1], isSystem);
             }
             else
             {
-                WriteVariable(s[0], s[1], isSystem);
+                // Not a classic assignment... look for ++ and --
+                if (assignment.Length > 2)
+                {
+                    int incr = 0;
+                    if (assignment.EndsWith("++")) incr = 1;
+                    if (assignment.EndsWith("--")) incr = -1;
+                    if (incr != 0)
+                    {
+                        try
+                        {
+                            string name = assignment.Substring(0, assignment.Length - 2);
+                            string v = ReadVariable(name);
+                            if (v != null)
+                            {
+                                double x = Convert.ToDouble(v);
+                                x += incr;
+                                wasSuccessful = WriteVariable(name, x.ToString());
+                            }
+                        }
+                        catch
+                        {
+                        }
+                    }
+                }
             }
-
+            if (!wasSuccessful)
+            {
+                log.Error("Illegal assignment statement: {0}", assignment);
+            }
+            return wasSuccessful;
         }
         private void WriteStringValueBtn_Click(object sender, EventArgs e)
         {

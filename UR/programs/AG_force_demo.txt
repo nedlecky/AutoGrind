@@ -1,0 +1,30 @@
+ Program
+   BeforeStart
+     start_p≔get_actual_tcp_pose()
+     MoveJ
+       start_p
+   Robot Program
+     MoveL
+       lift
+       Wait: 0.5
+       neutral
+     MoveL
+       Direction: Tool Z-
+         Until (tool_contact_detection)
+     Force
+       Wait: 0.5
+       MoveL
+         plusy
+     MoveL
+       lift
+       Wait: 0.5
+       neutral
+     MoveL
+       Direction: Tool Z-
+         Until (tool_contact_detection)
+     Force
+       Wait: 0.5
+       MoveL
+         plus_rx
+     MoveL
+       lift

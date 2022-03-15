@@ -1,9 +1,0 @@
- Program
-   BeforeStart
-     initial_p≔get_actual_tcp_pose()
-     MoveJ
-       initial_p
-   Robot Program
-     MoveL
-       Waypoint_1
-       Waypoint_2
