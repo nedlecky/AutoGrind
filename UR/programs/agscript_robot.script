@@ -98,12 +98,19 @@ def return_get_actual_joint_positions():
   global response = "return_get_actual_joint_positions()"
 end
 
-# Movel relatively
-def movel_relative(p1):
+# Movel relatively in base coordinates
+def movel_relative_base(p1):
   p0 = get_actual_tcp_pose()
   p2 = pose_add(p0, p1)
   movel(p2, robot_accel, robot_speed)
-  global response = "movel_relative()"
+  global response = "movel_relative_base()"
+end
+
+# Movel relatively in TCP coordinates
+def movel_relative_tcp(p1):
+  p1 = pose_trans(get_forward_kin(), p1)
+  movel(p1, a = robot_accel, v = robot_speed)
+  global response = "movel_relative_tcp()"
 end
 
 # Change one element of current pose and movel there

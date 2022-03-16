@@ -788,7 +788,7 @@ namespace AutoGrind
 
         private void JogBtn_Click(object sender, EventArgs e)
         {
-            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect");
+            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect", ReadVariable("robot_tool"));
 
             form.ShowDialog(this);
         }
@@ -815,7 +815,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingForm form = new JoggingForm(robotServer, this, prompt, true);
+            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), true);
 
             form.ShowDialog(this);
 
@@ -1850,7 +1850,9 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "default", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050 });
+                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
+                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050 });
+                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050 });
             }
         }
 
