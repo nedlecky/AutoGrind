@@ -214,6 +214,12 @@ namespace AutoGrind
                         RobotStatusLbl.Text = "READY";
                         // Restore all button settings with same current state
                         SetState(runState, true, true);
+                        ExecuteLine(-1, "set_speed(-1)");             // Query speed
+                        ExecuteLine(-1, "set_accel(-1)");             // Query accel
+                        ExecuteLine(-1, "set_blend(-1)");             // Query blend
+                        ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
+                        ExecuteLine(-1, "set_tcp(-10,0,0,0,0,0)");    // Query current TCP
+                        ExecuteLine(-1, "set_payload(0,0,0,0)");      // Query current payload and COG
                     }
                     else
                     {
@@ -967,11 +973,20 @@ namespace AutoGrind
         /// </summary>
         /// <param name="s">input string</param>
         /// <returns>Characters enclosed in (...) or ""</returns>
-        string ExtractParameters(string s)
+        string ExtractParameters(string s, int nParams = 0)
         {
             try
             {
-                return s.Split('(', ')')[1];
+                string parameters = s.Split('(', ')')[1];
+
+                //if nParams is specified, verify we have the right number!
+                if (nParams > 0)
+                {
+                    string[] p = parameters.Split(',');
+                    if (p.Length != nParams)
+                        return "";
+                }
+                return parameters;
             }
             catch
             {
@@ -997,31 +1012,38 @@ namespace AutoGrind
             }
         }
 
-        Dictionary<string, string> robotAlias = new Dictionary<string, string>
+        // Specifies number of expected parameters and prefix in SendRobot for each function
+        public struct CommandSpec
+        {
+            public int nParams;
+            public string prefix;
+        };
+
+        Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // SETTINGS
-            {"set_speed",                   "30,1"  },
-            {"set_accel",                   "30,2"  },
-            {"set_blend",                   "30,3"  },
-            {"set_tcp",                     "30,10" },
-            {"set_payload",                 "30,11" },
-            {"grind_contact_enabled",       "40,1"  },
+            {"set_speed",                   new CommandSpec(){nParams=1, prefix="30,1" } },
+            {"set_accel",                   new CommandSpec(){nParams=1, prefix="30,2" } },
+            {"set_blend",                   new CommandSpec(){nParams=1, prefix="30,3" } },
+            {"set_tcp",                     new CommandSpec(){nParams=6, prefix="30,10" } },
+            {"set_payload",                 new CommandSpec(){nParams=4, prefix="30,11" } },
+            {"grind_contact_enabled",       new CommandSpec(){nParams=1, prefix="40,1" } },
 
             // RECTANGLUR GRINDS
-            {"grind_rect_flat",             "40,10" },
-            {"grind_rect_cylinder",         "40,11" },
-            {"grind_rect_sphere",           "40,12" },
+            {"grind_rect_flat",             new CommandSpec(){nParams=1, prefix="40,10" }  },
+            {"grind_rect_cylinder",         new CommandSpec(){nParams=1, prefix="40,11" }  },
+            {"grind_rect_sphere",           new CommandSpec(){nParams=1, prefix="40,12" }  },
 
             // SERPENTINE GRINDS
-            {"grind_serpentine_flat",       "40,20" },
-            {"grind_serpentine_cylinder",   "40,21" },
+            {"grind_serpentine_flat",       new CommandSpec(){nParams=1, prefix="40,20" }  },
+            {"grind_serpentine_cylinder",   new CommandSpec(){nParams=1, prefix="40,21" }  },
 
             // CIRCLAR GRINDS
-            {"grind_circle_flat",           "40,30" },
-            {"grind_circle_sphere",         "40,31" },
+            {"grind_circle_flat",           new CommandSpec(){nParams=1, prefix="40,30" }  },
+            {"grind_circle_sphere",         new CommandSpec(){nParams=1, prefix="40,31" }  },
 
             // SPIRAL GRINDS
-            {"grind_spiral_flat",           "40,40" },
+            {"grind_spiral_flat",           new CommandSpec(){nParams=1, prefix="40,40" }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1111,7 +1133,7 @@ namespace AutoGrind
             if (command.StartsWith("jump_gt_zero("))
             {
                 string[] parameters = ExtractParameters(command).Split(',');
-                bool wasSuccessful = false;
+                //bool wasSuccessful = false;
                 if (parameters.Length != 2)
                 {
                     PromptOperator("Expected jump_gt_zero(variable,label):\nNot " + command);
@@ -1146,22 +1168,17 @@ namespace AutoGrind
                                     log.Info("EXEC {0:0000}: [JUMPNOTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
                                     SetCurrentLine(jumpLine);
                                 }
-                                wasSuccessful = true;
+                                //wasSuccessful = true;
                                 return true;
                             }
                             catch
                             {
-                                PromptOperator(String.Format("Could not convert jump_not_zero variable: {0} = {1}\nFrom: {2}",variableName, value, command));
+                                PromptOperator(String.Format("Could not convert jump_not_zero variable: {0} = {1}\nFrom: {2}", variableName, value, command));
                                 return true;
                             }
                         }
-                        
+
                     }
-                }
-                if(!wasSuccessful)
-                {
-                    PromptOperator("Illegal jump_not_zero command: " + command);
-                    return true;
                 }
             }
 
@@ -1196,8 +1213,7 @@ namespace AutoGrind
                     GotoToolChangeBtn_Click(null, null);
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_m"], row["ry_m"], row["rz_m"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
-                    messageForm = new MessageForm("Tool Change Prompt", "Please install tool for: " + command);
-                    messageForm.ShowDialog();
+                    PromptOperator("Please install tool for: " + command);
                 }
                 return true;
             }
@@ -1229,18 +1245,21 @@ namespace AutoGrind
             if (openParenIndex > -1 && closeParenIndex > openParenIndex)
             {
                 string commandInRecipe = command.Substring(0, openParenIndex);
-                string commandToRobot;
-                if (robotAlias.TryGetValue(commandInRecipe, out commandToRobot))
+                CommandSpec commandSpec;
+                if (robotAlias.TryGetValue(commandInRecipe, out commandSpec))
                 {
                     LogInterpret(commandInRecipe, lineNumber, command);
-                    robotServer.Send("(" + commandToRobot + "," + ExtractParameters(command) + ")");
+                    string parameters = ExtractParameters(command, commandSpec.nParams);
+                    if (parameters.Length > 0 || commandSpec.nParams == 0)
+                        robotServer.Send("(" + commandSpec.prefix + "," + parameters + ")");
+                    else
+                        PromptOperator(string.Format("Wrong number of operands. Expected {0}:\n{1}", commandSpec.nParams, command));
                     return true;
                 }
             }
 
             log.Error("Unknown Command Line {0} Exec: {1}", lineNumber, command);
-            messageForm = new MessageForm("Illegal Recipe Command", "Illegal Recipe line: " + command);
-            messageForm.ShowDialog();
+            PromptOperator("Illegal recipe line:\n" + command);
             return true;
         }
 
@@ -1784,6 +1803,12 @@ namespace AutoGrind
             }
             return null;
         }
+
+        private void RobotStatusLbl_Click(object sender, EventArgs e)
+        {
+
+        }
+
 
         // ===================================================================
         // END TOOL SYSTEM

@@ -5,12 +5,17 @@
 
 global response = "unknown"
 
-global robot_speed = 1.0
-global robot_accel = 1.0
-global robot_blend = 0.001
-global robot_tcp = p[0, 0, 0, 0, 0, 0]
-global robot_mass = 0
-global robot_cog = [0, 0, 0]
+global robot_speed = 0.5
+global robot_accel = 1.25
+global robot_blend = 0.003
+global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
+global robot_payload_mass = 1.0
+global robot_payload_cog = [0, 0, 0.50]
+
+# Defaults get set on load... and can be queried (or changed) from C#
+set_tcp(robot_tcp)
+set_payload(robot_payload_mass,robot_payload_cog)
+set_gravity([0.0, 0.0, 9.82])
 
 # Set interface... allows validation and limits
 def set_variable():
@@ -55,15 +60,15 @@ def set_variable():
   elif command[2] == 11:
     # set_payload if command[3] > 0. Always return robot_m and robot_cog
     if command[3] > 0:
-      robot_mass = command[3]
-      robot_cog = [command[4], command[5], command[6]]
-      set_payload(robot_mass, robot_cog)
+      robot_payload_mass = command[3]
+      robot_payload_cog = [command[4], command[5], command[6]]
+      set_payload(robot_payload_mass, robot_payload_cog)
     end
-    socket_send_string("robot_mass=")
-    socket_send_string(robot_mass)
+    socket_send_string("robot_payload_mass=")
+    socket_send_string(robot_payload_mass)
     socket_send_lf()
-    socket_send_string("robot_cog=")
-    return_vector(robot_cog, 3)
+    socket_send_string("robot_payload_cog=")
+    return_vector(robot_payload_cog, 3)
     socket_send_lf()
     global response = "set_payload()"
   else:

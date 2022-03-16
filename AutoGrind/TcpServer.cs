@@ -113,12 +113,7 @@ namespace AutoGrind
                         log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
 
-                        // Send some connect questions to query position, speed, and accel
                         Send("(10)");        // Query position
-                        Send("(30,1,-1)");   // Query speed
-                        Send("(30,2,-1)");   // Query accel
-                        Send("(30,3,-1)");   // Query blend
-                        Send("(40,1,0)");    // Set contact enabled = False
                     }
                     catch { }
                 }
