@@ -106,7 +106,7 @@
             // 
             // LabelLbl
             // 
-            this.LabelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LabelLbl.Location = new System.Drawing.Point(34, 9);
             this.LabelLbl.Name = "LabelLbl";
             this.LabelLbl.Size = new System.Drawing.Size(473, 56);

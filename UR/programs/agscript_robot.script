@@ -11,6 +11,8 @@ global robot_blend = 0.003
 global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
 global robot_payload_mass = 1.0
 global robot_payload_cog = [0, 0, 0.50]
+# Geometry [1=FLAT 2=CYL 3=SPHERE, radius_mm)
+global robot_part_geometry = [0, 0]
 
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
@@ -47,6 +49,17 @@ def set_variable():
     end
     socket_send_string("robot_blend=")
     socket_send_string(robot_blend)
+    socket_send_lf()
+    global response = "set_blend()"
+  elif command[2] == 4:
+    # Set part_geometry to [shape, radius_mm] is shape>0. Always returns "robot_part_geometry=[current geometry]"
+    s = command[3]
+    r = command[4]
+    if s > 0:
+      robot_part_geometry = [s, r]
+    end
+    socket_send_string("robot_part_geometry=")
+    return_vector(robot_part_geometry, 2)
     socket_send_lf()
     global response = "set_blend()"
   elif command[2] == 10:

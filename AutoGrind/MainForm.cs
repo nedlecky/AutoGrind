@@ -214,9 +214,11 @@ namespace AutoGrind
                         ExecuteLine(-1, "set_accel(-1)");             // Query accel
                         ExecuteLine(-1, "set_blend(-1)");             // Query blend
                         ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
-                        ExecuteLine(-1, "set_tcp(-10,0,0,0,0,0)");    // Query current TCP
-                        ExecuteLine(-1, "set_payload(0,0,0,0)");      // Query current payload and COG
-                        ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
+
+                        // Download selected tool and part geometry by acting like a reselect of both
+                        MountedToolBox_SelectedIndexChanged(null, null);
+                        PartGeometryBox_SelectedIndexChanged(null, null);
+
                         RobotStatusLbl.BackColor = Color.Green;
                         RobotStatusLbl.Text = "READY";
                         // Restore all button settings with same current state
@@ -361,9 +363,37 @@ namespace AutoGrind
             log.Info("Operator changing tool to " + MountedToolBox.Text);
 
             ToolsGrd.ClearSelection();
-            if(robotServer != null)
+            if (robotServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
         }
+
+        private void UpdateGeometryToRobot()
+        {
+            if (robotServer != null)
+                ExecuteLine(-1, String.Format("set_part_geometry({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
+        }
+
+        private void PartGeometryBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            log.Info("Operator changing geometry to " + PartGeometryBox.Text);
+            bool isFlat = PartGeometryBox.Text == "FLAT";
+            if (isFlat)
+            {
+                DiameterLbl.Visible = false;
+                DiameterDimLbl.Visible = false;
+            }
+            else
+            {
+                DiameterLbl.Visible = true;
+                DiameterDimLbl.Visible = true;
+
+                DiameterLbl_Click(null, null);
+            }
+
+            // If we put in Diam, that sends the update to the robot
+            if (isFlat) UpdateGeometryToRobot();
+        }
+
 
         private void GrindBtn_Click(object sender, EventArgs e)
         {
@@ -701,10 +731,6 @@ namespace AutoGrind
             // Debug Level selection
             DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "INFO");
 
-            // From Grind Tab
-            DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "25.000");
-            AngleLbl.Text = (string)AppNameKey.GetValue("AngleLbl.Text", "0.000");
-
             // Also load the tools table
             LoadToolsBtn_Click(null, null);
 
@@ -714,9 +740,13 @@ namespace AutoGrind
             // Autoload file is the last loaded recipe
             recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
 
-            // Save currently mounted tool
+            // Retreive currently mounted tool
             MountedToolBox.Text = (string)AppNameKey.GetValue("MountedToolBox.Text", "");
 
+            // Retreive current part geometry
+            //    TODO Forcing this to FLAT, 250.0 since we don't trust the stored diameter
+            PartGeometryBox.Text = "FLAT"; // (string)AppNameKey.GetValue("PartGeometryBox.Text", "FLAT");
+            DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "250.0");
         }
 
         void SavePersistent()
@@ -738,9 +768,6 @@ namespace AutoGrind
             // Debug Level selection
             AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
 
-            // From Grind Tab
-            AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
-            AppNameKey.SetValue("AngleLbl.Text", AngleLbl.Text);
 
             // Also save the tools table
             SaveToolsBtn_Click(null, null);
@@ -753,6 +780,10 @@ namespace AutoGrind
 
             // Save currently mounted tool
             AppNameKey.SetValue("MountedToolBox.Text", MountedToolBox.Text);
+
+            // Save current part geometry tool
+            AppNameKey.SetValue("PartGeometryBox.Text", PartGeometryBox.Text);
+            AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
         }
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -795,22 +826,14 @@ namespace AutoGrind
 
         private void DiameterLbl_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(DiameterLbl.Text, "DIAMETER");
+            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM");
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 DiameterLbl.Text = form.value;
             }
-        }
 
-        private void AngleLbl_Click(object sender, EventArgs e)
-        {
-            SetValueForm form = new SetValueForm(AngleLbl.Text, "ANGLE");
-
-            if (form.ShowDialog(this) == DialogResult.OK)
-            {
-                AngleLbl.Text = form.value;
-            }
+            UpdateGeometryToRobot();
         }
 
         private void RecordPosition(string prompt, string varName)
@@ -1062,6 +1085,7 @@ namespace AutoGrind
             {"set_speed",                   new CommandSpec(){nParams=1, prefix="30,1" } },
             {"set_accel",                   new CommandSpec(){nParams=1, prefix="30,2" } },
             {"set_blend",                   new CommandSpec(){nParams=1, prefix="30,3" } },
+            {"set_part_geometry",           new CommandSpec(){nParams=2, prefix="30,4" } },
             {"set_tcp",                     new CommandSpec(){nParams=6, prefix="30,10" } },
             {"set_payload",                 new CommandSpec(){nParams=4, prefix="30,11" } },
             {"grind_contact_enabled",       new CommandSpec(){nParams=1, prefix="40,1" } },
@@ -1869,7 +1893,6 @@ namespace AutoGrind
             return null;
         }
 
-        
         // ===================================================================
         // END TOOL SYSTEM
         // ===================================================================

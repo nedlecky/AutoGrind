@@ -38,10 +38,8 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
-            this.AngleLbl = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
             this.DiameterLbl = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
+            this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRoRTB = new System.Windows.Forms.RichTextBox();
             this.ContinueBtn = new System.Windows.Forms.Button();
@@ -138,6 +136,8 @@
             this.ExitBtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.MountedToolBox = new System.Windows.Forms.ComboBox();
+            this.PartGeometryBox = new System.Windows.Forms.ComboBox();
+            this.label5 = new System.Windows.Forms.Label();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -218,10 +218,6 @@
             this.GrindTab.Controls.Add(this.button2);
             this.GrindTab.Controls.Add(this.button1);
             this.GrindTab.Controls.Add(this.CurrentLineLbl);
-            this.GrindTab.Controls.Add(this.AngleLbl);
-            this.GrindTab.Controls.Add(this.label4);
-            this.GrindTab.Controls.Add(this.DiameterLbl);
-            this.GrindTab.Controls.Add(this.label2);
             this.GrindTab.Controls.Add(this.JogBtn);
             this.GrindTab.Controls.Add(this.RecipeRoRTB);
             this.GrindTab.Controls.Add(this.ContinueBtn);
@@ -286,47 +282,26 @@
             this.CurrentLineLbl.Size = new System.Drawing.Size(711, 30);
             this.CurrentLineLbl.TabIndex = 79;
             // 
-            // AngleLbl
-            // 
-            this.AngleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.AngleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AngleLbl.Location = new System.Drawing.Point(553, 7);
-            this.AngleLbl.Name = "AngleLbl";
-            this.AngleLbl.Size = new System.Drawing.Size(170, 37);
-            this.AngleLbl.TabIndex = 77;
-            this.AngleLbl.Text = "0.00";
-            this.AngleLbl.Click += new System.EventHandler(this.AngleLbl_Click);
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(377, 8);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(170, 37);
-            this.label4.TabIndex = 76;
-            this.label4.Text = "Angle, deg";
-            // 
             // DiameterLbl
             // 
             this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterLbl.Location = new System.Drawing.Point(229, 7);
+            this.DiameterLbl.Location = new System.Drawing.Point(654, 81);
             this.DiameterLbl.Name = "DiameterLbl";
-            this.DiameterLbl.Size = new System.Drawing.Size(142, 37);
+            this.DiameterLbl.Size = new System.Drawing.Size(168, 37);
             this.DiameterLbl.TabIndex = 75;
             this.DiameterLbl.Text = "25.0";
             this.DiameterLbl.Click += new System.EventHandler(this.DiameterLbl_Click);
             // 
-            // label2
+            // DiameterDimLbl
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(5, 7);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(218, 37);
-            this.label2.TabIndex = 74;
-            this.label2.Text = "Diameter, mm";
+            this.DiameterDimLbl.AutoSize = true;
+            this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiameterDimLbl.Location = new System.Drawing.Point(828, 81);
+            this.DiameterDimLbl.Name = "DiameterDimLbl";
+            this.DiameterDimLbl.Size = new System.Drawing.Size(71, 37);
+            this.DiameterDimLbl.TabIndex = 74;
+            this.DiameterDimLbl.Text = "mm";
             // 
             // JogBtn
             // 
@@ -1422,15 +1397,43 @@
             this.MountedToolBox.TabIndex = 99;
             this.MountedToolBox.SelectedIndexChanged += new System.EventHandler(this.MountedToolBox_SelectedIndexChanged);
             // 
+            // PartGeometryBox
+            // 
+            this.PartGeometryBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PartGeometryBox.FormattingEnabled = true;
+            this.PartGeometryBox.Items.AddRange(new object[] {
+            "FLAT",
+            "CYLINDER",
+            "SPHERE"});
+            this.PartGeometryBox.Location = new System.Drawing.Point(654, 39);
+            this.PartGeometryBox.Name = "PartGeometryBox";
+            this.PartGeometryBox.Size = new System.Drawing.Size(168, 39);
+            this.PartGeometryBox.TabIndex = 101;
+            this.PartGeometryBox.SelectedIndexChanged += new System.EventHandler(this.PartGeometryBox_SelectedIndexChanged);
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Location = new System.Drawing.Point(515, 44);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(133, 31);
+            this.label5.TabIndex = 100;
+            this.label5.Text = "Geometry";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1161);
+            this.Controls.Add(this.PartGeometryBox);
+            this.Controls.Add(this.label5);
             this.Controls.Add(this.MountedToolBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.ExitBtn);
             this.Controls.Add(this.RobotBlendLbl);
+            this.Controls.Add(this.DiameterDimLbl);
+            this.Controls.Add(this.DiameterLbl);
             this.Controls.Add(this.MonitorTab);
             this.Controls.Add(this.GrindContactEnabledBtn);
             this.Controls.Add(this.RobotAccelLbl);
@@ -1453,7 +1456,6 @@
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.OperationTab.ResumeLayout(false);
             this.GrindTab.ResumeLayout(false);
-            this.GrindTab.PerformLayout();
             this.EditTab.ResumeLayout(false);
             this.SetupTab.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
@@ -1513,10 +1515,8 @@
         private System.Windows.Forms.RichTextBox RecipeRoRTB;
         private System.Windows.Forms.Button JogBtn;
         private System.Windows.Forms.Label DiameterLbl;
-        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label DiameterDimLbl;
         private System.Windows.Forms.Button SetLeftBtn;
-        private System.Windows.Forms.Label AngleLbl;
-        private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button SetRightBtn;
         private System.Windows.Forms.Timer ExecTmr;
         private System.Windows.Forms.Button KeyboardBtn;
@@ -1590,6 +1590,8 @@
         private System.Windows.Forms.Button SelectToolBtn;
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.ComboBox MountedToolBox;
+        private System.Windows.Forms.ComboBox PartGeometryBox;
+        private System.Windows.Forms.Label label5;
     }
 }
 

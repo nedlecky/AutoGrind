@@ -34,7 +34,7 @@ namespace AutoGrind
             try
             {
                 double x = Convert.ToDouble(ValueTxt.Text);
-                value = x.ToString("0.000");
+                value = x.ToString("0.0");
                 this.DialogResult = DialogResult.OK;
                 log.Info("Setting {0} = {1}", label, value);
                 Close();
@@ -53,7 +53,7 @@ namespace AutoGrind
 
         private void ClearBtn_Click(object sender, EventArgs e)
         {
-            ValueTxt.Text = "0";
+            ValueTxt.Text = "";
 
         }
         private void PlusMinusBtn_Click(object sender, EventArgs e)
