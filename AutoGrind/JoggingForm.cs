@@ -16,14 +16,23 @@ namespace AutoGrind
         readonly TcpServer robot;
         public bool ShouldSave { get; set; }
 
-        public JoggingForm(TcpServer _robot, string purpose = "General Jogging", bool saveable = false)
+        MainForm mainForm;
+        //static DataTable tools;
+
+        public JoggingForm(TcpServer _robot, MainForm _mainForm, string purpose = "General Jogging", bool saveable = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;
             robot = _robot;
+            mainForm = _mainForm;
             ShouldSave = false;
             SaveBtn.Enabled = saveable;
             SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;
+
+            //tools = mainForm.tools;
+
+
+
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
@@ -42,6 +51,8 @@ namespace AutoGrind
         {
             DistanceLst.SelectedIndex = 2;
             AngleLst.SelectedIndex = 2;
+
+
         }
 
         private double Deg2Rad(double d)

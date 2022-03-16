@@ -11,9 +11,9 @@
                 <xs:element name="x_m" type="xs:double" minOccurs="0" />
                 <xs:element name="y_m" type="xs:double" minOccurs="0" />
                 <xs:element name="z_m" type="xs:double" minOccurs="0" />
-                <xs:element name="rx_m" type="xs:double" minOccurs="0" />
-                <xs:element name="ry_m" type="xs:double" minOccurs="0" />
-                <xs:element name="rz_m" type="xs:double" minOccurs="0" />
+                <xs:element name="rx_rad" type="xs:double" minOccurs="0" />
+                <xs:element name="ry_rad" type="xs:double" minOccurs="0" />
+                <xs:element name="rz_rad" type="xs:double" minOccurs="0" />
                 <xs:element name="mass_kg" type="xs:double" minOccurs="0" />
                 <xs:element name="cogx_m" type="xs:double" minOccurs="0" />
                 <xs:element name="cogy_m" type="xs:double" minOccurs="0" />
@@ -34,12 +34,38 @@
     <x_m>0</x_m>
     <y_m>0</y_m>
     <z_m>0.175</z_m>
-    <rx_m>0</rx_m>
-    <ry_m>-3.1415926535897931</ry_m>
-    <rz_m>0</rz_m>
-    <mass_kg>2.4</mass_kg>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>1</mass_kg>
     <cogx_m>0</cogx_m>
     <cogy_m>0</cogy_m>
-    <cogz_m>0.08</cogz_m>
+    <cogz_m>0.05</cogz_m>
+  </Tools>
+  <Tools>
+    <Name>alt</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.2</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.07</cogz_m>
+  </Tools>
+  <Tools>
+    <Name>J1</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>0</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0</cogz_m>
   </Tools>
 </NewDataSet>

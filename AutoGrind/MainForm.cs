@@ -33,7 +33,7 @@ namespace AutoGrind
         MessageForm messageForm = null;
 
         static DataTable variables;
-        static DataTable tools;
+        public DataTable tools;
 
         private enum RunState
         {
@@ -210,16 +210,17 @@ namespace AutoGrind
                     if (robotReady)
                     {
                         log.Info("Change robot connection to READY");
-                        RobotStatusLbl.BackColor = Color.Green;
-                        RobotStatusLbl.Text = "READY";
-                        // Restore all button settings with same current state
-                        SetState(runState, true, true);
                         ExecuteLine(-1, "set_speed(-1)");             // Query speed
                         ExecuteLine(-1, "set_accel(-1)");             // Query accel
                         ExecuteLine(-1, "set_blend(-1)");             // Query blend
                         ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
                         ExecuteLine(-1, "set_tcp(-10,0,0,0,0,0)");    // Query current TCP
                         ExecuteLine(-1, "set_payload(0,0,0,0)");      // Query current payload and COG
+                        ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
+                        RobotStatusLbl.BackColor = Color.Green;
+                        RobotStatusLbl.Text = "READY";
+                        // Restore all button settings with same current state
+                        SetState(runState, true, true);
                     }
                     else
                     {
@@ -230,6 +231,7 @@ namespace AutoGrind
                         SetState(runState, true, true);
                     }
                 }
+
             }
         }
 
@@ -237,6 +239,26 @@ namespace AutoGrind
         // ===================================================================
         // START MAIN UI BUTTONS
         // ===================================================================
+
+
+        // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
+        private void MonitorTab_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            string tabName = MonitorTab.TabPages[MonitorTab.SelectedIndex].Text;
+            log.Info("Monitor tab changed to " + tabName);
+
+            if (tabName == "Logs")
+            {
+                for (int i = 0; i < 2; i++)
+                {
+                    AllLogRTB.Refresh();
+                    ExecLogRTB.Refresh();
+                    UrLogRTB.Refresh();
+                    ErrorLogRTB.Refresh();
+                }
+            }
+        }
+
 
         private void SetState(RunState s, bool fEditing = false, bool fForce = false)
         {
@@ -333,6 +355,14 @@ namespace AutoGrind
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
             ContinueBtn.BackColor = ContinueBtn.Enabled ? Color.Green : Color.Gray;
             StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
+        }
+        private void MountedToolBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            log.Info("Operator changing tool to " + MountedToolBox.Text);
+
+            ToolsGrd.ClearSelection();
+            if(robotServer != null)
+                ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
         }
 
         private void GrindBtn_Click(object sender, EventArgs e)
@@ -683,6 +713,10 @@ namespace AutoGrind
 
             // Autoload file is the last loaded recipe
             recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
+
+            // Save currently mounted tool
+            MountedToolBox.Text = (string)AppNameKey.GetValue("MountedToolBox.Text", "");
+
         }
 
         void SavePersistent()
@@ -716,6 +750,9 @@ namespace AutoGrind
 
             // Save currently loaded recipe
             AppNameKey.SetValue("RecipeFilenameLbl.Text", RecipeFilenameLbl.Text);
+
+            // Save currently mounted tool
+            AppNameKey.SetValue("MountedToolBox.Text", MountedToolBox.Text);
         }
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -751,7 +788,7 @@ namespace AutoGrind
 
         private void JogBtn_Click(object sender, EventArgs e)
         {
-            JoggingForm form = new JoggingForm(robotServer, "Jog to Defect");
+            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect");
 
             form.ShowDialog(this);
         }
@@ -778,7 +815,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingForm form = new JoggingForm(robotServer, prompt, true);
+            JoggingForm form = new JoggingForm(robotServer, this, prompt, true);
 
             form.ShowDialog(this);
 
@@ -1197,11 +1234,11 @@ namespace AutoGrind
                 return true;
             }
 
-            // toolchange
+            // select_tool  (Assumes operator has already installed it somehow!!)
             if (command.StartsWith("select_tool("))
             {
                 LogInterpret("select_tool", lineNumber, command);
-                DataRow row = FindTool(ExtractParameters(command));
+                DataRow row = FindTool(ExtractParameters(command, 1));
                 if (row == null)
                 {
                     log.Error("Unknown tool specified in Exec: {0.000} {1}", lineNumber, command);
@@ -1210,10 +1247,10 @@ namespace AutoGrind
                 }
                 else
                 {
-                    GotoToolChangeBtn_Click(null, null);
-                    ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_m"], row["ry_m"], row["rz_m"]));
+                    ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
-                    PromptOperator("Please install tool for: " + command);
+                    WriteVariable("robot_tool=" + row["Name"]);
+                    MountedToolBox.Text = (string)row["Name"];
                 }
                 return true;
             }
@@ -1516,6 +1553,10 @@ namespace AutoGrind
             System.Threading.Monitor.Enter(lockObject);
             string nameTrimmed = name.Trim();
             string valueTrimmed = value.Trim();
+
+            // Automatically consider and variables with name starting in robot_ to be system variables
+            if (nameTrimmed.StartsWith("robot_")) isSystem = true;
+
             log.Trace("WriteVariable({0}, {1})", nameTrimmed, valueTrimmed);
             if (variables == null)
             {
@@ -1550,6 +1591,9 @@ namespace AutoGrind
             switch (nameTrimmed)
             {
                 case "robot_ready":
+                    RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    break;
+                case "robot_tool":
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
                 case "grind_ready":
@@ -1732,6 +1776,19 @@ namespace AutoGrind
         // ===================================================================
         // START TOOL SYSTEM
         // ===================================================================
+        private void SelectToolBtn_Click(object sender, EventArgs e)
+        {
+            if (ToolsGrd.SelectedRows.Count == 1)
+            {
+                DataRow row = ((DataRowView)ToolsGrd.SelectedRows[0].DataBoundItem).Row;
+                string name = row["Name"].ToString();
+
+                log.Info("Selecting tool {0}", name);
+
+                ExecuteLine(-1, string.Format("select_tool({0})", name));
+            }
+
+        }
 
         readonly string toolsFilename = "Tools.var";
         private void ClearAndInitializeTools()
@@ -1741,9 +1798,9 @@ namespace AutoGrind
             tools.Columns.Add("x_m", typeof(System.Double));
             tools.Columns.Add("y_m", typeof(System.Double));
             tools.Columns.Add("z_m", typeof(System.Double));
-            tools.Columns.Add("rx_m", typeof(System.Double));
-            tools.Columns.Add("ry_m", typeof(System.Double));
-            tools.Columns.Add("rz_m", typeof(System.Double));
+            tools.Columns.Add("rx_rad", typeof(System.Double));
+            tools.Columns.Add("ry_rad", typeof(System.Double));
+            tools.Columns.Add("rz_rad", typeof(System.Double));
             tools.Columns.Add("mass_kg", typeof(System.Double));
             tools.Columns.Add("cogx_m", typeof(System.Double));
             tools.Columns.Add("cogy_m", typeof(System.Double));
@@ -1770,6 +1827,12 @@ namespace AutoGrind
             ToolsGrd.DataSource = tools;
             foreach (DataGridViewColumn col in ToolsGrd.Columns)
                 col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+
+            MountedToolBox.Items.Clear();
+            foreach (DataRow row in tools.Rows)
+            {
+                MountedToolBox.Items.Add(row["Name"]);
+            }
         }
 
 
@@ -1804,12 +1867,7 @@ namespace AutoGrind
             return null;
         }
 
-        private void RobotStatusLbl_Click(object sender, EventArgs e)
-        {
-
-        }
-
-
+        
         // ===================================================================
         // END TOOL SYSTEM
         // ===================================================================
