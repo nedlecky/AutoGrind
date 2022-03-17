@@ -365,6 +365,7 @@ namespace AutoGrind
             ToolsGrd.ClearSelection();
             if (robotServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
+            PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
@@ -816,7 +817,11 @@ namespace AutoGrind
 
         private void JogBtn_Click(object sender, EventArgs e)
         {
-            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect", ReadVariable("robot_tool"));
+            string partName = PartGeometryBox.Text;
+            if (partName != "FLAT")
+                partName += " " + DiameterLbl.Text + " mm DIA";
+
+            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
 
             form.ShowDialog(this);
         }
@@ -835,7 +840,11 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), true);
+            string partName = PartGeometryBox.Text; 
+            if(partName != "FLAT")
+                partName += " " + DiameterLbl.Text + " mm DIA";    
+
+            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), partName, true);
 
             form.ShowDialog(this);
 

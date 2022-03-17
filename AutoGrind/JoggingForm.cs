@@ -17,23 +17,18 @@ namespace AutoGrind
         public bool ShouldSave { get; set; }
 
         MainForm mainForm;
-        //static DataTable tools;
 
-        public JoggingForm(TcpServer _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", bool saveable = false)
+        public JoggingForm(TcpServer _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;
             ToolLbl.Text = "Tool: " + tool;
+            PartLbl.Text = "Part: " + part;
             robot = _robot;
             mainForm = _mainForm;
             ShouldSave = false;
             SaveBtn.Enabled = saveable;
             SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;
-
-            //tools = mainForm.tools;
-
-
-
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
@@ -65,12 +60,19 @@ namespace AutoGrind
         }
         private void Jog(double[] p)
         {
-            string command;
-            if (CoordBox.Text == "TOOL")
-                command = "(14";
-            else
-                command = "(13";
-
+            string command = "??";
+            switch (CoordBox.Text)
+            {
+                case "BASE":
+                    command = "(13";
+                    break;
+                case "TOOL":
+                    command = "(14";
+                    break;
+                case "PART":
+                    command = "(15";
+                    break;
+            }
 
             for (int i = 0; i < 6; i++)
                 command += "," + p[i].ToString();
@@ -162,17 +164,17 @@ namespace AutoGrind
 
         private void FlipRBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,3," + Deg2Rad(180).ToString() + ")");
+            robot.Send("(16,3," + Deg2Rad(180).ToString() + ")");
         }
 
         private void ZeroPBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,4,0)");
+            robot.Send("(16,4,0)");
         }
 
         private void ZeroYBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(15,5,0)");
+            robot.Send("(16,5,0)");
         }
         private void ZeroRpyBtn_Click(object sender, EventArgs e)
         {

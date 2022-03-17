@@ -5,7 +5,7 @@
 
 global response = "unknown"
 
-global robot_speed = 0.5
+global robot_speed = 0.2
 global robot_accel = 1.25
 global robot_blend = 0.003
 global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
@@ -56,7 +56,7 @@ def set_variable():
     # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
     shape = command[3]
     if shape > 0:
-      diameter_m = command[4]
+      diameter_m = command[4] / 1000.0
       robot_part_geometry = [shape, diameter_m]
     end
 
@@ -136,6 +136,17 @@ def movel_relative_tcp(p1):
   p1 = pose_trans(get_forward_kin(), p1)
   movel(p1, a = robot_accel, v = robot_speed)
   global response = "movel_relative_tcp()"
+end
+
+# Movel relatively in TCP_part coordinates
+def movel_relative_tcp_part(p1):
+  set_tcp(robot_tcp_part)
+  p1 = pose_trans(get_forward_kin(), p1)
+  #p1 = pose_trans(get_forward_kin(q=get_actual_joint_positions(), tcp = robot_tcp_part), p1)
+  #p1 = pose_trans(get_forward_kin(q = get_actual_joint_positions(), tcp = robot_tcp_part), p1)
+  movel(p1, a = robot_accel, v = robot_speed)
+  set_tcp(robot_tcp)
+  global response = "movel_relative_tcp_part()"
 end
 
 # Change one element of current pose and movel there

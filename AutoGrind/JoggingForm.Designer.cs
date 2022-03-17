@@ -55,6 +55,7 @@
             this.DistanceBox = new System.Windows.Forms.ComboBox();
             this.AngleBox = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
+            this.PartLbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // YminusBtn
@@ -292,9 +293,9 @@
             this.PurposeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PurposeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PurposeLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.PurposeLbl.Location = new System.Drawing.Point(706, 9);
+            this.PurposeLbl.Location = new System.Drawing.Point(521, 9);
             this.PurposeLbl.Name = "PurposeLbl";
-            this.PurposeLbl.Size = new System.Drawing.Size(378, 52);
+            this.PurposeLbl.Size = new System.Drawing.Size(563, 52);
             this.PurposeLbl.TabIndex = 76;
             this.PurposeLbl.Text = "General Jogging";
             this.PurposeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -363,9 +364,9 @@
             this.ToolLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ToolLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.ToolLbl.Location = new System.Drawing.Point(706, 84);
+            this.ToolLbl.Location = new System.Drawing.Point(521, 84);
             this.ToolLbl.Name = "ToolLbl";
-            this.ToolLbl.Size = new System.Drawing.Size(378, 52);
+            this.ToolLbl.Size = new System.Drawing.Size(563, 52);
             this.ToolLbl.TabIndex = 82;
             this.ToolLbl.Text = "Tool:";
             this.ToolLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -426,12 +427,25 @@
             this.label3.Text = "Coordinates";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // PartLbl
+            // 
+            this.PartLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.PartLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PartLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
+            this.PartLbl.Location = new System.Drawing.Point(521, 162);
+            this.PartLbl.Name = "PartLbl";
+            this.PartLbl.Size = new System.Drawing.Size(563, 52);
+            this.PartLbl.TabIndex = 87;
+            this.PartLbl.Text = "Part:";
+            this.PartLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // JoggingForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1096, 769);
             this.ControlBox = false;
+            this.Controls.Add(this.PartLbl);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.AngleBox);
             this.Controls.Add(this.DistanceBox);
@@ -497,5 +511,6 @@
         private System.Windows.Forms.ComboBox DistanceBox;
         private System.Windows.Forms.ComboBox AngleBox;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label PartLbl;
     }
 }

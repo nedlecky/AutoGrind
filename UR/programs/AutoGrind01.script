@@ -1,12 +1,4 @@
 def AutoGrind01():
-  step_count_208b5410_aa86_42be_82b2_288ae82febab = 0.0
-  thread Step_Counter_Thread_37429f58_c7e4_4cdf_ad35_acbe30ef5af3():
-    while (True):
-      step_count_208b5410_aa86_42be_82b2_288ae82febab = step_count_208b5410_aa86_42be_82b2_288ae82febab + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_37429f58_c7e4_4cdf_ad35_acbe30ef5af3()
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -14,15 +6,23 @@ def AutoGrind01():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  set_safety_mode_transition_hardness(1)
+  set_gravity([0.0, 0.0, 9.82])
+  step_count_4609e991_5059_4679_8b3f_e2a1a7ba041f = 0.0
+  thread Step_Counter_Thread_2235f429_aee2_4f25_9d77_aa17058d98b7():
+    while (True):
+      step_count_4609e991_5059_4679_8b3f_e2a1a7ba041f = step_count_4609e991_5059_4679_8b3f_e2a1a7ba041f + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_2235f429_aee2_4f25_9d77_aa17058d98b7()
   set_tcp(p[0.0,0.0,0.175,1.0,0.0,0.0])
   set_payload(1.0, [0.0, 0.0, 0.05])
-  set_gravity([0.0, 0.0, 9.82])
   set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(0)
+  set_safety_mode_transition_hardness(1)
   global Vertical_3_p=p[.138885408770, -.597734994115, .345465728645, .020328607375, .009472346729, .004936256276]
   global Vertical_3_q=[1.5825845003128052, -1.3035788101008912, 1.3692634741412562, -1.6159240208067835, -1.5805562178241175, 3.148454189300537]
   global Tilted_1_p=p[.138883686744, -.597728142783, .345429622193, -.448043800451, .010443563975, .002601926233]
@@ -32,15 +32,15 @@ def AutoGrind01():
   global Vertical_6_p=p[.138875969234, -.597730539026, .130475163479, .000006847317, .000017170136, .002581409666]
   global Vertical_6_q=[1.5792073011398315, -1.1477825206569214, 1.743450943623678, -2.1663156948485316, -1.570512596760885, 3.1478190422058105]
   def AG_50():
-    $ 65 "AG_50" "noBreak"
-    $ 66 "MoveL"
-    $ 67 "Vertical_3" "breakAfter"
+    $ 67 "AG_50" "noBreak"
+    $ 68 "MoveL"
+    $ 69 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 68 "Tilted_1" "breakAfter"
+    $ 70 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 69 "Vertical_4" "breakAfter"
+    $ 71 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 70 "Vertical_6" "breakAfter"
+    $ 72 "Vertical_6" "breakAfter"
     movel(Vertical_6_p, a=1.2, v=0.25)
   end
   $ 1 "BeforeStart"
@@ -109,12 +109,15 @@ def AutoGrind01():
   global robot_accel = 1.25
   global robot_blend = 0.003
   global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
+  global robot_tcp_part = robot_tcp
   global robot_payload_mass = 1.0
   global robot_payload_cog = [0, 0, 0.50]
+  # Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_m)
+  global robot_part_geometry = [0, 0]
   
   # Defaults get set on load... and can be queried (or changed) from C#
   set_tcp(robot_tcp)
-  set_payload(robot_payload_mass,robot_payload_cog)
+  set_payload(robot_payload_mass, robot_payload_cog)
   set_gravity([0.0, 0.0, 9.82])
   
   # Set interface... allows validation and limits
@@ -149,13 +152,35 @@ def AutoGrind01():
       socket_send_string(robot_blend)
       socket_send_lf()
       global response = "set_blend()"
+    elif command[2] == 4:
+      # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
+      shape = command[3]
+      if shape > 0:
+        diameter_m = command[4]
+        robot_part_geometry = [shape, diameter_m]
+      end
+  
+      # set robot_tcp_part based on geometry
+      if shape == 1:  # Flat
+        robot_tcp_part = robot_tcp
+      else:  # Cylinder or Sphere
+        robot_tcp_part = pose_trans(robot_tcp, p[0, 0, robot_part_geometry[1] / 2.0, 0, 0, 0])
+      end
+  
+      socket_send_string("robot_part_geometry=")
+      return_vector(robot_part_geometry, 2)
+      socket_send_lf()
+      return_pose("robot_tcp_part", robot_tcp_part)
+      global response = "set_part_geometry()"
     elif command[2] == 10:
       # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
       if command[3] > -10:
         robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
+        robot_tcp_part = robot_tcp
         set_tcp(robot_tcp)
       end
       return_pose("robot_tcp", get_tcp_offset())
+      return_pose("robot_tcp_part", robot_tcp_part)
       global response = "set_tcp()"
     elif command[2] == 11:
       # set_payload if command[3] > 0. Always return robot_m and robot_cog
@@ -198,12 +223,26 @@ def AutoGrind01():
     global response = "return_get_actual_joint_positions()"
   end
   
-  # Movel relatively
-  def movel_relative(p1):
+  # Movel relatively in base coordinates
+  def movel_relative_base(p1):
     p0 = get_actual_tcp_pose()
     p2 = pose_add(p0, p1)
     movel(p2, robot_accel, robot_speed)
-    global response = "movel_relative()"
+    global response = "movel_relative_base()"
+  end
+  
+  # Movel relatively in TCP coordinates
+  def movel_relative_tcp(p1):
+    p1 = pose_trans(get_forward_kin(), p1)
+    movel(p1, a = robot_accel, v = robot_speed)
+    global response = "movel_relative_tcp()"
+  end
+  
+  # Movel relatively in TCP_part coordinates
+  def movel_relative_tcp_part(p1):
+    p1 = pose_trans(get_forward_kin(tcp = robot_tcp_part), p1)
+    movel(p1, a = robot_accel, v = robot_speed)
+    global response = "movel_relative_tcp_part()"
   end
   
   # Change one element of current pose and movel there
@@ -408,13 +447,15 @@ def AutoGrind01():
     global grind_cycle = 0
     global grind_n_cycles = 0
     global grind_dx_mm = 0
-    global grind_dx2_mm = 0
     global grind_dy_mm = 0
+    global grind_circle1_diam_mm = 0
+    global grind_circle2_diam_mm = 0
     global grind_n_spirals = 0
-    global grind_radius_mm = 0
     global grind_xstep_mm = 0
     global grind_ystep_mm = 0
-    global grind_rstep_mm = 0
+  
+    # Install tcp that puts tcp at center of part (noop for flat parts!)
+    set_tcp(robot_tcp_part)
   
     if command[2] == 1:
       global response = "set grind_contact_enabled"
@@ -425,72 +466,45 @@ def AutoGrind01():
         global grind_contact_enabled = False
         socket_send_line("grind_contact_enabled=False")
       end
-  
-      # RECTANGLAR GRINDS
-    elif command[2] == 10:
-      global response = "grind_rect_flat"
+      # RECTANGULAR GRINDS
+    elif command[2] == 2:
+      global response = "grind_rect"
       global grind_dx_mm = command[3]
       global grind_dy_mm = command[4]
       global grind_n_cycles = command[5]
-      grind_rect_flat(grind_dx_mm, grind_dy_mm, grind_n_cycles)
-    elif command[2] == 11:
-      global response = "grind_rect_cylinder"
-      global grind_dx_mm = command[3]
-      global grind_dy_mm = command[4]
-      global grind_radius_mm = command[5]
-      global grind_n_cycles = command[6]
-      grind_rect_cylinder(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
-    elif command[2] == 12:
-      global response = "grind_rect_sphere"
-      global grind_dx_mm = command[3]
-      global grind_dy_mm = command[4]
-      global grind_radius_mm = command[5]
-      global grind_n_cycles = command[6]
-      grind_rect_sphere(grind_dx_mm, grind_dy_mm, grind_radius_mm, grind_n_cycles)
+      grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
   
       # SERPENTINE GRINDS
-    elif command[2] == 20:
-      global response = "grind_serpentine_flat"
+    elif command[2] == 3:
+      global response = "grind_serpentine"
       global grind_dx_mm = command[3]
       global grind_dy_mm = command[4]
       global grind_xstep_mm = command[5]
       global grind_ystep_mm = command[6]
       global grind_n_cycles = command[7]
-      grind_serpentine_flat(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
-    elif command[2] == 21:
-      global response = "grind_serpentine_cylinder"
-      global grind_dx_mm = command[3]
-      global grind_dy_mm = command[4]
-      global grind_xstep_mm = command[5]
-      global grind_ystep_mm = command[6]
-      global grind_radius_mm = command[7]
-      global grind_n_cycles = command[8]
-      grind_serpentine_cylinder(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_radius_mm, grind_n_cycles)
+      grind_serpentine(grind_dx_mm, grind_dy_mm, grind_xstep_mm, grind_ystep_mm, grind_n_cycles)
   
       # CIRCULAR GRINDS
-    elif command[2] == 30:
-      global response = "grind_circle_flat"
-      global grind_dx_mm = command[3]
+    elif command[2] == 4:
+      global response = "grind_circle"
+      global grind_circle1_diam_mm = command[3]
       global grind_n_cycles = command[4]
-      grind_circle_flat(grind_dx_mm, grind_n_cycles)
-    elif command[2] == 31:
-      global response = "grind_circle_sphere"
-      global grind_dx_mm = command[3]
-      global grind_radius_mm = command[4]
-      global grind_n_cycles = command[5]
-      grind_circle_sphere(grind_dx_mm, grind_radius_mm, grind_n_cycles)
+      grind_circle(grind_circle1_diam_mm, grind_n_cycles)
   
       # SPIRAL GRINDS
-    elif command[2] == 40:
-      global response = "grind_spiral_flat"
-      global grind_dx_mm = command[3]
-      global grind_dx2_mm = command[4]
+    elif command[2] == 5:
+      global response = "grind_spiral"
+      global grind_circle1_diam_mm = command[3]
+      global grind_circle2_diam_mm = command[4]
       global grind_n_spirals = command[5]
       global grind_n_cycles = command[6]
-      grind_spiral_flat(grind_dx_mm, grind_dx2_mm, grind_n_spirals, grind_n_cycles)
+      grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_spirals, grind_n_cycles)
     else:
       global response = "Unknown Grind Command"
     end
+  
+    # Restore tool-only tcp
+    set_tcp(robot_tcp)
   
     kill listenerThread
     listenerThread = 0
@@ -499,11 +513,17 @@ def AutoGrind01():
     socket_send_line("grind_ready=True")
   end
   
-  # Grind along a flat rect dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.
+  # Grind along a rect dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.
   # Move in x direction first, then y
-  def grind_rect_flat(dx_mm, dy_mm, n_cycles):
+  def grind_rect(dx_mm, dy_mm, n_cycles):
     if n_cycles < 1:
       return True
+    end
+  
+    # shape OK?
+    shape = robot_part_geometry[0]
+    if shape < 1 or shape > 3:
+      return False
     end
   
     # Unit conversion
@@ -511,19 +531,46 @@ def AutoGrind01():
     dy_m = dy_mm / 1000.0
   
     # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m, 0, 0, 0])
     p0 = get_actual_tcp_pose()
   
-    # Move to offset position bottom left of scan area
-    p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
-    movel(p1, robot_accel, robot_speed)
+    # Move to start position
+    if shape == 1:
+      p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
+    elif shape == 2:
+      radius_m = robot_part_geometry[1] / 2.0
+      drx_rad = dy_m / radius_m
+      p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
+    elif shape == 3:
+      radius_m = robot_part_geometry[1] / 2.0
+      drx_rad = dy_m / radius_m
+      dry_rad = dy_m / radius_m
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
+    end
+    movel(p1, a = robot_accel, v = robot_speed)
   
     if not set_grinding_state(True):
       movel(p0, a = robot_accel, v = robot_speed)
       return False
     end
   
-    # Grind box pattern
+    # Grind the pattern
+    if shape == 1:
+      pattern_rect_flat(dx_m, dy_m, n_cycles)
+    elif shape == 2:
+      pattern_rect_cylinder(dx_m, drx_rad, n_cycles)
+    elif shape == 3:
+      pattern_rect_sphere(drx_rad, dry_rad, n_cycles)
+    end
+  
+    set_grinding_state(False)
+  
+    # Return robot back to initial position
+    movel(p0, a = robot_accel, v = robot_speed)
+  end
+  
+  # Move along a flat rect dx_m x dy_m starting at cuirrent position. Repeat n_cycles times.
+  # Move in x direction first, then y
+  def pattern_rect_flat(dx_m, dy_m, n_cycles):
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       if ok_to_proceed():
@@ -547,40 +594,11 @@ def AutoGrind01():
       end
       grind_cycle = grind_cycle + 1
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a cylindrical rect dx_mm,dy_mm with radius_mm centered on current tool position. Repeat n_cycles times.
-  # Move in x direction first, then r
-  def grind_rect_cylinder(dx_mm, dy_mm, radius_mm, n_cycles):
-    if n_cycles < 1:
-      return False
-    end
-  
-    # Unit conversion
-    dx_m = dx_mm / 1000.0
-    radius_m = radius_mm / 1000.0
-    drx_rad = dy_mm / radius_mm
-  
-    # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
-    p0 = get_actual_tcp_pose()
-  
-    # Move to offset position bottom left of scan area
-    p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
-    movel(p1, a = robot_accel, v = robot_speed)
-  
-    if not set_grinding_state(True):
-      movel(p0, a = robot_accel, v = robot_speed)
-      return False
-    end
-  
-    # Grind cylindrical box pattern
+  # Move along a cylindrical rect dx_mm,drx_rad starting at current position. Repeat n_cycles times.
+  # Move in x direction first, then rx
+  def pattern_rect_cylinder(dx_m, drx_rad, n_cycles):
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       if ok_to_proceed():
@@ -604,40 +622,11 @@ def AutoGrind01():
       end
       grind_cycle = grind_cycle + 1
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a cylindrical rect dx_mm,dy_mm with radius_mm centered on current tool position. Repeat n_cycles times.
-  # Move in x direction first, then r
-  def grind_rect_sphere(dx_mm, dy_mm, radius_mm, n_cycles):
-    if n_cycles < 1:
-      return False
-    end
-  
-    # Unit conversion
-    radius_m = radius_mm / 1000.0
-    drx_rad = dx_mm / radius_mm
-    dry_rad = dy_mm / radius_mm
-  
-    # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
-    p0 = get_actual_tcp_pose()
-  
-    # Move to offset position bottom left of scan area
-    p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
-    movel(p1, a = robot_accel, v = robot_speed)
-  
-    if not set_grinding_state(True):
-      movel(p0, a = robot_accel, v = robot_speed)
-      return False
-    end
-  
-    # Grind cylindrical box pattern
+  # Move along a sperical rect drx_rad,dry_rad starting at current tool position. Repeat n_cycles times.
+  # Move in rx direction first, then ry
+  def pattern_rect_sphere(drx_rad, dry_rad, n_cycles):
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       if ok_to_proceed():
@@ -661,18 +650,18 @@ def AutoGrind01():
       end
       grind_cycle = grind_cycle + 1
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a flat serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current tool position. Repeat n_cycles times.
+  # Grind along a rect in serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current tool position. Repeat n_cycles times.
   # Move in x direction first, then y
-  def grind_serpentine_flat(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
+  def grind_serpentine(dx_mm, dy_mm, xstep_mm, ystep_mm, n_cycles):
     if n_cycles < 1:
+      return True
+    end
+  
+    # shape OK?
+    shape = robot_part_geometry[0]
+    if shape < 1 or shape > 3:
       return False
     end
   
@@ -681,183 +670,194 @@ def AutoGrind01():
     dy_m = dy_mm / 1000.0
     xstep_m = xstep_mm / 1000.0
     ystep_m = ystep_mm / 1000.0
-    x_grid_count = floor(dx_m / xstep_m)
-    y_grid_count = floor(dy_m / ystep_m)
   
-    # Find initial position
-    set_tcp(p[0, 0, tool_length_m, 0, 0, 0])
+    # Find initial position p0
     p0 = get_actual_tcp_pose()
   
-    # Move to offset position bottom left of scan area
-    p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
+    # Move to start position
+    if shape == 1:
+      p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, -dy_m / 2, 0, 0, 0, 0])
+    elif shape == 2:
+      part_radius_m = robot_part_geometry[1] / 2.0
+      drx_rad = dy_m / part_radius_m
+      rxstep_rad = ystep_m / part_radius_m
+      p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
+    elif shape == 3:
+      part_radius_m = robot_part_geometry[1] / 2.0
+      drx_rad = dy_m / part_radius_m
+      dry_rad = dy_m / part_radius_m
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
+    end
     movel(p1, a = robot_accel, v = robot_speed)
   
     if not set_grinding_state(True):
-      movel(p0, robot_accel, robot_speed)
+      movel(p0, a = robot_accel, v = robot_speed)
       return False
     end
   
-    # Grind serpentine pattern
+    # Grind the pattern
+    if shape == 1:
+      pattern_serpentine_flat(dx_m, dy_m, xstep_m, ystep_m, n_cycles)
+    elif shape == 2:
+      pattern_serpentine_cylinder(dx_m, drx_rad, xstep_m, rxstep_rad, n_cycles)
+    elif shape == 3:
+      #pattern_serpentine_sphere(dx_m, drx_rad, xstep_m, rxstep_rad, n_cycles)  # NOT IMPLEMENTED
+    end
+  
+    set_grinding_state(False)
+  
+    # Return robot back to initial position
+    movel(p0, a = robot_accel, v = robot_speed)
+  end
+  
+  # Move along a flat serpentine dx_m,dy_m incrementing by xstep_m,ystep_m starting at current tool position. Repeat n_cycles times.
+  # Move in x direction first, then y
+  def pattern_serpentine_flat(dx_m, dy_m, xstep_m, ystep_m, n_cycles):
     global grind_cycle = 1
+    global x_grid_count = ceil(dx_m / xstep_m) + 1
+    global y_grid_count = ceil(dy_m / ystep_m) + 1
     x_grid = 0
     y_grid = 0
+    global cur_xstep_m = xstep_m
+    global cur_ystep_m = ystep_m
+    n_moves_per_pass = x_grid_count * y_grid_count - 1
+    move_count = 0
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      # Advance x by xstep_m
+      # Advance x by cur_xstep_m
       if ok_to_proceed():
-        p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
+        p1 = pose_trans(get_forward_kin(), p[cur_xstep_m, 0, 0, 0, 0, 0])
         movel(p1, a = robot_accel, v = robot_speed, r = robot_blend)
   
         # Track new grid square we're in
-        if xstep_m > 0:
+        if cur_xstep_m > 0:
           x_grid = x_grid + 1
         else:
           x_grid = x_grid - 1
         end
       end
       # Adjust x direction
-      if x_grid >= x_grid_count-1 and xstep_m > 0:
-        xstep_m = -xstep_m
-      elif x_grid == 0 and xstep_m < 0:
-        xstep_m = -xstep_m
+      if x_grid >= x_grid_count-1:
+        cur_xstep_m = -xstep_m
+      elif x_grid <= 0:
+        cur_xstep_m = xstep_m
       end
+      move_count = move_count + 1
   
-      # Advance y by ystep_m
-      if ok_to_proceed():
-        p1 = pose_trans(get_forward_kin(), p[0, ystep_m, 0, 0, 0, 0])
+      # Advance y by cur_ystep_m
+      if ok_to_proceed() and move_count < n_moves_per_pass:
+        p1 = pose_trans(get_forward_kin(), p[0, cur_ystep_m, 0, 0, 0, 0])
         movel(p1, a = robot_accel, v = robot_speed, r = robot_blend)
         # Track new grid square we're in
-        if ystep_m > 0:
+        if cur_ystep_m > 0:
           y_grid = y_grid + 1
         else:
           y_grid = y_grid - 1
         end
       end
       # Adjust y direction
-      if y_grid >= y_grid_count-1 and ystep_m > 0:
-        ystep_m = -ystep_m
-      elif y_grid == 0 and ystep_m < 0:
-        ystep_m = -ystep_m
+      if y_grid >= y_grid_count-1:
+        cur_ystep_m = -ystep_m
+      elif y_grid <= 0:
+        cur_ystep_m = ystep_m
       end
+      move_count = move_count + 1
   
       # Detect when we've covered all the grid squares!
-      # That's when you reach n-1,n-1 or 0,0
-      if x_grid == x_grid_count - 1 and y_grid == y_grid_count - 1:
+      if move_count >= n_moves_per_pass:
         grind_cycle = grind_cycle + 1
-      elif x_grid == 0 and y_grid == 0:
-        grind_cycle = grind_cycle + 1
+        move_count = 0
       end
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a cylindrical serpentine dx_mm,dy_mm incrementing by xstep_mm,rstep_mm centered on current tool position. Repeat n_cycles times.
-  # Move in x direction first, then r
-  def grind_serpentine_cylinder(dx_mm, dy_mm, xstep_mm, ystep_mm, radius_mm, n_cycles):
-    if n_cycles < 1:
-      return False
-    end
-  
-    # Unit conversion
-    dx_m = dx_mm / 1000.0
-    radius_m = radius_mm / 1000.0
-    drx_rad = dy_mm / radius_mm
-    xstep_m = xstep_mm / 1000.0
-    rstep_rad = ystep_mm / radius_mm
-    x_grid_count = floor(dx_mm / xstep_mm)
-    r_grid_count = floor(dy_mm / ystep_mm)
-  
-    # Find initial position
-    set_tcp(p[0, 0, tool_length_m + radius_m, 0, 0, 0])
-    p0 = get_actual_tcp_pose()
-  
-    # Move to offset position bottom left of scan area
-    p1 = pose_trans(get_forward_kin(), p[-dx_m / 2, 0, 0, -drx_rad / 2, 0, 0])
-    movel(p1, a = robot_accel, v = robot_speed)
-  
-    if not set_grinding_state(True):
-      movel(p0, a = robot_accel, v = robot_speed)
-      return False
-    end
-  
-    # Grind serpentine pattern
+  # Move along a cylindrical serpentine dx_m,drx_rad incrementing by xstep_m,rxstep_rad starting at current tool position. Repeat n_cycles times.
+  # Move in x direction first, then rx
+  def pattern_serpentine_cylinder(dx_m, drx_rad, xstep_m, rxstep_rad, n_cycles):
     global grind_cycle = 1
+    global x_grid_count = ceil(dx_m / xstep_m) + 1
+    global rx_grid_count = ceil(drx_rad / rxstep_rad) + 1
     x_grid = 0
-    r_grid = 0
+    rx_grid = 0
+    global cur_xstep_m = xstep_m
+    global cur_rxstep_rad = rxstep_rad
+    n_moves_per_pass = x_grid_count * rx_grid_count - 1
+    move_count = 0
+  
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      # Advance x by xstep_m
+      # Advance x by cur_xstep_m
       if ok_to_proceed():
-        p1 = pose_trans(get_forward_kin(), p[xstep_m, 0, 0, 0, 0, 0])
+        p1 = pose_trans(get_forward_kin(), p[cur_xstep_m, 0, 0, 0, 0, 0])
         movel(p1, a = robot_accel, v = robot_speed, r = robot_blend)
         # Track new grid square we're in
-        if xstep_m > 0:
+        if cur_xstep_m > 0:
           x_grid = x_grid + 1
         else:
           x_grid = x_grid - 1
         end
       end
       # Adjust x direction
-      if x_grid >= x_grid_count-1 and xstep_m > 0:
-        xstep_m = -xstep_m
-      elif x_grid == 0 and xstep_m < 0:
-        xstep_m = -xstep_m
+      if x_grid >= x_grid_count-1:
+        cur_xstep_m = -xstep_m
+      elif x_grid <= 0:
+        cur_xstep_m = xstep_m
       end
+      move_count = move_count + 1
   
-      # Advance r by rstep_rad
-      if ok_to_proceed():
-        p1 = pose_trans(get_forward_kin(), p[0, 0, 0, rstep_rad, 0, 0])
+      # Advance rx by cur_rxstep_rad
+      if ok_to_proceed() and move_count < n_moves_per_pass:
+        p1 = pose_trans(get_forward_kin(), p[0, 0, 0, cur_rxstep_rad, 0, 0])
         movel(p1, a = robot_accel, v = robot_speed, r = robot_blend)
         # Track new grid square we're in
-        if rstep_rad > 0:
-          r_grid = r_grid + 1
+        if cur_rxstep_rad > 0:
+          rx_grid = rx_grid + 1
         else:
-          r_grid = r_grid - 1
+          rx_grid = rx_grid - 1
         end
       end
-      # Adjust r direction
-      if r_grid >= r_grid_count-1 and rstep_rad > 0:
-        rstep_rad = -rstep_rad
-      elif r_grid == 0 and rstep_rad < 0:
-        rstep_rad = -rstep_rad
+      # Adjust rx direction
+      if rx_grid >= rx_grid_count-1:
+        cur_rxstep_rad = -rxstep_rad
+      elif rx_grid <= 0:
+        cur_rxstep_rad = rxstep_rad
       end
+      move_count = move_count + 1
   
       # Detect when we've covered all the grid squares!
-      # That's when you reach n-1,n-1 or 0,0
-      if x_grid == x_grid_count - 1 and r_grid == r_grid_count - 1:
+      if move_count >= n_moves_per_pass:
         grind_cycle = grind_cycle + 1
-      elif r_grid == 0 and r_grid == 0:
-        grind_cycle = grind_cycle + 1
+        move_count = 0
       end
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a flat circle diam dx_mm centered on current tool position. Repeat n_cycles times.
-  def grind_circle_flat(dx_mm, n_cycles):
+  # Grind along a circle with circle_diam_mm centered on current tool position. Repeat n_cycles times.
+  def grind_circle(circle_diam_mm, n_cycles):
     if n_cycles < 1:
       return True
     end
   
+    # shape OK?
+    shape = robot_part_geometry[0]
+    if shape < 1 or shape > 3:
+      return False
+    end
+  
     # Unit conversion
-    dx_m = dx_mm / 1000.0
-    n_points = ceil(dx_mm * 1.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-    radius_m = dx_m / 2          # Circle radius is half of specified dx
+    circle_diam_m = circle_diam_mm / 1000.0
   
     # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m, 0, 0, 0])  #
     p0 = get_actual_tcp_pose()
   
-    # Move to offset position east edge of circle
-    p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
+    # Move to start position
+    if shape == 1:
+      p1 = pose_trans(get_forward_kin(), p[circle_diam_m / 2.0, 0, 0, 0, 0, 0])
+    elif shape == 2:
+      part_diam_m = robot_part_geometry[1]
+      p1 = pose_trans(get_forward_kin(), p[circle_diam_m / 2.0, 0, 0, 0, 0, 0])
+    elif shape == 3:
+      part_diam_m = robot_part_geometry[1]
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, circle_diam_m / part_diam_m / 2.0, 0, 0])
+    end
     movel(p1, a = robot_accel, v = robot_speed)
   
     if not set_grinding_state(True):
@@ -865,16 +865,38 @@ def AutoGrind01():
       return False
     end
   
-    # Grind circle pattern
+    # Grind the pattern
+    if shape == 1:
+      pattern_circle_flat(circle_diam_m, n_cycles)
+    elif shape == 2:
+      #pattern_circle_cylinder(circle_diam_m, part_diam_m, n_cycles)  # NOT IMPLEMENTED
+    elif shape == 3:
+      pattern_circle_sphere(circle_diam_m, part_diam_m, n_cycles)
+    end
+  
+    set_grinding_state(False)
+  
+    # Return robot back to initial position
+    movel(p0, a = robot_accel, v = robot_speed)
+  end
+  
+  # Grind along a flat circle circle_diam_m starting at current tool position. Repeat n_cycles times.
+  def pattern_circle_flat(circle_diam_m, n_cycles):
+  
+    # Unit conversion
+    n_points = ceil(circle_diam_m * 1000.0)   # 10 points in a 10mm diam circle... linear n_points up and down from there
+    circle_radius_m = circle_diam_m / 2.0     # Circle radius is half of specified dx
+  
     # We're in contact at east side... compute where contact position would be at center of circle
-    p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
+    p_center = pose_trans(get_forward_kin(), p[-circle_radius_m, 0, 0, 0, 0, 0])
+  
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       i = 1
       while ok_to_proceed() and i <= n_points:
         theta = d2r(360.0 * i / n_points)
-        x = radius_m * cos(theta)
-        y = radius_m * sin(theta)
+        x = circle_radius_m * cos(theta)
+        y = circle_radius_m * sin(theta)
   
         p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
         movel(p1, a = robot_accel, v = robot_speed, r = robot_blend)
@@ -883,50 +905,25 @@ def AutoGrind01():
   
       grind_cycle = grind_cycle + 1
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
-  # Grind along a spherical circle diam dx_mm centered on current tool position. Repeat n_cycles times.
-  def grind_circle_sphere(dx_mm, sphere_radius_mm, n_cycles):
-    if n_cycles < 1:
-      return True
-    end
-  
+  # Move along a spherical circle circle_diam_m on a sphere_diam_m object starting at the current tool position. Repeat n_cycles times.
+  def pattern_circle_sphere(circle_diam_m, sphere_diam_m, n_cycles):
     # Unit conversion
-    dx_m = dx_mm / 1000.0
-    n_points = ceil(dx_mm * 1.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-    radius_m = dx_m / 2          # Circle radius is half of specified dx
-    sphere_radius_m = sphere_radius_mm / 1000
+    n_points = ceil(circle_diam_m * 1000.0)   # 10 points in a 10mm diam circle... linear n_points up and down from there
+    circle_radius_m = circle_diam_m / 2.0
+    sphere_radius_m = sphere_diam_m / 2.0
   
-    # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m + sphere_radius_m, 0, 0, 0])  #
-    p0 = get_actual_tcp_pose()
-  
-    # Move to offset position east edge of circle
-    p1 = pose_trans(get_forward_kin(), p[0, 0, 0, radius_m / sphere_radius_m, 0, 0])
-    movel(p1, a = robot_accel, v = robot_speed)
-  
-    if not set_grinding_state(True):
-      movel(p0, a = robot_accel, v = robot_speed)
-      return False
-    end
-  
-    # Grind circle pattern
     # We're in contact at east side... compute where contact position would be at center of circle
-    p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -radius_m / sphere_radius_m, 0, 0])
+    p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m / 2.0, 0, 0])
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       i = 1
       while ok_to_proceed() and i <= n_points:
         theta = d2r(360.0 * i / n_points)
-        x = radius_m * cos(theta)
+        x = circle_radius_m * cos(theta)
         rx = x / sphere_radius_m
-        y = radius_m * sin(theta)
+        y = circle_radius_m * sin(theta)
         ry = y / sphere_radius_m
   
         p1 = pose_trans(p_center, p[0, 0, 0, rx, ry, 0])
@@ -936,6 +933,52 @@ def AutoGrind01():
   
       grind_cycle = grind_cycle + 1
     end
+  end
+  
+  # Grind along a spiral circle1_diam_mm to circle2_diam_mm in n_spirals with rotations centered on current tool position. Repeat n_cycles times.
+  def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles):
+    if n_cycles < 1:
+      return True
+    end
+  
+    # shape OK?
+    shape = robot_part_geometry[0]
+    if shape < 1 or shape > 3:
+      return False
+    end
+  
+    # Unit conversion
+    circle1_diam_m = circle1_diam_mm / 1000.0
+    circle2_diam_m = circle2_diam_mm / 1000.0
+  
+    # Find initial position p0
+    p0 = get_actual_tcp_pose()
+  
+    # Move to start position
+    if shape == 1:
+      p1 = pose_trans(get_forward_kin(), p[circle1_diam_m / 2.0, 0, 0, 0, 0, 0])
+    elif shape == 2:
+      part_diam_m = robot_part_geometry[1]
+      p1 = pose_trans(get_forward_kin(), p[circle1_diam_m / 2.0, 0, 0, 0, 0, 0])
+    elif shape == 3:
+      part_diam_m = robot_part_geometry[1]
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0, circle1_diam_m / part_diam_m / 2.0, 0, 0])
+    end
+    movel(p1, a = robot_accel, v = robot_speed)
+  
+    if not set_grinding_state(True):
+      movel(p0, a = robot_accel, v = robot_speed)
+      return False
+    end
+  
+    # Grind the pattern
+    if shape == 1:
+      pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_spirals, n_cycles)
+    elif shape == 2:
+      #pattern_circle_cylinder(circle1_diam_m, circle2_diam_m, n_spirals, part_diam_m, n_cycles) # NOT IMPLEMENTED
+    elif shape == 3:
+      #pattern_circle_sphere(circle1_diam_m, circle2_diam_m, n_spirals, part_diam_m, n_cycles) # NOT IMPLEMENTED
+    end
   
     set_grinding_state(False)
   
@@ -944,42 +987,28 @@ def AutoGrind01():
     return True
   end
   
-  # Grind along a flat spiral diam dx_mm to dx2_mm in n_spirals rotations centered on current tool position. Repeat n_cycles times.
-  def grind_spiral_flat(dx_mm, dx2_mm, n_spirals, n_cycles):
-    if n_cycles < 1:
-      return True
-    end
-  
+  def pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_spirals, n_cycles):
     # Unit conversion
-    dx_m = dx_mm / 1000.0
-    dx2_m = dx2_mm / 1000.0
-    n_points = ceil(dx_mm * 1.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-    radius_m = dx_m / 2          # Circle radius is half of specified dx
-    radius2_m = dx2_m / 2
+    circle1_radius_m = circle1_diam_m / 2.0
+    circle2_radius_m = circle2_diam_m / 2.0
   
-    # Find initial position p0
-    set_tcp(p[0, 0, tool_length_m, 0, 0, 0])  #
-    p0 = get_actual_tcp_pose()
-  
-    # Move to offset position east edge of circle
-    p1 = pose_trans(get_forward_kin(), p[radius_m, 0, 0, 0, 0, 0])
-    movel(p1, a = robot_accel, v = robot_speed)
-  
-    if not set_grinding_state(True):
-      movel(p0, a = robot_accel, v = robot_speed)
-      return False
+    max_diam_m = circle1_radius_m
+    if circle2_diam_m > max_diam_m:
+      max_diam_m = circle2_radius_m
     end
-  
-    # Grind spiral pattern
-    # We're in contact at east side... compute where contact position would be at center of circle
-    p_center = pose_trans(get_forward_kin(), p[-radius_m, 0, 0, 0, 0, 0])
+    n_points = ceil(max_diam_m * 1000.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
     n_total_points = n_spirals * n_points
+  
+    # We're in contact at east side... compute where contact position would be at center of circle
+    p_center = pose_trans(get_forward_kin(), p[-circle1_diam_m / 2.0, 0, 0, 0, 0, 0])
+  
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
+      rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
       i = 0
       while ok_to_proceed() and i <= n_total_points:
         theta = d2r(360.0 * (i % n_points) / n_points)
-        r_instantaneous = i * (radius2_m - radius_m) / n_total_points + radius_m
+        r_instantaneous = i * rslope + circle1_radius_m
         x = r_instantaneous * cos(theta)
         y = r_instantaneous * sin(theta)
   
@@ -990,16 +1019,10 @@ def AutoGrind01():
   
       grind_cycle = grind_cycle + 1
       # Next cycle- swap diameters so we go in/out/in etc.
-      old_radius_m = radius_m
-      radius_m = radius2_m
-      radius2_m = old_radius_m
+      old_circle1_radius_m = circle1_radius_m
+      circle1_radius_m = circle2_radius_m
+      circle2_radius_m = old_circle1_radius_m
     end
-  
-    set_grinding_state(False)
-  
-    # Return robot back to initial position
-    movel(p0, a = robot_accel, v = robot_speed)
-    return True
   end
   
   $ 5 "currentTcpPose≔get_actual_tcp_pose()"
@@ -1056,69 +1079,73 @@ def AutoGrind01():
         movel_relative_tcp(p[command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (15 == switch_1):
         $ 33 "Case 15"
-        $ 34 "movel_one_only(command[2],command[3])"
+        $ 34 "movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
+        movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])
+      elif (16 == switch_1):
+        $ 35 "Case 16"
+        $ 36 "movel_one_only(command[2],command[3])"
         movel_one_only(command[2],command[3])
       elif (18 == switch_1):
-        $ 35 "Case 18"
-        $ 36 "movel_rot_only(command[2],command[3],command[4])"
+        $ 37 "Case 18"
+        $ 38 "movel_rot_only(command[2],command[3],command[4])"
         movel_rot_only(command[2],command[3],command[4])
       elif (20 == switch_1):
-        $ 37 "Case 20"
-        $ 38 "return_get_actual_joint_positions()"
+        $ 39 "Case 20"
+        $ 40 "return_get_actual_joint_positions()"
         return_get_actual_joint_positions()
       elif (21 == switch_1):
-        $ 39 "Case 21"
-        $ 40 "movej_q([command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 41 "Case 21"
+        $ 42 "movej_q([command[2], command[3], command[4], command[5], command[6], command[7]])"
         movej_q([command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (30 == switch_1):
-        $ 41 "Case 30"
-        $ 42 "set_variable()"
+        $ 43 "Case 30"
+        $ 44 "set_variable()"
         set_variable()
       elif (40 == switch_1):
-        $ 43 "Case 40"
-        $ 44 "pattern_grind()"
+        $ 45 "Case 40"
+        $ 46 "pattern_grind()"
         pattern_grind()
       elif (50 == switch_1):
-        $ 45 "Case 50"
-        $ 46 "Call AG_50"
+        $ 47 "Case 50"
+        $ 48 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 47 "Case 98"
-        $ 48 "response≔'socket reset'"
+        $ 49 "Case 98"
+        $ 50 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 49 "Case 99"
-        $ 50 "response≔'exiting'"
+        $ 51 "Case 99"
+        $ 52 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 51 "Default Case"
-        $ 52 "response≔'unknown command'"
+        $ 53 "Default Case"
+        $ 54 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 53 "socket_send_line('robot_response=' + response + '#robot_ready=True')"
+      $ 55 "socket_send_line('robot_response=' + response + '#robot_ready=True')"
       socket_send_line("robot_response=" + response + "#robot_ready=True")
-      $ 54 "If command[1]≟98"
+      $ 56 "If command[1]≟98"
       if (command[1] == 98):
-        $ 55 "Wait: 0.5"
+        $ 57 "Wait: 0.5"
         sleep(0.5)
-        $ 56 "socket_close()"
+        $ 58 "socket_close()"
         socket_close()
-        $ 57 "socket_is_open≔ False "
+        $ 59 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 58 "If command[1]≟99"
+      $ 60 "If command[1]≟99"
       if (command[1] == 99):
-        $ 59 "Wait: 0.5"
+        $ 61 "Wait: 0.5"
         sleep(0.5)
-        $ 60 "socket_close()"
+        $ 62 "socket_close()"
         socket_close()
-        $ 61 "socket_is_open≔ False "
+        $ 63 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 62 "Halt"
+        $ 64 "Halt"
         halt
       end
     else:
-      $ 63 "Else" "noBreak"
+      $ 65 "Else" "noBreak"
     end
   end
 end
