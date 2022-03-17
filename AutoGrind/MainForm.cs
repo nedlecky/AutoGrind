@@ -370,7 +370,7 @@ namespace AutoGrind
         private void UpdateGeometryToRobot()
         {
             if (robotServer != null)
-                ExecuteLine(-1, String.Format("set_part_geometry({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
+                ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
         }
 
         private void PartGeometryBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -386,12 +386,9 @@ namespace AutoGrind
             {
                 DiameterLbl.Visible = true;
                 DiameterDimLbl.Visible = true;
-
-                DiameterLbl_Click(null, null);
             }
 
-            // If we put in Diam, that sends the update to the robot
-            if (isFlat) UpdateGeometryToRobot();
+            UpdateGeometryToRobot();
         }
 
 
@@ -1085,7 +1082,7 @@ namespace AutoGrind
             {"set_speed",               new CommandSpec(){nParams=1, prefix="30,1" } },
             {"set_accel",               new CommandSpec(){nParams=1, prefix="30,2" } },
             {"set_blend",               new CommandSpec(){nParams=1, prefix="30,3" } },
-            {"set_part_geometry",       new CommandSpec(){nParams=2, prefix="30,4" } },
+            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,4" } },
             {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10" } },
             {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
@@ -1143,7 +1140,7 @@ namespace AutoGrind
             }
 
             // clear
-            if (command == "clear()" || command=="clear")
+            if (command == "clear()" || command == "clear")
             {
                 LogInterpret("clear", lineNumber, command);
                 ClearVariablesBtn_Click(null, null);
@@ -1240,7 +1237,7 @@ namespace AutoGrind
             }
 
             // end
-            if (command == "end()" || command=="end")
+            if (command == "end()" || command == "end")
             {
                 LogInterpret("end", lineNumber, command);
                 return false;
@@ -1272,6 +1269,51 @@ namespace AutoGrind
                     WriteVariable("robot_tool=" + row["Name"]);
                     MountedToolBox.Text = (string)row["Name"];
                 }
+                return true;
+            }
+
+            // set_part_geometry
+            if (command.StartsWith("set_part_geometry("))
+            {
+                LogInterpret("set_part_geometry", lineNumber, command);
+
+                string parameters = ExtractParameters(command, 2);
+                if (parameters.Length == 0)
+                {
+                    log.Error("Illegal parameters for set_part_geometry Exec: {0.000} {1}", lineNumber, command);
+                    PromptOperator("Illegal set_part_geometry command:\n" + command);
+                    return true;
+                }
+                string[] paramList = parameters.Split(',');
+                if (paramList.Length != 2)
+                {
+                    log.Error("Illegal parameters for set_part_geometry Exec: {0.000} {1}", lineNumber, command);
+                    PromptOperator("Illegal set_part_geometry command:\n" + command);
+                    return true;
+                }
+
+                int geomIndex = 0;
+                switch (paramList[0])
+                {
+                    case "FLAT":
+                        geomIndex = 1;
+                        break;
+                    case "CYLINDER":
+                        geomIndex = 2;
+                        DiameterLbl.Text = paramList[1];
+                        break;
+                    case "SPHERE":
+                        geomIndex = 3;
+                        DiameterLbl.Text = paramList[1];
+                        break;
+                    default:
+                        log.Error("First argument to must be FLAT, CYLINDER, or SPHERE Exec: {0.000} {1}", lineNumber, command);
+                        PromptOperator("First argument to must be FLAT, CYLINDER, or SPHERE:\n" + command);
+                        return true;
+                }
+
+                ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", geomIndex, paramList[1]));
+                PartGeometryBox.Text = paramList[0];
                 return true;
             }
 

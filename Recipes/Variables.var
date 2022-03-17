@@ -54,106 +54,106 @@
   <Variables>
     <Name>robot_ready</Name>
     <Value>True</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-17T13:01:16.564</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-17T13:36:14.792</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>11</Value>
+    <Value>150</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:01:00.395</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:14.702</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>0.3</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:58.088</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:01.965</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_spiral</Value>
+    <Value>set_part_geometry()</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:01:16.518</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:14.779</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
     <Value>0.5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:58.552</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:02.044</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_blend</Name>
     <Value>0.002</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:58.985</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:02.229</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp</Name>
     <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T12:51:02.727</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:04.412</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_mass</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T12:51:02.928</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:04.737</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_cog</Name>
     <Value>[0,0,0.05]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T12:51:03.058</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:04.856</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[0.0955724,-0.619867,0.110058,3.14106,-0.000868025,0.000573743]</Value>
+    <Value>p[0.0955804,-0.619855,0.110089,3.14095,-0.000793009,0.000563018]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:15.786</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:01.782</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_ready</Name>
     <Value>True</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:01:16.439</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:02.461</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_contact_enabled</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T12:51:02.634</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:02.446</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tool</Name>
     <Value>2F85</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T12:51:01.926</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:04.237</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_part_geometry</Name>
-    <Value>[1,0]</Value>
+    <Value>[2,0.222]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:59.827</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:14.731</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp_part</Name>
-    <Value>p[0,0,0.175,0,0,0]</Value>
+    <Value>p[0,0,0.397,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-17T13:00:59.883</TimeStamp>
+    <TimeStamp>2022-03-17T13:36:14.746</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
 </NewDataSet>
