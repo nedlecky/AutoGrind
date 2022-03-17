@@ -2,23 +2,32 @@
 
 set_speed(0.3)
 set_accel(0.5)
-
-
-jump(circle)
+set_blend(0.002)
 
 
 rect:
 rflat:
 set_part_geometry(1,0)
-grind_rect(20,20,2)
+#grind_rect(20,20,2)
+#grind_circle(20,2)
+grind_spiral(40,10,3,3)
+end
 
 rcyl:
 set_part_geometry(2,77)
+grind_rect(20,20,2)
+set_part_geometry(2,200)
 grind_rect(20,20,2)
 
 rsphere:
 set_part_geometry(3,82)
 grind_rect(20,20,2)
+grind_circle(20,2)
+set_part_geometry(3,200)
+grind_rect(20,20,2)
+grind_circle(20,2)
+
+end
 
 serpentine:
 sflat:

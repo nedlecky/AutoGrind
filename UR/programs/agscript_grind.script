@@ -616,7 +616,7 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles):
 
   # Unit conversion
   circle1_diam_m = circle1_diam_mm / 1000.0
-  circle2_diam_m = circle1_diam_mm / 1000.0
+  circle2_diam_m = circle2_diam_mm / 1000.0
 
   # Find initial position p0
   p0 = get_actual_tcp_pose()
