@@ -376,7 +376,8 @@
             this.CoordBox.FormattingEnabled = true;
             this.CoordBox.Items.AddRange(new object[] {
             "BASE",
-            "TOOL"});
+            "TOOL",
+            "PART"});
             this.CoordBox.Location = new System.Drawing.Point(335, 366);
             this.CoordBox.Name = "CoordBox";
             this.CoordBox.Size = new System.Drawing.Size(121, 39);

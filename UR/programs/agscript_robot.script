@@ -9,14 +9,15 @@ global robot_speed = 0.5
 global robot_accel = 1.25
 global robot_blend = 0.003
 global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
+global robot_tcp_part = robot_tcp
 global robot_payload_mass = 1.0
 global robot_payload_cog = [0, 0, 0.50]
-# Geometry [1=FLAT 2=CYL 3=SPHERE, radius_mm)
+# Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_m)
 global robot_part_geometry = [0, 0]
 
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
-set_payload(robot_payload_mass,robot_payload_cog)
+set_payload(robot_payload_mass, robot_payload_cog)
 set_gravity([0.0, 0.0, 9.82])
 
 # Set interface... allows validation and limits
@@ -52,23 +53,34 @@ def set_variable():
     socket_send_lf()
     global response = "set_blend()"
   elif command[2] == 4:
-    # Set part_geometry to [shape, radius_mm] is shape>0. Always returns "robot_part_geometry=[current geometry]"
-    s = command[3]
-    r = command[4]
-    if s > 0:
-      robot_part_geometry = [s, r]
+    # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
+    shape = command[3]
+    if shape > 0:
+      diameter_m = command[4]
+      robot_part_geometry = [shape, diameter_m]
     end
+
+    # set robot_tcp_part based on geometry
+    if shape == 1:  # Flat
+      robot_tcp_part = robot_tcp
+    else:  # Cylinder or Sphere
+      robot_tcp_part = pose_trans(robot_tcp, p[0, 0, robot_part_geometry[1] / 2.0, 0, 0, 0])
+    end
+
     socket_send_string("robot_part_geometry=")
     return_vector(robot_part_geometry, 2)
     socket_send_lf()
-    global response = "set_blend()"
+    return_pose("robot_tcp_part", robot_tcp_part)
+    global response = "set_part_geometry()"
   elif command[2] == 10:
     # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
     if command[3] > -10:
       robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
+      robot_tcp_part = robot_tcp
       set_tcp(robot_tcp)
     end
     return_pose("robot_tcp", get_tcp_offset())
+    return_pose("robot_tcp_part", robot_tcp_part)
     global response = "set_tcp()"
   elif command[2] == 11:
     # set_payload if command[3] > 0. Always return robot_m and robot_cog

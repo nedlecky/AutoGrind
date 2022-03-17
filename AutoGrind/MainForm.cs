@@ -1082,29 +1082,25 @@ namespace AutoGrind
         Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // SETTINGS
-            {"set_speed",                   new CommandSpec(){nParams=1, prefix="30,1" } },
-            {"set_accel",                   new CommandSpec(){nParams=1, prefix="30,2" } },
-            {"set_blend",                   new CommandSpec(){nParams=1, prefix="30,3" } },
-            {"set_part_geometry",           new CommandSpec(){nParams=2, prefix="30,4" } },
-            {"set_tcp",                     new CommandSpec(){nParams=6, prefix="30,10" } },
-            {"set_payload",                 new CommandSpec(){nParams=4, prefix="30,11" } },
-            {"grind_contact_enabled",       new CommandSpec(){nParams=1, prefix="40,1" } },
+            {"set_speed",               new CommandSpec(){nParams=1, prefix="30,1" } },
+            {"set_accel",               new CommandSpec(){nParams=1, prefix="30,2" } },
+            {"set_blend",               new CommandSpec(){nParams=1, prefix="30,3" } },
+            {"set_part_geometry",       new CommandSpec(){nParams=2, prefix="30,4" } },
+            {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10" } },
+            {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
+            {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
 
-            // RECTANGLUR GRINDS
-            {"grind_rect_flat",             new CommandSpec(){nParams=1, prefix="40,10" }  },
-            {"grind_rect_cylinder",         new CommandSpec(){nParams=1, prefix="40,11" }  },
-            {"grind_rect_sphere",           new CommandSpec(){nParams=1, prefix="40,12" }  },
+            // RECTANGULAR GRINDS
+            {"grind_rect",              new CommandSpec(){nParams=3, prefix="40,2" }  },
 
             // SERPENTINE GRINDS
-            {"grind_serpentine_flat",       new CommandSpec(){nParams=1, prefix="40,20" }  },
-            {"grind_serpentine_cylinder",   new CommandSpec(){nParams=1, prefix="40,21" }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=5, prefix="40,3" }  },
 
             // CIRCLAR GRINDS
-            {"grind_circle_flat",           new CommandSpec(){nParams=1, prefix="40,30" }  },
-            {"grind_circle_sphere",         new CommandSpec(){nParams=1, prefix="40,31" }  },
+            {"grind_circle",            new CommandSpec(){nParams=2, prefix="40,4" }  },
 
             // SPIRAL GRINDS
-            {"grind_spiral_flat",           new CommandSpec(){nParams=1, prefix="40,40" }  },
+            {"grind_spiral",            new CommandSpec(){nParams=4, prefix="40,5" }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1147,7 +1143,7 @@ namespace AutoGrind
             }
 
             // clear
-            if (command == "clear()")
+            if (command == "clear()" || command=="clear")
             {
                 LogInterpret("clear", lineNumber, command);
                 ClearVariablesBtn_Click(null, null);
@@ -1244,14 +1240,14 @@ namespace AutoGrind
             }
 
             // end
-            if (command == "end()")
+            if (command == "end()" || command=="end")
             {
                 LogInterpret("end", lineNumber, command);
                 return false;
             }
 
             // home
-            if (command == "home()")
+            if (command == "home_robot()")
             {
                 LogInterpret("home", lineNumber, command);
                 GotoHomeBtn_Click(null, null);
