@@ -13,12 +13,12 @@ namespace AutoGrind
     public partial class JoggingForm : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        readonly TcpServer robot;
+        readonly TcpServerSupport robot;
         public bool ShouldSave { get; set; }
 
         MainForm mainForm;
 
-        public JoggingForm(TcpServer _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
+        public JoggingForm(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;

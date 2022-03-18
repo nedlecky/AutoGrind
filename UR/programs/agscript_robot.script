@@ -20,6 +20,23 @@ set_tcp(robot_tcp)
 set_payload(robot_payload_mass, robot_payload_cog)
 set_gravity([0.0, 0.0, 9.82])
 
+# Experiment on delta positions
+
+MATH_PI = 3.14159265
+global pspheretop = p[0.126344,-0.435355,0.0939516,-3.12896,0,0]
+global psphere45 = p[0.126365,-0.445718,0.100066,2.35592,4.04911e-05,-5.37283e-05]
+#global padd = pose_add(spheretop,sphere45)
+#global psub = pose_sub(spheretop,sphere45)
+#global ptrans1 = pose_trans(spheretop,sphere45)
+#global ptrans2 = pose_trans(sphere45,spheretop)
+#global pdist = pose_dist(spheretop,sphere45)
+global pinv1 = pose_inv(pspheretop)
+global pinv2 = pose_inv(psphere45)
+
+global pfaceplate = pose_trans(pspheretop,pose_inv(robot_tcp))
+global pnew = pose_trans(pfaceplate,psphere45)
+global psub = pose_sub(pfaceplate,psphere45)
+
 # Set interface... allows validation and limits
 def set_variable():
   if command[2] == 1:

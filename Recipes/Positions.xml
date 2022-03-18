@@ -30,8 +30,8 @@
   </Positions>
   <Positions>
     <Name>cylcenter</Name>
-    <Joints>[1.37206,-1.16283,1.65884,-2.05784,-1.58265,2.94126]</Joints>
-    <Pose>p[0.00734986,-0.624666,0.0906527,-3.13053,-0.00298595,0.0156758]</Pose>
+    <Joints>[1.37211,-1.14662,1.67537,-2.09057,-1.58266,2.94134]</Joints>
+    <Pose>p[0.00737989,-0.624664,0.076664,-3.13052,-0.00300801,0.0157384]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
   <Positions>
@@ -44,6 +44,24 @@
     <Name>toolchange</Name>
     <Joints>[1.9772,-1.31982,1.86463,-2.47544,-0.866874,3.6864]</Joints>
     <Pose>p[0.526317,-0.43539,0.210034,-2.89735,0.0066516,-1.18379]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>high</Name>
+    <Joints>[1.56135,-1.69085,1.53411,-1.40338,-1.58096,3.13089]</Joints>
+    <Pose>p[0.126759,-0.434583,0.370465,-3.13091,-0.00171932,0.0153919]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>spheretop</Name>
+    <Joints>[1.56021,-1.54384,2.13195,-2.14627,-1.57964,3.1308]</Joints>
+    <Pose>p[0.126344,-0.435355,0.0939516,-3.12896,0,0]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>sphere45</Name>
+    <Joints>[1.54182,-1.50484,2.68439,-3.53571,-1.55012,3.12342]</Joints>
+    <Pose>p[0.126365,-0.445718,0.100066,2.35592,4.04911e-05,-5.37283e-05]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
 </NewDataSet>

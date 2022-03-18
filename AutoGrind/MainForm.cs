@@ -29,7 +29,8 @@ namespace AutoGrind
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
         static SplashForm splashForm;
-        TcpServer robotServer = null;
+        TcpServerSupport robotCommandServer = null;
+        TcpClientSupport robotDashboardClient = null;
         MessageForm messageForm = null;
 
         static DataTable variables;
@@ -199,10 +200,20 @@ namespace AutoGrind
             string now = DateTime.Now.ToString("s");
             timeLbl.Text = now;
 
+            // Ping the dashboard
+            if (robotDashboardClient != null)
+                if (robotDashboardClient.IsClientConnected)
+                {
+                    robotDashboardClient.Receive();
+
+                    robotDashboardClient.Send("robotmode");
+                }
+
+            // Manage whether robot command is connected and init when it does
             bool newRobotReady = false;
-            if (robotServer != null)
+            if (robotCommandServer != null)
             {
-                if (robotServer.IsClientConnected)
+                if (robotCommandServer.IsClientConnected)
                     newRobotReady = true;
 
                 if (newRobotReady != robotReady)
@@ -220,16 +231,16 @@ namespace AutoGrind
                         MountedToolBox_SelectedIndexChanged(null, null);
                         PartGeometryBox_SelectedIndexChanged(null, null);
 
-                        RobotStatusLbl.BackColor = Color.Green;
-                        RobotStatusLbl.Text = "READY";
+                        RobotCommandStatusLbl.BackColor = Color.Green;
+                        RobotCommandStatusLbl.Text = "Command Ready";
                         // Restore all button settings with same current state
                         SetState(runState, true, true);
                     }
                     else
                     {
                         log.Info("Change robot connection to WAIT");
-                        RobotStatusLbl.BackColor = Color.Red;
-                        RobotStatusLbl.Text = "WAIT";
+                        RobotCommandStatusLbl.BackColor = Color.Red;
+                        RobotCommandStatusLbl.Text = "WAIT";
                         // Restore all button settings with same current state
                         SetState(runState, true, true);
                     }
@@ -364,14 +375,14 @@ namespace AutoGrind
             log.Info("Operator changing tool to " + MountedToolBox.Text);
 
             ToolsGrd.ClearSelection();
-            if (robotServer != null)
+            if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
             PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
         {
-            if (robotServer != null)
+            if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
         }
 
@@ -487,10 +498,10 @@ namespace AutoGrind
 
         private void GrindContactEnabledBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
+            if (robotCommandServer != null)
+                if (robotCommandServer.IsConnected())
                 {
-                    robotServer.Send(String.Format("(40,1,{0})", GrindContactEnabledBtn.BackColor != Color.Green ? 1 : 0));
+                    robotCommandServer.Send(String.Format("(40,1,{0})", GrindContactEnabledBtn.BackColor != Color.Green ? 1 : 0));
                 }
         }
 
@@ -514,7 +525,7 @@ namespace AutoGrind
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn_Click(...)");
-            robotServer.Send("(10)");  // This will cancel any grind in progress
+            robotCommandServer.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.PAUSED);
         }
 
@@ -527,7 +538,7 @@ namespace AutoGrind
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
-            robotServer.Send("(10)");  // This will cancel any grind in progress
+            robotCommandServer.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.READY);
         }
 
@@ -705,7 +716,7 @@ namespace AutoGrind
             log.Info("DefaultConfigBtn_Click(...)");
             AutoGrindRoot = "\\";
             AutoGrindRootLbl.Text = AutoGrindRoot;
-            RobotIpPortTxt.Text = "192.168.25.1:30000";
+            RobotIpTxt.Text = "192.168.25.1:30000";
         }
         private string recipeFileToAutoload = "";
         void LoadPersistent()
@@ -724,7 +735,8 @@ namespace AutoGrind
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
-            RobotIpPortTxt.Text = (string)AppNameKey.GetValue("RobotIpPortTxt.Text", "192.168.25.1:30000");
+            RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
+            ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
             UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
 
             // Debug Level selection
@@ -764,7 +776,8 @@ namespace AutoGrind
 
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
-            AppNameKey.SetValue("RobotIpPortTxt.Text", RobotIpPortTxt.Text);
+            AppNameKey.SetValue("RobotIpTxt.Text", RobotIpTxt.Text);
+            AppNameKey.SetValue("ServerIpTxt.Text", ServerIpTxt.Text);
             AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
 
             // Debug Level selection
@@ -828,7 +841,7 @@ namespace AutoGrind
             if (partName != "FLAT")
                 partName += " " + DiameterLbl.Text + " mm DIA";
 
-            JoggingForm form = new JoggingForm(robotServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
+            JoggingForm form = new JoggingForm(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
 
             form.ShowDialog(this);
         }
@@ -1188,7 +1201,7 @@ namespace AutoGrind
             {
                 string positionName = ExtractParameters(command);
 
-                if(!GotoPositionPose(positionName))
+                if (!GotoPositionPose(positionName))
                 {
                     log.Error("Unknown position name specified in movepose Line {0} Exec: {1}", lineNumber, command);
                     PromptOperator("Illegal position name: " + command);
@@ -1282,7 +1295,7 @@ namespace AutoGrind
             if (command.StartsWith("sendrobot("))
             {
                 LogInterpret("sendrobot", lineNumber, command);
-                robotServer.Send("(" + ExtractParameters(command) + ")");
+                robotCommandServer.Send("(" + ExtractParameters(command) + ")");
                 return true;
             }
 
@@ -1302,7 +1315,7 @@ namespace AutoGrind
                     LogInterpret(commandInRecipe, lineNumber, command);
                     string parameters = ExtractParameters(command, commandSpec.nParams);
                     if (parameters.Length > 0 || commandSpec.nParams == 0)
-                        robotServer.Send("(" + commandSpec.prefix + "," + parameters + ")");
+                        robotCommandServer.Send("(" + commandSpec.prefix + "," + parameters + ")");
                     else
                         PromptOperator(string.Format("Wrong number of operands. Expected {0}:\n{1}", commandSpec.nParams, command));
                     return true;
@@ -1387,72 +1400,95 @@ namespace AutoGrind
         {
             RobotDisconnectBtn_Click(null, null);
 
-            robotServer = new TcpServer()
+            // Connect client to the UR dashboard
+            robotDashboardClient = new TcpClientSupport()
             {
-                ReceiveCallback = GeneralCallBack
+                ReceiveCallback = DashboardCallback
             };
-            if (robotServer.Connect(RobotIpPortTxt.Text) > 0)
+            if (robotDashboardClient.Connect(RobotIpTxt.Text, "29999") > 0)
             {
-                log.Error("Robot server initialization failure");
+                log.Error("Robot dashboard client initialization failure");
+                RobotDashboardStatusLbl.BackColor = Color.Red;
+                RobotDashboardStatusLbl.Text = "Dashboard Error";
             }
             else
             {
-                log.Info("Robot connection ready");
+                log.Info("Robot dashboard connection ready");
 
-                RobotStatusLbl.BackColor = Color.Red;
-                RobotStatusLbl.Text = "WAIT";
+                RobotDashboardStatusLbl.BackColor = Color.Green;
+                RobotDashboardStatusLbl.Text = "Dashboard Ready";
+            }
+
+            // Setup a server for the UR to connect to
+            robotCommandServer = new TcpServerSupport()
+            {
+                ReceiveCallback = CommandCallback
+            };
+            if (robotCommandServer.Connect(ServerIpTxt.Text, "30000") > 0)
+            {
+                log.Error("Robot command server initialization failure");
+                RobotCommandStatusLbl.BackColor = Color.Red;
+                RobotCommandStatusLbl.Text = "Command Error";
+            }
+            else
+            {
+                log.Info("Robot command connection ready");
+
+                RobotCommandStatusLbl.BackColor = Color.Red;
+                RobotCommandStatusLbl.Text = "Command Waiting";
             }
         }
 
         private void RobotDisconnectBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
+            // Disconnect client from dashboard
+            if (robotDashboardClient != null)
             {
-                if (robotServer.IsConnected())
+                if (robotDashboardClient.IsClientConnected)
                 {
-                    robotServer.Send("(98)");
-                    robotServer.Disconnect();
+                    robotDashboardClient.Disconnect();
                 }
-                robotServer = null;
+                robotDashboardClient = null;
             }
-            RobotStatusLbl.BackColor = Color.Red;
-            RobotStatusLbl.Text = "OFF";
+            RobotDashboardStatusLbl.BackColor = Color.Red;
+            RobotDashboardStatusLbl.Text = "OFF";
+
+            // Close command server
+            if (robotCommandServer != null)
+            {
+                if (robotCommandServer.IsConnected())
+                {
+                    robotCommandServer.Send("(98)");
+                    robotCommandServer.Disconnect();
+                }
+                robotCommandServer = null;
+            }
+            RobotCommandStatusLbl.BackColor = Color.Red;
+            RobotCommandStatusLbl.Text = "OFF";
         }
 
         private void RobotSendBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
+            if (robotCommandServer != null)
+                if (robotCommandServer.IsConnected())
                 {
-                    robotServer.Send(RobotMessageTxt.Text);
+                    robotCommandServer.Send(RobotMessageTxt.Text);
                 }
         }
         private void SetSpeedBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
-                {
-                    robotServer.Send("(30," + SpeedTxt.Text + ")");
-                }
+            ExecuteLine(-1, String.Format("set_speed({0})", SpeedTxt.Text));
         }
 
         private void SetAccelBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
-                {
-                    robotServer.Send("(31," + AccelTxt.Text + ")");
-                }
+            ExecuteLine(-1, String.Format("set_accel({0})", AccelTxt.Text));
         }
 
 
         private void SetBlendBtn_Click(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
-                {
-                    robotServer.Send("(32," + BlendTxt.Text + ")");
-                }
+            ExecuteLine(-1, String.Format("set_blend({0})", BlendTxt.Text));
         }
 
 
@@ -1466,9 +1502,9 @@ namespace AutoGrind
         /// SET name value
         /// </summary>
         /// <param name="message"></param>
-        void GeneralCallBack(string message)
+        void CommandCallback(string message)
         {
-            //log.Info("GCB<==({0},{1})", message, prefix);
+            //log.Info("UR<==({0})", message);
 
             string[] requests = message.Split('#');
             foreach (string request in requests)
@@ -1492,18 +1528,26 @@ namespace AutoGrind
                             log.Error("Illegal SET statement: {0}", request);
                     }
                     else
-                        log.Error("Illegal GCB command: {0}", request);
+                        log.Error("Illegal callback command: {0}", request);
                 }
             }
+        }
+        void DashboardCallback(string message)
+        {
+            log.Info("URD<==({0})", message);
+            DashboardResponseLbl.Text = message;
         }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            if (robotServer != null)
-                if (robotServer.IsConnected())
+            if (robotCommandServer != null)
+                if (robotCommandServer.IsConnected())
                 {
-                    robotServer.Receive();
+                    robotCommandServer.Receive();
+                    return;
                 }
+            RobotReadyLbl.BackColor = Color.Red;
+            GrindReadyLbl.BackColor = Color.Red;
         }
 
         // ===================================================================
@@ -1934,7 +1978,7 @@ namespace AutoGrind
         }
 
 
-        public bool WritePosition(string name, string joints="", string pose="", bool isSystem = false)
+        public bool WritePosition(string name, string joints = "", string pose = "", bool isSystem = false)
         {
             System.Threading.Monitor.Enter(lockObject);
 
@@ -2017,7 +2061,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
+            JoggingForm form = new JoggingForm(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
 
             form.ShowDialog(this);
 
@@ -2028,7 +2072,7 @@ namespace AutoGrind
                 if (robotReady)
                 {
                     copyPositionAtWrite = varName;
-                    robotServer.Send("(25)");
+                    robotCommandServer.Send("(25)");
                 }
 
             }
@@ -2043,7 +2087,7 @@ namespace AutoGrind
                 {
                     string msg = "(21," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
-                    robotServer.Send(msg);
+                    robotCommandServer.Send(msg);
                     return true;
                 }
             }
@@ -2059,7 +2103,7 @@ namespace AutoGrind
                 {
                     string msg = "(22," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
-                    robotServer.Send(msg);
+                    robotCommandServer.Send(msg);
                     return true;
                 }
             }
@@ -2103,6 +2147,16 @@ namespace AutoGrind
             DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
             string name = row["Name"].ToString();
             GotoPositionJoint(name);
+        }
+
+        private void AskSafetyStatusBtn_Click(object sender, EventArgs e)
+        {
+            robotDashboardClient?.Send("safetystatus");
+        }
+
+        private void ProgramStateBtn_Click(object sender, EventArgs e)
+        {
+            robotDashboardClient?.Send("programstate");
         }
 
         // ===================================================================

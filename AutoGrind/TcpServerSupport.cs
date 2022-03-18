@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace AutoGrind
 {
-    public class TcpServer
+    public class TcpServerSupport
     {
         TcpListener server;
         TcpClient client;
@@ -24,14 +24,14 @@ namespace AutoGrind
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
         public Action<string> ReceiveCallback { get; set; }
-        public bool IsClientConnected { get; set; }
+        public bool IsClientConnected { get; set; } = false;
 
-        public TcpServer()
+        public TcpServerSupport()
         {
             log.Debug("TcpServer(...)");
         }
 
-        ~TcpServer()
+        ~TcpServerSupport()
         {
             log.Debug("~TcpServer()");
         }
@@ -69,10 +69,10 @@ namespace AutoGrind
             if (server != null) Disconnect();
             IsClientConnected = false;
 
-            IPAddress ipAddress = IPAddress.Parse(IP);
-            IPEndPoint remoteEP = new IPEndPoint(IPAddressToLong(ipAddress), Int32.Parse(port));
             try
             {
+                IPAddress ipAddress = IPAddress.Parse(IP);
+                IPEndPoint remoteEP = new IPEndPoint(IPAddressToLong(ipAddress), Int32.Parse(port));
                 server = new TcpListener(remoteEP);
                 server.Start();
                 server.BeginAcceptTcpClient(ClientConnected, server);
@@ -125,6 +125,7 @@ namespace AutoGrind
 
         public bool IsConnected()
         {
+            if (server == null) return false;
             try
             {
                 return !(server.Server.Poll(1, SelectMode.SelectRead) && (server.Server.Available == 0));
@@ -195,8 +196,7 @@ namespace AutoGrind
                         string cleanLine = line.Trim('\n');
                         if (cleanLine.Length > 0)
                         {
-                            log.Debug("UR<== {0} Line {1}", cleanLine, lineNo);
-
+                           log.Debug("UR<== {0} Line {1}", cleanLine, lineNo);
                             ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                         }
                         lineNo++;

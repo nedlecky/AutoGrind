@@ -124,7 +124,8 @@
     <Compile Include="SplashForm.Designer.cs">
       <DependentUpon>SplashForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="TcpServer.cs" />
+    <Compile Include="TcpClientSupport.cs" />
+    <Compile Include="TcpServerSupport.cs" />
     <EmbeddedResource Include="JoggingForm.resx">
       <DependentUpon>JoggingForm.cs</DependentUpon>
     </EmbeddedResource>
