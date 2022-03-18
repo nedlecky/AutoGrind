@@ -23,13 +23,7 @@
     </xs:element>
   </xs:schema>
   <Positions>
-    <Name>abc</Name>
-    <Joints>[1.56122,-1.59713,2.07768,-2.04061,-1.57988,3.13124]</Joints>
-    <Pose>p[0.126731,-0.434606,0.130473,-3.13086,-0.00167047,0.0155731]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>def</Name>
+    <Name>above</Name>
     <Joints>[1.56123,-1.64053,2.00688,-1.92643,-1.5799,3.13109]</Joints>
     <Pose>p[0.126755,-0.434611,0.170456,-3.13088,-0.00168597,0.0153909]</Pose>
     <IsSystem>false</IsSystem>

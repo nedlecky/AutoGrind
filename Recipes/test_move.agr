@@ -1,0 +1,15 @@
+set_speed(0.5)
+set_accel(1.0)
+
+count=3
+loop:
+movepose(above)
+movepose(sphere)
+movepose(cylcenter)
+
+movejoint(above)
+movejoint(sphere)
+movejoint(toolchange)
+
+count--
+jump_gt_zero(count,loop)

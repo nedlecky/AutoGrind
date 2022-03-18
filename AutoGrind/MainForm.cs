@@ -1170,6 +1170,32 @@ namespace AutoGrind
                 }
             }
 
+            // movejoint
+            if (command.StartsWith("movejoint("))
+            {
+                string positionName = ExtractParameters(command);
+
+                if (!GotoPositionJoint(positionName))
+                {
+                    log.Error("Unknown position name specified in movejoint Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator("Illegal position name: " + command);
+                }
+                return true;
+            }
+
+            // movepose
+            if (command.StartsWith("movepose("))
+            {
+                string positionName = ExtractParameters(command);
+
+                if(!GotoPositionPose(positionName))
+                {
+                    log.Error("Unknown position name specified in movepose Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator("Illegal position name: " + command);
+                }
+                return true;
+            }
+
             // end
             if (command == "end()" || command == "end")
             {
@@ -2007,7 +2033,7 @@ namespace AutoGrind
 
             }
         }
-        private void GotoPositionJoint(string varName)
+        private bool GotoPositionJoint(string varName)
         {
             log.Trace("GotoPositionJoint({0})", varName);
             if (robotReady)
@@ -2018,10 +2044,12 @@ namespace AutoGrind
                     string msg = "(21," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
                     robotServer.Send(msg);
+                    return true;
                 }
             }
+            return false;
         }
-        private void GotoPositionPose(string varName)
+        private bool GotoPositionPose(string varName)
         {
             log.Trace("GotoPositionPose({0})", varName);
             if (robotReady)
@@ -2032,8 +2060,10 @@ namespace AutoGrind
                     string msg = "(22," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
                     robotServer.Send(msg);
+                    return true;
                 }
             }
+            return false;
         }
 
         private void PositionSetBtn_Click(object sender, EventArgs e)
