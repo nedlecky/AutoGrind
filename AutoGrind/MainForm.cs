@@ -33,7 +33,8 @@ namespace AutoGrind
         MessageForm messageForm = null;
 
         static DataTable variables;
-        public DataTable tools;
+        static DataTable tools;
+        static DataTable positions;
 
         private enum RunState
         {
@@ -729,10 +730,13 @@ namespace AutoGrind
             // Debug Level selection
             DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "INFO");
 
-            // Also load the tools table
+            // Load the tools table
             LoadToolsBtn_Click(null, null);
 
-            // Also load the variables table
+            // Load the positions table
+            LoadPositionsBtn_Click(null, null);
+
+            // Load the variables table
             LoadVariablesBtn_Click(null, null);
 
             // Autoload file is the last loaded recipe
@@ -767,10 +771,13 @@ namespace AutoGrind
             AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
 
 
-            // Also save the tools table
+            // Save the tools table
             SaveToolsBtn_Click(null, null);
 
-            // Also save the variables table
+            // Save the positions table
+            SavePositionsBtn_Click(null, null);
+
+            // Save the variables table
             SaveVariablesBtn_Click(null, null);
 
             // Save currently loaded recipe
@@ -836,84 +843,6 @@ namespace AutoGrind
             }
 
             UpdateGeometryToRobot();
-        }
-
-        private void RecordPosition(string prompt, string varName)
-        {
-            string partName = PartGeometryBox.Text; 
-            if(partName != "FLAT")
-                partName += " " + DiameterLbl.Text + " mm DIA";    
-
-            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), partName, true);
-
-            form.ShowDialog(this);
-
-            if (form.ShouldSave)
-            {
-                log.Trace(prompt);
-
-                if (robotReady)
-                {
-                    copyVariableAtWrite = varName + "=actual_joint_positions";
-                    isSystemCopyWrite = true;
-                    robotServer.Send("(20)");
-                }
-
-            }
-        }
-        private void GotoPosition(string varName)
-        {
-            log.Trace("GotoPosition({0})", varName);
-            if (robotReady)
-            {
-                string q = ReadVariable(varName);
-                if (q != null)
-                {
-                    string msg = "(21," + ExtractScalars(q) + ')';
-                    log.Trace("Sending {0}", msg);
-                    robotServer.Send(msg);
-                }
-            }
-        }
-
-        private void SetLeftBtn_Click(object sender, EventArgs e)
-        {
-            RecordPosition("Set Left End of Cylinder", "left_cylinder_end_q");
-        }
-
-        private void SetRightBtn_Click(object sender, EventArgs e)
-        {
-            RecordPosition("Set Right End of Cylinder", "right_cylinder_end_q");
-        }
-
-        private void SetHomeBtn_Click(object sender, EventArgs e)
-        {
-            RecordPosition("Set Home Position", "home_q");
-        }
-
-        private void SetToolChangeBtn_Click(object sender, EventArgs e)
-        {
-            RecordPosition("Set Tool Change Position", "tool_change_q");
-        }
-
-        private void GotoLeftBtn_Click(object sender, EventArgs e)
-        {
-            GotoPosition("left_cylinder_end_q");
-        }
-
-        private void GotoRightBtn_Click(object sender, EventArgs e)
-        {
-            GotoPosition("right_cylinder_end_q");
-        }
-
-        private void GotoHomeBtn_Click(object sender, EventArgs e)
-        {
-            GotoPosition("home_q");
-        }
-
-        private void GotoToolChangeBtn_Click(object sender, EventArgs e)
-        {
-            GotoPosition("tool_change_q");
         }
 
         private void ChangeLogLevel(string s)
@@ -991,10 +920,6 @@ namespace AutoGrind
 
 
         static int lineCurrentlyExecuting = 0;
-        private bool StartExecutive()
-        {
-            return true;
-        }
 
         /// <summary>
         /// Read file looking for lines of the form "name=value" and pass then to the variable write function
@@ -1250,14 +1175,6 @@ namespace AutoGrind
             {
                 LogInterpret("end", lineNumber, command);
                 return false;
-            }
-
-            // home
-            if (command == "home_robot()")
-            {
-                LogInterpret("home", lineNumber, command);
-                GotoHomeBtn_Click(null, null);
-                return true;
             }
 
             // select_tool  (Assumes operator has already installed it somehow!!)
@@ -1571,7 +1488,7 @@ namespace AutoGrind
         // START VARIABLE SYSTEM
         // ===================================================================
 
-        readonly string variablesFilename = "Variables.var";
+        readonly string variablesFilename = "Variables.xml";
 
         private void ReadVariableBtn_Click(object sender, EventArgs e)
         {
@@ -1611,6 +1528,7 @@ namespace AutoGrind
         static readonly object lockObject = new object();
         static string alsoWriteVariableAs = null;
         static string copyVariableAtWrite = null;
+        static string copyPositionAtWrite = null;
         static bool isSystemAlsoWrite = false;
         static bool isSystemCopyWrite = false;
         /// <summary>
@@ -1715,6 +1633,21 @@ namespace AutoGrind
                     }
                 }
             }
+
+            // Set copyPositionAtWrite to "name" and when position_p or position_q gets written it will also be written to Position:name
+            if (copyPositionAtWrite != null)
+            {
+                if (name == "position_q")
+                {
+                    WritePosition(copyPositionAtWrite, valueTrimmed, "", isSystemCopyWrite);
+                }
+                if (name == "position_p")
+                {
+                    WritePosition(copyPositionAtWrite, "", valueTrimmed, isSystemCopyWrite);
+                    copyPositionAtWrite = null;
+                    isSystemCopyWrite = false;
+                }
+            }
             return true;
         }
 
@@ -1779,7 +1712,6 @@ namespace AutoGrind
             try
             {
                 variables.ReadXml(filename);
-
             }
             catch
             { }
@@ -1801,15 +1733,15 @@ namespace AutoGrind
             variables.WriteXml(filename, XmlWriteMode.WriteSchema, true);
         }
 
-        private bool DeleteNonSystemVariable()
+        private bool DeleteFirstNonSystemVariable(DataTable table)
         {
-            foreach (DataRow row in variables.Rows)
+            foreach (DataRow row in table.Rows)
             {
                 if (row["IsSystem"].ToString() != "True")
                 {
                     log.Debug("Delete {0}", row["Name"]);
                     row.Delete();
-                    variables.AcceptChanges();
+                    table.AcceptChanges();
                     return true;
                 }
             }
@@ -1817,8 +1749,7 @@ namespace AutoGrind
         }
         private void ClearVariablesBtn_Click(object sender, EventArgs e)
         {
-            while (DeleteNonSystemVariable()) ;
-            variables.AcceptChanges();
+            while (DeleteFirstNonSystemVariable(variables)) ;
         }
 
         private void ClearAndInitializeVariables()
@@ -1858,10 +1789,9 @@ namespace AutoGrind
 
                 ExecuteLine(-1, string.Format("select_tool({0})", name));
             }
-
         }
 
-        readonly string toolsFilename = "Tools.var";
+        readonly string toolsFilename = "Tools.xml";
         private void ClearAndInitializeTools()
         {
             tools = new DataTable("Tools");
@@ -1942,6 +1872,211 @@ namespace AutoGrind
 
         // ===================================================================
         // END TOOL SYSTEM
+        // ===================================================================
+
+        // ===================================================================
+        // START POSITIONS SYSTEM
+        // ===================================================================
+
+        readonly string positionsFilename = "Positions.xml";
+
+        private string ReadPositionJoint(string name)
+        {
+            foreach (DataRow row in positions.Rows)
+            {
+                if ((string)row["Name"] == name)
+                {
+                    log.Trace("ReadPositionJoint({0}) = {1}", row["Name"], row["Joints"]);
+                    return row["Joints"].ToString();
+                }
+            }
+            log.Error("ReadPositionJoint({0}) Not Found", name);
+            return null;
+        }
+        private string ReadPositionPose(string name)
+        {
+            foreach (DataRow row in positions.Rows)
+            {
+                if ((string)row["Name"] == name)
+                {
+                    log.Trace("ReadPositionPose({0}) = {1}", row["Name"], row["Pose"]);
+                    return row["Pose"].ToString();
+                }
+            }
+            log.Error("ReadPositionPose({0}) Not Found", name);
+            return null;
+        }
+
+
+        public bool WritePosition(string name, string joints="", string pose="", bool isSystem = false)
+        {
+            System.Threading.Monitor.Enter(lockObject);
+
+            log.Trace("WritePosition({0}, {1}, {2}, {3})", name, joints, pose, isSystem);
+            if (positions == null)
+            {
+                log.Error("positions == null!!??");
+                return false;
+            }
+
+            bool foundVariable = false;
+            foreach (DataRow row in positions.Rows)
+            {
+                if ((string)row["Name"] == name)
+                {
+                    if (joints != "") row["Joints"] = joints;
+                    if (pose != "") row["Pose"] = pose;
+                    row["IsSystem"] = isSystem;
+                    foundVariable = true;
+                    break;
+                }
+            }
+
+            if (!foundVariable)
+                positions.Rows.Add(new object[] { name, joints, pose, isSystem });
+
+            positions.AcceptChanges();
+            Monitor.Exit(lockObject);
+            return true;
+        }
+
+
+        private void LoadPositionsBtn_Click(object sender, EventArgs e)
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", positionsFilename);
+            log.Info("LoadPositions from {0}", filename);
+            ClearAndInitializePositions();
+            try
+            {
+                positions.ReadXml(filename);
+            }
+            catch
+            { }
+
+            PositionsGrd.DataSource = positions;
+            foreach (DataGridViewColumn col in PositionsGrd.Columns)
+                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+        }
+
+        private void SavePositionsBtn_Click(object sender, EventArgs e)
+        {
+            string filename = Path.Combine(AutoGrindRoot, "Recipes", positionsFilename);
+            log.Info("SavePositions to {0}", filename);
+            positions.AcceptChanges();
+            positions.WriteXml(filename, XmlWriteMode.WriteSchema, true);
+        }
+
+        private void ClearPositionsBtn_Click(object sender, EventArgs e)
+        {
+            while (DeleteFirstNonSystemVariable(positions)) ;
+        }
+
+        private void ClearAndInitializePositions()
+        {
+            positions = new DataTable("Positions");
+            DataColumn name = positions.Columns.Add("Name", typeof(System.String));
+            positions.Columns.Add("Joints", typeof(System.String));
+            positions.Columns.Add("Pose", typeof(System.String));
+            positions.Columns.Add("IsSystem", typeof(System.Boolean));
+            positions.CaseSensitive = true;
+            positions.PrimaryKey = new DataColumn[] { name };
+            PositionsGrd.DataSource = positions;
+        }
+
+        private void ClearAllPositionsBtn_Click(object sender, EventArgs e)
+        {
+            if (DialogResult.Yes == ConfirmMessageBox("This will clear all positions INCLUDING system positions. Proceed?"))
+                ClearAndInitializePositions();
+        }
+
+        private void RecordPosition(string prompt, string varName)
+        {
+            JoggingForm form = new JoggingForm(robotServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
+
+            form.ShowDialog(this);
+
+            if (form.ShouldSave)
+            {
+                log.Trace(prompt);
+
+                if (robotReady)
+                {
+                    copyPositionAtWrite = varName;
+                    robotServer.Send("(25)");
+                }
+
+            }
+        }
+        private void GotoPositionJoint(string varName)
+        {
+            log.Trace("GotoPositionJoint({0})", varName);
+            if (robotReady)
+            {
+                string q = ReadPositionJoint(varName);
+                if (q != null)
+                {
+                    string msg = "(21," + ExtractScalars(q) + ')';
+                    log.Trace("Sending {0}", msg);
+                    robotServer.Send(msg);
+                }
+            }
+        }
+        private void GotoPositionPose(string varName)
+        {
+            log.Trace("GotoPositionPose({0})", varName);
+            if (robotReady)
+            {
+                string q = ReadPositionPose(varName);
+                if (q != null)
+                {
+                    string msg = "(22," + ExtractScalars(q) + ')';
+                    log.Trace("Sending {0}", msg);
+                    robotServer.Send(msg);
+                }
+            }
+        }
+
+        private void PositionSetBtn_Click(object sender, EventArgs e)
+        {
+            if (PositionsGrd.SelectedRows.Count != 1)
+            {
+                ErrorMessageBox("Select a row in the Positions table to overwrite!");
+                return;
+            }
+            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
+            string name = row["Name"].ToString();
+
+            log.Info("Setting Position {0}", name);
+
+            RecordPosition("Please teach position: " + name, name);
+        }
+
+        private void PositionMovePoseBtn_Click(object sender, EventArgs e)
+        {
+            if (PositionsGrd.SelectedRows.Count != 1)
+            {
+                ErrorMessageBox("Select a row in the Positions table to move to!");
+                return;
+            }
+            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
+            string name = row["Name"].ToString();
+            GotoPositionPose(name);
+        }
+
+        private void PositionMoveArmBtn_Click(object sender, EventArgs e)
+        {
+            if (PositionsGrd.SelectedRows.Count != 1)
+            {
+                ErrorMessageBox("Select a row in the Positions table to move to!");
+                return;
+            }
+            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
+            string name = row["Name"].ToString();
+            GotoPositionJoint(name);
+        }
+
+        // ===================================================================
+        // END POSITIONS SYSTEM
         // ===================================================================
     }
 }

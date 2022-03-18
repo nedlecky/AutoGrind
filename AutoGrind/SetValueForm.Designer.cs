@@ -60,7 +60,7 @@
             this.Button1.TabIndex = 4;
             this.Button1.Text = "1";
             this.Button1.UseVisualStyleBackColor = false;
-            this.Button1.Click += new System.EventHandler(this.Button1_Click);
+            this.Button1.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // EnterBtn
             // 
@@ -88,11 +88,12 @@
             this.Button2.TabIndex = 7;
             this.Button2.Text = "2";
             this.Button2.UseVisualStyleBackColor = false;
-            this.Button2.Click += new System.EventHandler(this.Button2_Click);
+            this.Button2.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // CancelBtn
             // 
             this.CancelBtn.BackColor = System.Drawing.Color.Red;
+            this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.White;
             this.CancelBtn.Location = new System.Drawing.Point(376, 353);
@@ -126,7 +127,7 @@
             this.Button3.TabIndex = 10;
             this.Button3.Text = "3";
             this.Button3.UseVisualStyleBackColor = false;
-            this.Button3.Click += new System.EventHandler(this.Button3_Click);
+            this.Button3.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button4
             // 
@@ -140,7 +141,7 @@
             this.Button4.TabIndex = 11;
             this.Button4.Text = "4";
             this.Button4.UseVisualStyleBackColor = false;
-            this.Button4.Click += new System.EventHandler(this.Button4_Click);
+            this.Button4.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button5
             // 
@@ -154,7 +155,7 @@
             this.Button5.TabIndex = 12;
             this.Button5.Text = "5";
             this.Button5.UseVisualStyleBackColor = false;
-            this.Button5.Click += new System.EventHandler(this.Button5_Click);
+            this.Button5.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button6
             // 
@@ -168,7 +169,7 @@
             this.Button6.TabIndex = 13;
             this.Button6.Text = "6";
             this.Button6.UseVisualStyleBackColor = false;
-            this.Button6.Click += new System.EventHandler(this.Button6_Click);
+            this.Button6.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button7
             // 
@@ -182,7 +183,7 @@
             this.Button7.TabIndex = 14;
             this.Button7.Text = "7";
             this.Button7.UseVisualStyleBackColor = false;
-            this.Button7.Click += new System.EventHandler(this.Button7_Click);
+            this.Button7.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button8
             // 
@@ -196,7 +197,7 @@
             this.Button8.TabIndex = 15;
             this.Button8.Text = "8";
             this.Button8.UseVisualStyleBackColor = false;
-            this.Button8.Click += new System.EventHandler(this.Button8_Click);
+            this.Button8.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button9
             // 
@@ -210,7 +211,7 @@
             this.Button9.TabIndex = 16;
             this.Button9.Text = "9";
             this.Button9.UseVisualStyleBackColor = false;
-            this.Button9.Click += new System.EventHandler(this.Button9_Click);
+            this.Button9.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // Button0
             // 
@@ -224,7 +225,7 @@
             this.Button0.TabIndex = 17;
             this.Button0.Text = "0";
             this.Button0.UseVisualStyleBackColor = false;
-            this.Button0.Click += new System.EventHandler(this.Button0_Click);
+            this.Button0.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // ButtonPeriod
             // 
@@ -238,7 +239,7 @@
             this.ButtonPeriod.TabIndex = 18;
             this.ButtonPeriod.Text = ".";
             this.ButtonPeriod.UseVisualStyleBackColor = false;
-            this.ButtonPeriod.Click += new System.EventHandler(this.ButtonPeriod_Click);
+            this.ButtonPeriod.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // ButtonBackspace
             // 
@@ -293,8 +294,10 @@
             // 
             // SetValueForm
             // 
+            this.AcceptButton = this.EnterBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.CancelBtn;
             this.ClientSize = new System.Drawing.Size(530, 550);
             this.ControlBox = false;
             this.Controls.Add(this.ValueTxt);

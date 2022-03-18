@@ -1,0 +1,55 @@
+<?xml version="1.0" standalone="yes"?>
+<NewDataSet>
+  <xs:schema id="NewDataSet" xmlns="" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xs:element name="NewDataSet" msdata:IsDataSet="true" msdata:MainDataTable="Positions" msdata:CaseSensitive="true" msdata:UseCurrentLocale="true">
+      <xs:complexType>
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+          <xs:element name="Positions" msdata:CaseSensitive="True">
+            <xs:complexType>
+              <xs:sequence>
+                <xs:element name="Name" type="xs:string" />
+                <xs:element name="Joints" type="xs:string" minOccurs="0" />
+                <xs:element name="Pose" type="xs:string" minOccurs="0" />
+                <xs:element name="IsSystem" type="xs:boolean" minOccurs="0" />
+              </xs:sequence>
+            </xs:complexType>
+          </xs:element>
+        </xs:choice>
+      </xs:complexType>
+      <xs:unique name="Constraint1" msdata:PrimaryKey="true">
+        <xs:selector xpath=".//Positions" />
+        <xs:field xpath="Name" />
+      </xs:unique>
+    </xs:element>
+  </xs:schema>
+  <Positions>
+    <Name>abc</Name>
+    <Joints>[1.56122,-1.59713,2.07768,-2.04061,-1.57988,3.13124]</Joints>
+    <Pose>p[0.126731,-0.434606,0.130473,-3.13086,-0.00167047,0.0155731]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>def</Name>
+    <Joints>[1.56123,-1.64053,2.00688,-1.92643,-1.5799,3.13109]</Joints>
+    <Pose>p[0.126755,-0.434611,0.170456,-3.13088,-0.00168597,0.0153909]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>cylcenter</Name>
+    <Joints>[1.37206,-1.16283,1.65884,-2.05784,-1.58265,2.94126]</Joints>
+    <Pose>p[0.00734986,-0.624666,0.0906527,-3.13053,-0.00298595,0.0156758]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>sphere</Name>
+    <Joints>[1.56024,-1.56739,2.10793,-2.0985,-1.57965,3.13074]</Joints>
+    <Pose>p[0.126355,-0.43528,0.109868,-3.12876,-0.00107887,0.0152426]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>toolchange</Name>
+    <Joints>[1.9772,-1.31982,1.86463,-2.47544,-0.866874,3.6864]</Joints>
+    <Pose>p[0.526317,-0.43539,0.210034,-2.89735,0.0066516,-1.18379]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+</NewDataSet>

@@ -116,11 +116,18 @@ def return_actual_tcp_pose():
   global response = "return_actual_tcp_pose()"
 end
 
-# Send get_actual_joint_positions() to
+# Send get_actual_joint_positions() to socket
 def return_get_actual_joint_positions():
   p = get_actual_joint_positions()
   return_joints("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
+end
+
+# Send both joints and pose to socket labeled position_p and position_q
+def return_both_positions():
+  return_joints("position_q", get_actual_joint_positions())
+  return_pose("position_p", get_actual_tcp_pose())
+  global response = "return_both_positions()"
 end
 
 # Movel relatively in base coordinates
@@ -167,10 +174,16 @@ def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
   global response = "movel_rot_only()"
 end
 
-# Movej to physical joint positions
-def movej_q(q):
-  movej(q, robot_accel, robot_speed)
-  global response = "movej_q()"
+# Movej to position (works with joints or poses)
+def movej_ag(p):
+  movej(p, a = robot_accel, v = robot_speed)
+  global response = "movej_ag()"
+end
+
+# Movel to position (works with joints or poses)
+def movel_ag(p):
+  movel(p, a = robot_accel, v = robot_speed)
+  global response = "movel_ag()"
 end
 
 
