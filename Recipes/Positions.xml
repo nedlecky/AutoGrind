@@ -88,4 +88,22 @@
     <Pose>p[0.1756,-0.421952,0.0124276,-3.13243,-0.000253795,0.0160812]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>flat_demo</Name>
+    <Joints>[1.67406,-1.38345,2.22322,-2.40023,-1.57892,3.24561]</Joints>
+    <Pose>p[0.175607,-0.421936,0.0124117,-3.13238,-0.000254058,0.0160696]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>cyl_demo</Name>
+    <Joints>[1.37116,-1.17024,1.6671,-2.05866,-1.58275,2.94033]</Joints>
+    <Pose>p[0.00736155,-0.621658,0.0915919,-3.13046,-0.00305068,0.0158369]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>sphere_demo</Name>
+    <Joints>[1.09942,-1.5966,2.13992,-2.10269,-1.57558,2.67069]</Joints>
+    <Pose>p[-0.0736999,-0.435337,0.108912,-3.12888,0.000169206,0.000171095]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>

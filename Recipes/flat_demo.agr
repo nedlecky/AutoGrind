@@ -1,0 +1,16 @@
+# flat_demo
+
+jump(spiral)
+movepose(above)
+movepose(flat_demo)
+
+grind_rect(20,20,2,20,10)
+grind_rect(10,10,2,20,10)
+
+circle:
+grind_circle(20,2,20,10)
+
+grind_serpentine(40,40,40,10,3,20,10)
+
+spiral:
+grind_spiral(20,50,3,2,20,10)

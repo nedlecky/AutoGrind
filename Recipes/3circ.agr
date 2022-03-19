@@ -1,0 +1,6 @@
+# 3 Circles
+
+grind_circle(30,3,20,10)
+grind_circle(20,3,20,10)
+grind_circle(10,3,20,10)
+

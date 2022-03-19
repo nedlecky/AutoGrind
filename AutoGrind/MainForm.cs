@@ -269,7 +269,6 @@ namespace AutoGrind
         // START MAIN UI BUTTONS
         // ===================================================================
 
-
         // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
         private void MonitorTab_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -424,7 +423,7 @@ namespace AutoGrind
         private void OperatorModeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             OperatorMode origOperatorMode = operatorMode;
-            
+
             OperatorMode newOperatorMode = (OperatorMode)OperatorModeBox.SelectedIndex;
             log.Info(string.Format("OperatorMode changing to {0}", newOperatorMode));
             SetValueForm form;
@@ -434,7 +433,7 @@ namespace AutoGrind
                     //Width = standardWidth;
                     break;
                 case OperatorMode.EDITOR:
-                    form = new SetValueForm("", "Please enter passcode for EDITOR",0);
+                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
@@ -442,12 +441,15 @@ namespace AutoGrind
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    form = new SetValueForm("", "Please enter passcode for ENGINEERING",0);
+                    // TEMPORARILY DON"T NEED PASSWORD
+                    // form = new SetValueForm("", "Please enter passcode for ENGINEERING",0);
+                    /*
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
+                    */
                     break;
             }
 
@@ -458,18 +460,26 @@ namespace AutoGrind
                     //Width = standardWidth;
                     EditBtn.Visible = false;
                     SetupBtn.Visible = false;
+                    OperationTab.TabPages["EditTab"].Visible = false;
+                    OperationTab.TabPages["SetupTab"].Visible = false;
                     MonitorTab.Visible = false;
+
+
                     break;
                 case OperatorMode.EDITOR:
                     //Width = standardWidth;
                     EditBtn.Visible = true;
                     SetupBtn.Visible = false;
+                    OperationTab.TabPages["EditTab"].Visible = true;
+                    OperationTab.TabPages["SetupTab"].Visible = false;
                     MonitorTab.Visible = true;
                     break;
                 case OperatorMode.ENGINEERING:
                     //Width = fullWidth;
                     EditBtn.Visible = true;
                     SetupBtn.Visible = true;
+                    OperationTab.TabPages["EditTab"].Visible = true;
+                    OperationTab.TabPages["SetupTab"].Visible = true;
                     MonitorTab.Visible = true;
                     break;
             }
@@ -483,6 +493,9 @@ namespace AutoGrind
             GrindBtn.BackColor = Color.Green;
             EditBtn.BackColor = Color.LightGreen;
             SetupBtn.BackColor = Color.LightGreen;
+
+            // Get latest from edit control
+            RecipeRoRTB.Text = RecipeRTB.Text;
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
@@ -512,21 +525,27 @@ namespace AutoGrind
             Close();
         }
 
-
         private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
         // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
         {
             log.Info("Selecting {0}", e.TabPage.Text);
+
             switch (e.TabPage.Text)
             {
                 case "Grind":
                     GrindBtn_Click(null, null);
                     break;
                 case "Edit":
-                    EditBtn_Click(null, null);
+                    if (operatorMode == OperatorMode.OPERATOR)
+                        GrindBtn_Click(null, null);
+                    else
+                        EditBtn_Click(null, null);
                     break;
                 case "Setup":
-                    SetupBtn_Click(null, null);
+                    if (operatorMode == OperatorMode.OPERATOR || operatorMode == OperatorMode.EDITOR)
+                        GrindBtn_Click(null, null);
+                    else
+                        SetupBtn_Click(null, null);
                     break;
             }
 
@@ -675,12 +694,14 @@ namespace AutoGrind
         {
             log.Info("LoadRecipeFile({0})", file);
             RecipeFilenameLbl.Text = "";
+            RecipeRoFilenameLbl.Text = "";
             RecipeRoRTB.Text = "";
             try
             {
                 RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
                 RecipeFilenameLbl.Text = file;
+                RecipeRoFilenameLbl.Text = file;
 
                 // Copy from the edit window to the runtime window
                 RecipeRoRTB.Text = RecipeRTB.Text;
@@ -706,6 +727,7 @@ namespace AutoGrind
             SetRecipeState(RecipeState.NEW);
             SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
+            RecipeRoFilenameLbl.Text = "Untitled";
             RecipeRTB.Clear();
             RecipeRoRTB.Clear();
         }
@@ -767,6 +789,7 @@ namespace AutoGrind
                 if (dialog.FileName != "")
                 {
                     RecipeFilenameLbl.Text = dialog.FileName;
+                    RecipeRoFilenameLbl.Text = dialog.FileName;
                     SaveRecipeBtn_Click(null, null);
                 }
             }
@@ -928,7 +951,7 @@ namespace AutoGrind
 
         private void DiameterLbl_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM",1);
+            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM", 1);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1115,16 +1138,16 @@ namespace AutoGrind
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
 
             // RECTANGULAR GRINDS
-            {"grind_rect",              new CommandSpec(){nParams=4, prefix="40,2" }  },
+            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,2" }  },
 
             // SERPENTINE GRINDS
-            {"grind_serpentine",        new CommandSpec(){nParams=6, prefix="40,3" }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,3" }  },
 
             // CIRCLAR GRINDS
-            {"grind_circle",            new CommandSpec(){nParams=3, prefix="40,4" }  },
+            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,4" }  },
 
             // SPIRAL GRINDS
-            {"grind_spiral",            new CommandSpec(){nParams=5, prefix="40,5" }  },
+            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,5" }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1557,7 +1580,7 @@ namespace AutoGrind
         }
         private void SetSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s",3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1567,7 +1590,7 @@ namespace AutoGrind
 
         private void SetAccelBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2",3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1578,7 +1601,7 @@ namespace AutoGrind
 
         private void SetBlendBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m",3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -2263,6 +2286,7 @@ namespace AutoGrind
         {
             robotDashboardClient?.Send(DashboardMessageTxt.Text);
         }
+
 
         // ===================================================================
         // END POSITIONS SYSTEM
