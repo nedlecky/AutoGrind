@@ -691,6 +691,7 @@
             this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
             this.groupBox1.Controls.Add(this.ChangeLEonardRootBtn);
             this.groupBox1.Controls.Add(this.label1);
+            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Location = new System.Drawing.Point(13, 11);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
@@ -797,7 +798,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.DebugLevelCombo);
-            this.groupBox3.Location = new System.Drawing.Point(9, 1004);
+            this.groupBox3.Location = new System.Drawing.Point(472, 85);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(123, 54);
             this.groupBox3.TabIndex = 86;
@@ -815,7 +816,7 @@
             "Trace"});
             this.DebugLevelCombo.Location = new System.Drawing.Point(6, 19);
             this.DebugLevelCombo.Name = "DebugLevelCombo";
-            this.DebugLevelCombo.Size = new System.Drawing.Size(100, 21);
+            this.DebugLevelCombo.Size = new System.Drawing.Size(100, 24);
             this.DebugLevelCombo.TabIndex = 80;
             this.DebugLevelCombo.SelectedIndexChanged += new System.EventHandler(this.DebugLevelCombo_SelectedIndexChanged);
             // 
@@ -1409,7 +1410,6 @@
             this.Controls.Add(this.GrindContactEnabledBtn);
             this.Controls.Add(this.RobotReadyLbl);
             this.Controls.Add(this.GrindReadyLbl);
-            this.Controls.Add(this.groupBox3);
             this.Controls.Add(this.RobotCommandStatusLbl);
             this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.RecipeFilenameLbl);

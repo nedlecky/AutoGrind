@@ -736,6 +736,8 @@ namespace AutoGrind
 
             // Window State
             Left = (Int32)AppNameKey.GetValue("Left", 0);
+            Width = (Int32)AppNameKey.GetValue("Width", 1920);
+
             Top = (Int32)AppNameKey.GetValue("Top", 0);
 
             // From Setup Tab
@@ -778,6 +780,7 @@ namespace AutoGrind
 
             // Window State
             AppNameKey.SetValue("Left", Left);
+            AppNameKey.SetValue("Width", Width);
             AppNameKey.SetValue("Top", Top);
 
             // From Setup Tab

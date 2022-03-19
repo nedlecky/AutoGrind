@@ -54,106 +54,106 @@
   <Variables>
     <Name>robot_ready</Name>
     <Value>True</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:58:21.793</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-19T12:04:34.837</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>163</Value>
+    <Value>217</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:58:21.772</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:21.468</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>0.2</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-19T11:58:21.779</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-19T12:03:14.123</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>set_speed()</Value>
+    <Value>grind_rect</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:58:21.791</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:34.821</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
-    <Value>0.43</Value>
+    <Value>0.4</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.786</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:20.823</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_blend</Name>
-    <Value>0.003</Value>
+    <Value>0.006</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.825</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:21.043</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp</Name>
     <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.917</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:14.285</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_mass</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.940</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:14.322</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_cog</Name>
     <Value>[0,0,0.05]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.948</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:14.345</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[-0.0770217,-0.414695,0.0947929,2.02108,-1.34984,0.404067]</Value>
+    <Value>p[-0.0770286,-0.414693,0.0947845,2.02109,-1.34989,0.404053]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.088</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:13.218</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_ready</Name>
     <Value>True</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.891</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:34.777</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_contact_enabled</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.863</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:14.232</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tool</Name>
     <Value>2F85</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.684</TimeStamp>
+    <TimeStamp>2022-03-19T12:03:14.058</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_part_geometry</Name>
-    <Value>[1,0]</Value>
+    <Value>[2,0.055]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.983</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:18.110</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp_part</Name>
-    <Value>p[0,0,0.175,0,0,0]</Value>
+    <Value>p[0,0,0.2025,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T11:57:39.987</TimeStamp>
+    <TimeStamp>2022-03-19T12:04:18.141</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
