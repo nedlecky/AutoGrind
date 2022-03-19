@@ -80,10 +80,10 @@
             this.AutoGrindRootLbl = new System.Windows.Forms.Label();
             this.ChangeLEonardRootBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.DiameterLbl = new System.Windows.Forms.Label();
-            this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DebugLevelCombo = new System.Windows.Forms.ComboBox();
+            this.DiameterLbl = new System.Windows.Forms.Label();
+            this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.HeartbeatTmr = new System.Windows.Forms.Timer(this.components);
             this.timeLbl = new System.Windows.Forms.Label();
             this.StartupTmr = new System.Windows.Forms.Timer(this.components);
@@ -137,6 +137,7 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
+            this.OperatorModeBox = new System.Windows.Forms.ComboBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -774,27 +775,6 @@
             this.label1.Text = "AutoGrind Root Directory";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // DiameterLbl
-            // 
-            this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterLbl.Location = new System.Drawing.Point(654, 81);
-            this.DiameterLbl.Name = "DiameterLbl";
-            this.DiameterLbl.Size = new System.Drawing.Size(168, 37);
-            this.DiameterLbl.TabIndex = 75;
-            this.DiameterLbl.Text = "25.0";
-            this.DiameterLbl.Click += new System.EventHandler(this.DiameterLbl_Click);
-            // 
-            // DiameterDimLbl
-            // 
-            this.DiameterDimLbl.AutoSize = true;
-            this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterDimLbl.Location = new System.Drawing.Point(828, 81);
-            this.DiameterDimLbl.Name = "DiameterDimLbl";
-            this.DiameterDimLbl.Size = new System.Drawing.Size(71, 37);
-            this.DiameterDimLbl.TabIndex = 74;
-            this.DiameterDimLbl.Text = "mm";
-            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.DebugLevelCombo);
@@ -819,6 +799,27 @@
             this.DebugLevelCombo.Size = new System.Drawing.Size(100, 24);
             this.DebugLevelCombo.TabIndex = 80;
             this.DebugLevelCombo.SelectedIndexChanged += new System.EventHandler(this.DebugLevelCombo_SelectedIndexChanged);
+            // 
+            // DiameterLbl
+            // 
+            this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiameterLbl.Location = new System.Drawing.Point(750, 81);
+            this.DiameterLbl.Name = "DiameterLbl";
+            this.DiameterLbl.Size = new System.Drawing.Size(168, 37);
+            this.DiameterLbl.TabIndex = 75;
+            this.DiameterLbl.Text = "25.0";
+            this.DiameterLbl.Click += new System.EventHandler(this.DiameterLbl_Click);
+            // 
+            // DiameterDimLbl
+            // 
+            this.DiameterDimLbl.AutoSize = true;
+            this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiameterDimLbl.Location = new System.Drawing.Point(924, 81);
+            this.DiameterDimLbl.Name = "DiameterDimLbl";
+            this.DiameterDimLbl.Size = new System.Drawing.Size(71, 37);
+            this.DiameterDimLbl.TabIndex = 74;
+            this.DiameterDimLbl.Text = "mm";
             // 
             // HeartbeatTmr
             // 
@@ -1340,7 +1341,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(140, 42);
+            this.label6.Location = new System.Drawing.Point(202, 58);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(179, 31);
             this.label6.TabIndex = 97;
@@ -1348,9 +1349,10 @@
             // 
             // MountedToolBox
             // 
+            this.MountedToolBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MountedToolBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MountedToolBox.FormattingEnabled = true;
-            this.MountedToolBox.Location = new System.Drawing.Point(323, 39);
+            this.MountedToolBox.Location = new System.Drawing.Point(387, 55);
             this.MountedToolBox.Name = "MountedToolBox";
             this.MountedToolBox.Size = new System.Drawing.Size(168, 39);
             this.MountedToolBox.TabIndex = 99;
@@ -1358,13 +1360,14 @@
             // 
             // PartGeometryBox
             // 
+            this.PartGeometryBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.PartGeometryBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PartGeometryBox.FormattingEnabled = true;
             this.PartGeometryBox.Items.AddRange(new object[] {
             "FLAT",
             "CYLINDER",
             "SPHERE"});
-            this.PartGeometryBox.Location = new System.Drawing.Point(654, 39);
+            this.PartGeometryBox.Location = new System.Drawing.Point(750, 39);
             this.PartGeometryBox.Name = "PartGeometryBox";
             this.PartGeometryBox.Size = new System.Drawing.Size(168, 39);
             this.PartGeometryBox.TabIndex = 101;
@@ -1374,7 +1377,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(515, 44);
+            this.label5.Location = new System.Drawing.Point(611, 44);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(133, 31);
             this.label5.TabIndex = 100;
@@ -1393,11 +1396,28 @@
             this.RobotDashboardStatusLbl.Text = "Dashboard Status";
             this.RobotDashboardStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // OperatorModeBox
+            // 
+            this.OperatorModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.OperatorModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OperatorModeBox.FormattingEnabled = true;
+            this.OperatorModeBox.Items.AddRange(new object[] {
+            "Operator",
+            "Editor",
+            "Engineering"});
+            this.OperatorModeBox.Location = new System.Drawing.Point(9, 785);
+            this.OperatorModeBox.Name = "OperatorModeBox";
+            this.OperatorModeBox.Size = new System.Drawing.Size(123, 28);
+            this.OperatorModeBox.TabIndex = 103;
+            this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1161);
+            this.ControlBox = false;
+            this.Controls.Add(this.OperatorModeBox);
             this.Controls.Add(this.RobotDashboardStatusLbl);
             this.Controls.Add(this.PartGeometryBox);
             this.Controls.Add(this.label5);
@@ -1418,6 +1438,7 @@
             this.Controls.Add(this.SetupBtn);
             this.Controls.Add(this.EditBtn);
             this.Controls.Add(this.GrindBtn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -1561,6 +1582,7 @@
         private System.Windows.Forms.Button UnlockProtectiveStopBtn;
         private System.Windows.Forms.TextBox DashboardMessageTxt;
         private System.Windows.Forms.Button DashboardSendBtn;
+        private System.Windows.Forms.ComboBox OperatorModeBox;
     }
 }
 

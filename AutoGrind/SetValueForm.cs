@@ -16,12 +16,16 @@ namespace AutoGrind
 
         public string value { get; set; }
         public string label { get; set; }
+        private int nDecimals { get; set; }
+        private bool isPassword { get; set; }
 
-        public SetValueForm(string val = "0.000", string lab = "??")
+        public SetValueForm(string val = "0.000", string lab = "??", int nDecimals_ = 3, bool isPassword_ = false)
         {
             InitializeComponent();
             value = val;
             label = lab;
+            nDecimals = nDecimals_;
+            isPassword = isPassword_;
             LabelLbl.Text = "Enter " + label;
             ValueTxt.Text = value;
         }
@@ -33,12 +37,28 @@ namespace AutoGrind
 
         private void EnterBtn_Click(object sender, EventArgs e)
         {
+            if (ValueTxt.Text == "")
+            {
+                value = "";
+                Close();
+                return;
+            }
             try
             {
                 double x = Convert.ToDouble(ValueTxt.Text);
-                value = x.ToString("0.000");
+                string fmt = "0";
+                if (nDecimals > 0)
+                {
+                    fmt = "0.";
+                    for (int i = 0; i < nDecimals; i++)
+                        fmt += "0";
+                }
+                value = x.ToString(fmt);
                 this.DialogResult = DialogResult.OK;
-                log.Info("Setting {0} = {1}", label, value);
+                if (isPassword)
+                    log.Info("Setting {0} = ********", label);
+                else
+                    log.Info("Setting {0} = {1}", label, value);
                 Close();
             }
             catch (Exception ex)

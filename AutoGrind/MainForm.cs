@@ -47,6 +47,14 @@ namespace AutoGrind
         }
         RunState runState = RunState.INIT;
 
+        private enum OperatorMode
+        {
+            OPERATOR,
+            EDITOR,
+            ENGINEERING
+        }
+        OperatorMode operatorMode = OperatorMode.OPERATOR;
+
         public MainForm()
         {
             InitializeComponent();
@@ -71,6 +79,7 @@ namespace AutoGrind
 
             // TODO: Must do this first to get AutoGrindRoot prior to logger beginning
             LoadPersistent();
+            OperatorModeBox.SelectedIndex = (int)operatorMode;
 
             // Set logfile variable in NLog
             LogManager.Configuration.Variables["LogfileName"] = AutoGrindRoot + "/Logs/AutoGrind.log";
@@ -410,6 +419,62 @@ namespace AutoGrind
             UpdateGeometryToRobot();
         }
 
+        //const int standardWidth = 1050;
+        const int fullWidth = 1920;
+        private void OperatorModeBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            OperatorMode origOperatorMode = operatorMode;
+            
+            OperatorMode newOperatorMode = (OperatorMode)OperatorModeBox.SelectedIndex;
+            log.Info(string.Format("OperatorMode changing to {0}", newOperatorMode));
+            SetValueForm form;
+            switch (newOperatorMode)
+            {
+                case OperatorMode.OPERATOR:
+                    //Width = standardWidth;
+                    break;
+                case OperatorMode.EDITOR:
+                    form = new SetValueForm("", "Please enter passcode for EDITOR",0);
+                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
+                    {
+                        OperatorModeBox.SelectedIndex = 0;
+                        return;
+                    }
+                    break;
+                case OperatorMode.ENGINEERING:
+                    form = new SetValueForm("", "Please enter passcode for ENGINEERING",0);
+                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    {
+                        OperatorModeBox.SelectedIndex = 0;
+                        return;
+                    }
+                    break;
+            }
+
+            operatorMode = newOperatorMode;
+            switch (operatorMode)
+            {
+                case OperatorMode.OPERATOR:
+                    //Width = standardWidth;
+                    EditBtn.Visible = false;
+                    SetupBtn.Visible = false;
+                    MonitorTab.Visible = false;
+                    break;
+                case OperatorMode.EDITOR:
+                    //Width = standardWidth;
+                    EditBtn.Visible = true;
+                    SetupBtn.Visible = false;
+                    MonitorTab.Visible = true;
+                    break;
+                case OperatorMode.ENGINEERING:
+                    //Width = fullWidth;
+                    EditBtn.Visible = true;
+                    SetupBtn.Visible = true;
+                    MonitorTab.Visible = true;
+                    break;
+            }
+        }
+
 
         private void GrindBtn_Click(object sender, EventArgs e)
         {
@@ -747,6 +812,10 @@ namespace AutoGrind
             ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
             UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
 
+            // Operator Mode
+            operatorMode = (OperatorMode)(Int32)AppNameKey.GetValue("operatorMode", 0);
+            OperatorModeBox.SelectedIndex = (int)operatorMode;
+
             // Debug Level selection
             DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "INFO");
 
@@ -762,10 +831,10 @@ namespace AutoGrind
             // Autoload file is the last loaded recipe
             recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
 
-            // Retreive currently mounted tool
+            // Retrieve currently mounted tool
             MountedToolBox.Text = (string)AppNameKey.GetValue("MountedToolBox.Text", "");
 
-            // Retreive current part geometry
+            // Retrieve current part geometry
             //    TODO Forcing this to FLAT, 250.0 since we don't trust the stored diameter
             PartGeometryBox.Text = "FLAT"; // (string)AppNameKey.GetValue("PartGeometryBox.Text", "FLAT");
             DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "250.0");
@@ -789,9 +858,11 @@ namespace AutoGrind
             AppNameKey.SetValue("ServerIpTxt.Text", ServerIpTxt.Text);
             AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
 
+            // Operator Mode
+            AppNameKey.SetValue("operatorMode", (Int32)operatorMode);
+
             // Debug Level selection
             AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
-
 
             // Save the tools table
             SaveToolsBtn_Click(null, null);
@@ -857,7 +928,7 @@ namespace AutoGrind
 
         private void DiameterLbl_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM");
+            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM",1);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1486,7 +1557,7 @@ namespace AutoGrind
         }
         private void SetSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s");
+            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s",3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1496,7 +1567,7 @@ namespace AutoGrind
 
         private void SetAccelBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2");
+            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2",3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1507,7 +1578,7 @@ namespace AutoGrind
 
         private void SetBlendBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m");
+            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m",3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
