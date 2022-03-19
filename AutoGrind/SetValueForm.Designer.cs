@@ -107,10 +107,10 @@
             // 
             // LabelLbl
             // 
-            this.LabelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LabelLbl.Location = new System.Drawing.Point(34, 9);
+            this.LabelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LabelLbl.Location = new System.Drawing.Point(4, 9);
             this.LabelLbl.Name = "LabelLbl";
-            this.LabelLbl.Size = new System.Drawing.Size(473, 56);
+            this.LabelLbl.Size = new System.Drawing.Size(524, 56);
             this.LabelLbl.TabIndex = 9;
             this.LabelLbl.Text = "???";
             this.LabelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -253,7 +253,7 @@
             this.ButtonBackspace.TabIndex = 19;
             this.ButtonBackspace.Text = "<<";
             this.ButtonBackspace.UseVisualStyleBackColor = false;
-            this.ButtonBackspace.Click += new System.EventHandler(this.ButtonBackspace_Click);
+            this.ButtonBackspace.Click += new System.EventHandler(this.DefaultKeyClick);
             // 
             // ClearBtn
             // 

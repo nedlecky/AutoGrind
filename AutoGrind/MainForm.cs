@@ -1041,16 +1041,16 @@ namespace AutoGrind
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
 
             // RECTANGULAR GRINDS
-            {"grind_rect",              new CommandSpec(){nParams=3, prefix="40,2" }  },
+            {"grind_rect",              new CommandSpec(){nParams=4, prefix="40,2" }  },
 
             // SERPENTINE GRINDS
-            {"grind_serpentine",        new CommandSpec(){nParams=5, prefix="40,3" }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=6, prefix="40,3" }  },
 
             // CIRCLAR GRINDS
-            {"grind_circle",            new CommandSpec(){nParams=2, prefix="40,4" }  },
+            {"grind_circle",            new CommandSpec(){nParams=3, prefix="40,4" }  },
 
             // SPIRAL GRINDS
-            {"grind_spiral",            new CommandSpec(){nParams=4, prefix="40,5" }  },
+            {"grind_spiral",            new CommandSpec(){nParams=5, prefix="40,5" }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1483,18 +1483,33 @@ namespace AutoGrind
         }
         private void SetSpeedBtn_Click(object sender, EventArgs e)
         {
-            ExecuteLine(-1, String.Format("set_speed({0})", SpeedTxt.Text));
+            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s");
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("set_speed({0})", form.value));
+            }
         }
 
         private void SetAccelBtn_Click(object sender, EventArgs e)
         {
-            ExecuteLine(-1, String.Format("set_accel({0})", AccelTxt.Text));
+            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2");
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("set_accel({0})", form.value));
+            }
         }
 
 
         private void SetBlendBtn_Click(object sender, EventArgs e)
         {
-            ExecuteLine(-1, String.Format("set_blend({0})", BlendTxt.Text));
+            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m");
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("set_blend({0})", form.value));
+            }
         }
 
 
@@ -1668,16 +1683,13 @@ namespace AutoGrind
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
                 case "robot_speed":
-                    RobotSpeedLbl.Text = "Speed\n" + valueTrimmed;
-                    SpeedTxt.Text = valueTrimmed;
+                    SetSpeedBtn.Text = "Speed\n" + valueTrimmed + "m/s";
                     break;
                 case "robot_accel":
-                    RobotAccelLbl.Text = "Accel\n" + valueTrimmed;
-                    AccelTxt.Text = valueTrimmed;
+                    SetAccelBtn.Text = "Acceleration\n" + valueTrimmed + "m/s^2";
                     break;
                 case "robot_blend":
-                    RobotBlendLbl.Text = "Blend\n" + valueTrimmed;
-                    BlendTxt.Text = valueTrimmed;
+                    SetBlendBtn.Text = "Blend Radius\n" + valueTrimmed + "m";
                     break;
                 case "grind_contact_enabled":
                     GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);

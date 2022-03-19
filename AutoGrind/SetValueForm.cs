@@ -36,7 +36,7 @@ namespace AutoGrind
             try
             {
                 double x = Convert.ToDouble(ValueTxt.Text);
-                value = x.ToString("0.0");
+                value = x.ToString("0.000");
                 this.DialogResult = DialogResult.OK;
                 log.Info("Setting {0} = {1}", label, value);
                 Close();
@@ -68,17 +68,14 @@ namespace AutoGrind
             else
                 ValueTxt.Text = '-' + current;
         }
-        private void ButtonBackspace_Click(object sender, EventArgs e)
-        {
-            string current = ValueTxt.Text;
-            if (current.Length > 0)
-                ValueTxt.Text = current.Substring(0, current.Length - 1);
-        }
 
         void DefaultKeyClick(object sender, EventArgs e)
         {
             ValueTxt.Select();
-            SendKeys.Send(((Button)sender).Text);
+            string val = ((Button)sender).Text;
+            if (val == "<<")
+                val = "\b";
+            SendKeys.Send(val);
         }
 
         private void ButtonPeriod_Click(object sender, EventArgs e)

@@ -56,12 +56,12 @@
             this.SaveToolsBtn = new System.Windows.Forms.Button();
             this.ClearToolsBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
+            this.DashboardSendBtn = new System.Windows.Forms.Button();
+            this.UnlockProtectiveStopBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
             this.AskSafetyStatusBtn = new System.Windows.Forms.Button();
-            this.BlendTxt = new System.Windows.Forms.TextBox();
             this.SetBlendBtn = new System.Windows.Forms.Button();
-            this.AccelTxt = new System.Windows.Forms.TextBox();
-            this.SpeedTxt = new System.Windows.Forms.TextBox();
             this.SetAccelBtn = new System.Windows.Forms.Button();
             this.SetSpeedBtn = new System.Windows.Forms.Button();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
@@ -95,8 +95,6 @@
             this.RobotCommandStatusLbl = new System.Windows.Forms.Label();
             this.GrindReadyLbl = new System.Windows.Forms.Label();
             this.RobotReadyLbl = new System.Windows.Forms.Label();
-            this.RobotSpeedLbl = new System.Windows.Forms.Label();
-            this.RobotAccelLbl = new System.Windows.Forms.Label();
             this.GrindContactEnabledBtn = new System.Windows.Forms.Button();
             this.MonitorTab = new System.Windows.Forms.TabControl();
             this.positionsPage = new System.Windows.Forms.TabPage();
@@ -133,16 +131,12 @@
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.ClearErrorLogRtbBtn = new System.Windows.Forms.Button();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
-            this.RobotBlendLbl = new System.Windows.Forms.Label();
             this.ExitBtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.MountedToolBox = new System.Windows.Forms.ComboBox();
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
-            this.UnlockProtectiveStopBtn = new System.Windows.Forms.Button();
-            this.DashboardSendBtn = new System.Windows.Forms.Button();
-            this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -513,10 +507,7 @@
             this.groupBox2.Controls.Add(this.UnlockProtectiveStopBtn);
             this.groupBox2.Controls.Add(this.ProgramStateBtn);
             this.groupBox2.Controls.Add(this.AskSafetyStatusBtn);
-            this.groupBox2.Controls.Add(this.BlendTxt);
             this.groupBox2.Controls.Add(this.SetBlendBtn);
-            this.groupBox2.Controls.Add(this.AccelTxt);
-            this.groupBox2.Controls.Add(this.SpeedTxt);
             this.groupBox2.Controls.Add(this.SetAccelBtn);
             this.groupBox2.Controls.Add(this.SetSpeedBtn);
             this.groupBox2.Controls.Add(this.RobotConnectBtn);
@@ -529,6 +520,38 @@
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
+            // 
+            // DashboardMessageTxt
+            // 
+            this.DashboardMessageTxt.Location = new System.Drawing.Point(274, 221);
+            this.DashboardMessageTxt.Name = "DashboardMessageTxt";
+            this.DashboardMessageTxt.Size = new System.Drawing.Size(334, 22);
+            this.DashboardMessageTxt.TabIndex = 88;
+            this.DashboardMessageTxt.Text = "programstate";
+            // 
+            // DashboardSendBtn
+            // 
+            this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
+            this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.DashboardSendBtn.Location = new System.Drawing.Point(274, 247);
+            this.DashboardSendBtn.Name = "DashboardSendBtn";
+            this.DashboardSendBtn.Size = new System.Drawing.Size(102, 25);
+            this.DashboardSendBtn.TabIndex = 87;
+            this.DashboardSendBtn.Text = "Send";
+            this.DashboardSendBtn.UseVisualStyleBackColor = false;
+            this.DashboardSendBtn.Click += new System.EventHandler(this.DashboardSendBtn_Click);
+            // 
+            // UnlockProtectiveStopBtn
+            // 
+            this.UnlockProtectiveStopBtn.BackColor = System.Drawing.Color.Transparent;
+            this.UnlockProtectiveStopBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 155);
+            this.UnlockProtectiveStopBtn.Name = "UnlockProtectiveStopBtn";
+            this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 52);
+            this.UnlockProtectiveStopBtn.TabIndex = 86;
+            this.UnlockProtectiveStopBtn.Text = "Unlock Protective Stop";
+            this.UnlockProtectiveStopBtn.UseVisualStyleBackColor = false;
+            this.UnlockProtectiveStopBtn.Click += new System.EventHandler(this.UnlockProtectiveStopBtn_Click);
             // 
             // ProgramStateBtn
             // 
@@ -553,47 +576,23 @@
             this.AskSafetyStatusBtn.UseVisualStyleBackColor = false;
             this.AskSafetyStatusBtn.Click += new System.EventHandler(this.AskSafetyStatusBtn_Click);
             // 
-            // BlendTxt
-            // 
-            this.BlendTxt.Location = new System.Drawing.Point(114, 228);
-            this.BlendTxt.Name = "BlendTxt";
-            this.BlendTxt.Size = new System.Drawing.Size(46, 22);
-            this.BlendTxt.TabIndex = 82;
-            this.BlendTxt.Text = "0.5";
-            // 
             // SetBlendBtn
             // 
             this.SetBlendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetBlendBtn.Location = new System.Drawing.Point(6, 221);
+            this.SetBlendBtn.Location = new System.Drawing.Point(506, 21);
             this.SetBlendBtn.Name = "SetBlendBtn";
-            this.SetBlendBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetBlendBtn.Size = new System.Drawing.Size(102, 53);
             this.SetBlendBtn.TabIndex = 81;
             this.SetBlendBtn.Text = "Set Blend";
             this.SetBlendBtn.UseVisualStyleBackColor = false;
             this.SetBlendBtn.Click += new System.EventHandler(this.SetBlendBtn_Click);
             // 
-            // AccelTxt
-            // 
-            this.AccelTxt.Location = new System.Drawing.Point(114, 185);
-            this.AccelTxt.Name = "AccelTxt";
-            this.AccelTxt.Size = new System.Drawing.Size(46, 22);
-            this.AccelTxt.TabIndex = 80;
-            this.AccelTxt.Text = "0.5";
-            // 
-            // SpeedTxt
-            // 
-            this.SpeedTxt.Location = new System.Drawing.Point(114, 142);
-            this.SpeedTxt.Name = "SpeedTxt";
-            this.SpeedTxt.Size = new System.Drawing.Size(46, 22);
-            this.SpeedTxt.TabIndex = 79;
-            this.SpeedTxt.Text = "0.85";
-            // 
             // SetAccelBtn
             // 
             this.SetAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetAccelBtn.Location = new System.Drawing.Point(6, 178);
+            this.SetAccelBtn.Location = new System.Drawing.Point(389, 21);
             this.SetAccelBtn.Name = "SetAccelBtn";
-            this.SetAccelBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetAccelBtn.Size = new System.Drawing.Size(102, 53);
             this.SetAccelBtn.TabIndex = 78;
             this.SetAccelBtn.Text = "Set Accel";
             this.SetAccelBtn.UseVisualStyleBackColor = false;
@@ -602,9 +601,9 @@
             // SetSpeedBtn
             // 
             this.SetSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetSpeedBtn.Location = new System.Drawing.Point(6, 135);
+            this.SetSpeedBtn.Location = new System.Drawing.Point(274, 21);
             this.SetSpeedBtn.Name = "SetSpeedBtn";
-            this.SetSpeedBtn.Size = new System.Drawing.Size(102, 37);
+            this.SetSpeedBtn.Size = new System.Drawing.Size(102, 53);
             this.SetSpeedBtn.TabIndex = 77;
             this.SetSpeedBtn.Text = "Set Speed";
             this.SetSpeedBtn.UseVisualStyleBackColor = false;
@@ -914,28 +913,6 @@
             this.RobotReadyLbl.TabIndex = 89;
             this.RobotReadyLbl.Text = "Robot Ready";
             this.RobotReadyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // RobotSpeedLbl
-            // 
-            this.RobotSpeedLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotSpeedLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotSpeedLbl.Location = new System.Drawing.Point(9, 725);
-            this.RobotSpeedLbl.Name = "RobotSpeedLbl";
-            this.RobotSpeedLbl.Size = new System.Drawing.Size(102, 44);
-            this.RobotSpeedLbl.TabIndex = 90;
-            this.RobotSpeedLbl.Text = "Speed\r\n???";
-            this.RobotSpeedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // RobotAccelLbl
-            // 
-            this.RobotAccelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotAccelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotAccelLbl.Location = new System.Drawing.Point(9, 769);
-            this.RobotAccelLbl.Name = "RobotAccelLbl";
-            this.RobotAccelLbl.Size = new System.Drawing.Size(102, 44);
-            this.RobotAccelLbl.TabIndex = 91;
-            this.RobotAccelLbl.Text = "Accel\r\n???";
-            this.RobotAccelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GrindContactEnabledBtn
             // 
@@ -1344,17 +1321,6 @@
             this.ErrorLogRTB.TabIndex = 0;
             this.ErrorLogRTB.Text = "";
             // 
-            // RobotBlendLbl
-            // 
-            this.RobotBlendLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotBlendLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotBlendLbl.Location = new System.Drawing.Point(9, 813);
-            this.RobotBlendLbl.Name = "RobotBlendLbl";
-            this.RobotBlendLbl.Size = new System.Drawing.Size(102, 44);
-            this.RobotBlendLbl.TabIndex = 95;
-            this.RobotBlendLbl.Text = "Blend\r\n???";
-            this.RobotBlendLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ExitBtn
             // 
             this.ExitBtn.BackColor = System.Drawing.Color.Green;
@@ -1426,38 +1392,6 @@
             this.RobotDashboardStatusLbl.Text = "Dashboard Status";
             this.RobotDashboardStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // UnlockProtectiveStopBtn
-            // 
-            this.UnlockProtectiveStopBtn.BackColor = System.Drawing.Color.Transparent;
-            this.UnlockProtectiveStopBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 155);
-            this.UnlockProtectiveStopBtn.Name = "UnlockProtectiveStopBtn";
-            this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 52);
-            this.UnlockProtectiveStopBtn.TabIndex = 86;
-            this.UnlockProtectiveStopBtn.Text = "Unlock Protective Stop";
-            this.UnlockProtectiveStopBtn.UseVisualStyleBackColor = false;
-            this.UnlockProtectiveStopBtn.Click += new System.EventHandler(this.UnlockProtectiveStopBtn_Click);
-            // 
-            // DashboardSendBtn
-            // 
-            this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.DashboardSendBtn.Location = new System.Drawing.Point(274, 247);
-            this.DashboardSendBtn.Name = "DashboardSendBtn";
-            this.DashboardSendBtn.Size = new System.Drawing.Size(102, 25);
-            this.DashboardSendBtn.TabIndex = 87;
-            this.DashboardSendBtn.Text = "Send";
-            this.DashboardSendBtn.UseVisualStyleBackColor = false;
-            this.DashboardSendBtn.Click += new System.EventHandler(this.DashboardSendBtn_Click);
-            // 
-            // DashboardMessageTxt
-            // 
-            this.DashboardMessageTxt.Location = new System.Drawing.Point(274, 221);
-            this.DashboardMessageTxt.Name = "DashboardMessageTxt";
-            this.DashboardMessageTxt.Size = new System.Drawing.Size(334, 22);
-            this.DashboardMessageTxt.TabIndex = 88;
-            this.DashboardMessageTxt.Text = "programstate";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1469,13 +1403,10 @@
             this.Controls.Add(this.MountedToolBox);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.ExitBtn);
-            this.Controls.Add(this.RobotBlendLbl);
             this.Controls.Add(this.DiameterDimLbl);
             this.Controls.Add(this.DiameterLbl);
             this.Controls.Add(this.MonitorTab);
             this.Controls.Add(this.GrindContactEnabledBtn);
-            this.Controls.Add(this.RobotAccelLbl);
-            this.Controls.Add(this.RobotSpeedLbl);
             this.Controls.Add(this.RobotReadyLbl);
             this.Controls.Add(this.GrindReadyLbl);
             this.Controls.Add(this.groupBox3);
@@ -1567,15 +1498,11 @@
         private System.Windows.Forms.CheckBox UtcTimeChk;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.Label RobotCommandStatusLbl;
-        private System.Windows.Forms.TextBox AccelTxt;
-        private System.Windows.Forms.TextBox SpeedTxt;
         private System.Windows.Forms.Button SetAccelBtn;
         private System.Windows.Forms.Button SetSpeedBtn;
         private System.Windows.Forms.GroupBox groupBox3;
         private System.Windows.Forms.Label GrindReadyLbl;
         private System.Windows.Forms.Label RobotReadyLbl;
-        private System.Windows.Forms.Label RobotSpeedLbl;
-        private System.Windows.Forms.Label RobotAccelLbl;
         private System.Windows.Forms.Button GrindContactEnabledBtn;
         private System.Windows.Forms.Label CurrentLineLbl;
         private System.Windows.Forms.ComboBox DebugLevelCombo;
@@ -1607,9 +1534,7 @@
         private System.Windows.Forms.Button LoadToolsBtn;
         private System.Windows.Forms.Button SaveToolsBtn;
         private System.Windows.Forms.Button ClearToolsBtn;
-        private System.Windows.Forms.TextBox BlendTxt;
         private System.Windows.Forms.Button SetBlendBtn;
-        private System.Windows.Forms.Label RobotBlendLbl;
         private System.Windows.Forms.GroupBox groupBox10;
         private System.Windows.Forms.Button ClearExecLogRtbBtn;
         private System.Windows.Forms.RichTextBox ExecLogRTB;
