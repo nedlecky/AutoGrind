@@ -1,6 +1,10 @@
 set_speed(0.5)
 set_accel(1.0)
 
+select_tool(2F85)
+
+retry:
+
 count=3
 loop:
 movepose(above)
@@ -13,3 +17,6 @@ movejoint(toolchange)
 
 count--
 jump_gt_zero(count,loop)
+
+select_tool(angletest)
+jump(retry)

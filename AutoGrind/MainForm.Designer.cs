@@ -56,6 +56,8 @@
             this.SaveToolsBtn = new System.Windows.Forms.Button();
             this.ClearToolsBtn = new System.Windows.Forms.Button();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
+            this.ProgramStateBtn = new System.Windows.Forms.Button();
+            this.AskSafetyStatusBtn = new System.Windows.Forms.Button();
             this.BlendTxt = new System.Windows.Forms.TextBox();
             this.SetBlendBtn = new System.Windows.Forms.Button();
             this.AccelTxt = new System.Windows.Forms.TextBox();
@@ -70,6 +72,8 @@
             this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.ServerIpTxt = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.UtcTimeChk = new System.Windows.Forms.CheckBox();
             this.RobotIpTxt = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -136,11 +140,9 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
-            this.ServerIpTxt = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.AskSafetyStatusBtn = new System.Windows.Forms.Button();
-            this.DashboardResponseLbl = new System.Windows.Forms.Label();
-            this.ProgramStateBtn = new System.Windows.Forms.Button();
+            this.UnlockProtectiveStopBtn = new System.Windows.Forms.Button();
+            this.DashboardSendBtn = new System.Windows.Forms.Button();
+            this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -506,8 +508,10 @@
             // 
             // groupBox2
             // 
+            this.groupBox2.Controls.Add(this.DashboardMessageTxt);
+            this.groupBox2.Controls.Add(this.DashboardSendBtn);
+            this.groupBox2.Controls.Add(this.UnlockProtectiveStopBtn);
             this.groupBox2.Controls.Add(this.ProgramStateBtn);
-            this.groupBox2.Controls.Add(this.DashboardResponseLbl);
             this.groupBox2.Controls.Add(this.AskSafetyStatusBtn);
             this.groupBox2.Controls.Add(this.BlendTxt);
             this.groupBox2.Controls.Add(this.SetBlendBtn);
@@ -521,10 +525,33 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(13, 171);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(614, 261);
+            this.groupBox2.Size = new System.Drawing.Size(614, 278);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
+            // 
+            // ProgramStateBtn
+            // 
+            this.ProgramStateBtn.BackColor = System.Drawing.Color.Transparent;
+            this.ProgramStateBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.ProgramStateBtn.Location = new System.Drawing.Point(386, 155);
+            this.ProgramStateBtn.Name = "ProgramStateBtn";
+            this.ProgramStateBtn.Size = new System.Drawing.Size(102, 52);
+            this.ProgramStateBtn.TabIndex = 85;
+            this.ProgramStateBtn.Text = "Program State";
+            this.ProgramStateBtn.UseVisualStyleBackColor = false;
+            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click);
+            // 
+            // AskSafetyStatusBtn
+            // 
+            this.AskSafetyStatusBtn.BackColor = System.Drawing.Color.Transparent;
+            this.AskSafetyStatusBtn.Location = new System.Drawing.Point(274, 155);
+            this.AskSafetyStatusBtn.Name = "AskSafetyStatusBtn";
+            this.AskSafetyStatusBtn.Size = new System.Drawing.Size(102, 52);
+            this.AskSafetyStatusBtn.TabIndex = 83;
+            this.AskSafetyStatusBtn.Text = "Ask Safety Status";
+            this.AskSafetyStatusBtn.UseVisualStyleBackColor = false;
+            this.AskSafetyStatusBtn.Click += new System.EventHandler(this.AskSafetyStatusBtn_Click);
             // 
             // BlendTxt
             // 
@@ -673,6 +700,23 @@
             this.groupBox1.TabIndex = 71;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GeneralConfig";
+            // 
+            // ServerIpTxt
+            // 
+            this.ServerIpTxt.Location = new System.Drawing.Point(166, 53);
+            this.ServerIpTxt.Name = "ServerIpTxt";
+            this.ServerIpTxt.Size = new System.Drawing.Size(93, 22);
+            this.ServerIpTxt.TabIndex = 79;
+            this.ServerIpTxt.Text = "192.168.25.1";
+            // 
+            // label2
+            // 
+            this.label2.Location = new System.Drawing.Point(27, 81);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(136, 16);
+            this.label2.TabIndex = 78;
+            this.label2.Text = "UR Robot IP Address";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // UtcTimeChk
             // 
@@ -1382,54 +1426,37 @@
             this.RobotDashboardStatusLbl.Text = "Dashboard Status";
             this.RobotDashboardStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // ServerIpTxt
+            // UnlockProtectiveStopBtn
             // 
-            this.ServerIpTxt.Location = new System.Drawing.Point(166, 53);
-            this.ServerIpTxt.Name = "ServerIpTxt";
-            this.ServerIpTxt.Size = new System.Drawing.Size(93, 22);
-            this.ServerIpTxt.TabIndex = 79;
-            this.ServerIpTxt.Text = "192.168.25.1";
+            this.UnlockProtectiveStopBtn.BackColor = System.Drawing.Color.Transparent;
+            this.UnlockProtectiveStopBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 155);
+            this.UnlockProtectiveStopBtn.Name = "UnlockProtectiveStopBtn";
+            this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 52);
+            this.UnlockProtectiveStopBtn.TabIndex = 86;
+            this.UnlockProtectiveStopBtn.Text = "Unlock Protective Stop";
+            this.UnlockProtectiveStopBtn.UseVisualStyleBackColor = false;
+            this.UnlockProtectiveStopBtn.Click += new System.EventHandler(this.UnlockProtectiveStopBtn_Click);
             // 
-            // label2
+            // DashboardSendBtn
             // 
-            this.label2.Location = new System.Drawing.Point(27, 81);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(136, 16);
-            this.label2.TabIndex = 78;
-            this.label2.Text = "UR Robot IP Address";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
+            this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
+            this.DashboardSendBtn.Location = new System.Drawing.Point(274, 247);
+            this.DashboardSendBtn.Name = "DashboardSendBtn";
+            this.DashboardSendBtn.Size = new System.Drawing.Size(102, 25);
+            this.DashboardSendBtn.TabIndex = 87;
+            this.DashboardSendBtn.Text = "Send";
+            this.DashboardSendBtn.UseVisualStyleBackColor = false;
+            this.DashboardSendBtn.Click += new System.EventHandler(this.DashboardSendBtn_Click);
             // 
-            // AskSafetyStatusBtn
+            // DashboardMessageTxt
             // 
-            this.AskSafetyStatusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.AskSafetyStatusBtn.Location = new System.Drawing.Point(274, 155);
-            this.AskSafetyStatusBtn.Name = "AskSafetyStatusBtn";
-            this.AskSafetyStatusBtn.Size = new System.Drawing.Size(102, 52);
-            this.AskSafetyStatusBtn.TabIndex = 83;
-            this.AskSafetyStatusBtn.Text = "Ask Safety Status";
-            this.AskSafetyStatusBtn.UseVisualStyleBackColor = false;
-            this.AskSafetyStatusBtn.Click += new System.EventHandler(this.AskSafetyStatusBtn_Click);
-            // 
-            // DashboardResponseLbl
-            // 
-            this.DashboardResponseLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DashboardResponseLbl.Location = new System.Drawing.Point(274, 18);
-            this.DashboardResponseLbl.Name = "DashboardResponseLbl";
-            this.DashboardResponseLbl.Size = new System.Drawing.Size(334, 134);
-            this.DashboardResponseLbl.TabIndex = 84;
-            this.DashboardResponseLbl.Text = "Dashboard Response";
-            // 
-            // ProgramStateBtn
-            // 
-            this.ProgramStateBtn.BackColor = System.Drawing.Color.Transparent;
-            this.ProgramStateBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(382, 155);
-            this.ProgramStateBtn.Name = "ProgramStateBtn";
-            this.ProgramStateBtn.Size = new System.Drawing.Size(102, 52);
-            this.ProgramStateBtn.TabIndex = 85;
-            this.ProgramStateBtn.Text = "Program State";
-            this.ProgramStateBtn.UseVisualStyleBackColor = false;
-            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click);
+            this.DashboardMessageTxt.Location = new System.Drawing.Point(274, 221);
+            this.DashboardMessageTxt.Name = "DashboardMessageTxt";
+            this.DashboardMessageTxt.Size = new System.Drawing.Size(334, 22);
+            this.DashboardMessageTxt.TabIndex = 88;
+            this.DashboardMessageTxt.Text = "programstate";
             // 
             // MainForm
             // 
@@ -1604,9 +1631,11 @@
         private System.Windows.Forms.Label RobotDashboardStatusLbl;
         private System.Windows.Forms.TextBox ServerIpTxt;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Label DashboardResponseLbl;
         private System.Windows.Forms.Button AskSafetyStatusBtn;
         private System.Windows.Forms.Button ProgramStateBtn;
+        private System.Windows.Forms.Button UnlockProtectiveStopBtn;
+        private System.Windows.Forms.TextBox DashboardMessageTxt;
+        private System.Windows.Forms.Button DashboardSendBtn;
     }
 }
 

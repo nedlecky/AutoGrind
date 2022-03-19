@@ -165,14 +165,14 @@ namespace AutoGrind
                 if (length > 0)
                 {
                     string input = Encoding.UTF8.GetString(inputBuffer, 0, length);
-                    string[] inputLines = input.Split('\r');
+                    string[] inputLines = input.Split('\n');  // TODO this was \r
                     int lineNo = 1;
                     foreach (string line in inputLines)
                     {
-                        string cleanLine = line.Trim('\n');
+                        string cleanLine = line.Trim('\r');  // TODO this was \n
                         if (cleanLine.Length > 0)
                         {
-                            //log.Debug("URD<== {0} Line {1}", cleanLine, lineNo);
+                            log.Debug("URD<== {0} Line {1}", cleanLine, lineNo);
                             ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                         }
                         lineNo++;

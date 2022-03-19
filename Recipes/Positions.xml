@@ -30,8 +30,8 @@
   </Positions>
   <Positions>
     <Name>cylcenter</Name>
-    <Joints>[1.37211,-1.14662,1.67537,-2.09057,-1.58266,2.94134]</Joints>
-    <Pose>p[0.00737989,-0.624664,0.076664,-3.13052,-0.00300801,0.0157384]</Pose>
+    <Joints>[1.37115,-1.15282,1.68486,-2.09387,-1.58268,2.9404]</Joints>
+    <Pose>p[0.00737528,-0.621669,0.0766248,-3.1305,-0.00298274,0.0157871]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
   <Positions>
@@ -62,6 +62,24 @@
     <Name>sphere45</Name>
     <Joints>[1.54182,-1.50484,2.68439,-3.53571,-1.55012,3.12342]</Joints>
     <Pose>p[0.126365,-0.445718,0.100066,2.35592,4.04911e-05,-5.37283e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>spheretop10</Name>
+    <Joints>[1.55407,-1.56782,2.11115,-2.1013,-1.57002,3.12524]</Joints>
+    <Pose>p[0.126319,-0.435352,0.10892,-3.12891,6.11498e-05,8.00132e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>cylcenter10</Name>
+    <Joints>[1.37115,-1.17025,1.66709,-2.05861,-1.58273,2.94034]</Joints>
+    <Pose>p[0.00736194,-0.621653,0.0915995,-3.13044,-0.00301335,0.0157926]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>clamp10</Name>
+    <Joints>[1.8963,-1.22703,1.7013,-2.19515,-1.71735,3.83984]</Joints>
+    <Pose>p[0.290684,-0.568357,0.129965,2.88416,-0.559903,-0.08004]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
 </NewDataSet>

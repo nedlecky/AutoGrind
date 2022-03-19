@@ -195,18 +195,24 @@ namespace AutoGrind
         }
 
         bool robotReady = false;
+        int nDashboard = 0;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             string now = DateTime.Now.ToString("s");
             timeLbl.Text = now;
 
-            // Ping the dashboard
-            if (robotDashboardClient != null)
+            // Ping the dashboard every 5th second
+            if (robotDashboardClient != null && (nDashboard++ % 5) == 0)
                 if (robotDashboardClient.IsClientConnected)
                 {
-                    robotDashboardClient.Receive();
+                    //robotDashboardClient.Receive();
 
+                    robotDashboardClient.Send("get robot model");
+                    robotDashboardClient.Send("get serial number");
+                    robotDashboardClient.Send("get loaded program");
                     robotDashboardClient.Send("robotmode");
+                    robotDashboardClient.Send("safetystatus");
+                    robotDashboardClient.Send("programstate");
                 }
 
             // Manage whether robot command is connected and init when it does
@@ -1504,7 +1510,7 @@ namespace AutoGrind
         /// <param name="message"></param>
         void CommandCallback(string message)
         {
-            //log.Info("UR<==({0})", message);
+            //log.Info("UR<== {0}", message);
 
             string[] requests = message.Split('#');
             foreach (string request in requests)
@@ -1534,12 +1540,15 @@ namespace AutoGrind
         }
         void DashboardCallback(string message)
         {
-            log.Info("URD<==({0})", message);
-            DashboardResponseLbl.Text = message;
+            log.Info("URD<== {0}", message);
         }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
+            if (robotDashboardClient != null)
+                if (robotDashboardClient.IsClientConnected)
+                    robotDashboardClient.Receive();
+
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
                 {
@@ -2157,6 +2166,16 @@ namespace AutoGrind
         private void ProgramStateBtn_Click(object sender, EventArgs e)
         {
             robotDashboardClient?.Send("programstate");
+        }
+
+        private void UnlockProtectiveStopBtn_Click(object sender, EventArgs e)
+        {
+            robotDashboardClient?.Send("unlock protective stop");
+        }
+
+        private void DashboardSendBtn_Click(object sender, EventArgs e)
+        {
+            robotDashboardClient?.Send(DashboardMessageTxt.Text);
         }
 
         // ===================================================================
