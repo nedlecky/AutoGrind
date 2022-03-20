@@ -851,6 +851,9 @@ namespace AutoGrind
             // Load the variables table
             LoadVariablesBtn_Click(null, null);
 
+            // Load the User's Manual
+            LoadManualBtn_Click(null, null);
+
             // Autoload file is the last loaded recipe
             recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
 
@@ -1137,17 +1140,11 @@ namespace AutoGrind
             {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
 
-            // RECTANGULAR GRINDS
-            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,2" }  },
-
-            // SERPENTINE GRINDS
-            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,3" }  },
-
-            // CIRCLAR GRINDS
-            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,4" }  },
-
-            // SPIRAL GRINDS
-            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,5" }  },
+            {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10" }  },
+            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,20" }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,30" }  },
+            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,40" }  },
+            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,50" }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -2286,10 +2283,27 @@ namespace AutoGrind
         {
             robotDashboardClient?.Send(DashboardMessageTxt.Text);
         }
+        // ===================================================================
+        // END POSITIONS SYSTEM
+        // ===================================================================
+
+        // ===================================================================
+        // START MANUAL SYSTEM
+        // ===================================================================
+
+        private void LoadManualBtn_Click(object sender, EventArgs e)
+        {
+            InstructionsRTB.LoadFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+        }
+
+        private void SaveManualBtn_Click(object sender, EventArgs e)
+        {
+            InstructionsRTB.SaveFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+        }
 
 
         // ===================================================================
-        // END POSITIONS SYSTEM
+        // END MANUAL SYSTEM
         // ===================================================================
     }
 }

@@ -54,106 +54,106 @@
   <Variables>
     <Name>robot_ready</Name>
     <Value>True</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-19T16:36:43.930</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-03-20T07:32:14.675</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>12</Value>
+    <Value>58</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:36:27.726</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.642</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_speed</Name>
     <Value>0.2</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.296</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.418</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_rect</Value>
+    <Value>set_part_geometry()</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:36:43.914</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.674</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_accel</Name>
     <Value>0.4</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.320</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.434</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_blend</Name>
     <Value>0.003</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.349</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.461</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp</Name>
     <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.439</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.550</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_mass</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.495</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.607</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_cog</Name>
     <Value>[0,0,0.05]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.500</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.611</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>actual_tcp_pose</Name>
-    <Value>p[-0.0736475,-0.435301,0.108888,-3.12879,7.45509e-05,0.00016319]</Value>
+    <Value>p[-0.0736886,-0.435283,0.109003,-3.1289,9.39784e-05,0.000439451]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:35.400</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:13.508</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_ready</Name>
     <Value>True</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:36:43.883</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.516</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>grind_contact_enabled</Name>
     <Value>False</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.401</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.512</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tool</Name>
     <Value>2F85</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:36.242</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.348</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_part_geometry</Name>
-    <Value>[3,0.085]</Value>
+    <Value>[1,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:39.479</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.646</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp_part</Name>
-    <Value>p[0,0,0.2175,0,0,0]</Value>
+    <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-19T16:35:39.498</TimeStamp>
+    <TimeStamp>2022-03-20T07:32:14.670</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>

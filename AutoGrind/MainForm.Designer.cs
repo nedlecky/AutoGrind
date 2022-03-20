@@ -42,7 +42,9 @@
             this.StopBtn = new System.Windows.Forms.Button();
             this.PauseBtn = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
+            this.RecipeRoFilenameLbl = new System.Windows.Forms.Label();
             this.EditTab = new System.Windows.Forms.TabPage();
+            this.RecipeFilenameLbl = new System.Windows.Forms.Label();
             this.SaveAsRecipeBtn = new System.Windows.Forms.Button();
             this.NewRecipeBtn = new System.Windows.Forms.Button();
             this.LoadRecipeBtn = new System.Windows.Forms.Button();
@@ -88,7 +90,6 @@
             this.timeLbl = new System.Windows.Forms.Label();
             this.StartupTmr = new System.Windows.Forms.Timer(this.components);
             this.CloseTmr = new System.Windows.Forms.Timer(this.components);
-            this.RecipeRoFilenameLbl = new System.Windows.Forms.Label();
             this.ExecTmr = new System.Windows.Forms.Timer(this.components);
             this.KeyboardBtn = new System.Windows.Forms.Button();
             this.MessageTmr = new System.Windows.Forms.Timer(this.components);
@@ -138,7 +139,10 @@
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
-            this.RecipeFilenameLbl = new System.Windows.Forms.Label();
+            this.InstructionsRTB = new System.Windows.Forms.RichTextBox();
+            this.manualPage = new System.Windows.Forms.TabPage();
+            this.LoadManualBtn = new System.Windows.Forms.Button();
+            this.SaveManualBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -159,6 +163,7 @@
             this.groupBox5.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.manualPage.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -343,6 +348,17 @@
             this.StartBtn.UseVisualStyleBackColor = false;
             this.StartBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
+            // RecipeRoFilenameLbl
+            // 
+            this.RecipeRoFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RecipeRoFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeRoFilenameLbl.Location = new System.Drawing.Point(147, 10);
+            this.RecipeRoFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RecipeRoFilenameLbl.Name = "RecipeRoFilenameLbl";
+            this.RecipeRoFilenameLbl.Size = new System.Drawing.Size(728, 22);
+            this.RecipeRoFilenameLbl.TabIndex = 76;
+            this.RecipeRoFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // EditTab
             // 
             this.EditTab.Controls.Add(this.RecipeFilenameLbl);
@@ -359,6 +375,17 @@
             this.EditTab.TabIndex = 1;
             this.EditTab.Text = "Edit";
             this.EditTab.UseVisualStyleBackColor = true;
+            // 
+            // RecipeFilenameLbl
+            // 
+            this.RecipeFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeFilenameLbl.Location = new System.Drawing.Point(147, 10);
+            this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
+            this.RecipeFilenameLbl.Size = new System.Drawing.Size(728, 22);
+            this.RecipeFilenameLbl.TabIndex = 77;
+            this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // SaveAsRecipeBtn
             // 
@@ -851,17 +878,6 @@
             // 
             this.CloseTmr.Tick += new System.EventHandler(this.CloseTmr_Tick);
             // 
-            // RecipeRoFilenameLbl
-            // 
-            this.RecipeRoFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RecipeRoFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRoFilenameLbl.Location = new System.Drawing.Point(147, 10);
-            this.RecipeRoFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RecipeRoFilenameLbl.Name = "RecipeRoFilenameLbl";
-            this.RecipeRoFilenameLbl.Size = new System.Drawing.Size(728, 22);
-            this.RecipeRoFilenameLbl.TabIndex = 76;
-            this.RecipeRoFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // ExecTmr
             // 
             this.ExecTmr.Tick += new System.EventHandler(this.ExecTmr_Tick);
@@ -941,8 +957,9 @@
             this.MonitorTab.Controls.Add(this.positionsPage);
             this.MonitorTab.Controls.Add(this.variablesPage);
             this.MonitorTab.Controls.Add(this.logsPage);
+            this.MonitorTab.Controls.Add(this.manualPage);
             this.MonitorTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.MonitorTab.Location = new System.Drawing.Point(1033, 7);
+            this.MonitorTab.Location = new System.Drawing.Point(1052, 11);
             this.MonitorTab.Name = "MonitorTab";
             this.MonitorTab.SelectedIndex = 0;
             this.MonitorTab.Size = new System.Drawing.Size(849, 1137);
@@ -1424,16 +1441,50 @@
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
-            // RecipeFilenameLbl
+            // InstructionsRTB
             // 
-            this.RecipeFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameLbl.Location = new System.Drawing.Point(147, 10);
-            this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
-            this.RecipeFilenameLbl.Size = new System.Drawing.Size(728, 22);
-            this.RecipeFilenameLbl.TabIndex = 77;
-            this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.InstructionsRTB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InstructionsRTB.Location = new System.Drawing.Point(18, 18);
+            this.InstructionsRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.InstructionsRTB.Name = "InstructionsRTB";
+            this.InstructionsRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.InstructionsRTB.Size = new System.Drawing.Size(805, 1017);
+            this.InstructionsRTB.TabIndex = 104;
+            this.InstructionsRTB.Text = "";
+            // 
+            // manualPage
+            // 
+            this.manualPage.Controls.Add(this.LoadManualBtn);
+            this.manualPage.Controls.Add(this.SaveManualBtn);
+            this.manualPage.Controls.Add(this.InstructionsRTB);
+            this.manualPage.Location = new System.Drawing.Point(4, 25);
+            this.manualPage.Name = "manualPage";
+            this.manualPage.Size = new System.Drawing.Size(841, 1108);
+            this.manualPage.TabIndex = 3;
+            this.manualPage.Text = "Manual";
+            this.manualPage.UseVisualStyleBackColor = true;
+            // 
+            // LoadManualBtn
+            // 
+            this.LoadManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadManualBtn.Location = new System.Drawing.Point(18, 1040);
+            this.LoadManualBtn.Name = "LoadManualBtn";
+            this.LoadManualBtn.Size = new System.Drawing.Size(155, 55);
+            this.LoadManualBtn.TabIndex = 106;
+            this.LoadManualBtn.Text = "Reload";
+            this.LoadManualBtn.UseVisualStyleBackColor = true;
+            this.LoadManualBtn.Click += new System.EventHandler(this.LoadManualBtn_Click);
+            // 
+            // SaveManualBtn
+            // 
+            this.SaveManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveManualBtn.Location = new System.Drawing.Point(179, 1040);
+            this.SaveManualBtn.Name = "SaveManualBtn";
+            this.SaveManualBtn.Size = new System.Drawing.Size(155, 55);
+            this.SaveManualBtn.TabIndex = 105;
+            this.SaveManualBtn.Text = "Save";
+            this.SaveManualBtn.UseVisualStyleBackColor = true;
+            this.SaveManualBtn.Click += new System.EventHandler(this.SaveManualBtn_Click);
             // 
             // MainForm
             // 
@@ -1457,10 +1508,10 @@
             this.Controls.Add(this.RobotCommandStatusLbl);
             this.Controls.Add(this.KeyboardBtn);
             this.Controls.Add(this.timeLbl);
-            this.Controls.Add(this.OperationTab);
             this.Controls.Add(this.SetupBtn);
             this.Controls.Add(this.EditBtn);
             this.Controls.Add(this.GrindBtn);
+            this.Controls.Add(this.OperationTab);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
@@ -1490,6 +1541,7 @@
             this.groupBox5.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
+            this.manualPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1607,6 +1659,10 @@
         private System.Windows.Forms.Button DashboardSendBtn;
         private System.Windows.Forms.ComboBox OperatorModeBox;
         private System.Windows.Forms.Label RecipeFilenameLbl;
+        private System.Windows.Forms.RichTextBox InstructionsRTB;
+        private System.Windows.Forms.TabPage manualPage;
+        private System.Windows.Forms.Button LoadManualBtn;
+        private System.Windows.Forms.Button SaveManualBtn;
     }
 }
 
