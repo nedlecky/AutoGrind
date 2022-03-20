@@ -1,2 +1,3 @@
-prompt Is homing OK?
-home
+grind_circle(20,1,10,10)
+grind_rect(20,20,1,10,10)
+grind_serpentine(30,30,1,3,2,30,10)

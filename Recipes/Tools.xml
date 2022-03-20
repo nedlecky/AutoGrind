@@ -69,24 +69,11 @@
     <cogz_m>0.05</cogz_m>
   </Tools>
   <Tools>
-    <Name>longer</Name>
-    <x_m>0</x_m>
-    <y_m>0</y_m>
-    <z_m>0.2</z_m>
-    <rx_rad>0</rx_rad>
-    <ry_rad>0</ry_rad>
-    <rz_rad>0</rz_rad>
-    <mass_kg>1</mass_kg>
-    <cogx_m>0</cogx_m>
-    <cogy_m>0</cogy_m>
-    <cogz_m>0.05</cogz_m>
-  </Tools>
-  <Tools>
-    <Name>angletest</Name>
+    <Name>angle</Name>
     <x_m>0</x_m>
     <y_m>-0.01</y_m>
     <z_m>0.175</z_m>
-    <rx_rad>0.7854</rx_rad>
+    <rx_rad>0.8</rx_rad>
     <ry_rad>0</ry_rad>
     <rz_rad>0</rz_rad>
     <mass_kg>1</mass_kg>

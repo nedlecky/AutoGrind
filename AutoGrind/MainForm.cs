@@ -433,7 +433,7 @@ namespace AutoGrind
                     //Width = standardWidth;
                     break;
                 case OperatorMode.EDITOR:
-                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0);
+                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0,true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
@@ -442,7 +442,7 @@ namespace AutoGrind
                     break;
                 case OperatorMode.ENGINEERING:
                     // TEMPORARILY DON"T NEED PASSWORD
-                    // form = new SetValueForm("", "Please enter passcode for ENGINEERING",0);
+                    // form = new SetValueForm("", "Please enter passcode for ENGINEERING",0,true);
                     /*
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
                     {

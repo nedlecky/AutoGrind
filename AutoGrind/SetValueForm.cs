@@ -28,6 +28,7 @@ namespace AutoGrind
             isPassword = isPassword_;
             LabelLbl.Text = "Enter " + label;
             ValueTxt.Text = value;
+            if (isPassword) ValueTxt.PasswordChar = '*';
         }
         private void SetValueForm_Load(object sender, EventArgs e)
         {
