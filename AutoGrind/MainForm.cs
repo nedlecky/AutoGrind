@@ -890,7 +890,8 @@ namespace AutoGrind
             // Debug Level selection
             AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
 
-            // Save the tools table
+            // Save currently mounted tool and tools table
+            AppNameKey.SetValue("MountedToolBox.Text", MountedToolBox.Text);
             SaveToolsBtn_Click(null, null);
 
             // Save the positions table
@@ -902,8 +903,6 @@ namespace AutoGrind
             // Save currently loaded recipe
             AppNameKey.SetValue("RecipeFilenameLbl.Text", RecipeFilenameLbl.Text);
 
-            // Save currently mounted tool
-            AppNameKey.SetValue("MountedToolBox.Text", MountedToolBox.Text);
 
             // Save current part geometry tool
             AppNameKey.SetValue("PartGeometryBox.Text", PartGeometryBox.Text);
@@ -1287,6 +1286,7 @@ namespace AutoGrind
             if (command.StartsWith("movejoint("))
             {
                 string positionName = ExtractParameters(command);
+                LogInterpret("movejoint", lineNumber, command);
 
                 if (!GotoPositionJoint(positionName))
                 {
@@ -1300,6 +1300,7 @@ namespace AutoGrind
             if (command.StartsWith("movepose("))
             {
                 string positionName = ExtractParameters(command);
+                LogInterpret("movepose", lineNumber, command);
 
                 if (!GotoPositionPose(positionName))
                 {
@@ -1454,7 +1455,7 @@ namespace AutoGrind
             {
                 // Only log this one time!
                 if (logFilter != 1)
-                    log.Trace("Exec waiting for robotReady");
+                    log.Info("EXEC Waiting for robotReady");
                 logFilter = 1;
             }
             else
@@ -1463,7 +1464,7 @@ namespace AutoGrind
                 {
                     // Only log this one time!
                     if (logFilter != 2)
-                        log.Trace("Exec waiting for robot_ready");
+                        log.Info("EXEC Waiting for robot_ready");
                     logFilter = 2;
                 }
                 else
@@ -1501,7 +1502,7 @@ namespace AutoGrind
             RobotDisconnectBtn_Click(null, null);
 
             // Connect client to the UR dashboard
-            robotDashboardClient = new TcpClientSupport()
+            robotDashboardClient = new TcpClientSupport("DASH")
             {
                 ReceiveCallback = DashboardCallback
             };
@@ -1649,7 +1650,7 @@ namespace AutoGrind
         }
         void DashboardCallback(string message)
         {
-            log.Info("URD<== {0}", message);
+            log.Info("DASH<== {0}", message);
         }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
@@ -1996,8 +1997,16 @@ namespace AutoGrind
 
             ToolsGrd.DataSource = tools;
         }
-        private void LoadToolsBtn_Click(object sender, EventArgs e)
+        private void RefreshMountedToolBox()
+        {
+            MountedToolBox.Items.Clear();
+            foreach (DataRow row in tools.Rows)
+            {
+                MountedToolBox.Items.Add(row["Name"]);
+            }
+        }
 
+        private void LoadToolsBtn_Click(object sender, EventArgs e)
         {
             string filename = Path.Combine(AutoGrindRoot, "Recipes", toolsFilename);
             log.Info("LoadTools from {0}", filename);
@@ -2014,11 +2023,7 @@ namespace AutoGrind
             foreach (DataGridViewColumn col in ToolsGrd.Columns)
                 col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
 
-            MountedToolBox.Items.Clear();
-            foreach (DataRow row in tools.Rows)
-            {
-                MountedToolBox.Items.Add(row["Name"]);
-            }
+            RefreshMountedToolBox();
         }
 
 
@@ -2028,6 +2033,7 @@ namespace AutoGrind
             log.Info("SaveTools to {0}", filename);
             tools.AcceptChanges();
             tools.WriteXml(filename, XmlWriteMode.WriteSchema, true);
+            RefreshMountedToolBox();
         }
 
         private void ClearToolsBtn_Click(object sender, EventArgs e)

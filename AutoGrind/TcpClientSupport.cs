@@ -24,14 +24,16 @@ namespace AutoGrind
         public Action<string> ReceiveCallback { get; set; }
 
         public bool IsClientConnected { get; set; } = false;
+        string logPrefix;
 
-        public TcpClientSupport()
+        public TcpClientSupport(string logPrefix_)
         {
-            log.Debug("TcpClientSupport(...)");
+            logPrefix = logPrefix_;
+            log.Debug("{0} TcpClientSupport(...)", logPrefix);
         }
         ~TcpClientSupport()
         {
-            log.Debug("~TcpClientSupport(...)");
+            log.Debug("{0} ~TcpClientSupport(...)", logPrefix);
         }
         public int Connect(string IPport)
         {
@@ -54,7 +56,7 @@ namespace AutoGrind
             myIp = IP;
             myPort = port;
 
-            log.Info("URD Connect({0}, {1})", myIp, myPort);
+            log.Info("{0} Connect({1}, {2})", logPrefix, myIp, myPort);
             if (client != null) Disconnect();
 
             IsClientConnected = false;
@@ -62,16 +64,16 @@ namespace AutoGrind
             {
                 Ping ping = new Ping();
                 PingReply PR = ping.Send(myIp,500);
-                log.Info("URD Connect Ping returns {0}", PR.Status);
+                log.Info("{0} Connect Ping returns {1}", logPrefix, PR.Status);
                 if (PR.Status != IPStatus.Success)
                 {
-                    log.Error("UR Could not ping {0}: {1}", myIp, PR.Status);
+                    log.Error("{0} Could not ping {1}: {2}", logPrefix, myIp, PR.Status);
                     return 2;
                 }
             }
             catch
             {
-                log.Error("URD Ping {0} failed", myIp);
+                log.Error("{0} Ping {1} failed", logPrefix, myIp);
                 return 1;
             }
 
@@ -86,17 +88,17 @@ namespace AutoGrind
             }
             catch
             {
-                log.Error("URD Could not connect");
+                log.Error("{0} Could not connect", logPrefix);
                 return 2;
             }
 
-            log.Info("URD Connected");
+            log.Info("{0} Connected", logPrefix);
             IsClientConnected = true;
             return 0;
         }
         public int Disconnect()
         {
-            log.Info("URD Disconnect()");
+            log.Info("{0} Disconnect()", logPrefix);
 
             if (stream != null)
             {
@@ -122,11 +124,11 @@ namespace AutoGrind
             fSendBusy = true;
             if (stream == null)
             {
-                log.Error("URD Not connected... stream==null");
+                log.Error("{0} Not connected... stream==null", logPrefix);
                 ++sendErrorCount;
                 if (sendErrorCount > 5)
                 {
-                    log.Error("URD Trying to bounce socket 1");
+                    log.Error("{0} Trying to bounce socket 1", logPrefix);
                     Disconnect();
                     Connect(myIp, myPort);
                     sendErrorCount = 0;
@@ -135,18 +137,18 @@ namespace AutoGrind
                 return 1;
             }
 
-            log.Info("URD==> {0}", request);
+            log.Info("{0}==> {1}", logPrefix, request);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(request + "\r"), 0, request.Length + 1);
             }
             catch
             {
-                log.Error("URD Send(...) failed");
+                log.Error("{0} Send(...) failed", logPrefix);
                 ++sendErrorCount;
                 if (sendErrorCount > 5)
                 {
-                    log.Error("URD Trying to bounce socket 2");
+                    log.Error("{0} Trying to bounce socket 2", logPrefix);
                     Disconnect();
                     Connect(myIp, myPort);
                     sendErrorCount = 0;
@@ -172,7 +174,7 @@ namespace AutoGrind
                         string cleanLine = line.Trim('\r');  // TODO this was \n
                         if (cleanLine.Length > 0)
                         {
-                            log.Debug("URD<== {0} Line {1}", cleanLine, lineNo);
+                            log.Debug("{0}<== {1} Line {2}", logPrefix, cleanLine, lineNo);
                             ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                         }
                         lineNo++;
