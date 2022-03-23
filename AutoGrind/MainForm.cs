@@ -1265,7 +1265,7 @@ namespace AutoGrind
                                 double val = Convert.ToDouble(value);
                                 if (val > 0.0)
                                 {
-                                    log.Info("EXEC {0:0000}: [JUMPNOTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
+                                    log.Info("EXEC {0:0000}: [JUMPGTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
                                     SetCurrentLine(jumpLine);
                                 }
                                 //wasSuccessful = true;

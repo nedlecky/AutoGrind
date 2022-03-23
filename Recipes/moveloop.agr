@@ -1,0 +1,9 @@
+loop = 3
+
+start:
+#movejoint(ToolH)
+#movejoint(ToolV)
+set_speed(3)
+set_accel(4)
+loop--
+jump_gt_zero(loop,start)

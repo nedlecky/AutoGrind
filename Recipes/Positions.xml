@@ -46,4 +46,22 @@
     <Pose>p[0.0807982,-0.696022,0.0820059,-3.12503,0.218571,0.0171177]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>SimPowerup</Name>
+    <Joints>[-1.6007,-1.7271,-2.203,-0.808,1.5951,-0.031]</Joints>
+    <Pose>p[-0.143969,-0.43562,0.20203,-0.00122136,3.11628,0.0388919]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>ToolH</Name>
+    <Joints>[-1.59518,-1.70717,-1.63838,-1.39242,1.59524,-0.0254825]</Joints>
+    <Pose>p[-0.143969,-0.53562,0.40203,-0.00122136,3.11628,0.0388919]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>ToolV</Name>
+    <Joints>[-1.59395,-1.70679,-1.63878,-2.93213,-1.60183,-0.0310371]</Joints>
+    <Pose>p[-0.142716,-0.538626,0.404978,1.56505,0.030591,-0.018357]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>
