@@ -126,12 +126,16 @@
             this.groupBox5 = new System.Windows.Forms.GroupBox();
             this.ClearUrLogRtbBtn = new System.Windows.Forms.Button();
             this.UrLogRTB = new System.Windows.Forms.RichTextBox();
-            this.groupBox4 = new System.Windows.Forms.GroupBox();
-            this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
-            this.AllLogRTB = new System.Windows.Forms.RichTextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.ClearErrorLogRtbBtn = new System.Windows.Forms.Button();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
+            this.groupBox4 = new System.Windows.Forms.GroupBox();
+            this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
+            this.AllLogRTB = new System.Windows.Forms.RichTextBox();
+            this.manualPage = new System.Windows.Forms.TabPage();
+            this.LoadManualBtn = new System.Windows.Forms.Button();
+            this.SaveManualBtn = new System.Windows.Forms.Button();
+            this.InstructionsRTB = new System.Windows.Forms.RichTextBox();
             this.ExitBtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.MountedToolBox = new System.Windows.Forms.ComboBox();
@@ -139,10 +143,6 @@
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
-            this.InstructionsRTB = new System.Windows.Forms.RichTextBox();
-            this.manualPage = new System.Windows.Forms.TabPage();
-            this.LoadManualBtn = new System.Windows.Forms.Button();
-            this.SaveManualBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -161,8 +161,8 @@
             this.logsPage.SuspendLayout();
             this.groupBox10.SuspendLayout();
             this.groupBox5.SuspendLayout();
-            this.groupBox4.SuspendLayout();
             this.groupBox6.SuspendLayout();
+            this.groupBox4.SuspendLayout();
             this.manualPage.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -270,7 +270,7 @@
             this.RecipeRoRTB.Name = "RecipeRoRTB";
             this.RecipeRoRTB.ReadOnly = true;
             this.RecipeRoRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRoRTB.Size = new System.Drawing.Size(728, 927);
+            this.RecipeRoRTB.Size = new System.Drawing.Size(728, 878);
             this.RecipeRoRTB.TabIndex = 72;
             this.RecipeRoRTB.Text = "";
             // 
@@ -448,7 +448,7 @@
             this.RecipeRTB.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRTB.Name = "RecipeRTB";
             this.RecipeRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTB.Size = new System.Drawing.Size(728, 963);
+            this.RecipeRTB.Size = new System.Drawing.Size(728, 877);
             this.RecipeRTB.TabIndex = 71;
             this.RecipeRTB.Text = "";
             this.RecipeRTB.ModifiedChanged += new System.EventHandler(this.RecipeRTB_ModifiedChanged);
@@ -476,9 +476,9 @@
             this.groupBox8.Controls.Add(this.LoadToolsBtn);
             this.groupBox8.Controls.Add(this.SaveToolsBtn);
             this.groupBox8.Controls.Add(this.ClearToolsBtn);
-            this.groupBox8.Location = new System.Drawing.Point(13, 516);
+            this.groupBox8.Location = new System.Drawing.Point(13, 426);
             this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(863, 412);
+            this.groupBox8.Size = new System.Drawing.Size(863, 405);
             this.groupBox8.TabIndex = 86;
             this.groupBox8.TabStop = false;
             this.groupBox8.Text = "Tools";
@@ -551,14 +551,14 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(13, 171);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(614, 278);
+            this.groupBox2.Size = new System.Drawing.Size(614, 238);
             this.groupBox2.TabIndex = 78;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
             // 
             // DashboardMessageTxt
             // 
-            this.DashboardMessageTxt.Location = new System.Drawing.Point(274, 221);
+            this.DashboardMessageTxt.Location = new System.Drawing.Point(274, 181);
             this.DashboardMessageTxt.Name = "DashboardMessageTxt";
             this.DashboardMessageTxt.Size = new System.Drawing.Size(334, 22);
             this.DashboardMessageTxt.TabIndex = 88;
@@ -568,7 +568,7 @@
             // 
             this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
             this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.DashboardSendBtn.Location = new System.Drawing.Point(274, 247);
+            this.DashboardSendBtn.Location = new System.Drawing.Point(274, 207);
             this.DashboardSendBtn.Name = "DashboardSendBtn";
             this.DashboardSendBtn.Size = new System.Drawing.Size(102, 25);
             this.DashboardSendBtn.TabIndex = 87;
@@ -580,7 +580,7 @@
             // 
             this.UnlockProtectiveStopBtn.BackColor = System.Drawing.Color.Transparent;
             this.UnlockProtectiveStopBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 155);
+            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 115);
             this.UnlockProtectiveStopBtn.Name = "UnlockProtectiveStopBtn";
             this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 52);
             this.UnlockProtectiveStopBtn.TabIndex = 86;
@@ -592,7 +592,7 @@
             // 
             this.ProgramStateBtn.BackColor = System.Drawing.Color.Transparent;
             this.ProgramStateBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(386, 155);
+            this.ProgramStateBtn.Location = new System.Drawing.Point(386, 115);
             this.ProgramStateBtn.Name = "ProgramStateBtn";
             this.ProgramStateBtn.Size = new System.Drawing.Size(102, 52);
             this.ProgramStateBtn.TabIndex = 85;
@@ -603,7 +603,7 @@
             // AskSafetyStatusBtn
             // 
             this.AskSafetyStatusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.AskSafetyStatusBtn.Location = new System.Drawing.Point(274, 155);
+            this.AskSafetyStatusBtn.Location = new System.Drawing.Point(274, 115);
             this.AskSafetyStatusBtn.Name = "AskSafetyStatusBtn";
             this.AskSafetyStatusBtn.Size = new System.Drawing.Size(102, 52);
             this.AskSafetyStatusBtn.TabIndex = 83;
@@ -686,7 +686,7 @@
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(336, 942);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(507, 856);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(155, 55);
             this.DefaultConfigBtn.TabIndex = 74;
@@ -697,7 +697,7 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-            this.LoadConfigBtn.Location = new System.Drawing.Point(13, 942);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(184, 856);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(155, 55);
             this.LoadConfigBtn.TabIndex = 73;
@@ -708,7 +708,7 @@
             // SaveConfigBtn
             // 
             this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold);
-            this.SaveConfigBtn.Location = new System.Drawing.Point(176, 942);
+            this.SaveConfigBtn.Location = new System.Drawing.Point(347, 856);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(155, 55);
             this.SaveConfigBtn.TabIndex = 72;
@@ -887,7 +887,7 @@
             this.KeyboardBtn.BackColor = System.Drawing.Color.Green;
             this.KeyboardBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeyboardBtn.ForeColor = System.Drawing.Color.White;
-            this.KeyboardBtn.Location = new System.Drawing.Point(11, 973);
+            this.KeyboardBtn.Location = new System.Drawing.Point(9, 856);
             this.KeyboardBtn.Margin = new System.Windows.Forms.Padding(2);
             this.KeyboardBtn.Name = "KeyboardBtn";
             this.KeyboardBtn.Size = new System.Drawing.Size(100, 77);
@@ -1074,7 +1074,7 @@
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 106);
             this.PositionsGrd.Name = "PositionsGrd";
-            this.PositionsGrd.Size = new System.Drawing.Size(829, 936);
+            this.PositionsGrd.Size = new System.Drawing.Size(829, 907);
             this.PositionsGrd.TabIndex = 85;
             // 
             // variablesPage
@@ -1096,7 +1096,7 @@
             // ClearAllVariablesBtn
             // 
             this.ClearAllVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(489, 1047);
+            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(489, 959);
             this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
             this.ClearAllVariablesBtn.Size = new System.Drawing.Size(155, 55);
             this.ClearAllVariablesBtn.TabIndex = 91;
@@ -1107,7 +1107,7 @@
             // LoadVariablesBtn
             // 
             this.LoadVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadVariablesBtn.Location = new System.Drawing.Point(6, 1047);
+            this.LoadVariablesBtn.Location = new System.Drawing.Point(6, 959);
             this.LoadVariablesBtn.Name = "LoadVariablesBtn";
             this.LoadVariablesBtn.Size = new System.Drawing.Size(155, 55);
             this.LoadVariablesBtn.TabIndex = 90;
@@ -1118,7 +1118,7 @@
             // SaveVariablesBtn
             // 
             this.SaveVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveVariablesBtn.Location = new System.Drawing.Point(167, 1047);
+            this.SaveVariablesBtn.Location = new System.Drawing.Point(167, 959);
             this.SaveVariablesBtn.Name = "SaveVariablesBtn";
             this.SaveVariablesBtn.Size = new System.Drawing.Size(155, 55);
             this.SaveVariablesBtn.TabIndex = 89;
@@ -1129,7 +1129,7 @@
             // ClearVariablesBtn
             // 
             this.ClearVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearVariablesBtn.Location = new System.Drawing.Point(328, 1047);
+            this.ClearVariablesBtn.Location = new System.Drawing.Point(328, 959);
             this.ClearVariablesBtn.Name = "ClearVariablesBtn";
             this.ClearVariablesBtn.Size = new System.Drawing.Size(155, 55);
             this.ClearVariablesBtn.TabIndex = 88;
@@ -1142,7 +1142,7 @@
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 65);
             this.VariablesGrd.Name = "VariablesGrd";
-            this.VariablesGrd.Size = new System.Drawing.Size(829, 976);
+            this.VariablesGrd.Size = new System.Drawing.Size(829, 885);
             this.VariablesGrd.TabIndex = 84;
             // 
             // groupBox7
@@ -1209,8 +1209,8 @@
             // 
             this.logsPage.Controls.Add(this.groupBox10);
             this.logsPage.Controls.Add(this.groupBox5);
-            this.logsPage.Controls.Add(this.groupBox4);
             this.logsPage.Controls.Add(this.groupBox6);
+            this.logsPage.Controls.Add(this.groupBox4);
             this.logsPage.Location = new System.Drawing.Point(4, 25);
             this.logsPage.Name = "logsPage";
             this.logsPage.Padding = new System.Windows.Forms.Padding(3);
@@ -1258,7 +1258,7 @@
             this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox5.Location = new System.Drawing.Point(6, 560);
             this.groupBox5.Name = "groupBox5";
-            this.groupBox5.Size = new System.Drawing.Size(813, 281);
+            this.groupBox5.Size = new System.Drawing.Size(813, 252);
             this.groupBox5.TabIndex = 89;
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Robot Messages";
@@ -1279,9 +1279,41 @@
             this.UrLogRTB.Location = new System.Drawing.Point(5, 15);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrLogRTB.Name = "UrLogRTB";
-            this.UrLogRTB.Size = new System.Drawing.Size(802, 259);
+            this.UrLogRTB.Size = new System.Drawing.Size(802, 228);
             this.UrLogRTB.TabIndex = 1;
             this.UrLogRTB.Text = "";
+            // 
+            // groupBox6
+            // 
+            this.groupBox6.Controls.Add(this.ClearErrorLogRtbBtn);
+            this.groupBox6.Controls.Add(this.ErrorLogRTB);
+            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox6.Location = new System.Drawing.Point(6, 818);
+            this.groupBox6.Name = "groupBox6";
+            this.groupBox6.Size = new System.Drawing.Size(819, 196);
+            this.groupBox6.TabIndex = 84;
+            this.groupBox6.TabStop = false;
+            this.groupBox6.Text = "Error Messages";
+            // 
+            // ClearErrorLogRtbBtn
+            // 
+            this.ClearErrorLogRtbBtn.Location = new System.Drawing.Point(732, 21);
+            this.ClearErrorLogRtbBtn.Name = "ClearErrorLogRtbBtn";
+            this.ClearErrorLogRtbBtn.Size = new System.Drawing.Size(75, 30);
+            this.ClearErrorLogRtbBtn.TabIndex = 81;
+            this.ClearErrorLogRtbBtn.Text = "Clear";
+            this.ClearErrorLogRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearErrorLogRtbBtn.Click += new System.EventHandler(this.ClearErrorLogRtbBtn_Click);
+            // 
+            // ErrorLogRTB
+            // 
+            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ErrorLogRTB.Location = new System.Drawing.Point(5, 21);
+            this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.ErrorLogRTB.Name = "ErrorLogRTB";
+            this.ErrorLogRTB.Size = new System.Drawing.Size(801, 170);
+            this.ErrorLogRTB.TabIndex = 0;
+            this.ErrorLogRTB.Text = "";
             // 
             // groupBox4
             // 
@@ -1315,44 +1347,57 @@
             this.AllLogRTB.TabIndex = 4;
             this.AllLogRTB.Text = "";
             // 
-            // groupBox6
+            // manualPage
             // 
-            this.groupBox6.Controls.Add(this.ClearErrorLogRtbBtn);
-            this.groupBox6.Controls.Add(this.ErrorLogRTB);
-            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox6.Location = new System.Drawing.Point(6, 847);
-            this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(819, 255);
-            this.groupBox6.TabIndex = 84;
-            this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Error Messages";
+            this.manualPage.Controls.Add(this.LoadManualBtn);
+            this.manualPage.Controls.Add(this.SaveManualBtn);
+            this.manualPage.Controls.Add(this.InstructionsRTB);
+            this.manualPage.Location = new System.Drawing.Point(4, 25);
+            this.manualPage.Name = "manualPage";
+            this.manualPage.Size = new System.Drawing.Size(841, 1108);
+            this.manualPage.TabIndex = 3;
+            this.manualPage.Text = "Manual";
+            this.manualPage.UseVisualStyleBackColor = true;
             // 
-            // ClearErrorLogRtbBtn
+            // LoadManualBtn
             // 
-            this.ClearErrorLogRtbBtn.Location = new System.Drawing.Point(732, 21);
-            this.ClearErrorLogRtbBtn.Name = "ClearErrorLogRtbBtn";
-            this.ClearErrorLogRtbBtn.Size = new System.Drawing.Size(75, 30);
-            this.ClearErrorLogRtbBtn.TabIndex = 81;
-            this.ClearErrorLogRtbBtn.Text = "Clear";
-            this.ClearErrorLogRtbBtn.UseVisualStyleBackColor = true;
-            this.ClearErrorLogRtbBtn.Click += new System.EventHandler(this.ClearErrorLogRtbBtn_Click);
+            this.LoadManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadManualBtn.Location = new System.Drawing.Point(18, 1040);
+            this.LoadManualBtn.Name = "LoadManualBtn";
+            this.LoadManualBtn.Size = new System.Drawing.Size(155, 55);
+            this.LoadManualBtn.TabIndex = 106;
+            this.LoadManualBtn.Text = "Reload";
+            this.LoadManualBtn.UseVisualStyleBackColor = true;
+            this.LoadManualBtn.Click += new System.EventHandler(this.LoadManualBtn_Click);
             // 
-            // ErrorLogRTB
+            // SaveManualBtn
             // 
-            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ErrorLogRTB.Location = new System.Drawing.Point(6, 20);
-            this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
-            this.ErrorLogRTB.Name = "ErrorLogRTB";
-            this.ErrorLogRTB.Size = new System.Drawing.Size(801, 228);
-            this.ErrorLogRTB.TabIndex = 0;
-            this.ErrorLogRTB.Text = "";
+            this.SaveManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveManualBtn.Location = new System.Drawing.Point(179, 1040);
+            this.SaveManualBtn.Name = "SaveManualBtn";
+            this.SaveManualBtn.Size = new System.Drawing.Size(155, 55);
+            this.SaveManualBtn.TabIndex = 105;
+            this.SaveManualBtn.Text = "Save";
+            this.SaveManualBtn.UseVisualStyleBackColor = true;
+            this.SaveManualBtn.Click += new System.EventHandler(this.SaveManualBtn_Click);
+            // 
+            // InstructionsRTB
+            // 
+            this.InstructionsRTB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.InstructionsRTB.Location = new System.Drawing.Point(18, 18);
+            this.InstructionsRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.InstructionsRTB.Name = "InstructionsRTB";
+            this.InstructionsRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.InstructionsRTB.Size = new System.Drawing.Size(805, 996);
+            this.InstructionsRTB.TabIndex = 104;
+            this.InstructionsRTB.Text = "";
             // 
             // ExitBtn
             // 
             this.ExitBtn.BackColor = System.Drawing.Color.Green;
             this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(11, 1080);
+            this.ExitBtn.Location = new System.Drawing.Point(11, 981);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
             this.ExitBtn.Size = new System.Drawing.Size(100, 69);
@@ -1441,56 +1486,11 @@
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
-            // InstructionsRTB
-            // 
-            this.InstructionsRTB.Font = new System.Drawing.Font("Courier New", 11.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.InstructionsRTB.Location = new System.Drawing.Point(18, 18);
-            this.InstructionsRTB.Margin = new System.Windows.Forms.Padding(2);
-            this.InstructionsRTB.Name = "InstructionsRTB";
-            this.InstructionsRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.InstructionsRTB.Size = new System.Drawing.Size(805, 1017);
-            this.InstructionsRTB.TabIndex = 104;
-            this.InstructionsRTB.Text = "";
-            // 
-            // manualPage
-            // 
-            this.manualPage.Controls.Add(this.LoadManualBtn);
-            this.manualPage.Controls.Add(this.SaveManualBtn);
-            this.manualPage.Controls.Add(this.InstructionsRTB);
-            this.manualPage.Location = new System.Drawing.Point(4, 25);
-            this.manualPage.Name = "manualPage";
-            this.manualPage.Size = new System.Drawing.Size(841, 1108);
-            this.manualPage.TabIndex = 3;
-            this.manualPage.Text = "Manual";
-            this.manualPage.UseVisualStyleBackColor = true;
-            // 
-            // LoadManualBtn
-            // 
-            this.LoadManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadManualBtn.Location = new System.Drawing.Point(18, 1040);
-            this.LoadManualBtn.Name = "LoadManualBtn";
-            this.LoadManualBtn.Size = new System.Drawing.Size(155, 55);
-            this.LoadManualBtn.TabIndex = 106;
-            this.LoadManualBtn.Text = "Reload";
-            this.LoadManualBtn.UseVisualStyleBackColor = true;
-            this.LoadManualBtn.Click += new System.EventHandler(this.LoadManualBtn_Click);
-            // 
-            // SaveManualBtn
-            // 
-            this.SaveManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveManualBtn.Location = new System.Drawing.Point(179, 1040);
-            this.SaveManualBtn.Name = "SaveManualBtn";
-            this.SaveManualBtn.Size = new System.Drawing.Size(155, 55);
-            this.SaveManualBtn.TabIndex = 105;
-            this.SaveManualBtn.Text = "Save";
-            this.SaveManualBtn.UseVisualStyleBackColor = true;
-            this.SaveManualBtn.Click += new System.EventHandler(this.SaveManualBtn_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1904, 1161);
+            this.ClientSize = new System.Drawing.Size(1904, 1061);
             this.ControlBox = false;
             this.Controls.Add(this.OperatorModeBox);
             this.Controls.Add(this.RobotDashboardStatusLbl);
@@ -1515,8 +1515,9 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "The Code Sets This Caption";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.OperationTab.ResumeLayout(false);
             this.GrindTab.ResumeLayout(false);
@@ -1539,8 +1540,8 @@
             this.logsPage.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
             this.groupBox5.ResumeLayout(false);
-            this.groupBox4.ResumeLayout(false);
             this.groupBox6.ResumeLayout(false);
+            this.groupBox4.ResumeLayout(false);
             this.manualPage.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();

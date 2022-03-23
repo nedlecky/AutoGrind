@@ -823,8 +823,8 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             // Window State
-            Left = (Int32)AppNameKey.GetValue("Left", 0);
-            Width = (Int32)AppNameKey.GetValue("Width", 1920);
+            //Left = (Int32)AppNameKey.GetValue("Left", 0);
+            //Width = (Int32)AppNameKey.GetValue("Width", 1920);
 
             Top = (Int32)AppNameKey.GetValue("Top", 0);
 
