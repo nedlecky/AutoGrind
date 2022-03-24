@@ -236,10 +236,13 @@ namespace AutoGrind
                     robotReady = newRobotReady;
                     if (robotReady)
                     {
-                        log.Info("Change robot connection to READY");
-                        ExecuteLine(-1, "set_speed(-1)");             // Query speed
-                        ExecuteLine(-1, "set_accel(-1)");             // Query accel
-                        ExecuteLine(-1, "set_blend(-1)");             // Query blend
+                        log.Info("Changing robot connection to READY");
+                        // Send defaults speeds and accelerations
+                        ExecuteLine(-1, string.Format("set_speed({0})", ReadVariable("robot_speed", "0.2")));
+                        ExecuteLine(-1, string.Format("set_accel({0})", ReadVariable("robot_accel", "0.5")));
+                        ExecuteLine(-1, string.Format("set_blend({0})", ReadVariable("robot_blend", "0.003")));
+                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed", "1.5")));
+                        ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel", "4.0")));
                         ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -1134,7 +1137,9 @@ namespace AutoGrind
             {"set_speed",               new CommandSpec(){nParams=1, prefix="30,1" } },
             {"set_accel",               new CommandSpec(){nParams=1, prefix="30,2" } },
             {"set_blend",               new CommandSpec(){nParams=1, prefix="30,3" } },
-            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,4" } },
+            {"set_joint_speed",         new CommandSpec(){nParams=1, prefix="30,4" } },
+            {"set_joint_accel",         new CommandSpec(){nParams=1, prefix="30,5" } },
+            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,6" } },
             {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10" } },
             {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
@@ -1578,7 +1583,7 @@ namespace AutoGrind
         }
         private void SetSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "standard robot SPEED, m/s", 3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_speed"), "default robot SPEED, m/s", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1588,7 +1593,7 @@ namespace AutoGrind
 
         private void SetAccelBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "standard robot ACCELERATION, m/s^2", 3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_accel"), "default robot ACCELERATION, m/s^2", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
@@ -1596,15 +1601,35 @@ namespace AutoGrind
             }
         }
 
-
         private void SetBlendBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "standard robot BLEND RADIUS, m", 3);
+            SetValueForm form = new SetValueForm(ReadVariable("robot_blend"), "default robot BLEND RADIUS, m", 3);
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 ExecuteLine(-1, String.Format("set_blend({0})", form.value));
             }
+        }
+        private void SetJointSpeedBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(ReadVariable("robot_joint_speed"), "default robot JOINT SPEED, rad/s", 3);
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("set_joint_speed({0})", form.value));
+            }
+
+        }
+
+        private void SetJointAccelBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(ReadVariable("robot_joint_accel"), "default robot JOINT ACCELERATION, rad/s^2", 3);
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("set_joint_accel({0})", form.value));
+            }
+
         }
 
 
@@ -1686,7 +1711,7 @@ namespace AutoGrind
             log.Info("ReadVariableBtn_Click(...) returns {0}={1}", name, value);
         }
 
-        private string ReadVariable(string name)
+        private string ReadVariable(string name, string defaultValue=null)
         {
             foreach (DataRow row in variables.Rows)
             {
@@ -1698,7 +1723,7 @@ namespace AutoGrind
                 }
             }
             //log.Error("ReadVariable({0}) Not Found", name);
-            return null;
+            return defaultValue;
         }
 
 
@@ -1788,6 +1813,12 @@ namespace AutoGrind
                     break;
                 case "grind_contact_enabled":
                     GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
+                    break;
+                case "robot_joint_speed":
+                    SetJointSpeedBtn.Text = "Joint Speed\n" + valueTrimmed + "rad/s";
+                    break;
+                case "robot_joint_accel":
+                    SetJointAccelBtn.Text = "Joint Acceleration\n" + valueTrimmed + "rad/s^2";
                     break;
             }
 
