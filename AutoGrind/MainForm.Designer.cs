@@ -51,6 +51,12 @@
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.SetupTab = new System.Windows.Forms.TabPage();
+            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.SetJointAccelBtn = new System.Windows.Forms.Button();
+            this.SetJointSpeedBtn = new System.Windows.Forms.Button();
+            this.SetSpeedBtn = new System.Windows.Forms.Button();
+            this.SetAccelBtn = new System.Windows.Forms.Button();
+            this.SetBlendBtn = new System.Windows.Forms.Button();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.SelectToolBtn = new System.Windows.Forms.Button();
             this.ToolsGrd = new System.Windows.Forms.DataGridView();
@@ -63,9 +69,6 @@
             this.UnlockProtectiveStopBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
             this.AskSafetyStatusBtn = new System.Windows.Forms.Button();
-            this.SetBlendBtn = new System.Windows.Forms.Button();
-            this.SetAccelBtn = new System.Windows.Forms.Button();
-            this.SetSpeedBtn = new System.Windows.Forms.Button();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
             this.RobotDisconnectBtn = new System.Windows.Forms.Button();
             this.RobotSendBtn = new System.Windows.Forms.Button();
@@ -143,13 +146,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
-            this.SetJointSpeedBtn = new System.Windows.Forms.Button();
-            this.SetJointAccelBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
             this.SetupTab.SuspendLayout();
+            this.groupBox9.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -167,7 +168,6 @@
             this.groupBox6.SuspendLayout();
             this.groupBox4.SuspendLayout();
             this.manualPage.SuspendLayout();
-            this.groupBox9.SuspendLayout();
             this.SuspendLayout();
             // 
             // GrindBtn
@@ -474,6 +474,75 @@
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
             // 
+            // groupBox9
+            // 
+            this.groupBox9.Controls.Add(this.SetJointAccelBtn);
+            this.groupBox9.Controls.Add(this.SetJointSpeedBtn);
+            this.groupBox9.Controls.Add(this.SetSpeedBtn);
+            this.groupBox9.Controls.Add(this.SetAccelBtn);
+            this.groupBox9.Controls.Add(this.SetBlendBtn);
+            this.groupBox9.Location = new System.Drawing.Point(643, 16);
+            this.groupBox9.Name = "groupBox9";
+            this.groupBox9.Size = new System.Drawing.Size(222, 387);
+            this.groupBox9.TabIndex = 89;
+            this.groupBox9.TabStop = false;
+            this.groupBox9.Text = "Default Non-grind Motion Parameters";
+            // 
+            // SetJointAccelBtn
+            // 
+            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointAccelBtn.Location = new System.Drawing.Point(114, 125);
+            this.SetJointAccelBtn.Name = "SetJointAccelBtn";
+            this.SetJointAccelBtn.Size = new System.Drawing.Size(100, 70);
+            this.SetJointAccelBtn.TabIndex = 83;
+            this.SetJointAccelBtn.Text = "Set Joint Accel";
+            this.SetJointAccelBtn.UseVisualStyleBackColor = false;
+            this.SetJointAccelBtn.Click += new System.EventHandler(this.SetJointAccelBtn_Click);
+            // 
+            // SetJointSpeedBtn
+            // 
+            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointSpeedBtn.Location = new System.Drawing.Point(6, 125);
+            this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
+            this.SetJointSpeedBtn.Size = new System.Drawing.Size(100, 70);
+            this.SetJointSpeedBtn.TabIndex = 82;
+            this.SetJointSpeedBtn.Text = "Set Joint Speed";
+            this.SetJointSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetJointSpeedBtn.Click += new System.EventHandler(this.SetJointSpeedBtn_Click);
+            // 
+            // SetSpeedBtn
+            // 
+            this.SetSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetSpeedBtn.Location = new System.Drawing.Point(6, 39);
+            this.SetSpeedBtn.Name = "SetSpeedBtn";
+            this.SetSpeedBtn.Size = new System.Drawing.Size(100, 70);
+            this.SetSpeedBtn.TabIndex = 77;
+            this.SetSpeedBtn.Text = "Set Speed";
+            this.SetSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetSpeedBtn.Click += new System.EventHandler(this.SetSpeedBtn_Click);
+            // 
+            // SetAccelBtn
+            // 
+            this.SetAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetAccelBtn.Location = new System.Drawing.Point(114, 39);
+            this.SetAccelBtn.Name = "SetAccelBtn";
+            this.SetAccelBtn.Size = new System.Drawing.Size(100, 70);
+            this.SetAccelBtn.TabIndex = 78;
+            this.SetAccelBtn.Text = "Set Accel";
+            this.SetAccelBtn.UseVisualStyleBackColor = false;
+            this.SetAccelBtn.Click += new System.EventHandler(this.SetAccelBtn_Click);
+            // 
+            // SetBlendBtn
+            // 
+            this.SetBlendBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetBlendBtn.Location = new System.Drawing.Point(6, 211);
+            this.SetBlendBtn.Name = "SetBlendBtn";
+            this.SetBlendBtn.Size = new System.Drawing.Size(100, 70);
+            this.SetBlendBtn.TabIndex = 81;
+            this.SetBlendBtn.Text = "Set Blend";
+            this.SetBlendBtn.UseVisualStyleBackColor = false;
+            this.SetBlendBtn.Click += new System.EventHandler(this.SetBlendBtn_Click);
+            // 
             // groupBox8
             // 
             this.groupBox8.Controls.Add(this.SelectToolBtn);
@@ -612,39 +681,6 @@
             this.AskSafetyStatusBtn.Text = "Ask Safety Status";
             this.AskSafetyStatusBtn.UseVisualStyleBackColor = false;
             this.AskSafetyStatusBtn.Click += new System.EventHandler(this.AskSafetyStatusBtn_Click);
-            // 
-            // SetBlendBtn
-            // 
-            this.SetBlendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetBlendBtn.Location = new System.Drawing.Point(6, 99);
-            this.SetBlendBtn.Name = "SetBlendBtn";
-            this.SetBlendBtn.Size = new System.Drawing.Size(102, 53);
-            this.SetBlendBtn.TabIndex = 81;
-            this.SetBlendBtn.Text = "Set Blend";
-            this.SetBlendBtn.UseVisualStyleBackColor = false;
-            this.SetBlendBtn.Click += new System.EventHandler(this.SetBlendBtn_Click);
-            // 
-            // SetAccelBtn
-            // 
-            this.SetAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetAccelBtn.Location = new System.Drawing.Point(114, 39);
-            this.SetAccelBtn.Name = "SetAccelBtn";
-            this.SetAccelBtn.Size = new System.Drawing.Size(102, 53);
-            this.SetAccelBtn.TabIndex = 78;
-            this.SetAccelBtn.Text = "Set Accel";
-            this.SetAccelBtn.UseVisualStyleBackColor = false;
-            this.SetAccelBtn.Click += new System.EventHandler(this.SetAccelBtn_Click);
-            // 
-            // SetSpeedBtn
-            // 
-            this.SetSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetSpeedBtn.Location = new System.Drawing.Point(6, 39);
-            this.SetSpeedBtn.Name = "SetSpeedBtn";
-            this.SetSpeedBtn.Size = new System.Drawing.Size(102, 53);
-            this.SetSpeedBtn.TabIndex = 77;
-            this.SetSpeedBtn.Text = "Set Speed";
-            this.SetSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetSpeedBtn.Click += new System.EventHandler(this.SetSpeedBtn_Click);
             // 
             // RobotConnectBtn
             // 
@@ -1488,42 +1524,6 @@
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
-            // groupBox9
-            // 
-            this.groupBox9.Controls.Add(this.SetJointAccelBtn);
-            this.groupBox9.Controls.Add(this.SetJointSpeedBtn);
-            this.groupBox9.Controls.Add(this.SetSpeedBtn);
-            this.groupBox9.Controls.Add(this.SetAccelBtn);
-            this.groupBox9.Controls.Add(this.SetBlendBtn);
-            this.groupBox9.Location = new System.Drawing.Point(643, 16);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(222, 296);
-            this.groupBox9.TabIndex = 89;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Default Non-grind Motion Parameters";
-            // 
-            // SetJointSpeedBtn
-            // 
-            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetJointSpeedBtn.Location = new System.Drawing.Point(6, 182);
-            this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
-            this.SetJointSpeedBtn.Size = new System.Drawing.Size(102, 78);
-            this.SetJointSpeedBtn.TabIndex = 82;
-            this.SetJointSpeedBtn.Text = "Set Joint Speed";
-            this.SetJointSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetJointSpeedBtn.Click += new System.EventHandler(this.SetJointSpeedBtn_Click);
-            // 
-            // SetJointAccelBtn
-            // 
-            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetJointAccelBtn.Location = new System.Drawing.Point(114, 182);
-            this.SetJointAccelBtn.Name = "SetJointAccelBtn";
-            this.SetJointAccelBtn.Size = new System.Drawing.Size(102, 78);
-            this.SetJointAccelBtn.TabIndex = 83;
-            this.SetJointAccelBtn.Text = "Set Joint Accel";
-            this.SetJointAccelBtn.UseVisualStyleBackColor = false;
-            this.SetJointAccelBtn.Click += new System.EventHandler(this.SetJointAccelBtn_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1561,6 +1561,7 @@
             this.GrindTab.ResumeLayout(false);
             this.EditTab.ResumeLayout(false);
             this.SetupTab.ResumeLayout(false);
+            this.groupBox9.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
             this.groupBox2.ResumeLayout(false);
@@ -1581,7 +1582,6 @@
             this.groupBox6.ResumeLayout(false);
             this.groupBox4.ResumeLayout(false);
             this.manualPage.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 

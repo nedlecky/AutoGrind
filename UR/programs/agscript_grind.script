@@ -55,8 +55,8 @@ def pattern_grind():
     global grind_speed = command[6] / 1000.0
     global grind_force = command[7]
     # These may get calculated later!
-    global grind_accel = robot_accel
-    global grind_blend = robot_blend
+    global grind_accel = robot_linear_accel_mpss
+    global grind_blend = robot_blend_radius_m
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles)
 
     # RECTANGULAR GRINDS
@@ -68,8 +68,8 @@ def pattern_grind():
     global grind_speed = command[6] / 1000.0
     global grind_force = command[7]
     # These may get calculated later!
-    global grind_accel = robot_accel
-    global grind_blend = robot_blend
+    global grind_accel = robot_linear_accel_mpss
+    global grind_blend = robot_blend_radius_m
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles)
 
     # SERPENTINE GRINDS
@@ -83,8 +83,8 @@ def pattern_grind():
     global grind_speed = command[8] / 1000.0
     global grind_force = command[9]
     # These may get calculated later!
-    global grind_accel = robot_accel
-    global grind_blend = robot_blend
+    global grind_accel = robot_linear_accel_mpss
+    global grind_blend = robot_blend_radius_m
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles)
 
     # CIRCULAR GRINDS
@@ -95,8 +95,8 @@ def pattern_grind():
     global grind_speed = command[5] / 1000.0
     global grind_force = command[6]
     # These may get calculated later!
-    global grind_accel = robot_accel
-    global grind_blend = robot_blend
+    global grind_accel = robot_linear_accel_mpss
+    global grind_blend = robot_blend_radius_m
     grind_circle(grind_circle1_diam_mm, grind_n_cycles)
 
     # SPIRAL GRINDS
@@ -109,8 +109,8 @@ def pattern_grind():
     global grind_speed = command[7] / 1000.0
     global grind_force = command[8]
     # These may get calculated later!
-    global grind_accel = robot_accel
-    global grind_blend = robot_blend
+    global grind_accel = robot_linear_accel_mpss
+    global grind_blend = robot_blend_radius_m
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_spirals, grind_n_cycles)
   else:
     global response = "Unknown grind command"
@@ -135,11 +135,11 @@ def contact_part(on = False, enabled = False):
     else:
       # Simulated....
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0.010, 0, 0, 0])
-      movel(p1, robot_accel, robot_speed)
+      movel(p1, a=robot_linear_accel_mpss, v=robot_linear_speed_mps)
     end
   else:
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.010, 0, 0, 0])
-    movel(p1, robot_accel, robot_speed)
+    movel(p1, a=robot_linear_accel_mpss, v=robot_linear_speed_mps)
   end
 
   return True
@@ -243,10 +243,10 @@ def grind_line(dx_mm, dy_mm, n_cycles):
     dry_rad = dy_m / radius_m
     p1 = pose_trans(p0, p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
   end
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
   if not set_grinding_state(True):
-    movel(p0, a = robot_accel, v = robot_speed)
+    movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     return False
   end
 
@@ -262,7 +262,7 @@ def grind_line(dx_mm, dy_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, a = robot_accel, v = robot_speed)
+  movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 end
 
 # Move along a flat line dx_m x dy_m starting at current position. Repeat n_cycles times.
@@ -374,10 +374,10 @@ def grind_rect(dx_mm, dy_mm, n_cycles):
     dry_rad = dy_m / radius_m
     p1 = pose_trans(p0, p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
   end
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
   if not set_grinding_state(True):
-    movel(p0, a = robot_accel, v = robot_speed)
+    movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     return False
   end
 
@@ -393,7 +393,7 @@ def grind_rect(dx_mm, dy_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, a = robot_accel, v = robot_speed)
+  movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 end
 
 # Move along a flat rect dx_m x dy_m starting at current position. Repeat n_cycles times.
@@ -524,10 +524,10 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles):
     dry_rad = dy_m / part_radius_m
     p1 = pose_trans(p0, p[0, 0, 0, -drx_rad / 2, -dry_rad / 2, 0])
   end
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
   if not set_grinding_state(True):
-    movel(p0, a = robot_accel, v = robot_speed)
+    movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     return False
   end
 
@@ -543,7 +543,7 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, a = robot_accel, v = robot_speed)
+  movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 end
 
 # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps starting at current tool position. Repeat n_cycles times.
@@ -766,10 +766,10 @@ def grind_circle(circle_diam_mm, n_cycles):
     part_diam_m = robot_part_geometry[1]
     p1 = pose_trans(p0, p[0, 0, 0, circle_diam_m / part_diam_m, 0, 0])
   end
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
   if not set_grinding_state(True):
-    movel(p0, a = robot_accel, v = robot_speed)
+    movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     return False
   end
 
@@ -785,7 +785,7 @@ def grind_circle(circle_diam_mm, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, a = robot_accel, v = robot_speed)
+  movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 end
 
 # Grind along a flat circle circle_diam_m starting at current tool position. Repeat n_cycles times.
@@ -899,10 +899,10 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles):
     part_diam_m = robot_part_geometry[1]
     p1 = pose_trans(p0, p[0, 0, 0, circle1_diam_m / part_diam_m / 2.0, 0, 0])
   end
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
   if not set_grinding_state(True):
-    movel(p0, a = robot_accel, v = robot_speed)
+    movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     return False
   end
 
@@ -918,7 +918,7 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles):
   set_grinding_state(False)
 
   # Return robot back to initial position
-  movel(p0, a = robot_accel, v = robot_speed)
+  movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   return True
 end
 

@@ -5,73 +5,73 @@
 
 global response = "unknown"
 
-global robot_speed = 0.2
-global robot_accel = 0.4
-global robot_blend = 0.003
-global robot_joint_speed = 1.0
-global robot_joint_accel = 4.0
+global robot_linear_speed_mps = 0.2
+global robot_linear_accel_mpss = 0.4
+global robot_blend_radius_m = 0.003
+global robot_joint_speed_rps = 1.0
+global robot_joint_accel_rpss = 4.0
 global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
 global robot_tcp_part = robot_tcp
-global robot_payload_mass = 1.0
-global robot_payload_cog = [0, 0, 0.50]
+global robot_payload_mass_kg = 1.0
+global robot_payload_cog_m = [0, 0, 0.50]
 # Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_m)
 global robot_part_geometry = [0, 0]
 
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
-set_payload(robot_payload_mass, robot_payload_cog)
+set_payload(robot_payload_mass_kg, robot_payload_cog_m)
 set_gravity([0.0, 0.0, 9.82])
 
 # Set interface... allows validation and limits
 def set_variable():
   if command[2] == 1:
-    # Set speed to s if s>0. Always returns "speed=[current speed]"
+    # Set speed to s if s>0. Always returns current value
     s = command[3]
     if s > 0:
-      robot_speed = s
+      robot_linear_speed_mps = s / 1000.0
     end
-    socket_send_string("robot_speed=")
-    socket_send_string(robot_speed)
+    socket_send_string("robot_linear_speed_mmps=")
+    socket_send_string(robot_linear_speed_mps * 1000.0)
     socket_send_lf()
-    global response = "set_speed()"
+    global response = "set_linear_speed()"
   elif command[2] == 2:
-    # Set accel to a if a>0. Always returns "accel=[current accel]"
+    # Set accel to a if a>0. Always returns current value
     a = command[3]
     if a > 0:
-      robot_accel = a
+      robot_linear_accel_mpss = a / 1000.0
     end
-    socket_send_string("robot_accel=")
-    socket_send_string(robot_accel)
+    socket_send_string("robot_linear_accel_mmpss=")
+    socket_send_string(robot_linear_accel_mpss * 1000.0)
     socket_send_lf()
-    global response = "set_accel()"
+    global response = "set_linear_accel()"
   elif command[2] == 3:
-    # Set blend to b if b>=0. Always returns "blend=[current blend]"
+    # Set blend to b if b>=0. Always returns current value
     b = command[3]
     if b >= 0:
-      robot_blend = b
+      robot_blend_radius_m = b / 1000.0
     end
-    socket_send_string("robot_blend=")
-    socket_send_string(robot_blend)
+    socket_send_string("robot_blend_radius_mm=")
+    socket_send_string(robot_blend_radius_m * 1000.0)
     socket_send_lf()
-    global response = "set_blend()"
+    global response = "set_blend_radius()"
   elif command[2] == 4:
-    # Set joint speed to s if s>0. Always returns "speed=[current speed]"
+    # Set joint speed to s if s>0. Always returns current value
     s = command[3]
     if s > 0:
-      robot_joint_speed = s
+      robot_joint_speed_rps = d2r(s)
     end
-    socket_send_string("robot_joint_speed=")
-    socket_send_string(robot_joint_speed)
+    socket_send_string("robot_joint_speed_dps=")
+    socket_send_string(r2d(robot_joint_speed_rps))
     socket_send_lf()
     global response = "set_joint_speed()"
   elif command[2] == 5:
-    # Set joint accel to a if a>0. Always returns "accel=[current accel]"
+    # Set joint accel to a if a>0. Always returns current value
     a = command[3]
     if a > 0:
-      robot_joint_accel = a
+      robot_joint_accel_rpss = d2r(a)
     end
-    socket_send_string("robot_joint_accel=")
-    socket_send_string(robot_joint_accel)
+    socket_send_string("robot_joint_accel_dpss=")
+    socket_send_string(r2d(robot_joint_accel_rpss))
     socket_send_lf()
     global response = "set_joint_accel()"
   elif command[2] == 6:
@@ -107,15 +107,15 @@ def set_variable():
   elif command[2] == 11:
     # set_payload if command[3] > 0. Always return robot_m and robot_cog
     if command[3] > 0:
-      robot_payload_mass = command[3]
-      robot_payload_cog = [command[4], command[5], command[6]]
-      set_payload(robot_payload_mass, robot_payload_cog)
+      robot_payload_mass_kg = command[3]
+      robot_payload_cog_m = [command[4], command[5], command[6]]
+      set_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
-    socket_send_string("robot_payload_mass=")
-    socket_send_string(robot_payload_mass)
+    socket_send_string("robot_payload_mass_kg=")
+    socket_send_string(robot_payload_mass_kg)
     socket_send_lf()
-    socket_send_string("robot_payload_cog=")
-    return_vector(robot_payload_cog, 3)
+    socket_send_string("robot_payload_cog_m=")
+    return_vector(robot_payload_cog_m, 3)
     socket_send_lf()
     global response = "set_payload()"
   else:
@@ -156,14 +156,14 @@ end
 def movel_relative_base(p1):
   p0 = get_actual_tcp_pose()
   p2 = pose_add(p0, p1)
-  movel(p2, robot_accel, robot_speed)
+  movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
   global response = "movel_relative_base()"
 end
 
 # Movel relatively in TCP coordinates
 def movel_relative_tcp(p1):
   p1 = pose_trans(get_forward_kin(), p1)
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   global response = "movel_relative_tcp()"
 end
 
@@ -173,7 +173,7 @@ def movel_relative_tcp_part(p1):
   p1 = pose_trans(get_forward_kin(), p1)
   #p1 = pose_trans(get_forward_kin(q=get_actual_joint_positions(), tcp = robot_tcp_part), p1)
   #p1 = pose_trans(get_forward_kin(q = get_actual_joint_positions(), tcp = robot_tcp_part), p1)
-  movel(p1, a = robot_accel, v = robot_speed)
+  movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   set_tcp(robot_tcp)
   global response = "movel_relative_tcp_part()"
 end
@@ -182,7 +182,7 @@ end
 def movel_one_only(index = 0, val = 0):
   p = get_actual_tcp_pose()
   p[index] = val
-  movel(p, robot_accel, robot_speed)
+  movel(p, robot_linear_accel_mpss, robot_linear_speed_mps)
   global response = "movel_one_only()"
 end
 
@@ -192,19 +192,19 @@ def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
   p[3] = r1
   p[4] = r2
   p[5] = r3
-  movel(p, robot_accel, robot_speed)
+  movel(p, robot_linear_accel_mpss, robot_linear_speed_mps)
   global response = "movel_rot_only()"
 end
 
 # Movej to position (works with joints or poses)
 def movej_ag(p):
-  movej(p, a = robot_joint_accel, v = robot_joint_speed)
+  movej(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
   global response = "movej_ag()"
 end
 
 # Movel to position (works with joints or poses)
 def movel_ag(p):
-  movel(p, a = robot_accel, v = robot_speed)
+  movel(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   global response = "movel_ag()"
 end
 
