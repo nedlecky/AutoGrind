@@ -214,14 +214,12 @@ namespace AutoGrind
             if (robotDashboardClient != null && (nDashboard++ % 5) == 0)
                 if (robotDashboardClient.IsClientConnected)
                 {
-                    //robotDashboardClient.Receive();
-
-                    robotDashboardClient.Send("get robot model");
-                    robotDashboardClient.Send("get serial number");
-                    robotDashboardClient.Send("get loaded program");
-                    robotDashboardClient.Send("robotmode");
-                    robotDashboardClient.Send("safetystatus");
-                    robotDashboardClient.Send("programstate");
+                    string dash_robot_model = robotDashboardClient.InquiryResponse("get robot model");
+                    string dash_robot_serial_number = robotDashboardClient.InquiryResponse("get serial number");
+                    string dash_loaded_program = robotDashboardClient.InquiryResponse("get loaded program");
+                    string dash_robotmode = robotDashboardClient.InquiryResponse("robotmode");
+                    string dash_safetystatus = robotDashboardClient.InquiryResponse("safetystatus");
+                    string dash_programstate = robotDashboardClient.InquiryResponse("programstate");
                 }
 
             // Manage whether robot command is connected and init when it does
@@ -1680,9 +1678,9 @@ namespace AutoGrind
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            if (robotDashboardClient != null)
-                if (robotDashboardClient.IsClientConnected)
-                    robotDashboardClient.Receive();
+            //if (robotDashboardClient != null)
+            //    if (robotDashboardClient.IsClientConnected)
+            //        robotDashboardClient.Receive();
 
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
@@ -2303,22 +2301,22 @@ namespace AutoGrind
 
         private void AskSafetyStatusBtn_Click(object sender, EventArgs e)
         {
-            robotDashboardClient?.Send("safetystatus");
+            robotDashboardClient?.InquiryResponse("safetystatus");
         }
 
         private void ProgramStateBtn_Click(object sender, EventArgs e)
         {
-            robotDashboardClient?.Send("programstate");
+            robotDashboardClient?.InquiryResponse("programstate");
         }
 
         private void UnlockProtectiveStopBtn_Click(object sender, EventArgs e)
         {
-            robotDashboardClient?.Send("unlock protective stop");
+            robotDashboardClient?.InquiryResponse("unlock protective stop");
         }
 
         private void DashboardSendBtn_Click(object sender, EventArgs e)
         {
-            robotDashboardClient?.Send(DashboardMessageTxt.Text);
+            robotDashboardClient?.InquiryResponse(DashboardMessageTxt.Text);
         }
         // ===================================================================
         // END POSITIONS SYSTEM

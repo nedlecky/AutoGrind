@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -63,7 +64,7 @@ namespace AutoGrind
             try
             {
                 Ping ping = new Ping();
-                PingReply PR = ping.Send(myIp,500);
+                PingReply PR = ping.Send(myIp, 500);
                 log.Info("{0} Connect Ping returns {1}", logPrefix, PR.Status);
                 if (PR.Status != IPStatus.Success)
                 {
@@ -159,32 +160,51 @@ namespace AutoGrind
         }
         public string Receive()
         {
-            if (stream != null)
+            if (stream == null) return null;
+
+            int length = 0;
+            while (stream.DataAvailable && length < inputBufferLen) inputBuffer[length++] = (byte)stream.ReadByte();
+
+            if (length == 0) return null;
+
+            string input = Encoding.UTF8.GetString(inputBuffer, 0, length).Trim();
+            string[] inputLines = input.Split('\n');  // TODO this was \r
+            int lineNo = 1;
+            foreach (string line in inputLines)
             {
-                int length = 0;
-                while (stream.DataAvailable && length < inputBufferLen) inputBuffer[length++] = (byte)stream.ReadByte();
-
-                if (length > 0)
+                string cleanLine = line.Trim();
+                if (cleanLine.Length > 0)
                 {
-                    string input = Encoding.UTF8.GetString(inputBuffer, 0, length);
-                    string[] inputLines = input.Split('\n');  // TODO this was \r
-                    int lineNo = 1;
-                    foreach (string line in inputLines)
-                    {
-                        string cleanLine = line.Trim('\r');  // TODO this was \n
-                        if (cleanLine.Length > 0)
-                        {
-                            log.Debug("{0}<== {1} Line {2}", logPrefix, cleanLine, lineNo);
-                            ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
-                        }
-                        lineNo++;
-                    }
+                    //log.Debug("{0}<== {1} Line {2}", logPrefix, cleanLine, lineNo);
+                    //ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
                 }
-
-                // TODO: I think all these returns are ignored
-                return "";
+                lineNo++;
             }
-            return "";
+            return input;
+        }
+
+        public string InquiryResponse(string inquiry)
+        {
+            // Purge any remaining responses
+            Receive();
+
+            Stopwatch timer = new Stopwatch();
+            timer.Start();
+            Send(inquiry);
+
+            string response;
+            while ((response = Receive()) == null && timer.ElapsedMilliseconds < 50) ;
+
+            timer.Stop();
+            if (timer.ElapsedMilliseconds > 50)
+            {
+                log.Error("InquiryResponse({0}) took too long.", inquiry);
+                return null;
+            }
+
+            log.Debug("InquiryResponse({0}) = {1} [{2} mS]", inquiry,response,timer.ElapsedMilliseconds);
+            return response?.Trim();
+
         }
     }
 }
