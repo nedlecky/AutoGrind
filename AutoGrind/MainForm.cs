@@ -2481,7 +2481,14 @@ namespace AutoGrind
 
         private void LoadManualBtn_Click(object sender, EventArgs e)
         {
-            InstructionsRTB.LoadFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+            try
+            {
+                InstructionsRTB.LoadFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+            }
+            catch (Exception ex)
+            {
+                log.Error("Could not load instruction sheet!");
+            }
         }
 
         private void SaveManualBtn_Click(object sender, EventArgs e)
