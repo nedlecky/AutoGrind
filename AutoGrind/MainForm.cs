@@ -231,6 +231,12 @@ namespace AutoGrind
                         case "Robotmode: POWER_OFF":
                             color = Color.Red;
                             break;
+                        case "Robotmode: POWER_ON":
+                            color = Color.Blue;
+                            break;
+                        case "Robotmode: BOOTING":
+                            color = Color.Coral;
+                            break;
                         default:
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
@@ -248,6 +254,9 @@ namespace AutoGrind
                         case "Safetystatus: NORMAL":
                             color = Color.Green;
                             break;
+                        case "Safetystatus: PROTECTIVE_STOP":
+                            color = Color.Red;
+                            break;
                         default:
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
@@ -257,10 +266,11 @@ namespace AutoGrind
                     SafetyStatusBtn.BackColor = color;
 
                     // Poll and interpret programstate
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate");
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate",100);
                     color = Color.Red;
-                    if (robotmodeResponse.StartsWith("PLAYING"))
-                        color = Color.Green;
+                    if(robotmodeResponse!=null)
+                        if (robotmodeResponse.StartsWith("PLAYING"))
+                            color = Color.Green;
                     ProgramStateBtn.Text = robotmodeResponse;
                     ProgramStateBtn.BackColor = color;
                 }
@@ -589,11 +599,8 @@ namespace AutoGrind
                 case "Safetystatus: NORMAL":
                     robotDashboardClient?.InquiryResponse("power off");
                     break;
-                case "Robotmode: IDLE":
-                    robotDashboardClient?.InquiryResponse("brake release");
-                    break;
-                case "Robotmode: POWER_OFF":
-                    robotDashboardClient?.InquiryResponse("power on");
+                case "Safetystatus: PROTECTIVE_STOP":
+                    robotDashboardClient?.InquiryResponse("unlock protective stop");
                     break;
                 default:
                     log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
@@ -602,7 +609,7 @@ namespace AutoGrind
             pollDashboardStateNow = true;
         }
 
-        private void ProgramStateBtn_Click_1(object sender, EventArgs e)
+        private void ProgramStateBtn_Click(object sender, EventArgs e)
         {
             if (ProgramStateBtn.Text.StartsWith("PLAYING"))
             {
@@ -927,9 +934,9 @@ namespace AutoGrind
 
             // Window State
             //Left = (Int32)AppNameKey.GetValue("Left", 0);
+            //Top = (Int32)AppNameKey.GetValue("Top", 0);
             //Width = (Int32)AppNameKey.GetValue("Width", 1920);
 
-            Top = (Int32)AppNameKey.GetValue("Top", 0);
 
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
@@ -978,9 +985,9 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             // Window State
-            AppNameKey.SetValue("Left", Left);
-            AppNameKey.SetValue("Width", Width);
-            AppNameKey.SetValue("Top", Top);
+            //AppNameKey.SetValue("Left", Left);
+            //AppNameKey.SetValue("Top", Top);
+            //AppNameKey.SetValue("Width", Width);
 
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
@@ -1628,6 +1635,9 @@ namespace AutoGrind
                 RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
                 robotDashboardClient.InquiryResponse("stop");
 
+                pollDashboardStateNow = true;
+
+
                 string loadedProgramResponse = robotDashboardClient.InquiryResponse("load " + RobotProgramTxt.Text, 1000);
                 if (loadedProgramResponse == null)
                 {
@@ -1654,6 +1664,14 @@ namespace AutoGrind
                 {
                     log.Error("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse);
                     ErrorMessageBox(String.Format("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse));
+                    return;
+                }
+
+                string playResponse = robotDashboardClient.InquiryResponse("play", 1000);
+                if (!playResponse.StartsWith("Starting program"))
+                {
+                    log.Error("Failed to start program playing. Response was \"{0}\"", playResponse);
+                    ErrorMessageBox(String.Format("Failed to start program playing. Response was \"{0}\"", playResponse));
                     return;
                 }
 
@@ -1688,6 +1706,7 @@ namespace AutoGrind
             {
                 if (robotDashboardClient.IsClientConnected)
                 {
+                    robotDashboardClient.Send("stop");
                     robotDashboardClient.Send("quit");
                     robotDashboardClient.Disconnect();
                 }
@@ -2441,11 +2460,6 @@ namespace AutoGrind
         private void AskSafetyStatusBtn_Click(object sender, EventArgs e)
         {
             robotDashboardClient?.InquiryResponse("safetystatus");
-        }
-
-        private void ProgramStateBtn_Click(object sender, EventArgs e)
-        {
-            robotDashboardClient?.InquiryResponse("programstate");
         }
 
         private void UnlockProtectiveStopBtn_Click(object sender, EventArgs e)

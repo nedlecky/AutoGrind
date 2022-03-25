@@ -183,7 +183,7 @@ namespace AutoGrind
             return input;
         }
 
-        public string InquiryResponse(string inquiry,int timeoutMs=50)
+        public string InquiryResponse(string inquiry, int timeoutMs = 50)
         {
             // Purge any remaining responses
             Receive();
@@ -198,11 +198,11 @@ namespace AutoGrind
             timer.Stop();
             if (timer.ElapsedMilliseconds >= timeoutMs)
             {
-                log.Error("InquiryResponse({0}) took too long.", inquiry);
+                log.Error("InquiryResponse({0}) took too long. Waited{1} mS", inquiry, timeoutMs);
                 return null;
             }
 
-            log.Debug("InquiryResponse({0}) = {1} [{2} mS]", inquiry,response,timer.ElapsedMilliseconds);
+            log.Debug("InquiryResponse({0}) = {1} [{2} mS]", inquiry, response, timer.ElapsedMilliseconds);
             return response?.Trim();
 
         }

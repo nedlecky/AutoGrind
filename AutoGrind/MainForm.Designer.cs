@@ -75,6 +75,8 @@
             this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.RobotProgramTxt = new System.Windows.Forms.TextBox();
             this.ServerIpTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.UtcTimeChk = new System.Windows.Forms.CheckBox();
@@ -146,8 +148,6 @@
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
             this.RobotModelLbl = new System.Windows.Forms.Label();
             this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
-            this.RobotProgramTxt = new System.Windows.Forms.TextBox();
-            this.label4 = new System.Windows.Forms.Label();
             this.RobotModeBtn = new System.Windows.Forms.Button();
             this.SafetyStatusBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
@@ -224,7 +224,7 @@
             this.OperationTab.Margin = new System.Windows.Forms.Padding(2);
             this.OperationTab.Name = "OperationTab";
             this.OperationTab.SelectedIndex = 0;
-            this.OperationTab.Size = new System.Drawing.Size(887, 1036);
+            this.OperationTab.Size = new System.Drawing.Size(887, 945);
             this.OperationTab.TabIndex = 3;
             this.OperationTab.Selecting += new System.Windows.Forms.TabControlCancelEventHandler(this.OperationTab_Selecting);
             // 
@@ -243,7 +243,7 @@
             this.GrindTab.Margin = new System.Windows.Forms.Padding(2);
             this.GrindTab.Name = "GrindTab";
             this.GrindTab.Padding = new System.Windows.Forms.Padding(2);
-            this.GrindTab.Size = new System.Drawing.Size(879, 1007);
+            this.GrindTab.Size = new System.Drawing.Size(879, 916);
             this.GrindTab.TabIndex = 0;
             this.GrindTab.Text = "Grind";
             this.GrindTab.UseVisualStyleBackColor = true;
@@ -380,7 +380,7 @@
             this.EditTab.Margin = new System.Windows.Forms.Padding(2);
             this.EditTab.Name = "EditTab";
             this.EditTab.Padding = new System.Windows.Forms.Padding(2);
-            this.EditTab.Size = new System.Drawing.Size(879, 1007);
+            this.EditTab.Size = new System.Drawing.Size(879, 916);
             this.EditTab.TabIndex = 1;
             this.EditTab.Text = "Edit";
             this.EditTab.UseVisualStyleBackColor = true;
@@ -474,7 +474,7 @@
             this.SetupTab.Location = new System.Drawing.Point(4, 25);
             this.SetupTab.Margin = new System.Windows.Forms.Padding(2);
             this.SetupTab.Name = "SetupTab";
-            this.SetupTab.Size = new System.Drawing.Size(879, 1007);
+            this.SetupTab.Size = new System.Drawing.Size(879, 916);
             this.SetupTab.TabIndex = 2;
             this.SetupTab.Text = "Setup";
             this.SetupTab.UseVisualStyleBackColor = true;
@@ -756,6 +756,23 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "GeneralConfig";
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 47);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(147, 16);
+            this.label4.TabIndex = 88;
+            this.label4.Text = "Robot Program to Load";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RobotProgramTxt
+            // 
+            this.RobotProgramTxt.Location = new System.Drawing.Point(166, 44);
+            this.RobotProgramTxt.Name = "RobotProgramTxt";
+            this.RobotProgramTxt.Size = new System.Drawing.Size(399, 22);
+            this.RobotProgramTxt.TabIndex = 87;
+            // 
             // ServerIpTxt
             // 
             this.ServerIpTxt.Location = new System.Drawing.Point(166, 75);
@@ -982,7 +999,7 @@
             this.MonitorTab.Location = new System.Drawing.Point(1052, 11);
             this.MonitorTab.Name = "MonitorTab";
             this.MonitorTab.SelectedIndex = 0;
-            this.MonitorTab.Size = new System.Drawing.Size(849, 1137);
+            this.MonitorTab.Size = new System.Drawing.Size(849, 1047);
             this.MonitorTab.TabIndex = 94;
             this.MonitorTab.SelectedIndexChanged += new System.EventHandler(this.MonitorTab_SelectedIndexChanged);
             // 
@@ -998,7 +1015,7 @@
             this.positionsPage.Controls.Add(this.PositionsGrd);
             this.positionsPage.Location = new System.Drawing.Point(4, 25);
             this.positionsPage.Name = "positionsPage";
-            this.positionsPage.Size = new System.Drawing.Size(841, 1108);
+            this.positionsPage.Size = new System.Drawing.Size(841, 1018);
             this.positionsPage.TabIndex = 2;
             this.positionsPage.Text = "Positions";
             this.positionsPage.UseVisualStyleBackColor = true;
@@ -1108,7 +1125,7 @@
             this.variablesPage.Location = new System.Drawing.Point(4, 25);
             this.variablesPage.Name = "variablesPage";
             this.variablesPage.Padding = new System.Windows.Forms.Padding(3);
-            this.variablesPage.Size = new System.Drawing.Size(841, 1108);
+            this.variablesPage.Size = new System.Drawing.Size(841, 1018);
             this.variablesPage.TabIndex = 0;
             this.variablesPage.Text = "Variables";
             this.variablesPage.UseVisualStyleBackColor = true;
@@ -1234,7 +1251,7 @@
             this.logsPage.Location = new System.Drawing.Point(4, 25);
             this.logsPage.Name = "logsPage";
             this.logsPage.Padding = new System.Windows.Forms.Padding(3);
-            this.logsPage.Size = new System.Drawing.Size(841, 1108);
+            this.logsPage.Size = new System.Drawing.Size(841, 1018);
             this.logsPage.TabIndex = 1;
             this.logsPage.Text = "Logs";
             this.logsPage.UseVisualStyleBackColor = true;
@@ -1374,7 +1391,7 @@
             this.manualPage.Controls.Add(this.InstructionsRTB);
             this.manualPage.Location = new System.Drawing.Point(4, 25);
             this.manualPage.Name = "manualPage";
-            this.manualPage.Size = new System.Drawing.Size(841, 1108);
+            this.manualPage.Size = new System.Drawing.Size(841, 1018);
             this.manualPage.TabIndex = 3;
             this.manualPage.Text = "Manual";
             this.manualPage.UseVisualStyleBackColor = true;
@@ -1528,23 +1545,6 @@
             this.RobotSerialNumberLbl.Text = "label7";
             this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // RobotProgramTxt
-            // 
-            this.RobotProgramTxt.Location = new System.Drawing.Point(166, 44);
-            this.RobotProgramTxt.Name = "RobotProgramTxt";
-            this.RobotProgramTxt.Size = new System.Drawing.Size(399, 22);
-            this.RobotProgramTxt.TabIndex = 87;
-            // 
-            // label4
-            // 
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(8, 47);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(147, 16);
-            this.label4.TabIndex = 88;
-            this.label4.Text = "Robot Program to Load";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
             // RobotModeBtn
             // 
             this.RobotModeBtn.BackColor = System.Drawing.Color.Gray;
@@ -1582,13 +1582,13 @@
             this.ProgramStateBtn.TabIndex = 108;
             this.ProgramStateBtn.Text = "Program State";
             this.ProgramStateBtn.UseVisualStyleBackColor = false;
-            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click_1);
+            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1904, 1061);
+            this.ClientSize = new System.Drawing.Size(1970, 1125);
             this.ControlBox = false;
             this.Controls.Add(this.ProgramStateBtn);
             this.Controls.Add(this.SafetyStatusBtn);
@@ -1617,8 +1617,10 @@
             this.Controls.Add(this.OperationTab);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.Margin = new System.Windows.Forms.Padding(2);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "MainForm";
-            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
+            this.StartPosition = System.Windows.Forms.FormStartPosition.Manual;
             this.Text = "The Code Sets This Caption";
             this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.Load += new System.EventHandler(this.MainForm_Load);
