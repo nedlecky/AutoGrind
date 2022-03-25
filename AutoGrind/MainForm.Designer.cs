@@ -67,8 +67,6 @@
             this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
             this.DashboardSendBtn = new System.Windows.Forms.Button();
             this.UnlockProtectiveStopBtn = new System.Windows.Forms.Button();
-            this.ProgramStateBtn = new System.Windows.Forms.Button();
-            this.AskSafetyStatusBtn = new System.Windows.Forms.Button();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
             this.RobotDisconnectBtn = new System.Windows.Forms.Button();
             this.RobotSendBtn = new System.Windows.Forms.Button();
@@ -146,6 +144,13 @@
             this.label5 = new System.Windows.Forms.Label();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
+            this.RobotModelLbl = new System.Windows.Forms.Label();
+            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
+            this.RobotProgramTxt = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.RobotModeBtn = new System.Windows.Forms.Button();
+            this.SafetyStatusBtn = new System.Windows.Forms.Button();
+            this.ProgramStateBtn = new System.Windows.Forms.Button();
             this.OperationTab.SuspendLayout();
             this.GrindTab.SuspendLayout();
             this.EditTab.SuspendLayout();
@@ -614,8 +619,6 @@
             this.groupBox2.Controls.Add(this.DashboardMessageTxt);
             this.groupBox2.Controls.Add(this.DashboardSendBtn);
             this.groupBox2.Controls.Add(this.UnlockProtectiveStopBtn);
-            this.groupBox2.Controls.Add(this.ProgramStateBtn);
-            this.groupBox2.Controls.Add(this.AskSafetyStatusBtn);
             this.groupBox2.Controls.Add(this.RobotConnectBtn);
             this.groupBox2.Controls.Add(this.RobotDisconnectBtn);
             this.groupBox2.Controls.Add(this.RobotSendBtn);
@@ -651,36 +654,13 @@
             // 
             this.UnlockProtectiveStopBtn.BackColor = System.Drawing.Color.Transparent;
             this.UnlockProtectiveStopBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(506, 115);
+            this.UnlockProtectiveStopBtn.Location = new System.Drawing.Point(274, 111);
             this.UnlockProtectiveStopBtn.Name = "UnlockProtectiveStopBtn";
-            this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 52);
+            this.UnlockProtectiveStopBtn.Size = new System.Drawing.Size(102, 64);
             this.UnlockProtectiveStopBtn.TabIndex = 86;
             this.UnlockProtectiveStopBtn.Text = "Unlock Protective Stop";
             this.UnlockProtectiveStopBtn.UseVisualStyleBackColor = false;
             this.UnlockProtectiveStopBtn.Click += new System.EventHandler(this.UnlockProtectiveStopBtn_Click);
-            // 
-            // ProgramStateBtn
-            // 
-            this.ProgramStateBtn.BackColor = System.Drawing.Color.Transparent;
-            this.ProgramStateBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(386, 115);
-            this.ProgramStateBtn.Name = "ProgramStateBtn";
-            this.ProgramStateBtn.Size = new System.Drawing.Size(102, 52);
-            this.ProgramStateBtn.TabIndex = 85;
-            this.ProgramStateBtn.Text = "Program State";
-            this.ProgramStateBtn.UseVisualStyleBackColor = false;
-            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click);
-            // 
-            // AskSafetyStatusBtn
-            // 
-            this.AskSafetyStatusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.AskSafetyStatusBtn.Location = new System.Drawing.Point(274, 115);
-            this.AskSafetyStatusBtn.Name = "AskSafetyStatusBtn";
-            this.AskSafetyStatusBtn.Size = new System.Drawing.Size(102, 52);
-            this.AskSafetyStatusBtn.TabIndex = 83;
-            this.AskSafetyStatusBtn.Text = "Ask Safety Status";
-            this.AskSafetyStatusBtn.UseVisualStyleBackColor = false;
-            this.AskSafetyStatusBtn.Click += new System.EventHandler(this.AskSafetyStatusBtn_Click);
             // 
             // RobotConnectBtn
             // 
@@ -719,7 +699,7 @@
             this.RobotMessageTxt.Name = "RobotMessageTxt";
             this.RobotMessageTxt.Size = new System.Drawing.Size(119, 22);
             this.RobotMessageTxt.TabIndex = 75;
-            this.RobotMessageTxt.Text = "(1)";
+            this.RobotMessageTxt.Text = "(10)";
             // 
             // DefaultConfigBtn
             // 
@@ -756,6 +736,8 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.label4);
+            this.groupBox1.Controls.Add(this.RobotProgramTxt);
             this.groupBox1.Controls.Add(this.ServerIpTxt);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.UtcTimeChk);
@@ -776,7 +758,7 @@
             // 
             // ServerIpTxt
             // 
-            this.ServerIpTxt.Location = new System.Drawing.Point(166, 53);
+            this.ServerIpTxt.Location = new System.Drawing.Point(166, 75);
             this.ServerIpTxt.Name = "ServerIpTxt";
             this.ServerIpTxt.Size = new System.Drawing.Size(93, 22);
             this.ServerIpTxt.TabIndex = 79;
@@ -784,7 +766,7 @@
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(27, 81);
+            this.label2.Location = new System.Drawing.Point(27, 103);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(136, 16);
             this.label2.TabIndex = 78;
@@ -803,7 +785,7 @@
             // 
             // RobotIpTxt
             // 
-            this.RobotIpTxt.Location = new System.Drawing.Point(166, 81);
+            this.RobotIpTxt.Location = new System.Drawing.Point(166, 103);
             this.RobotIpTxt.Name = "RobotIpTxt";
             this.RobotIpTxt.Size = new System.Drawing.Size(93, 22);
             this.RobotIpTxt.TabIndex = 72;
@@ -811,7 +793,7 @@
             // 
             // label3
             // 
-            this.label3.Location = new System.Drawing.Point(27, 53);
+            this.label3.Location = new System.Drawing.Point(27, 75);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(136, 16);
             this.label3.TabIndex = 71;
@@ -925,10 +907,10 @@
             this.KeyboardBtn.BackColor = System.Drawing.Color.Green;
             this.KeyboardBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.KeyboardBtn.ForeColor = System.Drawing.Color.White;
-            this.KeyboardBtn.Location = new System.Drawing.Point(9, 856);
+            this.KeyboardBtn.Location = new System.Drawing.Point(11, 900);
             this.KeyboardBtn.Margin = new System.Windows.Forms.Padding(2);
             this.KeyboardBtn.Name = "KeyboardBtn";
-            this.KeyboardBtn.Size = new System.Drawing.Size(100, 77);
+            this.KeyboardBtn.Size = new System.Drawing.Size(124, 77);
             this.KeyboardBtn.TabIndex = 77;
             this.KeyboardBtn.Text = "Keyboard";
             this.KeyboardBtn.UseVisualStyleBackColor = false;
@@ -944,7 +926,7 @@
             this.RobotCommandStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotCommandStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotCommandStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(9, 448);
+            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(9, 607);
             this.RobotCommandStatusLbl.Name = "RobotCommandStatusLbl";
             this.RobotCommandStatusLbl.Size = new System.Drawing.Size(102, 44);
             this.RobotCommandStatusLbl.TabIndex = 78;
@@ -957,7 +939,7 @@
             this.GrindReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.GrindReadyLbl.Location = new System.Drawing.Point(9, 564);
+            this.GrindReadyLbl.Location = new System.Drawing.Point(9, 723);
             this.GrindReadyLbl.Name = "GrindReadyLbl";
             this.GrindReadyLbl.Size = new System.Drawing.Size(102, 44);
             this.GrindReadyLbl.TabIndex = 88;
@@ -970,7 +952,7 @@
             this.RobotReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotReadyLbl.Location = new System.Drawing.Point(9, 503);
+            this.RobotReadyLbl.Location = new System.Drawing.Point(9, 662);
             this.RobotReadyLbl.Name = "RobotReadyLbl";
             this.RobotReadyLbl.Size = new System.Drawing.Size(102, 44);
             this.RobotReadyLbl.TabIndex = 89;
@@ -982,7 +964,7 @@
             this.GrindContactEnabledBtn.BackColor = System.Drawing.Color.Gray;
             this.GrindContactEnabledBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindContactEnabledBtn.ForeColor = System.Drawing.Color.White;
-            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(9, 623);
+            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(9, 782);
             this.GrindContactEnabledBtn.Name = "GrindContactEnabledBtn";
             this.GrindContactEnabledBtn.Size = new System.Drawing.Size(102, 69);
             this.GrindContactEnabledBtn.TabIndex = 93;
@@ -1438,7 +1420,7 @@
             this.ExitBtn.Location = new System.Drawing.Point(11, 981);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(100, 69);
+            this.ExitBtn.Size = new System.Drawing.Size(124, 69);
             this.ExitBtn.TabIndex = 96;
             this.ExitBtn.Text = "Exit";
             this.ExitBtn.UseVisualStyleBackColor = false;
@@ -1518,11 +1500,89 @@
             "Operator",
             "Editor",
             "Engineering"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(9, 785);
+            this.OperatorModeBox.Location = new System.Drawing.Point(9, 865);
             this.OperatorModeBox.Name = "OperatorModeBox";
             this.OperatorModeBox.Size = new System.Drawing.Size(123, 28);
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
+            // 
+            // RobotModelLbl
+            // 
+            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotModelLbl.Location = new System.Drawing.Point(147, 7);
+            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotModelLbl.Name = "RobotModelLbl";
+            this.RobotModelLbl.Size = new System.Drawing.Size(126, 22);
+            this.RobotModelLbl.TabIndex = 104;
+            this.RobotModelLbl.Text = "Robot Model";
+            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotSerialNumberLbl
+            // 
+            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(147, 29);
+            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
+            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(126, 22);
+            this.RobotSerialNumberLbl.TabIndex = 105;
+            this.RobotSerialNumberLbl.Text = "label7";
+            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotProgramTxt
+            // 
+            this.RobotProgramTxt.Location = new System.Drawing.Point(166, 44);
+            this.RobotProgramTxt.Name = "RobotProgramTxt";
+            this.RobotProgramTxt.Size = new System.Drawing.Size(399, 22);
+            this.RobotProgramTxt.TabIndex = 87;
+            // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(8, 47);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(147, 16);
+            this.label4.TabIndex = 88;
+            this.label4.Text = "Robot Program to Load";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RobotModeBtn
+            // 
+            this.RobotModeBtn.BackColor = System.Drawing.Color.Gray;
+            this.RobotModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotModeBtn.ForeColor = System.Drawing.Color.White;
+            this.RobotModeBtn.Location = new System.Drawing.Point(-1, 443);
+            this.RobotModeBtn.Name = "RobotModeBtn";
+            this.RobotModeBtn.Size = new System.Drawing.Size(136, 51);
+            this.RobotModeBtn.TabIndex = 106;
+            this.RobotModeBtn.Text = "Robot Mode";
+            this.RobotModeBtn.UseVisualStyleBackColor = false;
+            this.RobotModeBtn.Click += new System.EventHandler(this.RobotModeBtn_Click);
+            // 
+            // SafetyStatusBtn
+            // 
+            this.SafetyStatusBtn.BackColor = System.Drawing.Color.Gray;
+            this.SafetyStatusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SafetyStatusBtn.ForeColor = System.Drawing.Color.White;
+            this.SafetyStatusBtn.Location = new System.Drawing.Point(-1, 496);
+            this.SafetyStatusBtn.Name = "SafetyStatusBtn";
+            this.SafetyStatusBtn.Size = new System.Drawing.Size(136, 51);
+            this.SafetyStatusBtn.TabIndex = 107;
+            this.SafetyStatusBtn.Text = "Safety Status";
+            this.SafetyStatusBtn.UseVisualStyleBackColor = false;
+            this.SafetyStatusBtn.Click += new System.EventHandler(this.SafetyStatusBtn_Click);
+            // 
+            // ProgramStateBtn
+            // 
+            this.ProgramStateBtn.BackColor = System.Drawing.Color.Gray;
+            this.ProgramStateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ProgramStateBtn.ForeColor = System.Drawing.Color.White;
+            this.ProgramStateBtn.Location = new System.Drawing.Point(-1, 553);
+            this.ProgramStateBtn.Name = "ProgramStateBtn";
+            this.ProgramStateBtn.Size = new System.Drawing.Size(136, 51);
+            this.ProgramStateBtn.TabIndex = 108;
+            this.ProgramStateBtn.Text = "Program State";
+            this.ProgramStateBtn.UseVisualStyleBackColor = false;
+            this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click_1);
             // 
             // MainForm
             // 
@@ -1530,6 +1590,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1904, 1061);
             this.ControlBox = false;
+            this.Controls.Add(this.ProgramStateBtn);
+            this.Controls.Add(this.SafetyStatusBtn);
+            this.Controls.Add(this.RobotModeBtn);
+            this.Controls.Add(this.RobotSerialNumberLbl);
+            this.Controls.Add(this.RobotModelLbl);
             this.Controls.Add(this.OperatorModeBox);
             this.Controls.Add(this.RobotDashboardStatusLbl);
             this.Controls.Add(this.PartGeometryBox);
@@ -1692,8 +1757,6 @@
         private System.Windows.Forms.Label RobotDashboardStatusLbl;
         private System.Windows.Forms.TextBox ServerIpTxt;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.Button AskSafetyStatusBtn;
-        private System.Windows.Forms.Button ProgramStateBtn;
         private System.Windows.Forms.Button UnlockProtectiveStopBtn;
         private System.Windows.Forms.TextBox DashboardMessageTxt;
         private System.Windows.Forms.Button DashboardSendBtn;
@@ -1706,6 +1769,13 @@
         private System.Windows.Forms.GroupBox groupBox9;
         private System.Windows.Forms.Button SetJointAccelBtn;
         private System.Windows.Forms.Button SetJointSpeedBtn;
+        private System.Windows.Forms.Label RobotModelLbl;
+        private System.Windows.Forms.Label RobotSerialNumberLbl;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox RobotProgramTxt;
+        private System.Windows.Forms.Button RobotModeBtn;
+        private System.Windows.Forms.Button SafetyStatusBtn;
+        private System.Windows.Forms.Button ProgramStateBtn;
     }
 }
 

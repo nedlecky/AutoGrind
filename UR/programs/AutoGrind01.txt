@@ -14,7 +14,7 @@
      Loop socket_is_open ≟  False 
        Wait: 0.25
        socket_close()
-       socket_is_open≔socket_open("192.168.0.252", 30000)
+       socket_is_open≔socket_open("192.168.25.1", 30000)
      response≔"Unknown command"
      command≔socket_read_ascii_float(10)
      If command[0]≥1
@@ -71,7 +71,7 @@
        'socket_set_var("robot_index", command_index)'
    AG_50
      MoveL
-       Vertical_3
-       Tilted_1
-       Vertical_4
-       Vertical_6
+       Vertical_1
+       Tilted_2
+       Vertical_2
+       Vertical_5

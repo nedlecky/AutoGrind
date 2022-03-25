@@ -183,7 +183,7 @@ namespace AutoGrind
             return input;
         }
 
-        public string InquiryResponse(string inquiry)
+        public string InquiryResponse(string inquiry,int timeoutMs=50)
         {
             // Purge any remaining responses
             Receive();
@@ -193,10 +193,10 @@ namespace AutoGrind
             Send(inquiry);
 
             string response;
-            while ((response = Receive()) == null && timer.ElapsedMilliseconds < 50) ;
+            while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs) ;
 
             timer.Stop();
-            if (timer.ElapsedMilliseconds > 50)
+            if (timer.ElapsedMilliseconds >= timeoutMs)
             {
                 log.Error("InquiryResponse({0}) took too long.", inquiry);
                 return null;

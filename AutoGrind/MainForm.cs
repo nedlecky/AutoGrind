@@ -205,21 +205,64 @@ namespace AutoGrind
 
         bool robotReady = false;
         int nDashboard = 0;
+        bool pollDashboardStateNow = false;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             string now = DateTime.Now.ToString("s");
             timeLbl.Text = now;
 
             // Ping the dashboard every 5th second
-            if (robotDashboardClient != null && (nDashboard++ % 5) == 0)
+            if (robotDashboardClient != null && ((nDashboard++ % 5) == 0 || pollDashboardStateNow))
                 if (robotDashboardClient.IsClientConnected)
                 {
-                    string dash_robot_model = robotDashboardClient.InquiryResponse("get robot model");
-                    string dash_robot_serial_number = robotDashboardClient.InquiryResponse("get serial number");
-                    string dash_loaded_program = robotDashboardClient.InquiryResponse("get loaded program");
-                    string dash_robotmode = robotDashboardClient.InquiryResponse("robotmode");
-                    string dash_safetystatus = robotDashboardClient.InquiryResponse("safetystatus");
-                    string dash_programstate = robotDashboardClient.InquiryResponse("programstate");
+                    pollDashboardStateNow = false;
+                    // Poll and interpret robotmode
+                    string robotmodeResponse = robotDashboardClient.InquiryResponse("robotmode");
+                    Color color = Color.Red;
+                    string buttonText = robotmodeResponse;
+                    switch (robotmodeResponse)
+                    {
+                        case "Robotmode: RUNNING":
+                            color = Color.Green;
+                            break;
+                        case "Robotmode: IDLE":
+                            color = Color.Blue;
+                            break;
+                        case "Robotmode: POWER_OFF":
+                            color = Color.Red;
+                            break;
+                        default:
+                            buttonText = "?? " + robotmodeResponse;
+                            color = Color.Red;
+                            break;
+                    }
+                    RobotModeBtn.Text = buttonText;
+                    RobotModeBtn.BackColor = color;
+
+                    // Poll and interpret safetystatus
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus");
+                    color = Color.Red;
+                    buttonText = robotmodeResponse;
+                    switch (robotmodeResponse)
+                    {
+                        case "Safetystatus: NORMAL":
+                            color = Color.Green;
+                            break;
+                        default:
+                            buttonText = "?? " + robotmodeResponse;
+                            color = Color.Red;
+                            break;
+                    }
+                    SafetyStatusBtn.Text = buttonText;
+                    SafetyStatusBtn.BackColor = color;
+
+                    // Poll and interpret programstate
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate");
+                    color = Color.Red;
+                    if (robotmodeResponse.StartsWith("PLAYING"))
+                        color = Color.Green;
+                    ProgramStateBtn.Text = robotmodeResponse;
+                    ProgramStateBtn.BackColor = color;
                 }
 
             // Manage whether robot command is connected and init when it does
@@ -235,6 +278,7 @@ namespace AutoGrind
                     if (robotReady)
                     {
                         log.Info("Changing robot connection to READY");
+
                         // Send defaults speeds and accelerations
                         ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_speed", "200")));
                         ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_accel", "500")));
@@ -434,7 +478,7 @@ namespace AutoGrind
                     //Width = standardWidth;
                     break;
                 case OperatorMode.EDITOR:
-                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0,true);
+                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0, true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
@@ -516,6 +560,64 @@ namespace AutoGrind
             EditBtn.BackColor = Color.LightGreen;
             SetupBtn.BackColor = Color.Green;
         }
+
+        private void RobotModeBtn_Click(object sender, EventArgs e)
+        {
+            switch (RobotModeBtn.Text)
+            {
+                case "Robotmode: RUNNING":
+                    robotDashboardClient?.InquiryResponse("power off");
+                    break;
+                case "Robotmode: IDLE":
+                    robotDashboardClient?.InquiryResponse("brake release");
+                    break;
+                case "Robotmode: POWER_OFF":
+                    robotDashboardClient?.InquiryResponse("power on");
+                    break;
+                default:
+                    log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
+                    break;
+            }
+            pollDashboardStateNow = true;
+
+        }
+
+        private void SafetyStatusBtn_Click(object sender, EventArgs e)
+        {
+            switch (SafetyStatusBtn.Text)
+            {
+                case "Safetystatus: NORMAL":
+                    robotDashboardClient?.InquiryResponse("power off");
+                    break;
+                case "Robotmode: IDLE":
+                    robotDashboardClient?.InquiryResponse("brake release");
+                    break;
+                case "Robotmode: POWER_OFF":
+                    robotDashboardClient?.InquiryResponse("power on");
+                    break;
+                default:
+                    log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
+                    break;
+            }
+            pollDashboardStateNow = true;
+        }
+
+        private void ProgramStateBtn_Click_1(object sender, EventArgs e)
+        {
+            if (ProgramStateBtn.Text.StartsWith("PLAYING"))
+            {
+                robotCommandServer?.Send("(99)");
+                robotDashboardClient?.InquiryResponse("stop", 500);
+                RobotCommandStatusLbl.BackColor = Color.Red;
+                RobotCommandStatusLbl.Text = "OFF";
+
+            }
+            else
+                robotDashboardClient?.InquiryResponse("play", 500);
+
+            pollDashboardStateNow = true;
+        }
+
         private void KeyboardBtn_Click(object sender, EventArgs e)
         {
             System.Diagnostics.Process.Start("osk.exe");
@@ -832,6 +934,7 @@ namespace AutoGrind
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
             AutoGrindRootLbl.Text = AutoGrindRoot;
+            RobotProgramTxt.Text = (string)AppNameKey.GetValue("RobotProgramTxt.Text", "AutoGrind/AutoGrind01.urp");
             RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
             ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
             UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
@@ -881,6 +984,7 @@ namespace AutoGrind
 
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
+            AppNameKey.SetValue("RobotProgramTxt.Text", RobotProgramTxt.Text);
             AppNameKey.SetValue("RobotIpTxt.Text", RobotIpTxt.Text);
             AppNameKey.SetValue("ServerIpTxt.Text", ServerIpTxt.Text);
             AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
@@ -1514,10 +1618,44 @@ namespace AutoGrind
                 log.Error("Robot dashboard client initialization failure");
                 RobotDashboardStatusLbl.BackColor = Color.Red;
                 RobotDashboardStatusLbl.Text = "Dashboard Error";
+                return;
             }
             else
             {
                 log.Info("Robot dashboard connection ready");
+
+                RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
+                RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
+                robotDashboardClient.InquiryResponse("stop");
+
+                string loadedProgramResponse = robotDashboardClient.InquiryResponse("load " + RobotProgramTxt.Text, 1000);
+                if (loadedProgramResponse == null)
+                {
+                    log.Error("Failed to load {0}. No response.", RobotProgramTxt.Text);
+                    ErrorMessageBox(String.Format("Failed to load {0}. No response.", RobotProgramTxt.Text));
+                    return;
+                }
+                if (loadedProgramResponse.StartsWith("File not found"))
+                {
+                    log.Error("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse);
+                    ErrorMessageBox(String.Format("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse));
+                    return;
+                }
+
+                string getLoadedProgramResponse = robotDashboardClient.InquiryResponse("get loaded program", 1000);
+                if (getLoadedProgramResponse == null)
+                {
+                    log.Error("Failed to verify loading {0}. No response.", RobotProgramTxt.Text);
+                    ErrorMessageBox(String.Format("Failed to verify loading {0}. No response", RobotProgramTxt.Text));
+                    return;
+                }
+
+                if (!getLoadedProgramResponse.Contains(RobotProgramTxt.Text))
+                {
+                    log.Error("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse);
+                    ErrorMessageBox(String.Format("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse));
+                    return;
+                }
 
                 RobotDashboardStatusLbl.BackColor = Color.Green;
                 RobotDashboardStatusLbl.Text = "Dashboard Ready";
@@ -1550,6 +1688,7 @@ namespace AutoGrind
             {
                 if (robotDashboardClient.IsClientConnected)
                 {
+                    robotDashboardClient.Send("quit");
                     robotDashboardClient.Disconnect();
                 }
                 robotDashboardClient = null;
@@ -1709,7 +1848,7 @@ namespace AutoGrind
             log.Info("ReadVariableBtn_Click(...) returns {0}={1}", name, value);
         }
 
-        private string ReadVariable(string name, string defaultValue=null)
+        private string ReadVariable(string name, string defaultValue = null)
         {
             foreach (DataRow row in variables.Rows)
             {
@@ -2335,6 +2474,7 @@ namespace AutoGrind
         {
             InstructionsRTB.SaveFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
         }
+
 
 
         // ===================================================================
