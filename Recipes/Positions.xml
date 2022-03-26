@@ -23,45 +23,9 @@
     </xs:element>
   </xs:schema>
   <Positions>
-    <Name>toolchange</Name>
-    <Joints>[1.19415,-1.48813,2.49753,-3.33661,-1.31247,2.86507]</Joints>
-    <Pose>p[0.00605159,-0.531268,0.121917,-3.132,-0.000759425,0.0159778]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>demo_flat</Name>
-    <Joints>[1.68732,-1.13459,1.87706,-2.302,-1.57928,3.25786]</Joints>
-    <Pose>p[0.196213,-0.546068,0.0068703,-3.13155,-0.00147285,0.0160078]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>demo_sphere</Name>
-    <Joints>[1.18641,-1.31395,1.80729,-2.06396,-1.57039,2.75745]</Joints>
-    <Pose>p[-0.0834211,-0.562937,0.113329,-3.14154,-8.18032e-05,3.52387e-05]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>demo_cyl</Name>
-    <Joints>[1.49854,-0.99018,1.41206,-1.98368,-1.58206,3.2091]</Joints>
-    <Pose>p[0.0807982,-0.696022,0.0820059,-3.12503,0.218571,0.0171177]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>SimPowerup</Name>
-    <Joints>[-1.6007,-1.7271,-2.203,-0.808,1.5951,-0.031]</Joints>
-    <Pose>p[-0.143969,-0.43562,0.20203,-0.00122136,3.11628,0.0388919]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>ToolH</Name>
-    <Joints>[-1.59518,-1.70717,-1.63838,-1.39242,1.59524,-0.0254825]</Joints>
-    <Pose>p[-0.143969,-0.53562,0.40203,-0.00122136,3.11628,0.0388919]</Pose>
-    <IsSystem>false</IsSystem>
-  </Positions>
-  <Positions>
-    <Name>ToolV</Name>
-    <Joints>[-1.59395,-1.70679,-1.63878,-2.93213,-1.60183,-0.0310371]</Joints>
-    <Pose>p[-0.142716,-0.538626,0.404978,1.56505,0.030591,-0.018357]</Pose>
+    <Name>test1</Name>
+    <Joints>[1.68311,-1.3032,1.74864,-2.01614,-1.57048,3.25414]</Joints>
+    <Pose>p[0.196376,-0.547529,0.128932,3.14155,8.11401e-06,-9.73749e-06]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
 </NewDataSet>
