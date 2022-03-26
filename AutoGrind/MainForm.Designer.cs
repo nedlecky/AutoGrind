@@ -29,9 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
@@ -91,8 +88,6 @@
             this.MountedToolBox = new System.Windows.Forms.ComboBox();
             this.RobotDashboardStatusLbl = new System.Windows.Forms.Label();
             this.OperatorModeBox = new System.Windows.Forms.ComboBox();
-            this.RobotModelLbl = new System.Windows.Forms.Label();
-            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
             this.RobotModeBtn = new System.Windows.Forms.Button();
             this.SafetyStatusBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
@@ -105,6 +100,11 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
+            this.RobotModelLbl = new System.Windows.Forms.Label();
+            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
+            this.DiameterLbl = new System.Windows.Forms.Label();
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
             this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
@@ -140,8 +140,12 @@
             this.MovePage = new System.Windows.Forms.TabPage();
             this.IoPage = new System.Windows.Forms.TabPage();
             this.LogPage = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.ClearUrDashboardRtbBtn = new System.Windows.Forms.Button();
+            this.UrDashboardLogRTB = new System.Windows.Forms.RichTextBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
-            this.DiameterLbl = new System.Windows.Forms.Label();
+            this.label9 = new System.Windows.Forms.Label();
+            this.RecipeFilenameOnly2Lbl = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).BeginInit();
@@ -163,6 +167,7 @@
             this.groupBox3.SuspendLayout();
             this.MovePage.SuspendLayout();
             this.LogPage.SuspendLayout();
+            this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
             // CurrentLineLbl
@@ -205,10 +210,10 @@
             this.ContinueBtn.Enabled = false;
             this.ContinueBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ContinueBtn.ForeColor = System.Drawing.Color.White;
-            this.ContinueBtn.Location = new System.Drawing.Point(543, 1343);
+            this.ContinueBtn.Location = new System.Drawing.Point(1041, 1344);
             this.ContinueBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ContinueBtn.Name = "ContinueBtn";
-            this.ContinueBtn.Size = new System.Drawing.Size(197, 47);
+            this.ContinueBtn.Size = new System.Drawing.Size(197, 85);
             this.ContinueBtn.TabIndex = 5;
             this.ContinueBtn.Text = "Continue";
             this.ContinueBtn.UseVisualStyleBackColor = false;
@@ -220,10 +225,10 @@
             this.StopBtn.Enabled = false;
             this.StopBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StopBtn.ForeColor = System.Drawing.Color.White;
-            this.StopBtn.Location = new System.Drawing.Point(744, 1343);
+            this.StopBtn.Location = new System.Drawing.Point(1242, 1344);
             this.StopBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StopBtn.Name = "StopBtn";
-            this.StopBtn.Size = new System.Drawing.Size(197, 47);
+            this.StopBtn.Size = new System.Drawing.Size(197, 85);
             this.StopBtn.TabIndex = 3;
             this.StopBtn.Text = "Stop";
             this.StopBtn.UseVisualStyleBackColor = false;
@@ -235,10 +240,10 @@
             this.PauseBtn.Enabled = false;
             this.PauseBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PauseBtn.ForeColor = System.Drawing.Color.White;
-            this.PauseBtn.Location = new System.Drawing.Point(327, 1343);
+            this.PauseBtn.Location = new System.Drawing.Point(825, 1345);
             this.PauseBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PauseBtn.Name = "PauseBtn";
-            this.PauseBtn.Size = new System.Drawing.Size(197, 47);
+            this.PauseBtn.Size = new System.Drawing.Size(197, 85);
             this.PauseBtn.TabIndex = 2;
             this.PauseBtn.Text = "Pause";
             this.PauseBtn.UseVisualStyleBackColor = false;
@@ -250,10 +255,10 @@
             this.StartBtn.Enabled = false;
             this.StartBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StartBtn.ForeColor = System.Drawing.Color.White;
-            this.StartBtn.Location = new System.Drawing.Point(124, 1343);
+            this.StartBtn.Location = new System.Drawing.Point(622, 1344);
             this.StartBtn.Margin = new System.Windows.Forms.Padding(2);
             this.StartBtn.Name = "StartBtn";
-            this.StartBtn.Size = new System.Drawing.Size(197, 47);
+            this.StartBtn.Size = new System.Drawing.Size(197, 86);
             this.StartBtn.TabIndex = 1;
             this.StartBtn.Text = "Start";
             this.StartBtn.UseVisualStyleBackColor = false;
@@ -262,7 +267,7 @@
             // RecipeFilenameLbl
             // 
             this.RecipeFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RecipeFilenameLbl.Location = new System.Drawing.Point(43, 50);
             this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
@@ -278,7 +283,7 @@
             this.SaveAsRecipeBtn.Location = new System.Drawing.Point(1516, 11);
             this.SaveAsRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveAsRecipeBtn.Name = "SaveAsRecipeBtn";
-            this.SaveAsRecipeBtn.Size = new System.Drawing.Size(188, 65);
+            this.SaveAsRecipeBtn.Size = new System.Drawing.Size(188, 95);
             this.SaveAsRecipeBtn.TabIndex = 75;
             this.SaveAsRecipeBtn.Text = "Save As...";
             this.SaveAsRecipeBtn.UseVisualStyleBackColor = true;
@@ -291,7 +296,7 @@
             this.NewRecipeBtn.Location = new System.Drawing.Point(1297, 11);
             this.NewRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.NewRecipeBtn.Name = "NewRecipeBtn";
-            this.NewRecipeBtn.Size = new System.Drawing.Size(99, 65);
+            this.NewRecipeBtn.Size = new System.Drawing.Size(99, 95);
             this.NewRecipeBtn.TabIndex = 74;
             this.NewRecipeBtn.Text = "New";
             this.NewRecipeBtn.UseVisualStyleBackColor = true;
@@ -304,7 +309,7 @@
             this.LoadRecipeBtn.Location = new System.Drawing.Point(1183, 11);
             this.LoadRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.LoadRecipeBtn.Name = "LoadRecipeBtn";
-            this.LoadRecipeBtn.Size = new System.Drawing.Size(102, 65);
+            this.LoadRecipeBtn.Size = new System.Drawing.Size(102, 95);
             this.LoadRecipeBtn.TabIndex = 73;
             this.LoadRecipeBtn.Text = "Load";
             this.LoadRecipeBtn.UseVisualStyleBackColor = true;
@@ -318,7 +323,7 @@
             this.SaveRecipeBtn.Location = new System.Drawing.Point(1405, 11);
             this.SaveRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveRecipeBtn.Name = "SaveRecipeBtn";
-            this.SaveRecipeBtn.Size = new System.Drawing.Size(107, 65);
+            this.SaveRecipeBtn.Size = new System.Drawing.Size(107, 95);
             this.SaveRecipeBtn.TabIndex = 72;
             this.SaveRecipeBtn.Text = "Save";
             this.SaveRecipeBtn.UseVisualStyleBackColor = true;
@@ -332,7 +337,7 @@
             // 
             this.timeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.timeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeLbl.Location = new System.Drawing.Point(1684, 1356);
+            this.timeLbl.Location = new System.Drawing.Point(1678, 1387);
             this.timeLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.timeLbl.Name = "timeLbl";
             this.timeLbl.Size = new System.Drawing.Size(453, 41);
@@ -362,7 +367,7 @@
             this.RobotCommandStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotCommandStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotCommandStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(268, 173);
+            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(271, 35);
             this.RobotCommandStatusLbl.Name = "RobotCommandStatusLbl";
             this.RobotCommandStatusLbl.Size = new System.Drawing.Size(187, 115);
             this.RobotCommandStatusLbl.TabIndex = 78;
@@ -375,7 +380,7 @@
             this.GrindReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.GrindReadyLbl.Location = new System.Drawing.Point(268, 429);
+            this.GrindReadyLbl.Location = new System.Drawing.Point(271, 291);
             this.GrindReadyLbl.Name = "GrindReadyLbl";
             this.GrindReadyLbl.Size = new System.Drawing.Size(187, 125);
             this.GrindReadyLbl.TabIndex = 88;
@@ -388,7 +393,7 @@
             this.RobotReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotReadyLbl.Location = new System.Drawing.Point(268, 290);
+            this.RobotReadyLbl.Location = new System.Drawing.Point(271, 152);
             this.RobotReadyLbl.Name = "RobotReadyLbl";
             this.RobotReadyLbl.Size = new System.Drawing.Size(187, 129);
             this.RobotReadyLbl.TabIndex = 89;
@@ -400,7 +405,7 @@
             this.GrindContactEnabledBtn.BackColor = System.Drawing.Color.Gray;
             this.GrindContactEnabledBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindContactEnabledBtn.ForeColor = System.Drawing.Color.White;
-            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(703, 163);
+            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(548, 64);
             this.GrindContactEnabledBtn.Name = "GrindContactEnabledBtn";
             this.GrindContactEnabledBtn.Size = new System.Drawing.Size(285, 195);
             this.GrindContactEnabledBtn.TabIndex = 93;
@@ -485,7 +490,7 @@
             // ClearAllPositionsBtn
             // 
             this.ClearAllPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllPositionsBtn.Location = new System.Drawing.Point(668, 1048);
+            this.ClearAllPositionsBtn.Location = new System.Drawing.Point(660, 1007);
             this.ClearAllPositionsBtn.Name = "ClearAllPositionsBtn";
             this.ClearAllPositionsBtn.Size = new System.Drawing.Size(258, 100);
             this.ClearAllPositionsBtn.TabIndex = 95;
@@ -496,7 +501,7 @@
             // LoadPositionsBtn
             // 
             this.LoadPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadPositionsBtn.Location = new System.Drawing.Point(6, 1048);
+            this.LoadPositionsBtn.Location = new System.Drawing.Point(10, 1007);
             this.LoadPositionsBtn.Name = "LoadPositionsBtn";
             this.LoadPositionsBtn.Size = new System.Drawing.Size(208, 100);
             this.LoadPositionsBtn.TabIndex = 94;
@@ -507,7 +512,7 @@
             // SavePositionsBtn
             // 
             this.SavePositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SavePositionsBtn.Location = new System.Drawing.Point(262, 1048);
+            this.SavePositionsBtn.Location = new System.Drawing.Point(254, 1007);
             this.SavePositionsBtn.Name = "SavePositionsBtn";
             this.SavePositionsBtn.Size = new System.Drawing.Size(155, 100);
             this.SavePositionsBtn.TabIndex = 93;
@@ -518,7 +523,7 @@
             // ClearPositionsBtn
             // 
             this.ClearPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearPositionsBtn.Location = new System.Drawing.Point(465, 1048);
+            this.ClearPositionsBtn.Location = new System.Drawing.Point(457, 1007);
             this.ClearPositionsBtn.Name = "ClearPositionsBtn";
             this.ClearPositionsBtn.Size = new System.Drawing.Size(155, 100);
             this.ClearPositionsBtn.TabIndex = 92;
@@ -529,17 +534,11 @@
             // PositionsGrd
             // 
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.PositionsGrd.DefaultCellStyle = dataGridViewCellStyle4;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 217);
             this.PositionsGrd.Name = "PositionsGrd";
-            this.PositionsGrd.Size = new System.Drawing.Size(1281, 796);
+            this.PositionsGrd.RowTemplate.Height = 34;
+            this.PositionsGrd.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.Size = new System.Drawing.Size(1281, 772);
             this.PositionsGrd.TabIndex = 85;
             // 
             // variablesPage
@@ -604,16 +603,10 @@
             // VariablesGrd
             // 
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.VariablesGrd.DefaultCellStyle = dataGridViewCellStyle5;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
+            this.VariablesGrd.RowTemplate.Height = 34;
+            this.VariablesGrd.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
             this.VariablesGrd.Size = new System.Drawing.Size(1296, 885);
             this.VariablesGrd.TabIndex = 84;
             // 
@@ -666,10 +659,10 @@
             // 
             this.groupBox10.Controls.Add(this.ClearExecLogRtbBtn);
             this.groupBox10.Controls.Add(this.ExecLogRTB);
-            this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox10.Location = new System.Drawing.Point(3, 271);
+            this.groupBox10.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox10.Location = new System.Drawing.Point(8, 262);
             this.groupBox10.Name = "groupBox10";
-            this.groupBox10.Size = new System.Drawing.Size(1517, 284);
+            this.groupBox10.Size = new System.Drawing.Size(1517, 267);
             this.groupBox10.TabIndex = 90;
             this.groupBox10.TabStop = false;
             this.groupBox10.Text = "Recipe Execution Messages";
@@ -677,21 +670,21 @@
             // ClearExecLogRtbBtn
             // 
             this.ClearExecLogRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearExecLogRtbBtn.Location = new System.Drawing.Point(1404, 15);
+            this.ClearExecLogRtbBtn.Location = new System.Drawing.Point(1465, 28);
             this.ClearExecLogRtbBtn.Name = "ClearExecLogRtbBtn";
-            this.ClearExecLogRtbBtn.Size = new System.Drawing.Size(107, 60);
+            this.ClearExecLogRtbBtn.Size = new System.Drawing.Size(46, 42);
             this.ClearExecLogRtbBtn.TabIndex = 80;
-            this.ClearExecLogRtbBtn.Text = "Clear";
+            this.ClearExecLogRtbBtn.Text = "X";
             this.ClearExecLogRtbBtn.UseVisualStyleBackColor = true;
             this.ClearExecLogRtbBtn.Click += new System.EventHandler(this.ClearExecLogRtbBtn_Click);
             // 
             // ExecLogRTB
             // 
             this.ExecLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExecLogRTB.Location = new System.Drawing.Point(5, 15);
+            this.ExecLogRTB.Location = new System.Drawing.Point(5, 27);
             this.ExecLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ExecLogRTB.Name = "ExecLogRTB";
-            this.ExecLogRTB.Size = new System.Drawing.Size(1506, 264);
+            this.ExecLogRTB.Size = new System.Drawing.Size(1506, 234);
             this.ExecLogRTB.TabIndex = 1;
             this.ExecLogRTB.Text = "";
             // 
@@ -699,32 +692,32 @@
             // 
             this.groupBox5.Controls.Add(this.ClearUrLogRtbBtn);
             this.groupBox5.Controls.Add(this.UrLogRTB);
-            this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox5.Location = new System.Drawing.Point(3, 570);
+            this.groupBox5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox5.Location = new System.Drawing.Point(8, 528);
             this.groupBox5.Name = "groupBox5";
             this.groupBox5.Size = new System.Drawing.Size(1517, 252);
             this.groupBox5.TabIndex = 89;
             this.groupBox5.TabStop = false;
-            this.groupBox5.Text = "Robot Messages";
+            this.groupBox5.Text = "Robot Command Messages";
             // 
             // ClearUrLogRtbBtn
             // 
             this.ClearUrLogRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearUrLogRtbBtn.Location = new System.Drawing.Point(1404, 15);
+            this.ClearUrLogRtbBtn.Location = new System.Drawing.Point(1466, 28);
             this.ClearUrLogRtbBtn.Name = "ClearUrLogRtbBtn";
-            this.ClearUrLogRtbBtn.Size = new System.Drawing.Size(107, 60);
+            this.ClearUrLogRtbBtn.Size = new System.Drawing.Size(46, 42);
             this.ClearUrLogRtbBtn.TabIndex = 80;
-            this.ClearUrLogRtbBtn.Text = "Clear";
+            this.ClearUrLogRtbBtn.Text = "X";
             this.ClearUrLogRtbBtn.UseVisualStyleBackColor = true;
             this.ClearUrLogRtbBtn.Click += new System.EventHandler(this.ClearUrLogRtbBtn_Click);
             // 
             // UrLogRTB
             // 
             this.UrLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UrLogRTB.Location = new System.Drawing.Point(5, 15);
+            this.UrLogRTB.Location = new System.Drawing.Point(5, 27);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrLogRTB.Name = "UrLogRTB";
-            this.UrLogRTB.Size = new System.Drawing.Size(1506, 228);
+            this.UrLogRTB.Size = new System.Drawing.Size(1506, 216);
             this.UrLogRTB.TabIndex = 1;
             this.UrLogRTB.Text = "";
             // 
@@ -732,10 +725,10 @@
             // 
             this.groupBox6.Controls.Add(this.ClearErrorLogRtbBtn);
             this.groupBox6.Controls.Add(this.ErrorLogRTB);
-            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox6.Location = new System.Drawing.Point(8, 828);
+            this.groupBox6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox6.Location = new System.Drawing.Point(8, 1023);
             this.groupBox6.Name = "groupBox6";
-            this.groupBox6.Size = new System.Drawing.Size(1512, 196);
+            this.groupBox6.Size = new System.Drawing.Size(1517, 196);
             this.groupBox6.TabIndex = 84;
             this.groupBox6.TabStop = false;
             this.groupBox6.Text = "Error Messages";
@@ -743,21 +736,21 @@
             // ClearErrorLogRtbBtn
             // 
             this.ClearErrorLogRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearErrorLogRtbBtn.Location = new System.Drawing.Point(1400, 21);
+            this.ClearErrorLogRtbBtn.Location = new System.Drawing.Point(1464, 28);
             this.ClearErrorLogRtbBtn.Name = "ClearErrorLogRtbBtn";
-            this.ClearErrorLogRtbBtn.Size = new System.Drawing.Size(107, 60);
+            this.ClearErrorLogRtbBtn.Size = new System.Drawing.Size(46, 42);
             this.ClearErrorLogRtbBtn.TabIndex = 81;
-            this.ClearErrorLogRtbBtn.Text = "Clear";
+            this.ClearErrorLogRtbBtn.Text = "X";
             this.ClearErrorLogRtbBtn.UseVisualStyleBackColor = true;
             this.ClearErrorLogRtbBtn.Click += new System.EventHandler(this.ClearErrorLogRtbBtn_Click);
             // 
             // ErrorLogRTB
             // 
             this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ErrorLogRTB.Location = new System.Drawing.Point(5, 21);
+            this.ErrorLogRTB.Location = new System.Drawing.Point(5, 27);
             this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ErrorLogRTB.Name = "ErrorLogRTB";
-            this.ErrorLogRTB.Size = new System.Drawing.Size(1505, 170);
+            this.ErrorLogRTB.Size = new System.Drawing.Size(1505, 164);
             this.ErrorLogRTB.TabIndex = 0;
             this.ErrorLogRTB.Text = "";
             // 
@@ -765,7 +758,7 @@
             // 
             this.groupBox4.Controls.Add(this.ClearAllLogRtbBtn);
             this.groupBox4.Controls.Add(this.AllLogRTB);
-            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 9.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox4.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.groupBox4.Location = new System.Drawing.Point(8, 11);
             this.groupBox4.Name = "groupBox4";
             this.groupBox4.Size = new System.Drawing.Size(1512, 254);
@@ -776,21 +769,21 @@
             // ClearAllLogRtbBtn
             // 
             this.ClearAllLogRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllLogRtbBtn.Location = new System.Drawing.Point(1399, 21);
+            this.ClearAllLogRtbBtn.Location = new System.Drawing.Point(1461, 28);
             this.ClearAllLogRtbBtn.Name = "ClearAllLogRtbBtn";
-            this.ClearAllLogRtbBtn.Size = new System.Drawing.Size(107, 60);
+            this.ClearAllLogRtbBtn.Size = new System.Drawing.Size(46, 42);
             this.ClearAllLogRtbBtn.TabIndex = 79;
-            this.ClearAllLogRtbBtn.Text = "Clear";
+            this.ClearAllLogRtbBtn.Text = "X";
             this.ClearAllLogRtbBtn.UseVisualStyleBackColor = true;
             this.ClearAllLogRtbBtn.Click += new System.EventHandler(this.ClearAllLogRtbBtn_Click);
             // 
             // AllLogRTB
             // 
             this.AllLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AllLogRTB.Location = new System.Drawing.Point(6, 20);
+            this.AllLogRTB.Location = new System.Drawing.Point(6, 27);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.AllLogRTB.Name = "AllLogRTB";
-            this.AllLogRTB.Size = new System.Drawing.Size(1501, 226);
+            this.AllLogRTB.Size = new System.Drawing.Size(1501, 219);
             this.AllLogRTB.TabIndex = 4;
             this.AllLogRTB.Text = "";
             // 
@@ -802,7 +795,7 @@
             this.ExitBtn.Location = new System.Drawing.Point(1971, 12);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(160, 65);
+            this.ExitBtn.Size = new System.Drawing.Size(160, 94);
             this.ExitBtn.TabIndex = 96;
             this.ExitBtn.Text = "Exit";
             this.ExitBtn.UseVisualStyleBackColor = false;
@@ -812,11 +805,11 @@
             // 
             this.label6.BackColor = System.Drawing.Color.Green;
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(1185, 229);
+            this.label6.Location = new System.Drawing.Point(684, 781);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(224, 44);
+            this.label6.Size = new System.Drawing.Size(305, 123);
             this.label6.TabIndex = 97;
             this.label6.Text = "Mounted Tool";
             this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -824,11 +817,11 @@
             // MountedToolBox
             // 
             this.MountedToolBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.MountedToolBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MountedToolBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MountedToolBox.FormattingEnabled = true;
-            this.MountedToolBox.Location = new System.Drawing.Point(1185, 276);
+            this.MountedToolBox.Location = new System.Drawing.Point(684, 907);
             this.MountedToolBox.Name = "MountedToolBox";
-            this.MountedToolBox.Size = new System.Drawing.Size(224, 45);
+            this.MountedToolBox.Size = new System.Drawing.Size(305, 63);
             this.MountedToolBox.TabIndex = 99;
             this.MountedToolBox.SelectedIndexChanged += new System.EventHandler(this.MountedToolBox_SelectedIndexChanged);
             // 
@@ -838,7 +831,7 @@
             this.RobotDashboardStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotDashboardStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotDashboardStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotDashboardStatusLbl.Location = new System.Drawing.Point(17, 173);
+            this.RobotDashboardStatusLbl.Location = new System.Drawing.Point(20, 35);
             this.RobotDashboardStatusLbl.Name = "RobotDashboardStatusLbl";
             this.RobotDashboardStatusLbl.Size = new System.Drawing.Size(234, 115);
             this.RobotDashboardStatusLbl.TabIndex = 102;
@@ -854,40 +847,18 @@
             "Operator",
             "Editor",
             "Engineering"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(1739, 15);
+            this.OperatorModeBox.Location = new System.Drawing.Point(1755, 39);
             this.OperatorModeBox.Name = "OperatorModeBox";
             this.OperatorModeBox.Size = new System.Drawing.Size(167, 39);
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
-            // 
-            // RobotModelLbl
-            // 
-            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotModelLbl.Location = new System.Drawing.Point(680, 572);
-            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotModelLbl.Name = "RobotModelLbl";
-            this.RobotModelLbl.Size = new System.Drawing.Size(376, 61);
-            this.RobotModelLbl.TabIndex = 104;
-            this.RobotModelLbl.Text = "Robot Model";
-            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // RobotSerialNumberLbl
-            // 
-            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(680, 673);
-            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
-            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(376, 68);
-            this.RobotSerialNumberLbl.TabIndex = 105;
-            this.RobotSerialNumberLbl.Text = "Serial Number";
-            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RobotModeBtn
             // 
             this.RobotModeBtn.BackColor = System.Drawing.Color.Gray;
             this.RobotModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotModeBtn.ForeColor = System.Drawing.Color.White;
-            this.RobotModeBtn.Location = new System.Drawing.Point(17, 290);
+            this.RobotModeBtn.Location = new System.Drawing.Point(20, 152);
             this.RobotModeBtn.Name = "RobotModeBtn";
             this.RobotModeBtn.Size = new System.Drawing.Size(234, 129);
             this.RobotModeBtn.TabIndex = 106;
@@ -900,7 +871,7 @@
             this.SafetyStatusBtn.BackColor = System.Drawing.Color.Gray;
             this.SafetyStatusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SafetyStatusBtn.ForeColor = System.Drawing.Color.White;
-            this.SafetyStatusBtn.Location = new System.Drawing.Point(17, 426);
+            this.SafetyStatusBtn.Location = new System.Drawing.Point(20, 288);
             this.SafetyStatusBtn.Name = "SafetyStatusBtn";
             this.SafetyStatusBtn.Size = new System.Drawing.Size(234, 128);
             this.SafetyStatusBtn.TabIndex = 107;
@@ -913,7 +884,7 @@
             this.ProgramStateBtn.BackColor = System.Drawing.Color.Gray;
             this.ProgramStateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProgramStateBtn.ForeColor = System.Drawing.Color.White;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(17, 561);
+            this.ProgramStateBtn.Location = new System.Drawing.Point(20, 423);
             this.ProgramStateBtn.Name = "ProgramStateBtn";
             this.ProgramStateBtn.Size = new System.Drawing.Size(232, 129);
             this.ProgramStateBtn.TabIndex = 108;
@@ -980,11 +951,11 @@
             // 
             this.label5.BackColor = System.Drawing.Color.Green;
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(1185, 380);
+            this.label5.Location = new System.Drawing.Point(1067, 783);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(224, 57);
+            this.label5.Size = new System.Drawing.Size(305, 67);
             this.label5.TabIndex = 115;
             this.label5.Text = "Geometry";
             this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -992,12 +963,12 @@
             // DiameterDimLbl
             // 
             this.DiameterDimLbl.AutoSize = true;
-            this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterDimLbl.Location = new System.Drawing.Point(1412, 502);
+            this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiameterDimLbl.Location = new System.Drawing.Point(1310, 918);
             this.DiameterDimLbl.Name = "DiameterDimLbl";
-            this.DiameterDimLbl.Size = new System.Drawing.Size(71, 37);
+            this.DiameterDimLbl.Size = new System.Drawing.Size(237, 55);
             this.DiameterDimLbl.TabIndex = 114;
-            this.DiameterDimLbl.Text = "mm";
+            this.DiameterDimLbl.Text = "mm DIAM";
             // 
             // MainTab
             // 
@@ -1009,6 +980,7 @@
             this.MainTab.Controls.Add(this.IoPage);
             this.MainTab.Controls.Add(this.LogPage);
             this.MainTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.MainTab.ItemSize = new System.Drawing.Size(96, 96);
             this.MainTab.Location = new System.Drawing.Point(8, 11);
             this.MainTab.Name = "MainTab";
             this.MainTab.SelectedIndex = 0;
@@ -1018,6 +990,12 @@
             // 
             // RunPage
             // 
+            this.RunPage.Controls.Add(this.RecipeFilenameOnly2Lbl);
+            this.RunPage.Controls.Add(this.label9);
+            this.RunPage.Controls.Add(this.label8);
+            this.RunPage.Controls.Add(this.label7);
+            this.RunPage.Controls.Add(this.RobotModelLbl);
+            this.RunPage.Controls.Add(this.RobotSerialNumberLbl);
             this.RunPage.Controls.Add(this.DiameterLbl);
             this.RunPage.Controls.Add(this.PartGeometryBox);
             this.RunPage.Controls.Add(this.groupBox2);
@@ -1031,30 +1009,81 @@
             this.RunPage.Controls.Add(this.label5);
             this.RunPage.Controls.Add(this.ProgramStateBtn);
             this.RunPage.Controls.Add(this.GrindContactEnabledBtn);
-            this.RunPage.Controls.Add(this.RobotModelLbl);
-            this.RunPage.Controls.Add(this.RobotSerialNumberLbl);
             this.RunPage.Controls.Add(this.label6);
             this.RunPage.Controls.Add(this.MountedToolBox);
-            this.RunPage.Location = new System.Drawing.Point(4, 49);
+            this.RunPage.Location = new System.Drawing.Point(4, 100);
             this.RunPage.Name = "RunPage";
             this.RunPage.Padding = new System.Windows.Forms.Padding(3);
-            this.RunPage.Size = new System.Drawing.Size(2121, 1273);
+            this.RunPage.Size = new System.Drawing.Size(2121, 1222);
             this.RunPage.TabIndex = 0;
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
             // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(1611, 12);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(81, 61);
+            this.label8.TabIndex = 121;
+            this.label8.Text = "S/N:";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(1223, 12);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(210, 61);
+            this.label7.TabIndex = 120;
+            this.label7.Text = "Robot Model:";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RobotModelLbl
+            // 
+            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotModelLbl.Location = new System.Drawing.Point(1437, 12);
+            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotModelLbl.Name = "RobotModelLbl";
+            this.RobotModelLbl.Size = new System.Drawing.Size(157, 61);
+            this.RobotModelLbl.TabIndex = 118;
+            this.RobotModelLbl.Text = "Model";
+            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RobotSerialNumberLbl
+            // 
+            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(1695, 12);
+            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
+            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(279, 61);
+            this.RobotSerialNumberLbl.TabIndex = 119;
+            this.RobotSerialNumberLbl.Text = "Serial Number";
+            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // DiameterLbl
+            // 
+            this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DiameterLbl.Location = new System.Drawing.Point(1067, 918);
+            this.DiameterLbl.Name = "DiameterLbl";
+            this.DiameterLbl.Size = new System.Drawing.Size(237, 52);
+            this.DiameterLbl.TabIndex = 116;
+            this.DiameterLbl.Text = "25.0";
+            this.DiameterLbl.Click += new System.EventHandler(this.DiameterLbl_Click);
+            // 
             // PartGeometryBox
             // 
             this.PartGeometryBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.PartGeometryBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.PartGeometryBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PartGeometryBox.FormattingEnabled = true;
             this.PartGeometryBox.Items.AddRange(new object[] {
             "FLAT",
             "CYLINDER",
             "SPHERE"});
-            this.PartGeometryBox.Location = new System.Drawing.Point(1185, 440);
+            this.PartGeometryBox.Location = new System.Drawing.Point(1067, 853);
             this.PartGeometryBox.Name = "PartGeometryBox";
-            this.PartGeometryBox.Size = new System.Drawing.Size(224, 45);
+            this.PartGeometryBox.Size = new System.Drawing.Size(305, 63);
             this.PartGeometryBox.TabIndex = 110;
             this.PartGeometryBox.SelectedIndexChanged += new System.EventHandler(this.PartGeometryBox_SelectedIndexChanged);
             // 
@@ -1066,16 +1095,16 @@
             this.groupBox2.Controls.Add(this.RobotDisconnectBtn);
             this.groupBox2.Controls.Add(this.RobotSendBtn);
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
-            this.groupBox2.Location = new System.Drawing.Point(64, 802);
+            this.groupBox2.Location = new System.Drawing.Point(1437, 114);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(1030, 333);
+            this.groupBox2.Size = new System.Drawing.Size(609, 559);
             this.groupBox2.TabIndex = 109;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
             // 
             // DashboardMessageTxt
             // 
-            this.DashboardMessageTxt.Location = new System.Drawing.Point(607, 200);
+            this.DashboardMessageTxt.Location = new System.Drawing.Point(229, 331);
             this.DashboardMessageTxt.Name = "DashboardMessageTxt";
             this.DashboardMessageTxt.Size = new System.Drawing.Size(334, 44);
             this.DashboardMessageTxt.TabIndex = 88;
@@ -1085,7 +1114,7 @@
             // 
             this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
             this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.DashboardSendBtn.Location = new System.Drawing.Point(397, 163);
+            this.DashboardSendBtn.Location = new System.Drawing.Point(19, 294);
             this.DashboardSendBtn.Name = "DashboardSendBtn";
             this.DashboardSendBtn.Size = new System.Drawing.Size(190, 117);
             this.DashboardSendBtn.TabIndex = 87;
@@ -1116,7 +1145,7 @@
             // RobotSendBtn
             // 
             this.RobotSendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.RobotSendBtn.Location = new System.Drawing.Point(397, 43);
+            this.RobotSendBtn.Location = new System.Drawing.Point(19, 174);
             this.RobotSendBtn.Name = "RobotSendBtn";
             this.RobotSendBtn.Size = new System.Drawing.Size(190, 103);
             this.RobotSendBtn.TabIndex = 76;
@@ -1126,7 +1155,7 @@
             // 
             // RobotMessageTxt
             // 
-            this.RobotMessageTxt.Location = new System.Drawing.Point(607, 73);
+            this.RobotMessageTxt.Location = new System.Drawing.Point(229, 204);
             this.RobotMessageTxt.Name = "RobotMessageTxt";
             this.RobotMessageTxt.Size = new System.Drawing.Size(343, 44);
             this.RobotMessageTxt.TabIndex = 75;
@@ -1138,10 +1167,10 @@
             this.ProgramPage.Controls.Add(this.CurrentLineLbl);
             this.ProgramPage.Controls.Add(this.RecipeFilenameLbl);
             this.ProgramPage.Controls.Add(this.MonitorTab);
-            this.ProgramPage.Location = new System.Drawing.Point(4, 49);
+            this.ProgramPage.Location = new System.Drawing.Point(4, 100);
             this.ProgramPage.Name = "ProgramPage";
             this.ProgramPage.Padding = new System.Windows.Forms.Padding(3);
-            this.ProgramPage.Size = new System.Drawing.Size(2121, 1273);
+            this.ProgramPage.Size = new System.Drawing.Size(2121, 1222);
             this.ProgramPage.TabIndex = 1;
             this.ProgramPage.Text = "Program";
             this.ProgramPage.UseVisualStyleBackColor = true;
@@ -1153,9 +1182,9 @@
             this.InstallationPage.Controls.Add(this.LoadConfigBtn);
             this.InstallationPage.Controls.Add(this.SaveConfigBtn);
             this.InstallationPage.Controls.Add(this.groupBox1);
-            this.InstallationPage.Location = new System.Drawing.Point(4, 49);
+            this.InstallationPage.Location = new System.Drawing.Point(4, 100);
             this.InstallationPage.Name = "InstallationPage";
-            this.InstallationPage.Size = new System.Drawing.Size(2121, 1273);
+            this.InstallationPage.Size = new System.Drawing.Size(2121, 1222);
             this.InstallationPage.TabIndex = 2;
             this.InstallationPage.Text = "Installation";
             this.InstallationPage.UseVisualStyleBackColor = true;
@@ -1188,16 +1217,9 @@
             // ToolsGrd
             // 
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleLeft;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle6;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
+            this.ToolsGrd.RowTemplate.Height = 34;
             this.ToolsGrd.Size = new System.Drawing.Size(2100, 308);
             this.ToolsGrd.TabIndex = 85;
             // 
@@ -1412,34 +1434,68 @@
             this.MovePage.Controls.Add(this.SetJointAccelBtn);
             this.MovePage.Controls.Add(this.SetJointSpeedBtn);
             this.MovePage.Controls.Add(this.SetLinearAccelBtn);
-            this.MovePage.Location = new System.Drawing.Point(4, 49);
+            this.MovePage.Location = new System.Drawing.Point(4, 100);
             this.MovePage.Name = "MovePage";
-            this.MovePage.Size = new System.Drawing.Size(2121, 1273);
+            this.MovePage.Size = new System.Drawing.Size(2121, 1222);
             this.MovePage.TabIndex = 3;
             this.MovePage.Text = "Move";
             this.MovePage.UseVisualStyleBackColor = true;
             // 
             // IoPage
             // 
-            this.IoPage.Location = new System.Drawing.Point(4, 49);
+            this.IoPage.Location = new System.Drawing.Point(4, 100);
             this.IoPage.Name = "IoPage";
-            this.IoPage.Size = new System.Drawing.Size(2121, 1273);
+            this.IoPage.Size = new System.Drawing.Size(2121, 1222);
             this.IoPage.TabIndex = 4;
             this.IoPage.Text = "I/O";
             this.IoPage.UseVisualStyleBackColor = true;
             // 
             // LogPage
             // 
+            this.LogPage.Controls.Add(this.groupBox7);
             this.LogPage.Controls.Add(this.groupBox6);
             this.LogPage.Controls.Add(this.groupBox5);
             this.LogPage.Controls.Add(this.groupBox10);
             this.LogPage.Controls.Add(this.groupBox4);
-            this.LogPage.Location = new System.Drawing.Point(4, 49);
+            this.LogPage.Location = new System.Drawing.Point(4, 100);
             this.LogPage.Name = "LogPage";
-            this.LogPage.Size = new System.Drawing.Size(2121, 1273);
+            this.LogPage.Size = new System.Drawing.Size(2121, 1222);
             this.LogPage.TabIndex = 5;
             this.LogPage.Text = "Log";
             this.LogPage.UseVisualStyleBackColor = true;
+            // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.ClearUrDashboardRtbBtn);
+            this.groupBox7.Controls.Add(this.UrDashboardLogRTB);
+            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox7.Location = new System.Drawing.Point(8, 776);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(1517, 252);
+            this.groupBox7.TabIndex = 90;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Robot Dashboard Messages";
+            // 
+            // ClearUrDashboardRtbBtn
+            // 
+            this.ClearUrDashboardRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearUrDashboardRtbBtn.Location = new System.Drawing.Point(1466, 28);
+            this.ClearUrDashboardRtbBtn.Name = "ClearUrDashboardRtbBtn";
+            this.ClearUrDashboardRtbBtn.Size = new System.Drawing.Size(46, 42);
+            this.ClearUrDashboardRtbBtn.TabIndex = 80;
+            this.ClearUrDashboardRtbBtn.Text = "X";
+            this.ClearUrDashboardRtbBtn.UseVisualStyleBackColor = true;
+            this.ClearUrDashboardRtbBtn.Click += new System.EventHandler(this.ClearUrDashboardLogRtbBtn_Click);
+            // 
+            // UrDashboardLogRTB
+            // 
+            this.UrDashboardLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UrDashboardLogRTB.Location = new System.Drawing.Point(5, 27);
+            this.UrDashboardLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.UrDashboardLogRTB.Name = "UrDashboardLogRTB";
+            this.UrDashboardLogRTB.Size = new System.Drawing.Size(1506, 216);
+            this.UrDashboardLogRTB.TabIndex = 1;
+            this.UrDashboardLogRTB.Text = "";
             // 
             // RecipeFilenameOnlyLbl
             // 
@@ -1450,24 +1506,37 @@
             this.RecipeFilenameOnlyLbl.Name = "RecipeFilenameOnlyLbl";
             this.RecipeFilenameOnlyLbl.Size = new System.Drawing.Size(459, 42);
             this.RecipeFilenameOnlyLbl.TabIndex = 95;
-            this.RecipeFilenameOnlyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.RecipeFilenameOnlyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // DiameterLbl
+            // label9
             // 
-            this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterLbl.Location = new System.Drawing.Point(1185, 502);
-            this.DiameterLbl.Name = "DiameterLbl";
-            this.DiameterLbl.Size = new System.Drawing.Size(224, 37);
-            this.DiameterLbl.TabIndex = 116;
-            this.DiameterLbl.Text = "25.0";
-            this.DiameterLbl.Click += new System.EventHandler(this.DiameterLbl_Click);
+            this.label9.BackColor = System.Drawing.Color.Green;
+            this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label9.ForeColor = System.Drawing.Color.White;
+            this.label9.Location = new System.Drawing.Point(767, 312);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(605, 94);
+            this.label9.TabIndex = 122;
+            this.label9.Text = "Currently Loaded";
+            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // RecipeFilenameOnly2Lbl
+            // 
+            this.RecipeFilenameOnly2Lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RecipeFilenameOnly2Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeFilenameOnly2Lbl.Location = new System.Drawing.Point(767, 406);
+            this.RecipeFilenameOnly2Lbl.Name = "RecipeFilenameOnly2Lbl";
+            this.RecipeFilenameOnly2Lbl.Size = new System.Drawing.Size(605, 307);
+            this.RecipeFilenameOnly2Lbl.TabIndex = 123;
+            this.RecipeFilenameOnly2Lbl.Text = "Recipe";
+            this.RecipeFilenameOnly2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2144, 1401);
+            this.ClientSize = new System.Drawing.Size(2160, 1440);
             this.ControlBox = false;
             this.Controls.Add(this.RecipeFilenameOnlyLbl);
             this.Controls.Add(this.OperatorModeBox);
@@ -1482,7 +1551,7 @@
             this.Controls.Add(this.timeLbl);
             this.Controls.Add(this.PauseBtn);
             this.Controls.Add(this.StartBtn);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
@@ -1514,6 +1583,7 @@
             this.groupBox3.ResumeLayout(false);
             this.MovePage.ResumeLayout(false);
             this.LogPage.ResumeLayout(false);
+            this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -1578,8 +1648,6 @@
         private System.Windows.Forms.TabPage manualPage;
         private System.Windows.Forms.Button LoadManualBtn;
         private System.Windows.Forms.Button SaveManualBtn;
-        private System.Windows.Forms.Label RobotModelLbl;
-        private System.Windows.Forms.Label RobotSerialNumberLbl;
         private System.Windows.Forms.Button RobotModeBtn;
         private System.Windows.Forms.Button SafetyStatusBtn;
         private System.Windows.Forms.Button ProgramStateBtn;
@@ -1629,6 +1697,15 @@
         private System.Windows.Forms.Label RecipeFilenameOnlyLbl;
         private System.Windows.Forms.ComboBox PartGeometryBox;
         private System.Windows.Forms.Label DiameterLbl;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.Label RobotModelLbl;
+        private System.Windows.Forms.Label RobotSerialNumberLbl;
+        private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Button ClearUrDashboardRtbBtn;
+        private System.Windows.Forms.RichTextBox UrDashboardLogRTB;
+        private System.Windows.Forms.Label RecipeFilenameOnly2Lbl;
+        private System.Windows.Forms.Label label9;
     }
 }
 

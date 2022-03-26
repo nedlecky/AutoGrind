@@ -180,31 +180,42 @@ namespace AutoGrind
                 }
                 lineNo++;
             }
-            return input;
+            return input.Trim();
         }
 
         public string InquiryResponse(string inquiry, int timeoutMs = 50)
         {
             // Purge any remaining responses
-            Receive();
+            string response = Receive();
+            if (response != null)
+            {
+                log.Error("{0} InquiryResponse already had a response waiting: {1}", logPrefix, response);
+            }
 
             Stopwatch timer = new Stopwatch();
             timer.Start();
             Send(inquiry);
 
-            string response;
+            // Wait for awhile for the response!
             while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs) ;
 
-            timer.Stop();
-            if (timer.ElapsedMilliseconds >= timeoutMs)
+            if (response == null)
             {
-                log.Error("InquiryResponse({0}) took too long. Waited{1} mS", inquiry, timeoutMs);
+                log.Error("{0} InquiryResponse({1}) took too long. Waited {2} mS", logPrefix, inquiry, timeoutMs);
+
+                // Let's just wait a bit more?
+                while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs * 2) ;
+                if (response != null)
+                {
+                    log.Error("{0} InquiryResponse({1}) RETRY = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+                    return response;
+                }
                 return null;
             }
+            timer.Stop();
 
-            log.Debug("InquiryResponse({0}) = {1} [{2} mS]", inquiry, response, timer.ElapsedMilliseconds);
-            return response?.Trim();
-
+            log.Debug("{0} InquiryResponse({1}) = {2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+            return response;
         }
     }
 }

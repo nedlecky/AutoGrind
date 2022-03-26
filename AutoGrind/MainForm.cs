@@ -101,7 +101,6 @@ namespace AutoGrind
 
             SetRecipeState(RecipeState.NEW);
             SetState(RunState.IDLE);
-            GrindBtn_Click(null, null);
         }
 
         private void StartupTmr_Tick(object sender, EventArgs e)
@@ -254,9 +253,9 @@ namespace AutoGrind
                     SafetyStatusBtn.BackColor = color;
 
                     // Poll and interpret programstate
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate",100);
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate", 100);
                     color = Color.Red;
-                    if(robotmodeResponse!=null)
+                    if (robotmodeResponse != null)
                         if (robotmodeResponse.StartsWith("PLAYING"))
                             color = Color.Green;
                     ProgramStateBtn.Text = robotmodeResponse;
@@ -325,6 +324,7 @@ namespace AutoGrind
                     AllLogRTB.Refresh();
                     ExecLogRTB.Refresh();
                     UrLogRTB.Refresh();
+                    UrDashboardLogRTB.Refresh();
                     ErrorLogRTB.Refresh();
                 }
             }
@@ -528,37 +528,6 @@ namespace AutoGrind
             }
         }
 
-
-        private void GrindBtn_Click(object sender, EventArgs e)
-        {
-            //SetState(RunState.IDLE);
-            //OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
-            //GrindBtn.BackColor = Color.Green;
-            //EditBtn.BackColor = Color.LightGreen;
-            //SetupBtn.BackColor = Color.LightGreen;
-
-            // Get latest from edit control
-            RecipeRTB.Text = RecipeRTB.Text;
-        }
-
-        private void EditBtn_Click(object sender, EventArgs e)
-        {
-            //SetState(RunState.IDLE);
-            //OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
-            //GrindBtn.BackColor = Color.LightGreen;
-            //EditBtn.BackColor = Color.Green;
-            //SetupBtn.BackColor = Color.LightGreen;
-        }
-
-        private void SetupBtn_Click(object sender, EventArgs e)
-        {
-            //SetState(RunState.IDLE);
-            //OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
-            //GrindBtn.BackColor = Color.LightGreen;
-            //EditBtn.BackColor = Color.LightGreen;
-            //SetupBtn.BackColor = Color.Green;
-        }
-
         private void RobotModeBtn_Click(object sender, EventArgs e)
         {
             switch (RobotModeBtn.Text)
@@ -623,31 +592,6 @@ namespace AutoGrind
             Close();
         }
 
-        private void OperationTab_Selecting(object sender, TabControlCancelEventArgs e)
-        // This fires the main Grind, Edit, Setup buttons if the user just changes tabs directly
-        {
-            log.Info("Selecting {0}", e.TabPage.Text);
-
-            switch (e.TabPage.Text)
-            {
-                case "Grind":
-                    GrindBtn_Click(null, null);
-                    break;
-                case "Edit":
-                    if (operatorMode == OperatorMode.OPERATOR)
-                        GrindBtn_Click(null, null);
-                    else
-                        EditBtn_Click(null, null);
-                    break;
-                case "Setup":
-                    if (operatorMode == OperatorMode.OPERATOR || operatorMode == OperatorMode.EDITOR)
-                        GrindBtn_Click(null, null);
-                    else
-                        SetupBtn_Click(null, null);
-                    break;
-            }
-
-        }
         private void ClearAllLogRtbBtn_Click(object sender, EventArgs e)
         {
             AllLogRTB.Clear();
@@ -663,6 +607,11 @@ namespace AutoGrind
         {
             UrLogRTB.Clear();
         }
+        private void ClearUrDashboardLogRtbBtn_Click(object sender, EventArgs e)
+        {
+            UrDashboardLogRTB.Clear();
+        }
+
 
         private void ClearErrorLogRtbBtn_Click(object sender, EventArgs e)
         {
@@ -793,6 +742,7 @@ namespace AutoGrind
                 RecipeRTB.Modified = false;
                 RecipeFilenameLbl.Text = file;
                 RecipeFilenameOnlyLbl.Text = Path.GetFileName(file);
+                RecipeFilenameOnly2Lbl.Text = Path.GetFileName(file);
 
                 // Copy from the edit window to the runtime window
                 RecipeRTB.Text = RecipeRTB.Text;
@@ -819,6 +769,7 @@ namespace AutoGrind
             SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
             RecipeFilenameOnlyLbl.Text = "Untitled";
+            RecipeFilenameOnly2Lbl.Text = "Untitled";
             RecipeRTB.Clear();
         }
 
@@ -836,7 +787,7 @@ namespace AutoGrind
             {
                 Title = "Open an AutoGrind Recipe",
                 Filter = "AutoGrind Recipe Files|*.agr",
-                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes")
+                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
             };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
@@ -1606,6 +1557,8 @@ namespace AutoGrind
             else
             {
                 log.Info("Robot dashboard connection ready");
+                string response = robotDashboardClient.Receive();
+                log.Info("DASH connection returns {0}", response);
 
                 RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
                 RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
@@ -2449,7 +2402,7 @@ namespace AutoGrind
             }
             catch (Exception ex)
             {
-                log.Error("Could not load instruction sheet!");
+                log.Error(ex, "Could not load instruction sheet!");
             }
         }
 
