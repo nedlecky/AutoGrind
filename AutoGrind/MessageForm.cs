@@ -13,28 +13,16 @@ namespace AutoGrind
     public partial class MessageForm : Form
     {
         public DialogResult result = DialogResult.OK;
-        public MessageForm(string title, string label)
+        public MessageForm(string title, string label, string okText = "OK", string cancelText = "Cancel")
         {
             InitializeComponent();
+
             Text = title;
             label1.Text = label;
+            OkBtn.Text = okText;
+            CancelBtn.Text = cancelText;
+
             result = DialogResult.None;
-        }
-
-        private void MessageForm_Load(object sender, EventArgs e)
-        {
-        }
-
-        private void AbortBtn_Click(object sender, EventArgs e)
-        {
-            result = DialogResult.Abort;
-            Close();
-        }
-
-        private void ExitBtn_Click(object sender, EventArgs e)
-        {
-            result = DialogResult.OK;
-            Close();
         }
     }
 }

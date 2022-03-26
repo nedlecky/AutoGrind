@@ -29,65 +29,62 @@
         private void InitializeComponent()
         {
             this.label1 = new System.Windows.Forms.Label();
-            this.AbortBtn = new System.Windows.Forms.Button();
-            this.ExitBtn = new System.Windows.Forms.Button();
+            this.CancelBtn = new System.Windows.Forms.Button();
+            this.OkBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
             // 
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(142, 99);
+            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label1.Location = new System.Drawing.Point(21, 18);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(449, 221);
+            this.label1.Size = new System.Drawing.Size(885, 407);
             this.label1.TabIndex = 1;
             this.label1.Text = "label1";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // AbortBtn
+            // CancelBtn
             // 
-            this.AbortBtn.BackColor = System.Drawing.Color.Green;
-            this.AbortBtn.DialogResult = System.Windows.Forms.DialogResult.Abort;
-            this.AbortBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.AbortBtn.ForeColor = System.Drawing.Color.White;
-            this.AbortBtn.Location = new System.Drawing.Point(167, 358);
-            this.AbortBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.AbortBtn.Name = "AbortBtn";
-            this.AbortBtn.Size = new System.Drawing.Size(168, 86);
-            this.AbortBtn.TabIndex = 5;
-            this.AbortBtn.Text = "Abort";
-            this.AbortBtn.UseVisualStyleBackColor = false;
-            this.AbortBtn.Click += new System.EventHandler(this.AbortBtn_Click);
+            this.CancelBtn.BackColor = System.Drawing.Color.Green;
+            this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
+            this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CancelBtn.ForeColor = System.Drawing.Color.White;
+            this.CancelBtn.Location = new System.Drawing.Point(489, 447);
+            this.CancelBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.CancelBtn.Name = "CancelBtn";
+            this.CancelBtn.Size = new System.Drawing.Size(282, 164);
+            this.CancelBtn.TabIndex = 5;
+            this.CancelBtn.Text = "Cancel";
+            this.CancelBtn.UseVisualStyleBackColor = false;
             // 
-            // ExitBtn
+            // OkBtn
             // 
-            this.ExitBtn.BackColor = System.Drawing.Color.Green;
-            this.ExitBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(382, 358);
-            this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(168, 86);
-            this.ExitBtn.TabIndex = 6;
-            this.ExitBtn.Text = "Continue";
-            this.ExitBtn.UseVisualStyleBackColor = false;
-            this.ExitBtn.Click += new System.EventHandler(this.ExitBtn_Click);
+            this.OkBtn.BackColor = System.Drawing.Color.Green;
+            this.OkBtn.DialogResult = System.Windows.Forms.DialogResult.OK;
+            this.OkBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OkBtn.ForeColor = System.Drawing.Color.White;
+            this.OkBtn.Location = new System.Drawing.Point(114, 447);
+            this.OkBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.OkBtn.Name = "OkBtn";
+            this.OkBtn.Size = new System.Drawing.Size(282, 164);
+            this.OkBtn.TabIndex = 6;
+            this.OkBtn.Text = "OK";
+            this.OkBtn.UseVisualStyleBackColor = false;
             // 
             // MessageForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(741, 496);
+            this.ClientSize = new System.Drawing.Size(918, 636);
             this.ControlBox = false;
-            this.Controls.Add(this.ExitBtn);
-            this.Controls.Add(this.AbortBtn);
+            this.Controls.Add(this.OkBtn);
+            this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "MessageForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MessageForm";
-            this.Load += new System.EventHandler(this.MessageForm_Load);
             this.ResumeLayout(false);
 
         }
@@ -95,7 +92,7 @@
         #endregion
 
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button AbortBtn;
-        private System.Windows.Forms.Button ExitBtn;
+        private System.Windows.Forms.Button CancelBtn;
+        private System.Windows.Forms.Button OkBtn;
     }
 }

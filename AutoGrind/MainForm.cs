@@ -148,28 +148,16 @@ namespace AutoGrind
             //}
         }
 
-        /// <summary>
-        /// Put up a YesNo modal dialog with heading AutoGrind Confirmation and a "question", then
-        /// wait for response and return as DialogResult
-        /// </summary>
-        /// <param name="question">Question to display in dialog</param>
-        /// <returns>DialogResult.Yes, .No, or .Cancel</returns>
         private DialogResult ConfirmMessageBox(string question)
         {
-            // TODO: Maybe should be a custom dialog like the prompt!
-            DialogResult result = MessageBox.Show(question,
-                     "AutoGrind Confirmation",
-                     MessageBoxButtons.YesNo,
-                     MessageBoxIcon.Question);
+            messageForm = new MessageForm("AutoGrind Confirmation", question, "Yes", "No");
+            DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            // TODO: Maybe should be a custom dialog like the prompt!
-            DialogResult result = MessageBox.Show(message,
-                     "AutoGrind Error",
-                     MessageBoxButtons.OK,
-                     MessageBoxIcon.Error);
+            messageForm = new MessageForm("AutoGrind Error", message, "OK", "Cancel");
+            DialogResult result = messageForm.ShowDialog();
             return result;
         }
         protected override void OnFormClosing(FormClosingEventArgs e)
@@ -179,7 +167,7 @@ namespace AutoGrind
             if (e.CloseReason == CloseReason.UserClosing)
             {
                 var result = ConfirmMessageBox("Do you want to close the application?");
-                e.Cancel = (result == DialogResult.No);
+                e.Cancel = (result != DialogResult.OK);
             }
 
             if (!e.Cancel)
@@ -325,12 +313,12 @@ namespace AutoGrind
         // ===================================================================
 
         // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
-        private void MonitorTab_SelectedIndexChanged(object sender, EventArgs e)
+        private void MainTab_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string tabName = MonitorTab.TabPages[MonitorTab.SelectedIndex].Text;
-            log.Info("Monitor tab changed to " + tabName);
+            string tabName = MainTab.TabPages[MainTab.SelectedIndex].Text;
+            log.Info("Main Tab changed to " + tabName);
 
-            if (tabName == "Logs")
+            if (tabName == "Log")
             {
                 for (int i = 0; i < 2; i++)
                 {
@@ -359,12 +347,12 @@ namespace AutoGrind
             switch (runState)
             {
                 case RunState.IDLE:
-                    GrindBtn.Enabled = true;
-                    EditBtn.Enabled = true;
-                    SetupBtn.Enabled = true;
+                    //GrindBtn.Enabled = true;
+                    //EditBtn.Enabled = true;
+                    //SetupBtn.Enabled = true;
                     ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
-                    LoadBtn.Enabled = true;
+                    //LoadBtn.Enabled = true;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
@@ -373,12 +361,12 @@ namespace AutoGrind
                     CurrentLineLbl.Text = "";
                     break;
                 case RunState.READY:
-                    GrindBtn.Enabled = true;
-                    EditBtn.Enabled = true;
-                    SetupBtn.Enabled = true;
+                    //GrindBtn.Enabled = true;
+                    //EditBtn.Enabled = true;
+                    //SetupBtn.Enabled = true;
                     ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
-                    LoadBtn.Enabled = true;
+                    //LoadBtn.Enabled = true;
                     StartBtn.Enabled = true;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
@@ -387,12 +375,12 @@ namespace AutoGrind
                     CurrentLineLbl.Text = "";
                     break;
                 case RunState.RUNNING:
-                    GrindBtn.Enabled = false;
-                    EditBtn.Enabled = false;
-                    SetupBtn.Enabled = false;
+                    //GrindBtn.Enabled = false;
+                    //EditBtn.Enabled = false;
+                    //SetupBtn.Enabled = false;
                     ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
-                    LoadBtn.Enabled = false;
+                    //LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = true;
                     ContinueBtn.Enabled = false;
@@ -404,12 +392,12 @@ namespace AutoGrind
 
                     break;
                 case RunState.PAUSED:
-                    GrindBtn.Enabled = false;
-                    EditBtn.Enabled = false;
-                    SetupBtn.Enabled = false;
+                    //GrindBtn.Enabled = false;
+                    //EditBtn.Enabled = false;
+                    //SetupBtn.Enabled = false;
                     ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
-                    LoadBtn.Enabled = false;
+                    //LoadBtn.Enabled = false;
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = true;
@@ -426,14 +414,14 @@ namespace AutoGrind
             }
             else
             {
-                GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
-                EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
-                SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
+                //GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
+                //EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
+                //SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
                 ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
             }
 
             JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
-            LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
+            //LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
             StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
             ContinueBtn.BackColor = ContinueBtn.Enabled ? Color.Green : Color.Gray;
@@ -513,29 +501,29 @@ namespace AutoGrind
             {
                 case OperatorMode.OPERATOR:
                     //Width = standardWidth;
-                    EditBtn.Visible = false;
-                    SetupBtn.Visible = false;
-                    OperationTab.TabPages["EditTab"].Visible = false;
-                    OperationTab.TabPages["SetupTab"].Visible = false;
-                    MonitorTab.Visible = false;
+                    //EditBtn.Visible = false;
+                    //SetupBtn.Visible = false;
+                    //OperationTab.TabPages["EditTab"].Visible = false;
+                    //OperationTab.TabPages["SetupTab"].Visible = false;
+                    //MonitorTab.Visible = false;
 
 
                     break;
                 case OperatorMode.EDITOR:
                     //Width = standardWidth;
-                    EditBtn.Visible = true;
-                    SetupBtn.Visible = false;
-                    OperationTab.TabPages["EditTab"].Visible = true;
-                    OperationTab.TabPages["SetupTab"].Visible = false;
-                    MonitorTab.Visible = true;
+                    //EditBtn.Visible = true;
+                    //SetupBtn.Visible = false;
+                    //OperationTab.TabPages["EditTab"].Visible = true;
+                    //OperationTab.TabPages["SetupTab"].Visible = false;
+                    //MonitorTab.Visible = true;
                     break;
                 case OperatorMode.ENGINEERING:
                     //Width = fullWidth;
-                    EditBtn.Visible = true;
-                    SetupBtn.Visible = true;
-                    OperationTab.TabPages["EditTab"].Visible = true;
-                    OperationTab.TabPages["SetupTab"].Visible = true;
-                    MonitorTab.Visible = true;
+                    //EditBtn.Visible = true;
+                    //SetupBtn.Visible = true;
+                    //OperationTab.TabPages["EditTab"].Visible = true;
+                    //OperationTab.TabPages["SetupTab"].Visible = true;
+                    //MonitorTab.Visible = true;
                     break;
             }
         }
@@ -544,31 +532,31 @@ namespace AutoGrind
         private void GrindBtn_Click(object sender, EventArgs e)
         {
             //SetState(RunState.IDLE);
-            OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
-            GrindBtn.BackColor = Color.Green;
-            EditBtn.BackColor = Color.LightGreen;
-            SetupBtn.BackColor = Color.LightGreen;
+            //OperationTab.SelectedTab = OperationTab.TabPages["GrindTab"];
+            //GrindBtn.BackColor = Color.Green;
+            //EditBtn.BackColor = Color.LightGreen;
+            //SetupBtn.BackColor = Color.LightGreen;
 
             // Get latest from edit control
-            RecipeRoRTB.Text = RecipeRTB.Text;
+            RecipeRTB.Text = RecipeRTB.Text;
         }
 
         private void EditBtn_Click(object sender, EventArgs e)
         {
             //SetState(RunState.IDLE);
-            OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
-            GrindBtn.BackColor = Color.LightGreen;
-            EditBtn.BackColor = Color.Green;
-            SetupBtn.BackColor = Color.LightGreen;
+            //OperationTab.SelectedTab = OperationTab.TabPages["EditTab"];
+            //GrindBtn.BackColor = Color.LightGreen;
+            //EditBtn.BackColor = Color.Green;
+            //SetupBtn.BackColor = Color.LightGreen;
         }
 
         private void SetupBtn_Click(object sender, EventArgs e)
         {
             //SetState(RunState.IDLE);
-            OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
-            GrindBtn.BackColor = Color.LightGreen;
-            EditBtn.BackColor = Color.LightGreen;
-            SetupBtn.BackColor = Color.Green;
+            //OperationTab.SelectedTab = OperationTab.TabPages["SetupTab"];
+            //GrindBtn.BackColor = Color.LightGreen;
+            //EditBtn.BackColor = Color.LightGreen;
+            //SetupBtn.BackColor = Color.Green;
         }
 
         private void RobotModeBtn_Click(object sender, EventArgs e)
@@ -689,12 +677,6 @@ namespace AutoGrind
         // ===================================================================
         // START GRIND
         // ===================================================================
-        private void LoadBtn_Click(object sender, EventArgs e)
-        {
-            log.Info("LoadBtn_Click(...)");
-            LoadRecipeBtn_Click(null, null);
-        }
-
 
         private void GrindContactEnabledBtn_Click(object sender, EventArgs e)
         {
@@ -712,7 +694,7 @@ namespace AutoGrind
             if (!robotReady)
             {
                 var result = ConfirmMessageBox("Robot not connected. Run anyway?");
-                if (result != DialogResult.Yes) return;
+                if (result != DialogResult.OK) return;
             }
 
             SetCurrentLine(-1);
@@ -804,17 +786,16 @@ namespace AutoGrind
         {
             log.Info("LoadRecipeFile({0})", file);
             RecipeFilenameLbl.Text = "";
-            RecipeRoFilenameLbl.Text = "";
-            RecipeRoRTB.Text = "";
+            RecipeRTB.Text = "";
             try
             {
                 RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
                 RecipeFilenameLbl.Text = file;
-                RecipeRoFilenameLbl.Text = file;
+                RecipeFilenameOnlyLbl.Text = Path.GetFileName(file);
 
                 // Copy from the edit window to the runtime window
-                RecipeRoRTB.Text = RecipeRTB.Text;
+                RecipeRTB.Text = RecipeRTB.Text;
                 return true;
             }
             catch (Exception ex)
@@ -830,16 +811,15 @@ namespace AutoGrind
             if (RecipeRTB.Modified)
             {
                 var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
-                if (result == DialogResult.Yes)
+                if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
 
             SetRecipeState(RecipeState.NEW);
             SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
-            RecipeRoFilenameLbl.Text = "Untitled";
+            RecipeFilenameOnlyLbl.Text = "Untitled";
             RecipeRTB.Clear();
-            RecipeRoRTB.Clear();
         }
 
         private void LoadRecipeBtn_Click(object sender, EventArgs e)
@@ -880,8 +860,6 @@ namespace AutoGrind
                 RecipeRTB.Modified = false;
                 SetRecipeState(RecipeState.LOADED);
                 SetState(RunState.READY, true);
-                // Copy from the edit window to the runtime window
-                RecipeRoRTB.Text = RecipeRTB.Text;
             }
         }
 
@@ -899,7 +877,6 @@ namespace AutoGrind
                 if (dialog.FileName != "")
                 {
                     RecipeFilenameLbl.Text = dialog.FileName;
-                    RecipeRoFilenameLbl.Text = dialog.FileName;
                     SaveRecipeBtn_Click(null, null);
                 }
             }
@@ -933,10 +910,10 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             // Window State
-            //Left = (Int32)AppNameKey.GetValue("Left", 0);
-            //Top = (Int32)AppNameKey.GetValue("Top", 0);
-            //Width = (Int32)AppNameKey.GetValue("Width", 1920);
-
+            Left = 0;// (Int32)AppNameKey.GetValue("Left", 0);
+            Top = 0;// (Int32)AppNameKey.GetValue("Top", 0);
+            Width = 2160;// (Int32)AppNameKey.GetValue("Width", 1920);
+            Height = 1440;
 
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
@@ -985,9 +962,10 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             // Window State
-            //AppNameKey.SetValue("Left", Left);
-            //AppNameKey.SetValue("Top", Top);
-            //AppNameKey.SetValue("Width", Width);
+            AppNameKey.SetValue("Left", Left);
+            AppNameKey.SetValue("Top", Top);
+            AppNameKey.SetValue("Width", Width);
+            AppNameKey.SetValue("Height", Width);
 
             // From Setup Tab
             AppNameKey.SetValue("AutoGrindRoot", AutoGrindRoot);
@@ -1033,9 +1011,9 @@ namespace AutoGrind
             SavePersistent();
         }
 
-        private void ChangeLEonardRootBtn_Click(object sender, EventArgs e)
+        private void ChangeRootDirectoryBtn_Click(object sender, EventArgs e)
         {
-            log.Info("ChangeLEonardRootBtn_Click(...)");
+            log.Info("ChangeRootDirectoryBtn_Click(...)");
             FolderBrowserDialog dialog = new FolderBrowserDialog()
             {
                 SelectedPath = AutoGrindRoot
@@ -1116,7 +1094,7 @@ namespace AutoGrind
             labels = new Dictionary<string, int>();
 
             int lineNo = 0;
-            foreach (string line in RecipeRoRTB.Lines)
+            foreach (string line in RecipeRTB.Lines)
             {
                 var label = IsLineALabel(line);
                 if (label.Success)
@@ -1140,11 +1118,9 @@ namespace AutoGrind
 
             if (n >= 0 && n < RecipeRTB.Lines.Count())
             {
-                int start = RecipeRoRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
-                int length = RecipeRoRTB.Lines[lineCurrentlyExecuting].Length;
-                //RecipeRoRTB.Select(start,0);
-                //RecipeRoRTB.ScrollToCaret();
-                RecipeRoRTB.Select(start, length);
+                int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
+                int length = RecipeRTB.Lines[lineCurrentlyExecuting].Length;
+                RecipeRTB.Select(start, length);
             }
         }
 
@@ -1585,7 +1561,7 @@ namespace AutoGrind
                 {
                     // Resets such that the above log messages will happen
                     logFilter = 3;
-                    if (lineCurrentlyExecuting + 1 >= RecipeRoRTB.Lines.Count())
+                    if (lineCurrentlyExecuting + 1 >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
                         SetState(RunState.READY);
@@ -1593,7 +1569,7 @@ namespace AutoGrind
                     else
                     {
                         SetCurrentLine(lineCurrentlyExecuting + 1);
-                        string line = RecipeRoRTB.Lines[lineCurrentlyExecuting];
+                        string line = RecipeRTB.Lines[lineCurrentlyExecuting];
                         bool fContinue = ExecuteLine(lineCurrentlyExecuting, line);
                         if (!fContinue)
                         {
@@ -1737,7 +1713,7 @@ namespace AutoGrind
                     robotCommandServer.Send(RobotMessageTxt.Text);
                 }
         }
-        private void SetSpeedBtn_Click(object sender, EventArgs e)
+        private void SetLinearSpeedBtn_Click(object sender, EventArgs e)
         {
             SetValueForm form = new SetValueForm(ReadVariable("robot_linear_speed_mmps"), "default robot SPEED, mm/s", 3);
 
@@ -1747,7 +1723,7 @@ namespace AutoGrind
             }
         }
 
-        private void SetAccelBtn_Click(object sender, EventArgs e)
+        private void SetLinearAccelBtn_Click(object sender, EventArgs e)
         {
             SetValueForm form = new SetValueForm(ReadVariable("robot_linear_accel_mmpss"), "default robot ACCELERATION, mm/s^2", 3);
 
@@ -1757,7 +1733,7 @@ namespace AutoGrind
             }
         }
 
-        private void SetBlendBtn_Click(object sender, EventArgs e)
+        private void SetBlendRadiusBtn_Click(object sender, EventArgs e)
         {
             SetValueForm form = new SetValueForm(ReadVariable("robot_blend_radius_mm"), "default robot BLEND RADIUS, mm", 3);
 
@@ -1860,13 +1836,6 @@ namespace AutoGrind
 
         readonly string variablesFilename = "Variables.xml";
 
-        private void ReadVariableBtn_Click(object sender, EventArgs e)
-        {
-            string name = VariableNameTxt.Text.Trim();
-            string value = ReadVariable(name);
-            log.Info("ReadVariableBtn_Click(...) returns {0}={1}", name, value);
-        }
-
         private string ReadVariable(string name, string defaultValue = null)
         {
             foreach (DataRow row in variables.Rows)
@@ -1959,13 +1928,13 @@ namespace AutoGrind
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
                 case "robot_linear_speed_mmps":
-                    SetSpeedBtn.Text = "Linear Speed\n" + valueTrimmed + " mm/s";
+                    SetLinearSpeedBtn.Text = "Linear Speed\n" + valueTrimmed + " mm/s";
                     break;
                 case "robot_linear_accel_mmpss":
-                    SetAccelBtn.Text = "Linear Acceleration\n" + valueTrimmed + " mm/s^2";
+                    SetLinearAccelBtn.Text = "Linear Acceleration\n" + valueTrimmed + " mm/s^2";
                     break;
                 case "robot_blend_radius_mm":
-                    SetBlendBtn.Text = "Blend Radius\n" + valueTrimmed + " mm";
+                    SetBlendRadiusBtn.Text = "Blend Radius\n" + valueTrimmed + " mm";
                     break;
                 case "robot_joint_speed_dps":
                     SetJointSpeedBtn.Text = "Joint Speed\n" + valueTrimmed + " deg/s";
@@ -2069,13 +2038,6 @@ namespace AutoGrind
             }
             return wasSuccessful;
         }
-        private void WriteStringValueBtn_Click(object sender, EventArgs e)
-        {
-            string name = VariableNameTxt.Text;
-            string value = WriteStringValueTxt.Text;
-            bool fSystem = IsSystemChk.Checked;
-            WriteVariable(name, value, fSystem);
-        }
 
         private void LoadVariablesBtn_Click(object sender, EventArgs e)
         {
@@ -2140,7 +2102,7 @@ namespace AutoGrind
 
         private void ClearAllVariablesBtn_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes == ConfirmMessageBox("This will clear all variables INCLUDING system variables. Proceed?"))
+            if (DialogResult.OK == ConfirmMessageBox("This will clear all variables INCLUDING system variables. Proceed?"))
                 ClearAndInitializeVariables();
         }
 
@@ -2225,7 +2187,7 @@ namespace AutoGrind
 
         private void ClearToolsBtn_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes == ConfirmMessageBox("This will clear all tools. Proceed?"))
+            if (DialogResult.OK == ConfirmMessageBox("This will clear all tools. Proceed?"))
             {
 
                 ClearAndInitializeTools();
@@ -2363,7 +2325,7 @@ namespace AutoGrind
 
         private void ClearAllPositionsBtn_Click(object sender, EventArgs e)
         {
-            if (DialogResult.Yes == ConfirmMessageBox("This will clear all positions INCLUDING system positions. Proceed?"))
+            if (DialogResult.OK == ConfirmMessageBox("This will clear all positions INCLUDING system positions. Proceed?"))
                 ClearAndInitializePositions();
         }
 
@@ -2483,7 +2445,7 @@ namespace AutoGrind
         {
             try
             {
-                InstructionsRTB.LoadFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+                InstructionsRTB.LoadFile("Instructions.RTF");
             }
             catch (Exception ex)
             {
@@ -2493,10 +2455,8 @@ namespace AutoGrind
 
         private void SaveManualBtn_Click(object sender, EventArgs e)
         {
-            InstructionsRTB.SaveFile(Path.Combine(AutoGrindRoot, "Recipes/Instructions.RTF"));
+            InstructionsRTB.SaveFile("Instructions.RTF");
         }
-
-
 
         // ===================================================================
         // END MANUAL SYSTEM

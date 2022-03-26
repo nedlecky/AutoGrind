@@ -1,9 +1,11 @@
 loop = 3
 
 start:
+prompt(Test)
 #movejoint(ToolH)
 #movejoint(ToolV)
 set_linear_speed(300)
 set_linear_accel(400)
+
 loop--
 jump_gt_zero(loop,start)
