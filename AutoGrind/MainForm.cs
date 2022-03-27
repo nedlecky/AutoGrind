@@ -173,8 +173,8 @@ namespace AutoGrind
             {
                 if (RecipeRTB.Modified)
                 {
-                    var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
-                    if (result == DialogResult.Yes)
+                    var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                    if (result == DialogResult.OK)
                         SaveRecipeBtn_Click(null, null);
                 }
 
@@ -336,7 +336,6 @@ namespace AutoGrind
             }
         }
 
-        bool originalModifiedState = false;
         private void EnterRunState(bool fEditing)
         {
             switch (runState)
@@ -363,10 +362,8 @@ namespace AutoGrind
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
-                    RecipeRTB.Modified = false;
-                    SaveRecipeBtn.Enabled = originalModifiedState;
+                    SaveRecipeBtn.Enabled = RecipeRTB.Modified;
                     SaveAsRecipeBtn.Enabled = true;
-                    RecipeRTB.Modified = originalModifiedState;
 
                     StartBtn.Enabled = true;
                     PauseBtn.Enabled = false;
@@ -374,6 +371,12 @@ namespace AutoGrind
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
+
+                    //RecipeRTB.SelectAll();
+                    //RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+                    //RecipeRTBCopy.SelectAll();
+                    //RecipeRTBCopy.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+
                     break;
                 case RunState.RUNNING:
                     ExitBtn.Enabled = false;
@@ -383,7 +386,6 @@ namespace AutoGrind
                     NewRecipeBtn.Enabled = false;
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
-                    originalModifiedState = RecipeRTB.Modified;
 
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = true;
@@ -490,12 +492,12 @@ namespace AutoGrind
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    form = new SetValueForm("", "Please enter passcode for ENGINEERING", 0, true);
-                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
-                    {
-                        OperatorModeBox.SelectedIndex = 0;
-                        return;
-                    }
+                    //form = new SetValueForm("", "Please enter passcode for ENGINEERING", 0, true);
+                    //if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    //{
+                    //    OperatorModeBox.SelectedIndex = 0;
+                    //    return;
+                    //}
                     break;
             }
 
@@ -771,7 +773,7 @@ namespace AutoGrind
             log.Info("NewRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
+                var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                 if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -788,8 +790,8 @@ namespace AutoGrind
             log.Info("LoadRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
-                if (result == DialogResult.Yes)
+                var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
 
@@ -1083,14 +1085,20 @@ namespace AutoGrind
                 int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
                 int length = RecipeRTB.Lines[lineCurrentlyExecuting].Length;
 
+                bool modified = RecipeRTB.Modified;
                 RecipeRTB.SelectAll();
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
 
                 RecipeRTB.Select(start, length);
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Bold);
+                RecipeRTB.ScrollToCaret();
+                RecipeRTB.ScrollToCaret();
+                RecipeRTB.Modified = modified;
 
                 RecipeRTBCopy.Select(start, length);
                 RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
+                RecipeRTBCopy.ScrollToCaret();
+                RecipeRTBCopy.ScrollToCaret();
             }
         }
 
@@ -1534,8 +1542,6 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting + 1 >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
-                        RecipeRTB.SelectAll();
-                        RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
                         SetState(RunState.READY);
                         SetRecipeState(recipeStateAtRun);
                     }

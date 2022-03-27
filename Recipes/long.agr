@@ -1,0 +1,35 @@
+# Test1
+a++
+a = 3
+a++
+a++
+a++
+a++
+a++
+a++
+a++
+# Here we go
+a++
+a++
+select_tool(2F85)
+a++
+d5=12
+a++
+d5++
+a++
+select_tool(faceplate)
+a++
+c=3
+a++ # Sometimes people make very
+# Comment
+a++
+#Whats next
+a++
+d=5
+a++
+f=6
+a++
+j=7
+a++
+# Another
+a++

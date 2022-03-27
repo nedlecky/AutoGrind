@@ -1,0 +1,7 @@
+n=1
+loop:
+
+grind_line(100,100,4,100,30)
+n++
+
+jump(loop)

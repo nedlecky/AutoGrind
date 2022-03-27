@@ -180,7 +180,7 @@
             // 
             this.CurrentLineLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CurrentLineLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLbl.Location = new System.Drawing.Point(6, 123);
+            this.CurrentLineLbl.Location = new System.Drawing.Point(5, 66);
             this.CurrentLineLbl.Name = "CurrentLineLbl";
             this.CurrentLineLbl.Size = new System.Drawing.Size(786, 44);
             this.CurrentLineLbl.TabIndex = 79;
@@ -203,11 +203,11 @@
             // RecipeRTB
             // 
             this.RecipeRTB.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRTB.Location = new System.Drawing.Point(5, 180);
+            this.RecipeRTB.Location = new System.Drawing.Point(5, 122);
             this.RecipeRTB.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRTB.Name = "RecipeRTB";
             this.RecipeRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTB.Size = new System.Drawing.Size(788, 932);
+            this.RecipeRTB.Size = new System.Drawing.Size(788, 1084);
             this.RecipeRTB.TabIndex = 72;
             this.RecipeRTB.Text = "";
             this.RecipeRTB.TextChanged += new System.EventHandler(this.RecipeRTB_TextChanged);
@@ -275,8 +275,8 @@
             // RecipeFilenameLbl
             // 
             this.RecipeFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameLbl.Location = new System.Drawing.Point(6, 50);
+            this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeFilenameLbl.Location = new System.Drawing.Point(5, 15);
             this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
             this.RecipeFilenameLbl.Size = new System.Drawing.Size(786, 42);
@@ -1038,12 +1038,12 @@
             // RecipeRTBCopy
             // 
             this.RecipeRTBCopy.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRTBCopy.Location = new System.Drawing.Point(20, 133);
+            this.RecipeRTBCopy.Location = new System.Drawing.Point(5, 133);
             this.RecipeRTBCopy.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRTBCopy.Name = "RecipeRTBCopy";
             this.RecipeRTBCopy.ReadOnly = true;
             this.RecipeRTBCopy.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTBCopy.Size = new System.Drawing.Size(765, 1059);
+            this.RecipeRTBCopy.Size = new System.Drawing.Size(788, 1084);
             this.RecipeRTBCopy.TabIndex = 129;
             this.RecipeRTBCopy.Text = "";
             // 
@@ -1081,9 +1081,9 @@
             // 
             this.CurrentLineLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 23);
+            this.CurrentLineLblCopy.Location = new System.Drawing.Point(6, 23);
             this.CurrentLineLblCopy.Name = "CurrentLineLblCopy";
-            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 94);
+            this.CurrentLineLblCopy.Size = new System.Drawing.Size(787, 94);
             this.CurrentLineLblCopy.TabIndex = 125;
             // 
             // label10
