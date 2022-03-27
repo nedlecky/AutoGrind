@@ -151,6 +151,7 @@
             this.GrindCycleLbl = new System.Windows.Forms.Label();
             this.GrindNCyclesLbl = new System.Windows.Forms.Label();
             this.Grind = new System.Windows.Forms.Label();
+            this.RecipeRTBCopy = new System.Windows.Forms.RichTextBox();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).BeginInit();
@@ -179,9 +180,9 @@
             // 
             this.CurrentLineLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CurrentLineLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLbl.Location = new System.Drawing.Point(43, 123);
+            this.CurrentLineLbl.Location = new System.Drawing.Point(6, 123);
             this.CurrentLineLbl.Name = "CurrentLineLbl";
-            this.CurrentLineLbl.Size = new System.Drawing.Size(749, 44);
+            this.CurrentLineLbl.Size = new System.Drawing.Size(786, 44);
             this.CurrentLineLbl.TabIndex = 79;
             this.CurrentLineLbl.TextChanged += new System.EventHandler(this.CurrentLineLbl_TextChanged);
             // 
@@ -202,11 +203,11 @@
             // RecipeRTB
             // 
             this.RecipeRTB.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRTB.Location = new System.Drawing.Point(43, 180);
+            this.RecipeRTB.Location = new System.Drawing.Point(5, 180);
             this.RecipeRTB.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRTB.Name = "RecipeRTB";
             this.RecipeRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTB.Size = new System.Drawing.Size(750, 932);
+            this.RecipeRTB.Size = new System.Drawing.Size(788, 932);
             this.RecipeRTB.TabIndex = 72;
             this.RecipeRTB.Text = "";
             this.RecipeRTB.TextChanged += new System.EventHandler(this.RecipeRTB_TextChanged);
@@ -275,10 +276,10 @@
             // 
             this.RecipeFilenameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RecipeFilenameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameLbl.Location = new System.Drawing.Point(43, 50);
+            this.RecipeFilenameLbl.Location = new System.Drawing.Point(6, 50);
             this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
-            this.RecipeFilenameLbl.Size = new System.Drawing.Size(749, 42);
+            this.RecipeFilenameLbl.Size = new System.Drawing.Size(786, 42);
             this.RecipeFilenameLbl.TabIndex = 77;
             this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.RecipeFilenameLbl.TextChanged += new System.EventHandler(this.RecipeFilenameLbl_TextChanged);
@@ -375,7 +376,7 @@
             this.RobotCommandStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotCommandStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotCommandStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(271, 35);
+            this.RobotCommandStatusLbl.Location = new System.Drawing.Point(1859, 688);
             this.RobotCommandStatusLbl.Name = "RobotCommandStatusLbl";
             this.RobotCommandStatusLbl.Size = new System.Drawing.Size(187, 115);
             this.RobotCommandStatusLbl.TabIndex = 78;
@@ -388,7 +389,7 @@
             this.GrindReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.GrindReadyLbl.Location = new System.Drawing.Point(271, 291);
+            this.GrindReadyLbl.Location = new System.Drawing.Point(1859, 944);
             this.GrindReadyLbl.Name = "GrindReadyLbl";
             this.GrindReadyLbl.Size = new System.Drawing.Size(187, 125);
             this.GrindReadyLbl.TabIndex = 88;
@@ -401,7 +402,7 @@
             this.RobotReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotReadyLbl.Location = new System.Drawing.Point(271, 152);
+            this.RobotReadyLbl.Location = new System.Drawing.Point(1859, 805);
             this.RobotReadyLbl.Name = "RobotReadyLbl";
             this.RobotReadyLbl.Size = new System.Drawing.Size(187, 129);
             this.RobotReadyLbl.TabIndex = 89;
@@ -413,7 +414,7 @@
             this.GrindContactEnabledBtn.BackColor = System.Drawing.Color.Gray;
             this.GrindContactEnabledBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindContactEnabledBtn.ForeColor = System.Drawing.Color.White;
-            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(548, 64);
+            this.GrindContactEnabledBtn.Location = new System.Drawing.Point(1173, 740);
             this.GrindContactEnabledBtn.Name = "GrindContactEnabledBtn";
             this.GrindContactEnabledBtn.Size = new System.Drawing.Size(285, 195);
             this.GrindContactEnabledBtn.TabIndex = 93;
@@ -815,7 +816,7 @@
             this.label6.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label6.ForeColor = System.Drawing.Color.White;
-            this.label6.Location = new System.Drawing.Point(684, 781);
+            this.label6.Location = new System.Drawing.Point(813, 740);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(305, 123);
             this.label6.TabIndex = 97;
@@ -827,7 +828,7 @@
             this.MountedToolBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MountedToolBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MountedToolBox.FormattingEnabled = true;
-            this.MountedToolBox.Location = new System.Drawing.Point(684, 907);
+            this.MountedToolBox.Location = new System.Drawing.Point(813, 866);
             this.MountedToolBox.Name = "MountedToolBox";
             this.MountedToolBox.Size = new System.Drawing.Size(305, 63);
             this.MountedToolBox.TabIndex = 99;
@@ -839,7 +840,7 @@
             this.RobotDashboardStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotDashboardStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotDashboardStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotDashboardStatusLbl.Location = new System.Drawing.Point(20, 35);
+            this.RobotDashboardStatusLbl.Location = new System.Drawing.Point(1608, 688);
             this.RobotDashboardStatusLbl.Name = "RobotDashboardStatusLbl";
             this.RobotDashboardStatusLbl.Size = new System.Drawing.Size(234, 115);
             this.RobotDashboardStatusLbl.TabIndex = 102;
@@ -866,7 +867,7 @@
             this.RobotModeBtn.BackColor = System.Drawing.Color.Gray;
             this.RobotModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotModeBtn.ForeColor = System.Drawing.Color.White;
-            this.RobotModeBtn.Location = new System.Drawing.Point(20, 152);
+            this.RobotModeBtn.Location = new System.Drawing.Point(1608, 805);
             this.RobotModeBtn.Name = "RobotModeBtn";
             this.RobotModeBtn.Size = new System.Drawing.Size(234, 129);
             this.RobotModeBtn.TabIndex = 106;
@@ -879,7 +880,7 @@
             this.SafetyStatusBtn.BackColor = System.Drawing.Color.Gray;
             this.SafetyStatusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SafetyStatusBtn.ForeColor = System.Drawing.Color.White;
-            this.SafetyStatusBtn.Location = new System.Drawing.Point(20, 288);
+            this.SafetyStatusBtn.Location = new System.Drawing.Point(1608, 941);
             this.SafetyStatusBtn.Name = "SafetyStatusBtn";
             this.SafetyStatusBtn.Size = new System.Drawing.Size(234, 128);
             this.SafetyStatusBtn.TabIndex = 107;
@@ -892,7 +893,7 @@
             this.ProgramStateBtn.BackColor = System.Drawing.Color.Gray;
             this.ProgramStateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProgramStateBtn.ForeColor = System.Drawing.Color.White;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(20, 423);
+            this.ProgramStateBtn.Location = new System.Drawing.Point(1608, 1076);
             this.ProgramStateBtn.Name = "ProgramStateBtn";
             this.ProgramStateBtn.Size = new System.Drawing.Size(232, 129);
             this.ProgramStateBtn.TabIndex = 108;
@@ -961,7 +962,7 @@
             this.label5.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(1067, 783);
+            this.label5.Location = new System.Drawing.Point(936, 73);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(305, 67);
             this.label5.TabIndex = 115;
@@ -972,7 +973,7 @@
             // 
             this.DiameterDimLbl.AutoSize = true;
             this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterDimLbl.Location = new System.Drawing.Point(1310, 918);
+            this.DiameterDimLbl.Location = new System.Drawing.Point(1179, 208);
             this.DiameterDimLbl.Name = "DiameterDimLbl";
             this.DiameterDimLbl.Size = new System.Drawing.Size(237, 55);
             this.DiameterDimLbl.TabIndex = 114;
@@ -998,6 +999,7 @@
             // 
             // RunPage
             // 
+            this.RunPage.Controls.Add(this.RecipeRTBCopy);
             this.RunPage.Controls.Add(this.Grind);
             this.RunPage.Controls.Add(this.GrindNCyclesLbl);
             this.RunPage.Controls.Add(this.GrindCycleLbl);
@@ -1036,7 +1038,7 @@
             // 
             this.RecipeFilenameOnlyLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RecipeFilenameOnlyLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameOnlyLblCopy.Location = new System.Drawing.Point(636, 412);
+            this.RecipeFilenameOnlyLblCopy.Location = new System.Drawing.Point(813, 412);
             this.RecipeFilenameOnlyLblCopy.Name = "RecipeFilenameOnlyLblCopy";
             this.RecipeFilenameOnlyLblCopy.Size = new System.Drawing.Size(605, 146);
             this.RecipeFilenameOnlyLblCopy.TabIndex = 123;
@@ -1049,7 +1051,7 @@
             this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(636, 318);
+            this.label9.Location = new System.Drawing.Point(813, 318);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(605, 94);
             this.label9.TabIndex = 122;
@@ -1102,7 +1104,7 @@
             // 
             this.DiameterLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DiameterLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DiameterLbl.Location = new System.Drawing.Point(1067, 918);
+            this.DiameterLbl.Location = new System.Drawing.Point(936, 208);
             this.DiameterLbl.Name = "DiameterLbl";
             this.DiameterLbl.Size = new System.Drawing.Size(237, 52);
             this.DiameterLbl.TabIndex = 116;
@@ -1118,7 +1120,7 @@
             "FLAT",
             "CYLINDER",
             "SPHERE"});
-            this.PartGeometryBox.Location = new System.Drawing.Point(1067, 853);
+            this.PartGeometryBox.Location = new System.Drawing.Point(936, 143);
             this.PartGeometryBox.Name = "PartGeometryBox";
             this.PartGeometryBox.Size = new System.Drawing.Size(305, 63);
             this.PartGeometryBox.TabIndex = 110;
@@ -1134,7 +1136,7 @@
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
             this.groupBox2.Location = new System.Drawing.Point(1437, 114);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(609, 559);
+            this.groupBox2.Size = new System.Drawing.Size(609, 424);
             this.groupBox2.TabIndex = 109;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
@@ -1550,7 +1552,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(674, 618);
+            this.label10.Location = new System.Drawing.Point(851, 618);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(205, 55);
             this.label10.TabIndex = 124;
@@ -1560,16 +1562,16 @@
             // 
             this.CurrentLineLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLblCopy.Location = new System.Drawing.Point(402, 563);
+            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 51);
             this.CurrentLineLblCopy.Name = "CurrentLineLblCopy";
-            this.CurrentLineLblCopy.Size = new System.Drawing.Size(1016, 52);
+            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 52);
             this.CurrentLineLblCopy.TabIndex = 125;
             // 
             // GrindCycleLbl
             // 
             this.GrindCycleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindCycleLbl.Location = new System.Drawing.Point(885, 620);
+            this.GrindCycleLbl.Location = new System.Drawing.Point(1062, 620);
             this.GrindCycleLbl.Name = "GrindCycleLbl";
             this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
             this.GrindCycleLbl.TabIndex = 126;
@@ -1579,7 +1581,7 @@
             // 
             this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1057, 621);
+            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1234, 621);
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
@@ -1589,11 +1591,23 @@
             // 
             this.Grind.AutoSize = true;
             this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(986, 621);
+            this.Grind.Location = new System.Drawing.Point(1163, 621);
             this.Grind.Name = "Grind";
             this.Grind.Size = new System.Drawing.Size(64, 55);
             this.Grind.TabIndex = 128;
             this.Grind.Text = "of";
+            // 
+            // RecipeRTBCopy
+            // 
+            this.RecipeRTBCopy.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeRTBCopy.Location = new System.Drawing.Point(20, 133);
+            this.RecipeRTBCopy.Margin = new System.Windows.Forms.Padding(2);
+            this.RecipeRTBCopy.Name = "RecipeRTBCopy";
+            this.RecipeRTBCopy.ReadOnly = true;
+            this.RecipeRTBCopy.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.RecipeRTBCopy.Size = new System.Drawing.Size(765, 1059);
+            this.RecipeRTBCopy.TabIndex = 129;
+            this.RecipeRTBCopy.Text = "";
             // 
             // MainForm
             // 
@@ -1774,6 +1788,7 @@
         private System.Windows.Forms.Label GrindCycleLbl;
         private System.Windows.Forms.Label CurrentLineLblCopy;
         private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.RichTextBox RecipeRTBCopy;
     }
 }
 

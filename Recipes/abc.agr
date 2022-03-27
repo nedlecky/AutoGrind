@@ -1,0 +1,8 @@
+a=4
+
+redo:
+
+a++
+
+# here we are
+jump(redo)

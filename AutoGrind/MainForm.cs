@@ -176,11 +176,6 @@ namespace AutoGrind
                     var result = ConfirmMessageBox("Current recipe has been modified. Save changes?");
                     if (result == DialogResult.Yes)
                         SaveRecipeBtn_Click(null, null);
-                    else if (result == DialogResult.Cancel)
-                    {
-                        e.Cancel = true;
-                        return;
-                    }
                 }
 
                 CloseTmr.Interval = 500;
@@ -1065,6 +1060,9 @@ namespace AutoGrind
                 int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
                 int length = RecipeRTB.Lines[lineCurrentlyExecuting].Length;
                 RecipeRTB.Select(start, length);
+                RecipeRTBCopy.Select(start, length);
+                RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Bold);
+                RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
             }
         }
 
@@ -1185,7 +1183,7 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
-            CurrentLineLbl.Text = String.Format("Executing {0:000}: {1}", lineCurrentlyExecuting, line);
+            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
             string origLine = line;
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -2432,6 +2430,7 @@ namespace AutoGrind
         private void RecipeRTB_TextChanged(object sender, EventArgs e)
         {
             SetRecipeState(RecipeState.MODIFIED);
+            RecipeRTBCopy.Text = RecipeRTB.Text;
         }
     }
 }
