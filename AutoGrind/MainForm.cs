@@ -383,7 +383,7 @@ namespace AutoGrind
                     NewRecipeBtn.Enabled = false;
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
-                    originalModifiedState=RecipeRTB.Modified;
+                    originalModifiedState = RecipeRTB.Modified;
 
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = true;
@@ -490,8 +490,8 @@ namespace AutoGrind
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    form = new SetValueForm("", "Please enter passcode for ENGINEERING",0,true);
-                      if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    form = new SetValueForm("", "Please enter passcode for ENGINEERING", 0, true);
+                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
@@ -502,7 +502,7 @@ namespace AutoGrind
             operatorMode = newOperatorMode;
             // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
             // TODO: This doesn't really do most of what we want!
-            if(MainTab.TabPages[1] != null)
+            if (MainTab.TabPages[1] != null)
             {
                 log.Info("Setting Operator Mode {0}", operatorMode);
                 switch (operatorMode)
@@ -651,7 +651,10 @@ namespace AutoGrind
             if (!BuildLabelTable())
                 ErrorMessageBox("Error parsing labels from recipe.");
             else
+            {
+                SetRecipeState(RecipeState.RUNNING);
                 SetState(RunState.RUNNING);
+            }
         }
 
         private void PauseBtn_Click(object sender, EventArgs e)
@@ -672,6 +675,7 @@ namespace AutoGrind
             log.Info("StopBtn_Click(...)");
             robotCommandServer.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.READY);
+            SetRecipeState(recipeStateAtRun);
         }
 
 
@@ -691,10 +695,12 @@ namespace AutoGrind
             RUNNING
         }
         RecipeState recipeState = RecipeState.INIT;
+        RecipeState recipeStateAtRun = RecipeState.INIT;
         private void SetRecipeState(RecipeState s)
         {
             if (recipeState != s)
             {
+                RecipeState oldRecipeState = recipeState;
                 recipeState = s;
                 log.Info("SetRecipeState({0})", s.ToString());
 
@@ -720,10 +726,11 @@ namespace AutoGrind
                         break;
                     // TODO NEXT
                     case RecipeState.RUNNING:
-                        NewRecipeBtn.Enabled = true;
-                        LoadRecipeBtn.Enabled = true;
-                        SaveRecipeBtn.Enabled = true;
-                        SaveAsRecipeBtn.Enabled = true;
+                        recipeStateAtRun = oldRecipeState;
+                        NewRecipeBtn.Enabled = false;
+                        LoadRecipeBtn.Enabled = false;
+                        SaveRecipeBtn.Enabled = false;
+                        SaveAsRecipeBtn.Enabled = false;
                         break;
                 }
                 NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
@@ -1481,7 +1488,7 @@ namespace AutoGrind
             return true;
         }
 
-        int logFilter=0;
+        int logFilter = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) lineCurrentlyExecuting={0}", lineCurrentlyExecuting);
@@ -1527,9 +1534,10 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting + 1 >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
-                        SetState(RunState.READY);
                         RecipeRTB.SelectAll();
                         RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+                        SetState(RunState.READY);
+                        SetRecipeState(recipeStateAtRun);
                     }
                     else
                     {
@@ -1540,6 +1548,7 @@ namespace AutoGrind
                         {
                             log.Info("EXEC Aborting execution");
                             SetState(RunState.READY);
+                            SetRecipeState(recipeStateAtRun);
                         }
                     }
                 }
@@ -2452,7 +2461,10 @@ namespace AutoGrind
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)
         {
-            SetRecipeState(RecipeState.MODIFIED);
+            if (runState != RunState.RUNNING)
+            {
+                SetRecipeState(RecipeState.MODIFIED);
+            }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
     }
