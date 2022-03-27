@@ -30,9 +30,10 @@ def set_variable():
     if s > 0:
       robot_linear_speed_mps = s / 1000.0
     end
-    socket_send_string("robot_linear_speed_mmps=")
-    socket_send_string(robot_linear_speed_mps * 1000.0)
-    socket_send_lf()
+    socket_set_var("robot_linear_speed_mmps",robot_linear_speed_mps * 1000.0)
+    #socket_send_string("robot_linear_speed_mmps=")
+    #socket_send_string(robot_linear_speed_mps * 1000.0)
+    #socket_send_lf()
     global response = "set_linear_speed()"
   elif command[2] == 2:
     # Set accel to a if a>0. Always returns current value
@@ -40,9 +41,10 @@ def set_variable():
     if a > 0:
       robot_linear_accel_mpss = a / 1000.0
     end
-    socket_send_string("robot_linear_accel_mmpss=")
-    socket_send_string(robot_linear_accel_mpss * 1000.0)
-    socket_send_lf()
+    socket_set_var("robot_linear_accel_mmpss",robot_linear_accel_mpss * 1000.0)
+    #socket_send_string("robot_linear_accel_mmpss=")
+    #socket_send_string(robot_linear_accel_mpss * 1000.0)
+    #socket_send_lf()
     global response = "set_linear_accel()"
   elif command[2] == 3:
     # Set blend to b if b>=0. Always returns current value
@@ -50,9 +52,10 @@ def set_variable():
     if b >= 0:
       robot_blend_radius_m = b / 1000.0
     end
-    socket_send_string("robot_blend_radius_mm=")
-    socket_send_string(robot_blend_radius_m * 1000.0)
-    socket_send_lf()
+    socket_set_var("robot_blend_radius_mm",robot_blend_radius_m * 1000.0)
+    #socket_send_string("robot_blend_radius_mm=")
+    #socket_send_string(robot_blend_radius_m * 1000.0)
+    #socket_send_lf()
     global response = "set_blend_radius()"
   elif command[2] == 4:
     # Set joint speed to s if s>0. Always returns current value
@@ -60,9 +63,10 @@ def set_variable():
     if s > 0:
       robot_joint_speed_rps = d2r(s)
     end
-    socket_send_string("robot_joint_speed_dps=")
-    socket_send_string(r2d(robot_joint_speed_rps))
-    socket_send_lf()
+    socket_set_var("robot_joint_speed_dps",r2d(robot_joint_speed_rps))
+    #socket_send_string("robot_joint_speed_dps=")
+    #socket_send_string(r2d(robot_joint_speed_rps))
+    #socket_send_lf()
     global response = "set_joint_speed()"
   elif command[2] == 5:
     # Set joint accel to a if a>0. Always returns current value
@@ -70,9 +74,10 @@ def set_variable():
     if a > 0:
       robot_joint_accel_rpss = d2r(a)
     end
-    socket_send_string("robot_joint_accel_dpss=")
-    socket_send_string(r2d(robot_joint_accel_rpss))
-    socket_send_lf()
+    socket_set_var("robot_joint_accel_dpss",r2d(robot_joint_accel_rpss))
+    #socket_send_string("robot_joint_accel_dpss=")
+    #socket_send_string(r2d(robot_joint_accel_rpss))
+    #socket_send_lf()
     global response = "set_joint_accel()"
   elif command[2] == 6:
     # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
@@ -111,9 +116,10 @@ def set_variable():
       robot_payload_cog_m = [command[4], command[5], command[6]]
       set_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
-    socket_send_string("robot_payload_mass_kg=")
-    socket_send_string(robot_payload_mass_kg)
-    socket_send_lf()
+    socket_set_var("robot_payload_mass_kg",robot_payload_mass_kg)
+    #socket_send_string("robot_payload_mass_kg=")
+    #socket_send_string(robot_payload_mass_kg)
+    #socket_send_lf()
     socket_send_string("robot_payload_cog_m=")
     return_vector(robot_payload_cog_m, 3)
     socket_send_lf()

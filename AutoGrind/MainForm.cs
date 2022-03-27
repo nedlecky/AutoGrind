@@ -741,11 +741,6 @@ namespace AutoGrind
                 RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
                 RecipeRTB.Modified = false;
                 RecipeFilenameLbl.Text = file;
-                RecipeFilenameOnlyLbl.Text = Path.GetFileName(file);
-                RecipeFilenameOnly2Lbl.Text = Path.GetFileName(file);
-
-                // Copy from the edit window to the runtime window
-                RecipeRTB.Text = RecipeRTB.Text;
                 return true;
             }
             catch (Exception ex)
@@ -768,8 +763,6 @@ namespace AutoGrind
             SetRecipeState(RecipeState.NEW);
             SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
-            RecipeFilenameOnlyLbl.Text = "Untitled";
-            RecipeFilenameOnly2Lbl.Text = "Untitled";
             RecipeRTB.Clear();
         }
 
@@ -1880,6 +1873,12 @@ namespace AutoGrind
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
+                case "grind_n_cycles":
+                    GrindNCyclesLbl.Text = valueTrimmed;
+                    break;
+                case "grind_cycle":
+                    GrindCycleLbl.Text = valueTrimmed;
+                    break;
                 case "robot_linear_speed_mmps":
                     SetLinearSpeedBtn.Text = "Linear Speed\n" + valueTrimmed + " mm/s";
                     break;
@@ -2411,8 +2410,28 @@ namespace AutoGrind
             InstructionsRTB.SaveFile("Instructions.RTF");
         }
 
+
         // ===================================================================
         // END MANUAL SYSTEM
         // ===================================================================
+        private void RecipeFilenameOnlyLbl_TextChanged(object sender, EventArgs e)
+        {
+            RecipeFilenameOnlyLblCopy.Text = RecipeFilenameOnlyLbl.Text;
+        }
+
+        private void CurrentLineLbl_TextChanged(object sender, EventArgs e)
+        {
+            CurrentLineLblCopy.Text = CurrentLineLbl.Text;
+        }
+
+        private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
+        {
+            RecipeFilenameOnlyLbl.Text = Path.GetFileName(RecipeFilenameLbl.Text);
+        }
+
+        private void RecipeRTB_TextChanged(object sender, EventArgs e)
+        {
+            SetRecipeState(RecipeState.MODIFIED);
+        }
     }
 }
