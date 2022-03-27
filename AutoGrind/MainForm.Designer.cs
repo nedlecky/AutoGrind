@@ -1080,10 +1080,10 @@
             // CurrentLineLblCopy
             // 
             this.CurrentLineLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 51);
+            this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 23);
             this.CurrentLineLblCopy.Name = "CurrentLineLblCopy";
-            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 52);
+            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 94);
             this.CurrentLineLblCopy.TabIndex = 125;
             // 
             // label10

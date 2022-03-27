@@ -1499,7 +1499,7 @@ namespace AutoGrind
                 {
                     case DialogResult.None:
                         return;
-                    case DialogResult.Abort:
+                    case DialogResult.Cancel:
                         log.Error("Operator selected \"Abort\" in MessageForm");
                         SetState(RunState.READY);
                         waitingForOperatorMessageForm = null;

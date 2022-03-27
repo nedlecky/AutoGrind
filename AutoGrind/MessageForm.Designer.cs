@@ -57,6 +57,7 @@
             this.CancelBtn.TabIndex = 5;
             this.CancelBtn.Text = "Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
+            this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
             // OkBtn
             // 
@@ -71,6 +72,7 @@
             this.OkBtn.TabIndex = 6;
             this.OkBtn.Text = "OK";
             this.OkBtn.UseVisualStyleBackColor = false;
+            this.OkBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
             // MessageForm
             // 
