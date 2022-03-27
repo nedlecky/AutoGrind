@@ -239,7 +239,9 @@ thread move_thread():
   move_thread_flag = 2
   exit_critical
 end
-def touchoff():
+def touchoff(retract_mm):
+  retract_m = retract_mm/1000.0
+
   move_thread_flag = 0
   move_thread_han = run move_thread()
   while (True):
@@ -254,7 +256,7 @@ def touchoff():
       local retractTo = contactPose
       if (norm(posDir) > 1e-6):
         local normalizedPosDir = normalize(posDir)
-        local additionalRetraction = p[normalizedPosDir[0] * 0.001, normalizedPosDir[1] * 0.001, normalizedPosDir[2] * 0.001, 0, 0, 0]
+        local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
       movel(retractTo, a = 1.0, v = 0.1)

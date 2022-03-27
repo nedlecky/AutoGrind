@@ -10,6 +10,7 @@ global haltCommand = [0, 0]
 
 global grind_ready = True
 global grind_contact_enabled = False
+global grind_touch_retract_mm = 3
 
 MATH_PI = 3.1415926535
 
@@ -25,7 +26,7 @@ def pattern_grind():
   listenerThread = run listener_thread()
 
   global grind_cycle = 0
-  socket_set_var("grind_cycle",grind_cycle)
+  socket_set_var("grind_cycle", grind_cycle)
   global grind_n_cycles = 0
   global grind_dx_mm = 0
   global grind_dy_mm = 0
@@ -34,6 +35,8 @@ def pattern_grind():
   global grind_n_spirals = 0
   global grind_xstep_mm = 0
   global grind_ystep_mm = 0
+  global grind_accel = 1
+  global grind_blend = 3
 
   # Install tcp that puts tcp at center of part (noop for flat parts!)
   set_tcp(robot_tcp_part)
@@ -47,13 +50,19 @@ def pattern_grind():
       global grind_contact_enabled = False
       socket_send_line("grind_contact_enabled=False")
     end
+  elif command[2] == 2:
+    global response = "set grind_touch_retract_mm"
+    if command[3] >= 0:
+      global grind_touch_retract_mm = command[3]
+    end
+    socket_set_var("grind_touch_retract_mm", grind_touch_retract_mm)
     # LINEAR GRINDS
   elif command[2] == 10:
     global response = "grind_line"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_n_cycles = command[5]
-    socket_set_var("grind_n_cycles",grind_n_cycles)
+    socket_set_var("grind_n_cycles", grind_n_cycles)
     global grind_speed = command[6] / 1000.0
     global grind_force = command[7]
     # These may get calculated later!
@@ -67,7 +76,7 @@ def pattern_grind():
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
     global grind_n_cycles = command[5]
-    socket_set_var("grind_n_cycles",grind_n_cycles)
+    socket_set_var("grind_n_cycles", grind_n_cycles)
     global grind_speed = command[6] / 1000.0
     global grind_force = command[7]
     # These may get calculated later!
@@ -83,7 +92,7 @@ def pattern_grind():
     global grind_n_xsteps = limiter(command[5], 1, 10)
     global grind_n_ysteps = limiter(command[6], 1, 10)
     global grind_n_cycles = command[7]
-    socket_set_var("grind_n_cycles",grind_n_cycles)
+    socket_set_var("grind_n_cycles", grind_n_cycles)
     global grind_speed = command[8] / 1000.0
     global grind_force = command[9]
     # These may get calculated later!
@@ -96,7 +105,7 @@ def pattern_grind():
     global response = "grind_circle"
     global grind_circle1_diam_mm = command[3]
     global grind_n_cycles = command[4]
-    socket_set_var("grind_n_cycles",grind_n_cycles)
+    socket_set_var("grind_n_cycles", grind_n_cycles)
     global grind_speed = command[5] / 1000.0
     global grind_force = command[6]
     # These may get calculated later!
@@ -136,7 +145,7 @@ def contact_part(on = False, enabled = False):
   if on:
     if enabled:
       # Advance until contact
-      return touchoff()
+      return touchoff(grind_touch_retract_mm)
     else:
       # Simulated....
       p1 = pose_trans(get_forward_kin(), p[0, 0, 0.010, 0, 0, 0])
@@ -577,7 +586,7 @@ def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
   move_count = 0
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     # Skip first X move if we should start with a y move
     if grind_cycle != 1 or move_count != 0 or n_xsteps == 1:
       # Advance x_grid by x_incr
@@ -641,7 +650,7 @@ def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
   move_count = 0
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     # Skip first X move if we should start with a y move
     if grind_cycle != 1 or move_count != 0 or n_xsteps == 1:
       # Advance x_grid by x_incr
@@ -706,7 +715,7 @@ def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
   move_count = 0
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     # Skip first X move if we should start with a y move
     if grind_cycle != 1 or move_count != 0 or n_rxsteps == 1:
       # Advance x_grid by x_incr
@@ -814,7 +823,7 @@ def pattern_circle_flat(circle_diam_m, n_cycles):
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     i = 1
     while ok_to_proceed() and i <= n_points:
       theta = d2r(360.0 * i / n_points)
@@ -841,7 +850,7 @@ def pattern_circle_cylinder(circle_diam_m, cylinder_radius_m, n_cycles):
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     i = 1
     while ok_to_proceed() and i <= n_points:
       theta = d2r(360.0 * i / n_points)
@@ -869,7 +878,7 @@ def pattern_circle_sphere(circle_diam_m, sphere_diam_m, n_cycles):
   p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m / 2.0, 0, 0])
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     i = 1
     while ok_to_proceed() and i <= n_points:
       theta = d2r(360.0 * i / n_points)
@@ -956,7 +965,7 @@ def pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_spirals, n_cycles):
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
     i = 0
     while ok_to_proceed() and i <= n_total_points:

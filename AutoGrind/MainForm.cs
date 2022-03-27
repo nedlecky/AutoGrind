@@ -278,6 +278,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
+                        ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -1004,6 +1005,11 @@ namespace AutoGrind
 
             form.ShowDialog(this);
         }
+        private void JogRunBtn_Click(object sender, EventArgs e)
+        {
+            JogBtn_Click(sender, e);
+        }
+
 
         private void DiameterLbl_Click(object sender, EventArgs e)
         {
@@ -1206,6 +1212,7 @@ namespace AutoGrind
             {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10" } },
             {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
             {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
+            {"grind_touch_retract",     new CommandSpec(){nParams=1, prefix="40,2" } },
 
             {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10" }  },
             {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,20" }  },
@@ -1732,7 +1739,6 @@ namespace AutoGrind
             {
                 ExecuteLine(-1, String.Format("set_joint_speed({0})", form.value));
             }
-
         }
 
         private void SetJointAccelBtn_Click(object sender, EventArgs e)
@@ -1743,8 +1749,18 @@ namespace AutoGrind
             {
                 ExecuteLine(-1, String.Format("set_joint_accel({0})", form.value));
             }
-
         }
+
+        private void SetTouchRetractBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(ReadVariable("grind_touch_retract_mm"), "grind TOUCH RETRACT DISTANCE, mm", 3);
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_touch_retract({0})", form.value));
+            }
+        }
+
 
 
         /// <summary>
@@ -1929,6 +1945,9 @@ namespace AutoGrind
                     break;
                 case "robot_joint_accel_dpss":
                     SetJointAccelBtn.Text = "Joint Acceleration\n" + valueTrimmed + " deg/s^2";
+                    break;
+                case "grind_touch_retract_mm":
+                    SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
                 case "grind_contact_enabled":
                     GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
@@ -2473,5 +2492,6 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
+
     }
 }
