@@ -1048,7 +1048,7 @@ namespace AutoGrind
         }
 
         /// <summary>
-        /// Set the lineCurrentlyExecuting to n and highlight it in the RecipRoRTB
+        /// Set the lineCurrentlyExecuting to n and highlight it in the RecipeRTB
         /// </summary>
         /// <param name="n">Line number to start executing</param>
         private void SetCurrentLine(int n)
@@ -1059,9 +1059,14 @@ namespace AutoGrind
             {
                 int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
                 int length = RecipeRTB.Lines[lineCurrentlyExecuting].Length;
+
+                RecipeRTB.SelectAll();
+                RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+
                 RecipeRTB.Select(start, length);
-                RecipeRTBCopy.Select(start, length);
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Bold);
+
+                RecipeRTBCopy.Select(start, length);
                 RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
             }
         }
@@ -1507,6 +1512,9 @@ namespace AutoGrind
                     {
                         log.Info("EXEC Reached end of file");
                         SetState(RunState.READY);
+                        RecipeRTB.SelectAll();
+                        RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+
                     }
                     else
                     {
