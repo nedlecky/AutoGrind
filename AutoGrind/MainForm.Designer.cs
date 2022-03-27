@@ -100,6 +100,12 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.RecipeRTBCopy = new System.Windows.Forms.RichTextBox();
+            this.Grind = new System.Windows.Forms.Label();
+            this.GrindNCyclesLbl = new System.Windows.Forms.Label();
+            this.GrindCycleLbl = new System.Windows.Forms.Label();
+            this.CurrentLineLblCopy = new System.Windows.Forms.Label();
+            this.label10 = new System.Windows.Forms.Label();
             this.RecipeFilenameOnlyLblCopy = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
@@ -116,7 +122,8 @@
             this.RobotSendBtn = new System.Windows.Forms.Button();
             this.RobotMessageTxt = new System.Windows.Forms.TextBox();
             this.ProgramPage = new System.Windows.Forms.TabPage();
-            this.InstallationPage = new System.Windows.Forms.TabPage();
+            this.MovePage = new System.Windows.Forms.TabPage();
+            this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.SelectToolBtn = new System.Windows.Forms.Button();
             this.ToolsGrd = new System.Windows.Forms.DataGridView();
@@ -139,19 +146,12 @@
             this.label1 = new System.Windows.Forms.Label();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.DebugLevelCombo = new System.Windows.Forms.ComboBox();
-            this.MovePage = new System.Windows.Forms.TabPage();
             this.IoPage = new System.Windows.Forms.TabPage();
             this.LogPage = new System.Windows.Forms.TabPage();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.ClearUrDashboardRtbBtn = new System.Windows.Forms.Button();
             this.UrDashboardLogRTB = new System.Windows.Forms.RichTextBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
-            this.label10 = new System.Windows.Forms.Label();
-            this.CurrentLineLblCopy = new System.Windows.Forms.Label();
-            this.GrindCycleLbl = new System.Windows.Forms.Label();
-            this.GrindNCyclesLbl = new System.Windows.Forms.Label();
-            this.Grind = new System.Windows.Forms.Label();
-            this.RecipeRTBCopy = new System.Windows.Forms.RichTextBox();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).BeginInit();
@@ -166,12 +166,12 @@
             this.RunPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
             this.ProgramPage.SuspendLayout();
-            this.InstallationPage.SuspendLayout();
+            this.MovePage.SuspendLayout();
+            this.SetupPage.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.MovePage.SuspendLayout();
             this.LogPage.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.SuspendLayout();
@@ -850,15 +850,15 @@
             // OperatorModeBox
             // 
             this.OperatorModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.OperatorModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.OperatorModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OperatorModeBox.FormattingEnabled = true;
             this.OperatorModeBox.Items.AddRange(new object[] {
             "Operator",
             "Editor",
             "Engineering"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(1755, 39);
+            this.OperatorModeBox.Location = new System.Drawing.Point(1726, 39);
             this.OperatorModeBox.Name = "OperatorModeBox";
-            this.OperatorModeBox.Size = new System.Drawing.Size(167, 39);
+            this.OperatorModeBox.Size = new System.Drawing.Size(221, 47);
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
@@ -984,8 +984,8 @@
             this.MainTab.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.MainTab.Controls.Add(this.RunPage);
             this.MainTab.Controls.Add(this.ProgramPage);
-            this.MainTab.Controls.Add(this.InstallationPage);
             this.MainTab.Controls.Add(this.MovePage);
+            this.MainTab.Controls.Add(this.SetupPage);
             this.MainTab.Controls.Add(this.IoPage);
             this.MainTab.Controls.Add(this.LogPage);
             this.MainTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -999,6 +999,7 @@
             // 
             // RunPage
             // 
+            this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.RunPage.Controls.Add(this.RecipeRTBCopy);
             this.RunPage.Controls.Add(this.Grind);
             this.RunPage.Controls.Add(this.GrindNCyclesLbl);
@@ -1033,6 +1034,67 @@
             this.RunPage.TabIndex = 0;
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
+            // 
+            // RecipeRTBCopy
+            // 
+            this.RecipeRTBCopy.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RecipeRTBCopy.Location = new System.Drawing.Point(20, 133);
+            this.RecipeRTBCopy.Margin = new System.Windows.Forms.Padding(2);
+            this.RecipeRTBCopy.Name = "RecipeRTBCopy";
+            this.RecipeRTBCopy.ReadOnly = true;
+            this.RecipeRTBCopy.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
+            this.RecipeRTBCopy.Size = new System.Drawing.Size(765, 1059);
+            this.RecipeRTBCopy.TabIndex = 129;
+            this.RecipeRTBCopy.Text = "";
+            // 
+            // Grind
+            // 
+            this.Grind.AutoSize = true;
+            this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Grind.Location = new System.Drawing.Point(1163, 621);
+            this.Grind.Name = "Grind";
+            this.Grind.Size = new System.Drawing.Size(64, 55);
+            this.Grind.TabIndex = 128;
+            this.Grind.Text = "of";
+            // 
+            // GrindNCyclesLbl
+            // 
+            this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1234, 621);
+            this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
+            this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
+            this.GrindNCyclesLbl.TabIndex = 127;
+            this.GrindNCyclesLbl.Text = "1";
+            // 
+            // GrindCycleLbl
+            // 
+            this.GrindCycleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindCycleLbl.Location = new System.Drawing.Point(1062, 620);
+            this.GrindCycleLbl.Name = "GrindCycleLbl";
+            this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
+            this.GrindCycleLbl.TabIndex = 126;
+            this.GrindCycleLbl.Text = "1";
+            // 
+            // CurrentLineLblCopy
+            // 
+            this.CurrentLineLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 51);
+            this.CurrentLineLblCopy.Name = "CurrentLineLblCopy";
+            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 52);
+            this.CurrentLineLblCopy.TabIndex = 125;
+            // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(851, 618);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(205, 55);
+            this.label10.TabIndex = 124;
+            this.label10.Text = "Grinding";
             // 
             // RecipeFilenameOnlyLblCopy
             // 
@@ -1202,6 +1264,7 @@
             // 
             // ProgramPage
             // 
+            this.ProgramPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.ProgramPage.Controls.Add(this.RecipeRTB);
             this.ProgramPage.Controls.Add(this.CurrentLineLbl);
             this.ProgramPage.Controls.Add(this.RecipeFilenameLbl);
@@ -1214,19 +1277,36 @@
             this.ProgramPage.Text = "Program";
             this.ProgramPage.UseVisualStyleBackColor = true;
             // 
-            // InstallationPage
+            // MovePage
             // 
-            this.InstallationPage.Controls.Add(this.groupBox8);
-            this.InstallationPage.Controls.Add(this.DefaultConfigBtn);
-            this.InstallationPage.Controls.Add(this.LoadConfigBtn);
-            this.InstallationPage.Controls.Add(this.SaveConfigBtn);
-            this.InstallationPage.Controls.Add(this.groupBox1);
-            this.InstallationPage.Location = new System.Drawing.Point(4, 100);
-            this.InstallationPage.Name = "InstallationPage";
-            this.InstallationPage.Size = new System.Drawing.Size(2121, 1222);
-            this.InstallationPage.TabIndex = 2;
-            this.InstallationPage.Text = "Installation";
-            this.InstallationPage.UseVisualStyleBackColor = true;
+            this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MovePage.Controls.Add(this.JogBtn);
+            this.MovePage.Controls.Add(this.SetLinearSpeedBtn);
+            this.MovePage.Controls.Add(this.SetBlendRadiusBtn);
+            this.MovePage.Controls.Add(this.SetJointAccelBtn);
+            this.MovePage.Controls.Add(this.SetJointSpeedBtn);
+            this.MovePage.Controls.Add(this.SetLinearAccelBtn);
+            this.MovePage.Location = new System.Drawing.Point(4, 100);
+            this.MovePage.Name = "MovePage";
+            this.MovePage.Size = new System.Drawing.Size(2121, 1222);
+            this.MovePage.TabIndex = 3;
+            this.MovePage.Text = "Move";
+            this.MovePage.UseVisualStyleBackColor = true;
+            // 
+            // SetupPage
+            // 
+            this.SetupPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SetupPage.Controls.Add(this.groupBox8);
+            this.SetupPage.Controls.Add(this.DefaultConfigBtn);
+            this.SetupPage.Controls.Add(this.LoadConfigBtn);
+            this.SetupPage.Controls.Add(this.SaveConfigBtn);
+            this.SetupPage.Controls.Add(this.groupBox1);
+            this.SetupPage.Location = new System.Drawing.Point(4, 100);
+            this.SetupPage.Name = "SetupPage";
+            this.SetupPage.Size = new System.Drawing.Size(2121, 1222);
+            this.SetupPage.TabIndex = 2;
+            this.SetupPage.Text = "Setup";
+            this.SetupPage.UseVisualStyleBackColor = true;
             // 
             // groupBox8
             // 
@@ -1465,23 +1545,9 @@
             this.DebugLevelCombo.TabIndex = 80;
             this.DebugLevelCombo.SelectedIndexChanged += new System.EventHandler(this.DebugLevelCombo_SelectedIndexChanged);
             // 
-            // MovePage
-            // 
-            this.MovePage.Controls.Add(this.JogBtn);
-            this.MovePage.Controls.Add(this.SetLinearSpeedBtn);
-            this.MovePage.Controls.Add(this.SetBlendRadiusBtn);
-            this.MovePage.Controls.Add(this.SetJointAccelBtn);
-            this.MovePage.Controls.Add(this.SetJointSpeedBtn);
-            this.MovePage.Controls.Add(this.SetLinearAccelBtn);
-            this.MovePage.Location = new System.Drawing.Point(4, 100);
-            this.MovePage.Name = "MovePage";
-            this.MovePage.Size = new System.Drawing.Size(2121, 1222);
-            this.MovePage.TabIndex = 3;
-            this.MovePage.Text = "Move";
-            this.MovePage.UseVisualStyleBackColor = true;
-            // 
             // IoPage
             // 
+            this.IoPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.IoPage.Location = new System.Drawing.Point(4, 100);
             this.IoPage.Name = "IoPage";
             this.IoPage.Size = new System.Drawing.Size(2121, 1222);
@@ -1491,6 +1557,7 @@
             // 
             // LogPage
             // 
+            this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.LogPage.Controls.Add(this.groupBox7);
             this.LogPage.Controls.Add(this.groupBox6);
             this.LogPage.Controls.Add(this.groupBox5);
@@ -1548,67 +1615,6 @@
             this.RecipeFilenameOnlyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.RecipeFilenameOnlyLbl.TextChanged += new System.EventHandler(this.RecipeFilenameOnlyLbl_TextChanged);
             // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(851, 618);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(205, 55);
-            this.label10.TabIndex = 124;
-            this.label10.Text = "Grinding";
-            // 
-            // CurrentLineLblCopy
-            // 
-            this.CurrentLineLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.CurrentLineLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLblCopy.Location = new System.Drawing.Point(20, 51);
-            this.CurrentLineLblCopy.Name = "CurrentLineLblCopy";
-            this.CurrentLineLblCopy.Size = new System.Drawing.Size(765, 52);
-            this.CurrentLineLblCopy.TabIndex = 125;
-            // 
-            // GrindCycleLbl
-            // 
-            this.GrindCycleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindCycleLbl.Location = new System.Drawing.Point(1062, 620);
-            this.GrindCycleLbl.Name = "GrindCycleLbl";
-            this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
-            this.GrindCycleLbl.TabIndex = 126;
-            this.GrindCycleLbl.Text = "1";
-            // 
-            // GrindNCyclesLbl
-            // 
-            this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1234, 621);
-            this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
-            this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
-            this.GrindNCyclesLbl.TabIndex = 127;
-            this.GrindNCyclesLbl.Text = "1";
-            // 
-            // Grind
-            // 
-            this.Grind.AutoSize = true;
-            this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(1163, 621);
-            this.Grind.Name = "Grind";
-            this.Grind.Size = new System.Drawing.Size(64, 55);
-            this.Grind.TabIndex = 128;
-            this.Grind.Text = "of";
-            // 
-            // RecipeRTBCopy
-            // 
-            this.RecipeRTBCopy.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRTBCopy.Location = new System.Drawing.Point(20, 133);
-            this.RecipeRTBCopy.Margin = new System.Windows.Forms.Padding(2);
-            this.RecipeRTBCopy.Name = "RecipeRTBCopy";
-            this.RecipeRTBCopy.ReadOnly = true;
-            this.RecipeRTBCopy.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTBCopy.Size = new System.Drawing.Size(765, 1059);
-            this.RecipeRTBCopy.TabIndex = 129;
-            this.RecipeRTBCopy.Text = "";
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1652,13 +1658,13 @@
             this.groupBox2.ResumeLayout(false);
             this.groupBox2.PerformLayout();
             this.ProgramPage.ResumeLayout(false);
-            this.InstallationPage.ResumeLayout(false);
+            this.MovePage.ResumeLayout(false);
+            this.SetupPage.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.groupBox3.ResumeLayout(false);
-            this.MovePage.ResumeLayout(false);
             this.LogPage.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -1738,7 +1744,7 @@
         private System.Windows.Forms.TabControl MainTab;
         private System.Windows.Forms.TabPage RunPage;
         private System.Windows.Forms.TabPage ProgramPage;
-        private System.Windows.Forms.TabPage InstallationPage;
+        private System.Windows.Forms.TabPage SetupPage;
         private System.Windows.Forms.GroupBox groupBox8;
         private System.Windows.Forms.Button SelectToolBtn;
         private System.Windows.Forms.DataGridView ToolsGrd;

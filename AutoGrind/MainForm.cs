@@ -31,7 +31,7 @@ namespace AutoGrind
         static SplashForm splashForm;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
-        MessageForm messageForm = null;
+        MessageForm waitingForOperatorMessageForm = null;
 
         static DataTable variables;
         static DataTable tools;
@@ -149,13 +149,13 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            messageForm = new MessageForm("AutoGrind Confirmation", question, "Yes", "No");
+            MessageForm messageForm = new MessageForm("AutoGrind Confirmation", question, "Yes", "No");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            messageForm = new MessageForm("AutoGrind Error", message, "OK", "Cancel");
+            MessageForm messageForm = new MessageForm("AutoGrind Error", message, "OK", "Cancel");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -272,11 +272,11 @@ namespace AutoGrind
                         log.Info("Changing robot connection to READY");
 
                         // Send defaults speeds and accelerations
-                        ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_speed", "200")));
-                        ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_accel", "500")));
-                        ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend", "3")));
-                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed", "90")));
-                        ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel", "180")));
+                        ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_linear_speed_mmps", "200")));
+                        ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_linear_accel_mmpss", "500")));
+                        ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
+                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
+                        ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -325,7 +325,6 @@ namespace AutoGrind
             }
         }
 
-
         private void SetState(RunState s, bool fEditing = false, bool fForce = false)
         {
             if (fForce || runState != s)
@@ -337,17 +336,20 @@ namespace AutoGrind
             }
         }
 
+        bool originalModifiedState = false;
         private void EnterRunState(bool fEditing)
         {
             switch (runState)
             {
                 case RunState.IDLE:
-                    //GrindBtn.Enabled = true;
-                    //EditBtn.Enabled = true;
-                    //SetupBtn.Enabled = true;
                     ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
-                    //LoadBtn.Enabled = true;
+
+                    LoadRecipeBtn.Enabled = true;
+                    NewRecipeBtn.Enabled = true;
+                    SaveRecipeBtn.Enabled = RecipeRTB.Modified;
+                    SaveAsRecipeBtn.Enabled = true;
+
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
@@ -356,12 +358,16 @@ namespace AutoGrind
                     CurrentLineLbl.Text = "";
                     break;
                 case RunState.READY:
-                    //GrindBtn.Enabled = true;
-                    //EditBtn.Enabled = true;
-                    //SetupBtn.Enabled = true;
                     ExitBtn.Enabled = true;
                     JogBtn.Enabled = robotReady;
-                    //LoadBtn.Enabled = true;
+
+                    LoadRecipeBtn.Enabled = true;
+                    NewRecipeBtn.Enabled = true;
+                    RecipeRTB.Modified = false;
+                    SaveRecipeBtn.Enabled = originalModifiedState;
+                    SaveAsRecipeBtn.Enabled = true;
+                    RecipeRTB.Modified = originalModifiedState;
+
                     StartBtn.Enabled = true;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = false;
@@ -370,12 +376,15 @@ namespace AutoGrind
                     CurrentLineLbl.Text = "";
                     break;
                 case RunState.RUNNING:
-                    //GrindBtn.Enabled = false;
-                    //EditBtn.Enabled = false;
-                    //SetupBtn.Enabled = false;
                     ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
-                    //LoadBtn.Enabled = false;
+
+                    LoadRecipeBtn.Enabled = false;
+                    NewRecipeBtn.Enabled = false;
+                    SaveRecipeBtn.Enabled = false;
+                    SaveAsRecipeBtn.Enabled = false;
+                    originalModifiedState=RecipeRTB.Modified;
+
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = true;
                     ContinueBtn.Enabled = false;
@@ -387,12 +396,14 @@ namespace AutoGrind
 
                     break;
                 case RunState.PAUSED:
-                    //GrindBtn.Enabled = false;
-                    //EditBtn.Enabled = false;
-                    //SetupBtn.Enabled = false;
                     ExitBtn.Enabled = false;
                     JogBtn.Enabled = false;
-                    //LoadBtn.Enabled = false;
+
+                    LoadRecipeBtn.Enabled = false;
+                    NewRecipeBtn.Enabled = false;
+                    SaveRecipeBtn.Enabled = false;
+                    SaveAsRecipeBtn.Enabled = false;
+
                     StartBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     ContinueBtn.Enabled = true;
@@ -404,19 +415,20 @@ namespace AutoGrind
             // Set the colors
             if (fEditing)
             {
-                //GrindBtn.BackColor = GrindBtn.Enabled ? Color.LightGreen : Color.Gray;
-                //EditBtn.BackColor = EditBtn.Enabled ? Color.Green : Color.Gray;
+                ;
             }
             else
             {
-                //GrindBtn.BackColor = GrindBtn.Enabled ? Color.Green : Color.Gray;
-                //EditBtn.BackColor = EditBtn.Enabled ? Color.LightGreen : Color.Gray;
-                //SetupBtn.BackColor = SetupBtn.Enabled ? Color.LightGreen : Color.Gray;
-                ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
             }
 
+            ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
             JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
-            //LoadBtn.BackColor = LoadBtn.Enabled ? Color.Green : Color.Gray;
+
+            LoadRecipeBtn.BackColor = LoadRecipeBtn.Enabled ? Color.Green : Color.Gray;
+            NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
+            SaveRecipeBtn.BackColor = SaveRecipeBtn.Enabled ? Color.Green : Color.Gray;
+            SaveAsRecipeBtn.BackColor = SaveAsRecipeBtn.Enabled ? Color.Green : Color.Gray;
+
             StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
             ContinueBtn.BackColor = ContinueBtn.Enabled ? Color.Green : Color.Gray;
@@ -468,7 +480,6 @@ namespace AutoGrind
             switch (newOperatorMode)
             {
                 case OperatorMode.OPERATOR:
-                    //Width = standardWidth;
                     break;
                 case OperatorMode.EDITOR:
                     form = new SetValueForm("", "Please enter passcode for EDITOR", 0, true);
@@ -479,47 +490,42 @@ namespace AutoGrind
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    // TEMPORARILY DON"T NEED PASSWORD
-                    // form = new SetValueForm("", "Please enter passcode for ENGINEERING",0,true);
-                    /*
-                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    form = new SetValueForm("", "Please enter passcode for ENGINEERING",0,true);
+                      if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
-                    */
                     break;
             }
 
             operatorMode = newOperatorMode;
-            switch (operatorMode)
+            // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
+            // TODO: This doesn't really do most of what we want!
+            if(MainTab.TabPages[1] != null)
             {
-                case OperatorMode.OPERATOR:
-                    //Width = standardWidth;
-                    //EditBtn.Visible = false;
-                    //SetupBtn.Visible = false;
-                    //OperationTab.TabPages["EditTab"].Visible = false;
-                    //OperationTab.TabPages["SetupTab"].Visible = false;
-                    //MonitorTab.Visible = false;
-
-
-                    break;
-                case OperatorMode.EDITOR:
-                    //Width = standardWidth;
-                    //EditBtn.Visible = true;
-                    //SetupBtn.Visible = false;
-                    //OperationTab.TabPages["EditTab"].Visible = true;
-                    //OperationTab.TabPages["SetupTab"].Visible = false;
-                    //MonitorTab.Visible = true;
-                    break;
-                case OperatorMode.ENGINEERING:
-                    //Width = fullWidth;
-                    //EditBtn.Visible = true;
-                    //SetupBtn.Visible = true;
-                    //OperationTab.TabPages["EditTab"].Visible = true;
-                    //OperationTab.TabPages["SetupTab"].Visible = true;
-                    //MonitorTab.Visible = true;
-                    break;
+                log.Info("Setting Operator Mode {0}", operatorMode);
+                switch (operatorMode)
+                {
+                    case OperatorMode.OPERATOR:
+                        MainTab.TabPages[1].Enabled = false;
+                        MainTab.TabPages[2].Enabled = false;
+                        MainTab.TabPages[3].Enabled = false;
+                        MainTab.TabPages[4].Enabled = false;
+                        break;
+                    case OperatorMode.EDITOR:
+                        MainTab.TabPages[1].Enabled = true;
+                        MainTab.TabPages[2].Enabled = true;
+                        MainTab.TabPages[3].Enabled = false;
+                        MainTab.TabPages[4].Enabled = false;
+                        break;
+                    case OperatorMode.ENGINEERING:
+                        MainTab.TabPages[1].Enabled = true;
+                        MainTab.TabPages[2].Enabled = true;
+                        MainTab.TabPages[3].Enabled = true;
+                        MainTab.TabPages[4].Enabled = true;
+                        break;
+                }
             }
         }
 
@@ -681,7 +687,8 @@ namespace AutoGrind
             INIT,
             NEW,
             LOADED,
-            MODIFIED
+            MODIFIED,
+            RUNNING
         }
         RecipeState recipeState = RecipeState.INIT;
         private void SetRecipeState(RecipeState s)
@@ -711,6 +718,13 @@ namespace AutoGrind
                         SaveRecipeBtn.Enabled = true;
                         SaveAsRecipeBtn.Enabled = true;
                         break;
+                    // TODO NEXT
+                    case RecipeState.RUNNING:
+                        NewRecipeBtn.Enabled = true;
+                        LoadRecipeBtn.Enabled = true;
+                        SaveRecipeBtn.Enabled = true;
+                        SaveAsRecipeBtn.Enabled = true;
+                        break;
                 }
                 NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
                 LoadRecipeBtn.BackColor = LoadRecipeBtn.Enabled ? Color.Green : Color.Gray;
@@ -721,8 +735,8 @@ namespace AutoGrind
 
 
         /// <summary>
-        /// Load a filename into RecipeRTB and RecibeRoRTB and place the filename in RecipeFilenameLbl.Text
-        /// If the file does nbot exost, clear all of the above and return false. Else return true.
+        /// Load a filename into RecipeRTB and place the filename in RecipeFilenameLbl.Text
+        /// If the file does nbot exist, clear all of the above and return false. Else return true.
         /// </summary>
         /// <param name="file">The file to be loaded.</param>
         /// <returns></returns>
@@ -759,6 +773,7 @@ namespace AutoGrind
             SetState(RunState.IDLE, true);
             RecipeFilenameLbl.Text = "Untitled";
             RecipeRTB.Clear();
+            MainTab.SelectedIndex = 1; // = "Program";
         }
 
         private void LoadRecipeBtn_Click(object sender, EventArgs e)
@@ -849,6 +864,7 @@ namespace AutoGrind
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
 
             // Window State
+            // Zebra L10 Tablet runs best at 2160x1440 100% mag
             Left = 0;// (Int32)AppNameKey.GetValue("Left", 0);
             Top = 0;// (Int32)AppNameKey.GetValue("Top", 0);
             Width = 2160;// (Int32)AppNameKey.GetValue("Width", 1920);
@@ -1028,7 +1044,7 @@ namespace AutoGrind
         Dictionary<string, int> labels;
         private bool BuildLabelTable()
         {
-            log.Debug("BuildLabelTable()");
+            log.Debug("EXEC BuildLabelTable()");
 
             labels = new Dictionary<string, int>();
 
@@ -1039,7 +1055,7 @@ namespace AutoGrind
                 if (label.Success)
                 {
                     labels.Add(label.Value, lineNo);
-                    log.Debug("Found label {0:000}: {1}", lineNo, label.Value);
+                    log.Debug("EXEC Found label {0:000}: {1}", lineNo, label.Value);
                 }
                 lineNo++;
             }
@@ -1107,8 +1123,8 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            messageForm = new MessageForm(heading, message);
-            messageForm.ShowDialog();
+            waitingForOperatorMessageForm = new MessageForm(heading, message);
+            waitingForOperatorMessageForm.ShowDialog();
         }
 
         /// <summary>
@@ -1465,25 +1481,25 @@ namespace AutoGrind
             return true;
         }
 
-        int logFilter = 0;
+        int logFilter=0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
-            //log.Info("ExecTmr(...) curLine={0}", currentLine);
+            //log.Info("ExecTmr(...) lineCurrentlyExecuting={0}", lineCurrentlyExecuting);
             // Wait for any operator prompt to be cleared
-            if (messageForm != null)
+            if (waitingForOperatorMessageForm != null)
             {
-                switch (messageForm.result)
+                switch (waitingForOperatorMessageForm.result)
                 {
                     case DialogResult.None:
                         return;
                     case DialogResult.Abort:
                         log.Error("Operator selected \"Abort\" in MessageForm");
                         SetState(RunState.READY);
-                        messageForm = null;
+                        waitingForOperatorMessageForm = null;
                         return;
                     case DialogResult.OK:
                         log.Info("Operator selected \"Continue\" in MessageForm");
-                        messageForm = null;
+                        waitingForOperatorMessageForm = null;
                         break;
                 }
             }
@@ -1514,7 +1530,6 @@ namespace AutoGrind
                         SetState(RunState.READY);
                         RecipeRTB.SelectAll();
                         RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
-
                     }
                     else
                     {
