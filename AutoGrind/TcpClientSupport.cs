@@ -205,11 +205,13 @@ namespace AutoGrind
 
                 // Let's just wait a bit more?
                 while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs * 2) ;
+                timer.Stop();
                 if (response != null)
                 {
-                    log.Error("{0} InquiryResponse({1}) RETRY = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+                    log.Error("{0} InquiryResponse({1}) RETRY SUCCESS = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
                     return response;
                 }
+                log.Error("{0} InquiryResponse({1}) RETRY FAIL. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
                 return null;
             }
             timer.Stop();

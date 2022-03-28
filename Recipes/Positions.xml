@@ -28,4 +28,22 @@
     <Pose>p[0.196376,-0.547529,0.128932,3.14155,8.11401e-06,-9.73749e-06]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>demo_flat</Name>
+    <Joints>[1.49762,-1.27728,2.0899,-2.38308,-1.57013,3.08359]</Joints>
+    <Pose>p[0.0973861,-0.500668,0.00988879,-3.1413,0.0225512,0.000323034]</Pose>
+    <IsSystem>true</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>demo_cyl</Name>
+    <Joints>[1.51585,-1.00266,1.4167,-1.98223,-1.57069,3.22431]</Joints>
+    <Pose>p[0.0960217,-0.693247,0.0883123,-3.1317,0.215807,-0.000591277]</Pose>
+    <IsSystem>true</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>demo_sphere</Name>
+    <Joints>[1.09473,-1.45274,1.99352,-2.11145,-1.56998,2.66595]</Joints>
+    <Pose>p[-0.103878,-0.493247,0.108092,3.14156,-8.11408e-05,6.93148e-06]</Pose>
+    <IsSystem>true</IsSystem>
+  </Positions>
 </NewDataSet>

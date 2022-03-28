@@ -180,6 +180,16 @@ def apply_force(on = False, enabled = False):
     return None
   end
 
+  if on:
+    sleep(0.02)
+    zero_ftsensor()
+    # TODO All params correct??
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  else:
+    end_force_mode()
+    #stopl(5.0)
+  end
+
   return None
 end
 

@@ -36,6 +36,7 @@ namespace AutoGrind
         static DataTable variables;
         static DataTable tools;
         static DataTable positions;
+        static string[] diameterDefaults = { "0.00", "77.2", "81.9" };
 
         private enum RunState
         {
@@ -194,12 +195,12 @@ namespace AutoGrind
             timeLbl.Text = now;
 
             // Ping the dashboard every 5th second
-            if (robotDashboardClient != null && ((nDashboard++ % 5) == 0 || pollDashboardStateNow))
+            if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
                 if (robotDashboardClient.IsClientConnected)
                 {
                     pollDashboardStateNow = false;
                     // Poll and interpret robotmode
-                    string robotmodeResponse = robotDashboardClient.InquiryResponse("robotmode");
+                    string robotmodeResponse = robotDashboardClient.InquiryResponse("robotmode", 100);
                     Color color = Color.Red;
                     string buttonText = robotmodeResponse;
                     switch (robotmodeResponse)
@@ -228,7 +229,7 @@ namespace AutoGrind
                     RobotModeBtn.BackColor = color;
 
                     // Poll and interpret safetystatus
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus");
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus", 100);
                     color = Color.Red;
                     buttonText = robotmodeResponse;
                     switch (robotmodeResponse)
@@ -373,11 +374,6 @@ namespace AutoGrind
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
 
-                    //RecipeRTB.SelectAll();
-                    //RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
-                    //RecipeRTBCopy.SelectAll();
-                    //RecipeRTBCopy.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
-
                     break;
                 case RunState.RUNNING:
                     ExitBtn.Enabled = false;
@@ -444,7 +440,7 @@ namespace AutoGrind
             ToolsGrd.ClearSelection();
             if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
-            PartGeometryBox.Text = "FLAT";
+            //PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
@@ -459,13 +455,16 @@ namespace AutoGrind
             bool isFlat = PartGeometryBox.Text == "FLAT";
             if (isFlat)
             {
-                DiameterLbl.Visible = false;
-                DiameterDimLbl.Visible = false;
+                DiameterLbl.Text = "0.0";
+                DiameterLbl.Enabled = false;
+                DiameterDimLbl.Enabled = false;
             }
             else
             {
-                DiameterLbl.Visible = true;
-                DiameterDimLbl.Visible = true;
+                int index = PartGeometryBox.SelectedIndex;
+                DiameterLbl.Text = diameterDefaults[index];
+                DiameterLbl.Enabled = true;
+                DiameterDimLbl.Enabled = true;
             }
 
             UpdateGeometryToRobot();
@@ -689,6 +688,8 @@ namespace AutoGrind
         // ===================================================================
         // START EDIT
         // ===================================================================
+
+        // Drop any highlighted lines!
         private enum RecipeState
         {
             INIT,
@@ -703,9 +704,10 @@ namespace AutoGrind
         {
             if (recipeState != s)
             {
+                log.Info("SetRecipeState({0})", s.ToString());
+
                 RecipeState oldRecipeState = recipeState;
                 recipeState = s;
-                log.Info("SetRecipeState({0})", s.ToString());
 
                 switch (recipeState)
                 {
@@ -727,7 +729,6 @@ namespace AutoGrind
                         SaveRecipeBtn.Enabled = true;
                         SaveAsRecipeBtn.Enabled = true;
                         break;
-                    // TODO NEXT
                     case RecipeState.RUNNING:
                         recipeStateAtRun = oldRecipeState;
                         NewRecipeBtn.Enabled = false;
@@ -914,9 +915,9 @@ namespace AutoGrind
             MountedToolBox.Text = (string)AppNameKey.GetValue("MountedToolBox.Text", "");
 
             // Retrieve current part geometry
-            //    TODO Forcing this to FLAT, 250.0 since we don't trust the stored diameter
-            PartGeometryBox.Text = "FLAT"; // (string)AppNameKey.GetValue("PartGeometryBox.Text", "FLAT");
-            DiameterLbl.Text = (string)AppNameKey.GetValue("DiameterLbl.Text", "250.0");
+            for (int i = 0; i < 3; i++)
+                diameterDefaults[i] = (string)AppNameKey.GetValue(String.Format("Diameter[{0}].Text", i), i==0?"0.0":"100.0");
+            PartGeometryBox.Text = (string)AppNameKey.GetValue("PartGeometryBox.Text", "FLAT");
         }
 
         void SavePersistent()
@@ -961,7 +962,8 @@ namespace AutoGrind
 
             // Save current part geometry tool
             AppNameKey.SetValue("PartGeometryBox.Text", PartGeometryBox.Text);
-            AppNameKey.SetValue("DiameterLbl.Text", DiameterLbl.Text);
+            for (int i = 0; i < 3; i++)
+                AppNameKey.SetValue(String.Format("Diameter[{0}].Text", i), diameterDefaults[i]);
         }
 
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -1019,6 +1021,10 @@ namespace AutoGrind
             {
                 DiameterLbl.Text = form.value;
             }
+
+            // Save value in slot associated with this geometry
+            int index = PartGeometryBox.SelectedIndex;
+            diameterDefaults[index] = DiameterLbl.Text;
 
             UpdateGeometryToRobot();
         }
@@ -1503,6 +1509,18 @@ namespace AutoGrind
             return true;
         }
 
+
+        private void UnboldRecipe()
+        {
+            bool modified = RecipeRTB.Modified;
+            RecipeRTB.SelectAll();
+            RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+            RecipeRTB.Modified = modified;
+
+            RecipeRTBCopy.SelectAll();
+            RecipeRTBCopy.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+        }
+
         int logFilter = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
@@ -1549,8 +1567,9 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting + 1 >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
-                        SetState(RunState.READY);
+                        UnboldRecipe();
                         SetRecipeState(recipeStateAtRun);
+                        SetState(RunState.READY);
                     }
                     else
                     {
@@ -1560,8 +1579,9 @@ namespace AutoGrind
                         if (!fContinue)
                         {
                             log.Info("EXEC Aborting execution");
-                            SetState(RunState.READY);
+                            UnboldRecipe();
                             SetRecipeState(recipeStateAtRun);
+                            SetState(RunState.READY);
                         }
                     }
                 }

@@ -9,7 +9,7 @@
        Wait: 0.5
        neutral
      MoveL
-       Direction: Tool Z-
+       Direction: Tool Z+
          Until (tool_contact_detection)
      Force
        Wait: 0.5
@@ -20,7 +20,7 @@
        Wait: 0.5
        neutral
      MoveL
-       Direction: Tool Z-
+       Direction: Tool Z+
          Until (tool_contact_detection)
      Force
        Wait: 0.5

@@ -1,21 +1,21 @@
 def AG_force_demo():
-  set_safety_mode_transition_hardness(1)
-  set_tcp(p[0.0,0.0,0.175,3.1416,0.0,0.0])
-  set_payload(2.0)
-  step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = 0.0
-  thread Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018():
-    while (True):
-      step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 = step_count_3f5f38b4_9700_4c4c_af9e_3723dcee2132 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_e2dd7c92_2f27_4ad3_aa0f_0b847f41f018()
+  set_gravity([0.0, 0.0, 9.82])
   set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(0)
-  set_gravity([0.0, 0.0, 9.82])
+  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
+  set_payload(1.0, [0.0, 0.0, 0.05])
+  step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 = 0.0
+  thread Step_Counter_Thread_37de43ba_9411_40cc_9039_f9f09a1d02c4():
+    while (True):
+      step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 = step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_37de43ba_9411_40cc_9039_f9f09a1d02c4()
+  set_safety_mode_transition_hardness(1)
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -23,10 +23,10 @@ def AG_force_demo():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
-  global lift_p=p[.000009281153, -.499986405438, .140728154825, .000055694718, -.000015364011, .000032419467]
-  global lift_q=[1.3001211881637573, -1.5019636911204834, 1.9538257757769983, -2.0224653683104457, -1.5700591246234339, 2.8711280822753906]
-  global neutral_p=p[.000016608045, -.499989968771, .036690712500, .000013721607, -.000000220155, -.000000595068]
-  global neutral_q=[1.3000131845474243, -1.348571853046753, 2.092989746724264, -2.3150655231871546, -1.5698679129229944, 2.8715128898620605]
+  global lift_p=p[.107195657727, -.507057500458, .163445351421, -3.141442696785, .023140508684, -.000007825344]
+  global lift_q=[1.5182002782821655, -1.4818661969951172, 1.8685386816607874, -1.957261701623434, -1.570226017628805, 3.103896141052246]
+  global neutral_p=p[.107209575278, -.507104816004, .087743361371, 3.141458053513, -.023111536263, .000035311077]
+  global neutral_q=[1.518140196800232, -1.3926049035838624, 1.9834259192096155, -2.16152348140859, -1.5699995199786585, 3.104100227355957]
   def calculate_point_to_move_towards(feature, direction, position_distance):
     local posDir=[direction[0], direction[1], direction[2]]
     if (norm(posDir) < 1e-6):
@@ -56,12 +56,12 @@ def AG_force_demo():
   $ 9 "neutral" "breakAfter"
   movel(neutral_p, a=1.2, v=0.25)
   $ 10 "MoveL"
-  $ 11 "Direction: Tool Z-"
+  $ 11 "Direction: Tool Z+"
   global move_thread_flag_11=0
   thread move_thread_11():
     enter_critical
     move_thread_flag_11 = 1
-    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,-1.0], 1000.0)
+    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,1.0], 1000.0)
     movel(towardsPos, a=0.5, v=0.01)
     move_thread_flag_11 = 2
     exit_critical
@@ -92,7 +92,7 @@ def AG_force_demo():
   $ 13 "Force"
   sleep(0.02)
   zero_ftsensor()
-  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, -5.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, 10.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   $ 14 "Wait: 0.5" "noBreak"
   sleep(0.5)
   $ 15 "MoveL" "noBreak"
@@ -108,12 +108,12 @@ def AG_force_demo():
   $ 20 "neutral" "breakAfter"
   movel(neutral_p, a=1.2, v=0.25)
   $ 21 "MoveL"
-  $ 22 "Direction: Tool Z-"
+  $ 22 "Direction: Tool Z+"
   global move_thread_flag_22=0
   thread move_thread_22():
     enter_critical
     move_thread_flag_22 = 1
-    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,-1.0], 1000.0)
+    local towardsPos=calculate_point_to_move_towards(get_forward_kin(), [0.0,0.0,1.0], 1000.0)
     movel(towardsPos, a=0.5, v=0.01)
     move_thread_flag_22 = 2
     exit_critical
@@ -144,7 +144,7 @@ def AG_force_demo():
   $ 24 "Force"
   sleep(0.02)
   zero_ftsensor()
-  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, -10.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, 10.0, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   $ 25 "Wait: 0.5" "noBreak"
   sleep(0.5)
   $ 26 "MoveL" "noBreak"
