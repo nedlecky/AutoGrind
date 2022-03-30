@@ -662,7 +662,7 @@ namespace AutoGrind
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn_Click(...)");
-            robotCommandServer.Send("(10)");  // This will cancel any grind in progress
+            robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.PAUSED);
         }
 
@@ -675,7 +675,7 @@ namespace AutoGrind
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
-            robotCommandServer.Send("(10)");  // This will cancel any grind in progress
+            robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
             SetState(RunState.READY);
             SetRecipeState(recipeStateAtRun);
         }
@@ -916,7 +916,7 @@ namespace AutoGrind
 
             // Retrieve current part geometry
             for (int i = 0; i < 3; i++)
-                diameterDefaults[i] = (string)AppNameKey.GetValue(String.Format("Diameter[{0}].Text", i), i==0?"0.0":"100.0");
+                diameterDefaults[i] = (string)AppNameKey.GetValue(String.Format("Diameter[{0}].Text", i), i == 0 ? "0.0" : "100.0");
             PartGeometryBox.Text = (string)AppNameKey.GetValue("PartGeometryBox.Text", "FLAT");
         }
 
@@ -1150,7 +1150,7 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new MessageForm(heading, message);
+            waitingForOperatorMessageForm = new MessageForm(heading, message, "Continue Execution", "Abort");
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -1164,19 +1164,30 @@ namespace AutoGrind
         {
             try
             {
-                string parameters = s.Split('(', ')')[1];
+                // Get what is enclosed between the first set of parentheses
+                string parameters = "";
+                parameters = Regex.Match(s, @"\(([^)]*)\)").Groups[1].Value;
+                /* \(           # Starts with a '(' character"
+                       (        # Parentheses in a regex mean "put (capture) the stuff in between into the Groups array
+                          [^)]  # Any character that is not a ')' character
+                          *     # Zero or more occurrences of the aforementioned "non ')' char
+                       )        # Close the capturing group
+                   \)           # Ends with a ')' character  */
+                log.Info("EXEC params=\"{0}\"", parameters);
 
-                //if nParams is specified, verify we have the right number!
+                // If nParams is specified (> 0), verify we have the right number!
                 if (nParams > 0)
                 {
-                    string[] p = parameters.Split(',');
-                    if (p.Length != nParams)
+                    int commaCount = parameters.Count(f => (f == ','));
+                    log.Info("EXEC sees {0} commas", commaCount);
+                    if (parameters.Count(f => (f == ',')) != nParams - 1)
                         return "";
                 }
                 return parameters;
             }
-            catch
+            catch (Exception ex)
             {
+                log.Error(ex, "Recipe line parameter error: {0} {1}", s, ex);
                 return "";
             }
         }
@@ -1234,6 +1245,18 @@ namespace AutoGrind
         {
             CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
             string origLine = line;
+
+            // Any variables to sub {varName}
+            line = Regex.Replace(line, @"\{([^}]*)\}", m => ReadVariable(m.Groups[1].Value, "var_not_found"));
+            /* {            # Bracket, means "starts with a '{' character"
+                   (        # Parentheses in a regex mean "put (capture) the stuff in between into the Groups array
+                      [^}]  # Any character that is not a '}' character
+                      *     # Zero or more occurrences of the aforementioned "non '}' char
+                   )        # Close the capturing group
+               }            # Ends with a '}' character  */
+            if (line != origLine)
+                log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
+
 
             // 1) Ignore comments: drop anything from # onward in the line
             int index = line.IndexOf("#");
@@ -1371,7 +1394,7 @@ namespace AutoGrind
 
                 if (!GotoPositionJoint(positionName))
                 {
-                    log.Error("Unknown position name specified in movejoint Line {0} Exec: {1}", lineNumber, command);
+                    log.Error("Unknown position name specified in movejoint Line {0} EXEC: {1}", lineNumber, command);
                     PromptOperator("Illegal position name: " + command);
                 }
                 return true;
@@ -1385,7 +1408,7 @@ namespace AutoGrind
 
                 if (!GotoPositionPose(positionName))
                 {
-                    log.Error("Unknown position name specified in movepose Line {0} Exec: {1}", lineNumber, command);
+                    log.Error("Unknown position name specified in movepose Line {0} EXEC: {1}", lineNumber, command);
                     PromptOperator("Illegal position name: " + command);
                 }
                 return true;
@@ -1405,7 +1428,7 @@ namespace AutoGrind
                 DataRow row = FindTool(ExtractParameters(command, 1));
                 if (row == null)
                 {
-                    log.Error("Unknown tool specified in Exec: {0.000} {1}", lineNumber, command);
+                    log.Error("Unknown tool specified in EXEC: {0.000} {1}", lineNumber, command);
                     PromptOperator("Illegal select_tool command: " + command);
                     return true;
                 }
@@ -1427,14 +1450,14 @@ namespace AutoGrind
                 string parameters = ExtractParameters(command, 2);
                 if (parameters.Length == 0)
                 {
-                    log.Error("Illegal parameters for set_part_geometry Exec: {0.000} {1}", lineNumber, command);
+                    log.Error("Illegal parameters for set_part_geometry EXEC: {0.000} {1}", lineNumber, command);
                     PromptOperator("Illegal set_part_geometry command:\n" + command);
                     return true;
                 }
                 string[] paramList = parameters.Split(',');
                 if (paramList.Length != 2)
                 {
-                    log.Error("Illegal parameters for set_part_geometry Exec: {0.000} {1}", lineNumber, command);
+                    log.Error("Illegal parameters for set_part_geometry EXEC: {0.000} {1}", lineNumber, command);
                     PromptOperator("Illegal set_part_geometry command:\n" + command);
                     return true;
                 }
@@ -1454,7 +1477,7 @@ namespace AutoGrind
                         DiameterLbl.Text = paramList[1];
                         break;
                     default:
-                        log.Error("First argument to must be FLAT, CYLINDER, or SPHERE Exec: {0.000} {1}", lineNumber, command);
+                        log.Error("First argument to must be FLAT, CYLINDER, or SPHERE EXEC: {0.000} {1}", lineNumber, command);
                         PromptOperator("First argument to must be FLAT, CYLINDER, or SPHERE:\n" + command);
                         return true;
                 }
@@ -1477,7 +1500,15 @@ namespace AutoGrind
             if (command.StartsWith("sendrobot("))
             {
                 LogInterpret("sendrobot", lineNumber, command);
-                robotCommandServer.Send("(" + ExtractParameters(command) + ")");
+                string parameters = ExtractParameters(command);
+                // Must be all numeric: Really, all (nnn,nnn,nnn)
+                if (!Regex.IsMatch(parameters, @"^[()+-.,0-9]*$"))
+                {
+                    log.Error("Illegal parameters for send_robot EXEC: {0.000} {1}", lineNumber, command);
+                    PromptOperator("Illegal send_robot command:\n" + command);
+                }
+                else
+                    robotCommandServer?.Send("(" + parameters + ")");
                 return true;
             }
 
@@ -1496,10 +1527,19 @@ namespace AutoGrind
                 {
                     LogInterpret(commandInRecipe, lineNumber, command);
                     string parameters = ExtractParameters(command, commandSpec.nParams);
-                    if (parameters.Length > 0 || commandSpec.nParams == 0)
-                        robotCommandServer.Send("(" + commandSpec.prefix + "," + parameters + ")");
+                    // Must be all numeric: Really, all (nnn,nnn,nnn)
+                    if (!Regex.IsMatch(parameters, @"^[()+-.,0-9]*$"))
+                    {
+                        log.Error("Illegal parameters for EXEC: {0.000} {1}", lineNumber, command);
+                        PromptOperator("Illegal command:\n" + command);
+                    }
                     else
-                        PromptOperator(string.Format("Wrong number of operands. Expected {0}:\n{1}", commandSpec.nParams, command));
+                    {
+                        if (parameters.Length > 0 || commandSpec.nParams == 0)
+                            robotCommandServer?.Send("(" + commandSpec.prefix + "," + parameters + ")");
+                        else
+                            PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting + 1, commandSpec.nParams, command));
+                    }
                     return true;
                 }
             }
@@ -1544,7 +1584,7 @@ namespace AutoGrind
                 }
             }
 
-            if (!robotReady)
+            if (false)//!robotReady)  // Disabling so can run recipes offline
             {
                 // Only log this one time!
                 if (logFilter != 1)
