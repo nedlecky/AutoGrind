@@ -100,6 +100,10 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.RunStartedTimeLbl = new System.Windows.Forms.Label();
+            this.label14 = new System.Windows.Forms.Label();
+            this.RunElapsedTimeLbl = new System.Windows.Forms.Label();
+            this.label12 = new System.Windows.Forms.Label();
             this.JogRunBtn = new System.Windows.Forms.Button();
             this.RecipeRTBCopy = new System.Windows.Forms.RichTextBox();
             this.Grind = new System.Windows.Forms.Label();
@@ -697,7 +701,7 @@
             // 
             // ExecLogRTB
             // 
-            this.ExecLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExecLogRTB.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExecLogRTB.Location = new System.Drawing.Point(5, 27);
             this.ExecLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ExecLogRTB.Name = "ExecLogRTB";
@@ -732,7 +736,7 @@
             // 
             // UrLogRTB
             // 
-            this.UrLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UrLogRTB.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UrLogRTB.Location = new System.Drawing.Point(5, 27);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrLogRTB.Name = "UrLogRTB";
@@ -767,7 +771,7 @@
             // 
             // ErrorLogRTB
             // 
-            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ErrorLogRTB.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ErrorLogRTB.Location = new System.Drawing.Point(5, 27);
             this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.ErrorLogRTB.Name = "ErrorLogRTB";
@@ -802,7 +806,7 @@
             // 
             // AllLogRTB
             // 
-            this.AllLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AllLogRTB.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AllLogRTB.Location = new System.Drawing.Point(6, 27);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.AllLogRTB.Name = "AllLogRTB";
@@ -1014,6 +1018,10 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.RunStartedTimeLbl);
+            this.RunPage.Controls.Add(this.label14);
+            this.RunPage.Controls.Add(this.RunElapsedTimeLbl);
+            this.RunPage.Controls.Add(this.label12);
             this.RunPage.Controls.Add(this.JogRunBtn);
             this.RunPage.Controls.Add(this.RecipeRTBCopy);
             this.RunPage.Controls.Add(this.Grind);
@@ -1044,13 +1052,54 @@
             this.RunPage.TabIndex = 0;
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
+            this.RunPage.Click += new System.EventHandler(this.RunPage_Click);
+            // 
+            // RunStartedTimeLbl
+            // 
+            this.RunStartedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RunStartedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1097, 435);
+            this.RunStartedTimeLbl.Name = "RunStartedTimeLbl";
+            this.RunStartedTimeLbl.Size = new System.Drawing.Size(353, 52);
+            this.RunStartedTimeLbl.TabIndex = 134;
+            this.RunStartedTimeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(847, 432);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(244, 55);
+            this.label14.TabIndex = 133;
+            this.label14.Text = "Start Time";
+            // 
+            // RunElapsedTimeLbl
+            // 
+            this.RunElapsedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RunElapsedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1097, 499);
+            this.RunElapsedTimeLbl.Name = "RunElapsedTimeLbl";
+            this.RunElapsedTimeLbl.Size = new System.Drawing.Size(353, 52);
+            this.RunElapsedTimeLbl.TabIndex = 132;
+            this.RunElapsedTimeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(774, 496);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(317, 55);
+            this.label12.TabIndex = 131;
+            this.label12.Text = "Elapsed Time";
             // 
             // JogRunBtn
             // 
             this.JogRunBtn.BackColor = System.Drawing.Color.Green;
             this.JogRunBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.JogRunBtn.ForeColor = System.Drawing.Color.White;
-            this.JogRunBtn.Location = new System.Drawing.Point(820, 502);
+            this.JogRunBtn.Location = new System.Drawing.Point(820, 819);
             this.JogRunBtn.Margin = new System.Windows.Forms.Padding(2);
             this.JogRunBtn.Name = "JogRunBtn";
             this.JogRunBtn.Size = new System.Drawing.Size(630, 125);
@@ -1089,7 +1138,7 @@
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
-            this.GrindNCyclesLbl.Text = "1";
+            this.GrindNCyclesLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GrindCycleLbl
             // 
@@ -1099,7 +1148,7 @@
             this.GrindCycleLbl.Name = "GrindCycleLbl";
             this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
             this.GrindCycleLbl.TabIndex = 126;
-            this.GrindCycleLbl.Text = "1";
+            this.GrindCycleLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CurrentLineLblCopy
             // 
@@ -1114,11 +1163,11 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(886, 349);
+            this.label10.Location = new System.Drawing.Point(817, 351);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(205, 55);
+            this.label10.Size = new System.Drawing.Size(274, 55);
             this.label10.TabIndex = 124;
-            this.label10.Text = "Grinding";
+            this.label10.Text = "Grind Cycle";
             // 
             // RecipeFilenameOnlyLblCopy
             // 
@@ -1627,7 +1676,7 @@
             // 
             // UrDashboardLogRTB
             // 
-            this.UrDashboardLogRTB.Font = new System.Drawing.Font("Courier New", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UrDashboardLogRTB.Font = new System.Drawing.Font("Courier New", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UrDashboardLogRTB.Location = new System.Drawing.Point(5, 27);
             this.UrDashboardLogRTB.Margin = new System.Windows.Forms.Padding(2);
             this.UrDashboardLogRTB.Name = "UrDashboardLogRTB";
@@ -1865,6 +1914,10 @@
         private System.Windows.Forms.Button SetTouchRetractBtn;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Button JogRunBtn;
+        private System.Windows.Forms.Label RunStartedTimeLbl;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label RunElapsedTimeLbl;
+        private System.Windows.Forms.Label label12;
     }
 }
 

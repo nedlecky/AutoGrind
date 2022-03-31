@@ -160,7 +160,7 @@
     <Name>n_cycles</Name>
     <Value>4</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-30T13:05:41.133Z</TimeStamp>
+    <TimeStamp>2022-03-31T11:18:04.116Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
@@ -229,8 +229,8 @@
   <Variables>
     <Name>d</Name>
     <Value>12</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-30T13:05:49.864Z</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-31T11:18:39.300Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
@@ -279,28 +279,28 @@
     <Name>x</Name>
     <Value>21</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-30T13:05:40.678Z</TimeStamp>
+    <TimeStamp>2022-03-31T11:18:03.668Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>y</Name>
     <Value>31</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-30T13:05:41.013Z</TimeStamp>
+    <TimeStamp>2022-03-31T11:18:04.006Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>force</Name>
     <Value>10</Value>
     <IsNew>false</IsNew>
-    <TimeStamp>2022-03-30T13:05:40.237Z</TimeStamp>
+    <TimeStamp>2022-03-31T11:18:03.229Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>sped</Name>
     <Value>13.1</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-30T13:05:40.349Z</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-31T11:18:03.324Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

@@ -189,12 +189,21 @@ namespace AutoGrind
         bool robotReady = false;
         int nDashboard = 0;
         bool pollDashboardStateNow = false;
+        DateTime runStartedTime;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
-            string now = DateTime.Now.ToString("s");
-            timeLbl.Text = now;
+            // Update current time
+            DateTime now = DateTime.Now;
+            timeLbl.Text = now.ToString();
+            
+            // Update elapsed time panel
+            if (runState == RunState.RUNNING || runState == RunState.PAUSED)
+            {
+                TimeSpan elapsed = now - runStartedTime;
+                RunElapsedTimeLbl.Text = elapsed.ToString(@"d\:hh\:mm\:ss");
+            }
 
-            // Ping the dashboard every 5th second
+            // Ping the dashboard every few seconds
             if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
                 if (robotDashboardClient.IsClientConnected)
                 {
@@ -643,6 +652,14 @@ namespace AutoGrind
         private void StartBtn_Click(object sender, EventArgs e)
         {
             log.Info("StartBtn_Click(...)");
+
+            // Mark and display the start time, set ciounters to 0
+            runStartedTime = DateTime.Now;
+            RunStartedTimeLbl.Text= runStartedTime.ToString();
+            GrindCycleLbl.Text = "";
+            GrindNCyclesLbl.Text = "";
+
+            // This allows offline dry runs but makes sure you know!
             if (!robotReady)
             {
                 var result = ConfirmMessageBox("Robot not connected. Run anyway?");
@@ -1217,6 +1234,7 @@ namespace AutoGrind
             public string prefix;
         };
 
+        // These recipe commands will be converted to sendrobot(prefix,[nParams additional parameters])
         Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // SETTINGS
@@ -1512,11 +1530,13 @@ namespace AutoGrind
                 return true;
             }
 
-            // All of the robot aliases
-            // speed(1.1) ==> robotServer.Send("(30,1.1)")
-            // grind_contact_enabled(0) ==> robotServer.Send("(40,1,0)")
+            // andle all of the other robot commands (which just use sendrobot, some prefeix params, and any other specified params)
+            // Example:
+            // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
+            // grind_rect(30,30,5,20,10) ==> robotCommandServer.Send("(40,20,30,30,5,20,10)")
             // etc.
 
+            // Find the commandName from commandName(parameters)
             int openParenIndex = command.IndexOf("(");
             int closeParenIndex = command.IndexOf(")");
             if (openParenIndex > -1 && closeParenIndex > openParenIndex)
@@ -2553,5 +2573,9 @@ namespace AutoGrind
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
 
+        private void RunPage_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
