@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -61,6 +62,28 @@ namespace AutoGrind
             InitializeComponent();
         }
 
+        private void RegexTest(string pattern, string test)
+        {
+            Stopwatch s = new Stopwatch();
+
+            Regex regex = new Regex(pattern, RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+            log.Info("Try: {0} {1}", pattern, test);
+
+            s.Start();
+            Match m = regex.Match(test);
+            s.Stop();
+            log.Info("Match took {0} mS", s.ElapsedMilliseconds);
+
+            if (m.Success)
+            {
+                foreach (Group g in m.Groups)
+                {
+                    log.Info("Group: {0}: {1}", g.Name, g.ToString());
+                }
+            }
+            else
+                log.Error("Match failed: {0}  {1}", pattern, test);
+        }
         private void MainForm_Load(object sender, EventArgs e)
         {
             string companyName = Application.CompanyName;
@@ -78,7 +101,6 @@ namespace AutoGrind
             // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
 
-            // TODO: Must do this first to get AutoGrindRoot prior to logger beginning
             LoadPersistent();
             OperatorModeBox.SelectedIndex = (int)operatorMode;
 
@@ -195,7 +217,7 @@ namespace AutoGrind
             // Update current time
             DateTime now = DateTime.Now;
             timeLbl.Text = now.ToString();
-            
+
             // Update elapsed time panel
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
             {
@@ -512,7 +534,6 @@ namespace AutoGrind
 
             operatorMode = newOperatorMode;
             // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
-            // TODO: This doesn't really do most of what we want!
             if (MainTab.TabPages[1] != null)
             {
                 log.Info("Setting Operator Mode {0}", operatorMode);
@@ -655,7 +676,7 @@ namespace AutoGrind
 
             // Mark and display the start time, set ciounters to 0
             runStartedTime = DateTime.Now;
-            RunStartedTimeLbl.Text= runStartedTime.ToString();
+            RunStartedTimeLbl.Text = runStartedTime.ToString();
             GrindCycleLbl.Text = "";
             GrindNCyclesLbl.Text = "";
 
@@ -1065,7 +1086,7 @@ namespace AutoGrind
         // ===================================================================
 
         /// <summary>
-        /// Is the line a recipe label? TYhis means starting with alpha, followed by 0 or more alphanum, followed by :
+        /// Is the line a recipe label? This means starting with alpha, followed by 0 or more alphanum, followed by :
         /// </summary>
         /// <param name="line">Input Line</param>
         /// <returns>(bool Success, string Value if matched else null)</returns>
@@ -1149,7 +1170,7 @@ namespace AutoGrind
                 {
                     log.Info("Import Line: {0}", line);
                     if (line.Contains("="))
-                        WriteVariable(line);
+                        UpdateVariable(line);
                 }
                 return true;
             }
@@ -1291,11 +1312,11 @@ namespace AutoGrind
                 return true;
             }
 
-            // =, incr, decr (assignment, ++, --)
+            // =, incr, decr (assignment, ++, --, +=, -=)
             if (command.Contains("=") || command.Contains("++") || command.Contains("--"))
             {
                 LogInterpret("assign", lineNumber, command);
-                if (!WriteVariable(command))
+                if (!UpdateVariable(command))
                     PromptOperator(String.Format("Invalid assignment command: {0}", command));
                 return true;
             }
@@ -1454,7 +1475,7 @@ namespace AutoGrind
                 {
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
-                    WriteVariable("robot_tool=" + row["Name"]);
+                    WriteVariable("robot_tool", row["Name"].ToString());
                     MountedToolBox.Text = (string)row["Name"];
                 }
                 return true;
@@ -1844,8 +1865,6 @@ namespace AutoGrind
 
 
         /// <summary>
-        /// TODO: Clean these up, use consistent string formatting ideas, and the variables
-        /// TODO All of these... the variable name should be prefixed with the unique device name not the message prefix
         /// Currently expect 0 or more #-separated name=value sequences
         /// Examples:
         /// return1=abc
@@ -1861,12 +1880,8 @@ namespace AutoGrind
             foreach (string request in requests)
             {
                 // name=value
-                // TODO not clear what happens if you have
-                //      name = value
-                //      name = this is a test
-                //      name = "this is a test"
                 if (request.Contains("="))
-                    WriteVariable(request);
+                    UpdateVariable(request);
                 else
                 {
                     // SET name value
@@ -1980,7 +1995,6 @@ namespace AutoGrind
             {
                 if ((string)row["Name"] == nameTrimmed)
                 {
-                    // TODO: This is where it breaks prior to Thread Safety work
                     row["Value"] = valueTrimmed;
                     row["IsNew"] = true;
                     row["TimeStamp"] = datetime;
@@ -2080,41 +2094,80 @@ namespace AutoGrind
             return true;
         }
 
+
+        // Regex to look for varname = value expressions (value can be any string, numeric or not)
+        // @"^\s*                           Start of line, ignore leading whitespace
+        // (?<name>[A-Za-z][A-Za-z0-9_]*)   Group "name" is one alpha followed by 0 or more alphanum and underscore
+        // \s*                              Ignore whitespace
+        // =                                Equals
+        // \s*                              Ignore whitespace
+        // (?<value>[A-Za-z0-9 _]+)         Group "value" is one or morealphanum space or underscore
+        // \s*$"                            Ignore whitespace to EOL
+        static Regex directAssignmentRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<value>[A-Za-z0-9 _]+)$",
+            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+
+        // Regex to look for varname += or -= number expressions
+        // @"^\s*                           Start of line, ignore leading whitespace
+        // (?<name>[A-Za-z][A-Za-z0-9_]*)   Group "name" is one alpha followed by 0 or more alphanum and underscore
+        // \s*                              Ignore whitespace
+        // (?<operator>(\+=|\-=))           Group "operator" can be += or -=
+        // \s*                              Ignore whitespace
+        // (?<value>[\-+]?[0-9.]+)          Group "value" can be optional (+ or -) followed by one or more digits and decimal
+        // \s*$"                            Ignore whitespace to EOL
+        static Regex plusMinusEqualsRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*(?<operator>(\+=|\-=))\s*(?<value>[\-+]?[0-9.]+)$",
+            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+
+        // Regex to look for varname += or -= number expressions
+        // @"^\s*                           Start of line, ignore leading whitespace
+        // (?<name>[A-Za-z][A-Za-z0-9_]*)   Group "name" is one alpha followed by 0 or more alphanum and underscore
+        // (?<operator>(\+\+|\-\-))         Group "operator" can be ++ or --
+        // \s*$"                            Ignore whitespace to EOL
+        static Regex plusPlusMinusMinusRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)(?<operator>(\+\+|\-\-))\s*$",
+            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+
         /// <summary>
-        /// Takes a "name=value" string and set variable "name" equal to "value"  ALSO: will handle name++ and name--
+        /// Takes a "name=value" string and set variable "name" equal to "value"
+        /// ALSO: will handle name++ and name--
+        /// ALSO: will handle name+=value and name-=value
         /// </summary>
         /// <param name="assignment">Variable to be modified</param>
-        public bool WriteVariable(string assignment, bool isSystem = false)
+        public bool UpdateVariable(string assignment, bool isSystem = false)
         {
             bool wasSuccessful = false;
-            string[] s = assignment.Split('=');
-            if (s.Length == 2)
+
+            Match m = directAssignmentRegex.Match(assignment);
+            if (m.Success)
             {
-                wasSuccessful = WriteVariable(s[0], s[1], isSystem);
+                log.Info("DirectAssignment {0}={1}", m.Groups["name"].Value, m.Groups["value"].Value);
+                wasSuccessful = WriteVariable(m.Groups["name"].Value, m.Groups["value"].Value, isSystem);
             }
             else
             {
-                // Not a classic assignment... look for ++ and --
-                if (assignment.Length > 2)
+                m = plusMinusEqualsRegex.Match(assignment);
+                if (m.Success)
                 {
-                    int incr = 0;
-                    if (assignment.EndsWith("++")) incr = 1;
-                    if (assignment.EndsWith("--")) incr = -1;
-                    if (incr != 0)
+                    log.Info("PlusMinusEqualsAssignment {0}{1}{2}", m.Groups["name"].Value, m.Groups["operator"].Value, m.Groups["value"].Value);
+                    string v = ReadVariable(m.Groups["name"].Value);
+                    if (v != null)
                     {
-                        try
+                        double x = Convert.ToDouble(v);
+                        double y = Convert.ToDouble(m.Groups["value"].Value);
+                        x = x + ((m.Groups["operator"].Value == "+=") ? y : -y);
+                        wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
+                    }
+                }
+                else
+                {
+                    m = plusPlusMinusMinusRegex.Match(assignment);
+                    if (m.Success)
+                    {
+                        log.Info("IncrAssignment {0}{1}{2}", m.Groups["name"].Value, m.Groups["operator"].Value, m.Groups["value"].Value);
+                        string v = ReadVariable(m.Groups["name"].Value);
+                        if (v != null)
                         {
-                            string name = assignment.Substring(0, assignment.Length - 2);
-                            string v = ReadVariable(name);
-                            if (v != null)
-                            {
-                                double x = Convert.ToDouble(v);
-                                x += incr;
-                                wasSuccessful = WriteVariable(name, x.ToString());
-                            }
-                        }
-                        catch
-                        {
+                            double x = Convert.ToDouble(v);
+                            x = x + ((m.Groups["operator"].Value == "++") ? 1.0 : -1.0);
+                            wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
                         }
                     }
                 }

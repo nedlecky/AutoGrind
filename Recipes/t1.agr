@@ -1,6 +1,15 @@
-#Test1
-movepose(spheretop10)
-prompt(Don't forget!)
-
-#Grind special 4
-grind_serpentine(40,40,3,1,1,40,10)
+aaa = 13
+aaa++
+aaa--
+aaa--
+aaa += 7
+aaa-=3
+q1a={aaa}
+aaa-=3.112
+ned = 12
+ned   -= -8.1
+ned++
+ned--
+a=5
+a_=6
+a_+=-2

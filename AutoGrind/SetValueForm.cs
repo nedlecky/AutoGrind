@@ -64,8 +64,8 @@ namespace AutoGrind
             }
             catch (Exception ex)
             {
-                log.Error("{0} is not a number", value, ex);
-                // TODO: Some sort of explanatory dialog here
+                // User has typed junk into the box... clear it!
+                ValueTxt.Text = "";
             }
         }
         private void CancelBtn_Click(object sender, EventArgs e)
