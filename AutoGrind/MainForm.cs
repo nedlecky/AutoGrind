@@ -1312,15 +1312,6 @@ namespace AutoGrind
                 return true;
             }
 
-            // =, incr, decr (assignment, ++, --, +=, -=)
-            if (command.Contains("=") || command.Contains("++") || command.Contains("--"))
-            {
-                LogInterpret("assign", lineNumber, command);
-                if (!UpdateVariable(command))
-                    PromptOperator(String.Format("Invalid assignment command: {0}", command));
-                return true;
-            }
-
             // Is line a label? If so, we ignore it!
             if (IsLineALabel(command).Success)
             {
@@ -1551,7 +1542,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // andle all of the other robot commands (which just use sendrobot, some prefeix params, and any other specified params)
+            // Handle all of the other robot commands (which just use sendrobot, some prefeix params, and any other specified params)
             // Example:
             // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
             // grind_rect(30,30,5,20,10) ==> robotCommandServer.Send("(40,20,30,30,5,20,10)")
@@ -1583,6 +1574,13 @@ namespace AutoGrind
                     }
                     return true;
                 }
+            }
+
+            // Matched nothing above... could be an assignment operator =, -=, +=, ++, --
+            if (UpdateVariable(command))
+            {
+                LogInterpret("assign", lineNumber, command);
+                return true;
             }
 
             log.Error("Unknown Command Line {0} Exec: {1}", lineNumber, command);

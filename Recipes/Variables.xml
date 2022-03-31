@@ -146,35 +146,35 @@
     <Name>aaa</Name>
     <Value>12.888</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-31T23:03:01.861Z</TimeStamp>
+    <TimeStamp>2022-03-31T23:46:33.582Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>q1a</Name>
     <Value>16</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-31T23:03:01.500Z</TimeStamp>
+    <TimeStamp>2022-03-31T23:46:33.462Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>ned</Name>
     <Value>20.1</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-31T23:03:03.189Z</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-31T23:46:33.971Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>a</Name>
     <Value>5</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-03-31T23:03:03.510Z</TimeStamp>
+    <TimeStamp>2022-03-31T23:46:34.069Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
   <Variables>
     <Name>a_</Name>
     <Value>4</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-03-31T23:03:04.168Z</TimeStamp>
+    <IsNew>false</IsNew>
+    <TimeStamp>2022-03-31T23:46:34.306Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>
