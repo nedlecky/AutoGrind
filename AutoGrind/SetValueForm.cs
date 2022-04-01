@@ -62,7 +62,7 @@ namespace AutoGrind
                     log.Info("Setting {0} = {1}", label, value);
                 Close();
             }
-            catch (Exception ex)
+            catch
             {
                 // User has typed junk into the box... clear it!
                 ValueTxt.Text = "";

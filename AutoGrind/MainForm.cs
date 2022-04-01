@@ -61,29 +61,6 @@ namespace AutoGrind
         {
             InitializeComponent();
         }
-
-        private void RegexTest(string pattern, string test)
-        {
-            Stopwatch s = new Stopwatch();
-
-            Regex regex = new Regex(pattern, RegexOptions.ExplicitCapture & RegexOptions.Compiled);
-            log.Info("Try: {0} {1}", pattern, test);
-
-            s.Start();
-            Match m = regex.Match(test);
-            s.Stop();
-            log.Info("Match took {0} mS", s.ElapsedMilliseconds);
-
-            if (m.Success)
-            {
-                foreach (Group g in m.Groups)
-                {
-                    log.Info("Group: {0}: {1}", g.Name, g.ToString());
-                }
-            }
-            else
-                log.Error("Match failed: {0}  {1}", pattern, test);
-        }
         private void MainForm_Load(object sender, EventArgs e)
         {
             string companyName = Application.CompanyName;
@@ -2190,12 +2167,10 @@ namespace AutoGrind
             { }
 
             VariablesGrd.DataSource = variables;
-            foreach (DataGridViewColumn col in VariablesGrd.Columns)
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
+            
+            // Clear the IsNew flags
             foreach (DataRow row in variables.Rows)
-            {
                 row["IsNew"] = false;
-            }
         }
 
         private void SaveVariablesBtn_Click(object sender, EventArgs e)
@@ -2251,15 +2226,27 @@ namespace AutoGrind
         // ===================================================================
         // START TOOL SYSTEM
         // ===================================================================
+        /// <summary>
+        /// Return a selected value from column 1 of a DataGridView. Return null for any errors
+        /// </summary>
+        /// <param name="dg"></param>
+        /// <returns></returns>
+        private string SelectedName(DataGridView dg)
+        {
+            if (dg.SelectedCells.Count <1) return null;
+            var cell = dg.SelectedCells[0];
+            if (cell.ColumnIndex != 0) return null;
+            if (cell.Value == null) return null;
+            return cell.Value.ToString();
+        }
         private void SelectToolBtn_Click(object sender, EventArgs e)
         {
-            if (ToolsGrd.SelectedRows.Count == 1)
+            string name = SelectedName(ToolsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a tool in the tool table.");
+            else
             {
-                DataRow row = ((DataRowView)ToolsGrd.SelectedRows[0].DataBoundItem).Row;
-                string name = row["Name"].ToString();
-
                 log.Info("Selecting tool {0}", name);
-
                 ExecuteLine(-1, string.Format("select_tool({0})", name));
             }
         }
@@ -2307,9 +2294,6 @@ namespace AutoGrind
             { }
 
             ToolsGrd.DataSource = tools;
-            foreach (DataGridViewColumn col in ToolsGrd.Columns)
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
-
             RefreshMountedToolBox();
         }
 
@@ -2432,8 +2416,6 @@ namespace AutoGrind
             { }
 
             PositionsGrd.DataSource = positions;
-            foreach (DataGridViewColumn col in PositionsGrd.Columns)
-                col.AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells;
         }
 
         private void SavePositionsBtn_Click(object sender, EventArgs e)
@@ -2520,41 +2502,32 @@ namespace AutoGrind
 
         private void PositionSetBtn_Click(object sender, EventArgs e)
         {
-            if (PositionsGrd.SelectedRows.Count != 1)
+            string name = SelectedName(PositionsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a position in the table to teach.");
+            else
             {
-                ErrorMessageBox("Select a row in the Positions table to overwrite!");
-                return;
+                log.Info("Setting Position {0}", name);
+                RecordPosition("Please teach position: " + name, name);
             }
-            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
-            string name = row["Name"].ToString();
-
-            log.Info("Setting Position {0}", name);
-
-            RecordPosition("Please teach position: " + name, name);
         }
 
         private void PositionMovePoseBtn_Click(object sender, EventArgs e)
         {
-            if (PositionsGrd.SelectedRows.Count != 1)
-            {
-                ErrorMessageBox("Select a row in the Positions table to move to!");
-                return;
-            }
-            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
-            string name = row["Name"].ToString();
-            GotoPositionPose(name);
+            string name = SelectedName(PositionsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a target position in the table.");
+            else
+                GotoPositionPose(name);
         }
 
         private void PositionMoveArmBtn_Click(object sender, EventArgs e)
         {
-            if (PositionsGrd.SelectedRows.Count != 1)
-            {
-                ErrorMessageBox("Select a row in the Positions table to move to!");
-                return;
-            }
-            DataRow row = ((DataRowView)PositionsGrd.SelectedRows[0].DataBoundItem).Row;
-            string name = row["Name"].ToString();
-            GotoPositionJoint(name);
+            string name = SelectedName(PositionsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a target position in the table.");
+            else
+                GotoPositionJoint(name);
         }
 
         private void AskSafetyStatusBtn_Click(object sender, EventArgs e)
@@ -2583,7 +2556,7 @@ namespace AutoGrind
         {
             try
             {
-                InstructionsRTB.LoadFile("Instructions.RTF");
+                InstructionsRTB.LoadFile("RecipeCommands.rtf");
             }
             catch (Exception ex)
             {
@@ -2593,7 +2566,7 @@ namespace AutoGrind
 
         private void SaveManualBtn_Click(object sender, EventArgs e)
         {
-            InstructionsRTB.SaveFile("Instructions.RTF");
+            InstructionsRTB.SaveFile("RecipeCommands.rtf");
         }
 
 
