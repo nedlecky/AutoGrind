@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
-            this.ContinueBtn = new System.Windows.Forms.Button();
+            this.StepBtn = new System.Windows.Forms.Button();
             this.StopBtn = new System.Windows.Forms.Button();
             this.PauseBtn = new System.Windows.Forms.Button();
             this.StartBtn = new System.Windows.Forms.Button();
@@ -154,10 +154,10 @@
             this.AutoGrindRootLbl = new System.Windows.Forms.Label();
             this.ChangeRootDirectoryBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.groupBox3 = new System.Windows.Forms.GroupBox();
-            this.DebugLevelCombo = new System.Windows.Forms.ComboBox();
             this.IoPage = new System.Windows.Forms.TabPage();
             this.LogPage = new System.Windows.Forms.TabPage();
+            this.groupBox3 = new System.Windows.Forms.GroupBox();
+            this.DebugLevelCombo = new System.Windows.Forms.ComboBox();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.ClearUrDashboardRtbBtn = new System.Windows.Forms.Button();
             this.UrDashboardLogRTB = new System.Windows.Forms.RichTextBox();
@@ -185,8 +185,8 @@
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
             this.groupBox1.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.LogPage.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -226,20 +226,20 @@
             this.RecipeRTB.Text = "";
             this.RecipeRTB.TextChanged += new System.EventHandler(this.RecipeRTB_TextChanged);
             // 
-            // ContinueBtn
+            // StepBtn
             // 
-            this.ContinueBtn.BackColor = System.Drawing.Color.Gray;
-            this.ContinueBtn.Enabled = false;
-            this.ContinueBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ContinueBtn.ForeColor = System.Drawing.Color.White;
-            this.ContinueBtn.Location = new System.Drawing.Point(430, 1343);
-            this.ContinueBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.ContinueBtn.Name = "ContinueBtn";
-            this.ContinueBtn.Size = new System.Drawing.Size(197, 85);
-            this.ContinueBtn.TabIndex = 5;
-            this.ContinueBtn.Text = "Continue";
-            this.ContinueBtn.UseVisualStyleBackColor = false;
-            this.ContinueBtn.Click += new System.EventHandler(this.ContinueBtn_Click);
+            this.StepBtn.BackColor = System.Drawing.Color.Gray;
+            this.StepBtn.Enabled = false;
+            this.StepBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StepBtn.ForeColor = System.Drawing.Color.White;
+            this.StepBtn.Location = new System.Drawing.Point(212, 1344);
+            this.StepBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.StepBtn.Name = "StepBtn";
+            this.StepBtn.Size = new System.Drawing.Size(197, 85);
+            this.StepBtn.TabIndex = 5;
+            this.StepBtn.Text = "Step";
+            this.StepBtn.UseVisualStyleBackColor = false;
+            this.StepBtn.Click += new System.EventHandler(this.StepBtn_Click);
             // 
             // StopBtn
             // 
@@ -262,7 +262,7 @@
             this.PauseBtn.Enabled = false;
             this.PauseBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PauseBtn.ForeColor = System.Drawing.Color.White;
-            this.PauseBtn.Location = new System.Drawing.Point(214, 1344);
+            this.PauseBtn.Location = new System.Drawing.Point(413, 1344);
             this.PauseBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PauseBtn.Name = "PauseBtn";
             this.PauseBtn.Size = new System.Drawing.Size(197, 85);
@@ -558,14 +558,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 217);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -637,14 +637,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1440,23 +1440,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle12;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1541,7 +1541,6 @@
             this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
             this.groupBox1.Controls.Add(this.ChangeRootDirectoryBtn);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Controls.Add(this.groupBox3);
             this.groupBox1.Location = new System.Drawing.Point(9, 20);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
@@ -1641,13 +1640,39 @@
             this.label1.Text = "AutoGrind Root Directory";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // IoPage
+            // 
+            this.IoPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.IoPage.Location = new System.Drawing.Point(4, 100);
+            this.IoPage.Name = "IoPage";
+            this.IoPage.Size = new System.Drawing.Size(2121, 1222);
+            this.IoPage.TabIndex = 4;
+            this.IoPage.Text = "I/O";
+            this.IoPage.UseVisualStyleBackColor = true;
+            // 
+            // LogPage
+            // 
+            this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.LogPage.Controls.Add(this.groupBox3);
+            this.LogPage.Controls.Add(this.groupBox7);
+            this.LogPage.Controls.Add(this.groupBox6);
+            this.LogPage.Controls.Add(this.groupBox5);
+            this.LogPage.Controls.Add(this.groupBox10);
+            this.LogPage.Controls.Add(this.groupBox4);
+            this.LogPage.Location = new System.Drawing.Point(4, 100);
+            this.LogPage.Name = "LogPage";
+            this.LogPage.Size = new System.Drawing.Size(2121, 1222);
+            this.LogPage.TabIndex = 5;
+            this.LogPage.Text = "Log";
+            this.LogPage.UseVisualStyleBackColor = true;
+            // 
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.DebugLevelCombo);
-            this.groupBox3.Location = new System.Drawing.Point(1723, 29);
+            this.groupBox3.Location = new System.Drawing.Point(1668, 22);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(331, 110);
-            this.groupBox3.TabIndex = 86;
+            this.groupBox3.TabIndex = 91;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "On Screen Logging";
             // 
@@ -1665,31 +1690,6 @@
             this.DebugLevelCombo.Size = new System.Drawing.Size(291, 45);
             this.DebugLevelCombo.TabIndex = 80;
             this.DebugLevelCombo.SelectedIndexChanged += new System.EventHandler(this.DebugLevelCombo_SelectedIndexChanged);
-            // 
-            // IoPage
-            // 
-            this.IoPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.IoPage.Location = new System.Drawing.Point(4, 100);
-            this.IoPage.Name = "IoPage";
-            this.IoPage.Size = new System.Drawing.Size(2121, 1222);
-            this.IoPage.TabIndex = 4;
-            this.IoPage.Text = "I/O";
-            this.IoPage.UseVisualStyleBackColor = true;
-            // 
-            // LogPage
-            // 
-            this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.LogPage.Controls.Add(this.groupBox7);
-            this.LogPage.Controls.Add(this.groupBox6);
-            this.LogPage.Controls.Add(this.groupBox5);
-            this.LogPage.Controls.Add(this.groupBox10);
-            this.LogPage.Controls.Add(this.groupBox4);
-            this.LogPage.Location = new System.Drawing.Point(4, 100);
-            this.LogPage.Name = "LogPage";
-            this.LogPage.Size = new System.Drawing.Size(2121, 1222);
-            this.LogPage.TabIndex = 5;
-            this.LogPage.Text = "Log";
-            this.LogPage.UseVisualStyleBackColor = true;
             // 
             // groupBox7
             // 
@@ -1779,7 +1779,7 @@
             this.Controls.Add(this.LoadRecipeBtn);
             this.Controls.Add(this.SaveRecipeBtn);
             this.Controls.Add(this.MainTab);
-            this.Controls.Add(this.ContinueBtn);
+            this.Controls.Add(this.StepBtn);
             this.Controls.Add(this.StopBtn);
             this.Controls.Add(this.PauseBtn);
             this.Controls.Add(this.StartBtn);
@@ -1820,8 +1820,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
-            this.groupBox3.ResumeLayout(false);
             this.LogPage.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -1837,7 +1837,7 @@
         private System.Windows.Forms.Button NewRecipeBtn;
         private System.Windows.Forms.Button LoadRecipeBtn;
         private System.Windows.Forms.Button SaveRecipeBtn;
-        private System.Windows.Forms.Button ContinueBtn;
+        private System.Windows.Forms.Button StepBtn;
         private System.Windows.Forms.Button StopBtn;
         private System.Windows.Forms.Button PauseBtn;
         private System.Windows.Forms.Button StartBtn;
@@ -1922,8 +1922,6 @@
         private System.Windows.Forms.Label AutoGrindRootLbl;
         private System.Windows.Forms.Button ChangeRootDirectoryBtn;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.ComboBox DebugLevelCombo;
         private System.Windows.Forms.TabPage MovePage;
         private System.Windows.Forms.TabPage IoPage;
         private System.Windows.Forms.TabPage LogPage;
@@ -1960,6 +1958,8 @@
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label RunElapsedTimeLbl;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.GroupBox groupBox3;
+        private System.Windows.Forms.ComboBox DebugLevelCombo;
     }
 }
 

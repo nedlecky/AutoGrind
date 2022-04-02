@@ -360,8 +360,8 @@ namespace AutoGrind
                     SaveAsRecipeBtn.Enabled = true;
 
                     StartBtn.Enabled = false;
+                    StepBtn.Enabled = false;
                     PauseBtn.Enabled = false;
-                    ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
@@ -376,8 +376,8 @@ namespace AutoGrind
                     SaveAsRecipeBtn.Enabled = true;
 
                     StartBtn.Enabled = true;
+                    StepBtn.Enabled = true;
                     PauseBtn.Enabled = false;
-                    ContinueBtn.Enabled = false;
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
@@ -393,8 +393,9 @@ namespace AutoGrind
                     SaveAsRecipeBtn.Enabled = false;
 
                     StartBtn.Enabled = false;
+                    StepBtn.Enabled = false;
                     PauseBtn.Enabled = true;
-                    ContinueBtn.Enabled = false;
+                    PauseBtn.Text = "Pause";
                     StopBtn.Enabled = true;
                     CurrentLineLbl.Text = "";
 
@@ -412,8 +413,9 @@ namespace AutoGrind
                     SaveAsRecipeBtn.Enabled = false;
 
                     StartBtn.Enabled = false;
-                    PauseBtn.Enabled = false;
-                    ContinueBtn.Enabled = true;
+                    StepBtn.Enabled = true;
+                    PauseBtn.Enabled = true;
+                    PauseBtn.Text = "Continue";
                     StopBtn.Enabled = true;
                     ExecTmr.Enabled = false;
                     break;
@@ -438,7 +440,7 @@ namespace AutoGrind
 
             StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
             PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
-            ContinueBtn.BackColor = ContinueBtn.Enabled ? Color.Green : Color.Gray;
+            StepBtn.BackColor = StepBtn.Enabled ? Color.Green : Color.Gray;
             StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
         }
         private void MountedToolBox_SelectedIndexChanged(object sender, EventArgs e)
@@ -646,12 +648,9 @@ namespace AutoGrind
                 }
         }
 
-
-        private void StartBtn_Click(object sender, EventArgs e)
+        private bool PrepareToRun()
         {
-            log.Info("StartBtn_Click(...)");
-
-            // Mark and display the start time, set ciounters to 0
+            // Mark and display the start time, set counters to 0
             runStartedTime = DateTime.Now;
             RunStartedTimeLbl.Text = runStartedTime.ToString();
             GrindCycleLbl.Text = "";
@@ -661,14 +660,23 @@ namespace AutoGrind
             if (!robotReady)
             {
                 var result = ConfirmMessageBox("Robot not connected. Run anyway?");
-                if (result != DialogResult.OK) return;
+                if (result != DialogResult.OK) return false;
             }
 
             SetCurrentLine(-1);
-            if (!BuildLabelTable())
+            bool goodLabels = BuildLabelTable();
+            if (!goodLabels)
                 ErrorMessageBox("Error parsing labels from recipe.");
-            else
+            return goodLabels;
+        }
+
+        private void StartBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("StartBtn_Click(...)");
+
+            if(PrepareToRun())
             {
+                isSingleStep = false;
                 SetRecipeState(RecipeState.RUNNING);
                 SetState(RunState.RUNNING);
             }
@@ -676,21 +684,47 @@ namespace AutoGrind
 
         private void PauseBtn_Click(object sender, EventArgs e)
         {
-            log.Info("PauseBtn_Click(...)");
-            robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
-            SetState(RunState.PAUSED);
+            log.Info("PauseBtn{0}_Click(...)", PauseBtn.Text);
+            switch (runState)
+            {
+                case RunState.RUNNING:
+                    // Perform PAUSE function
+                    robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
+                    SetState(RunState.PAUSED);
+                    break;
+                case RunState.PAUSED:
+                    // Perform CONTINUE function
+                    SetState(RunState.RUNNING);
+                    break;
+            }
         }
 
-        private void ContinueBtn_Click(object sender, EventArgs e)
+        private void StepBtn_Click(object sender, EventArgs e)
         {
-            log.Info("ContinueBtn_Click(...)");
-            SetState(RunState.RUNNING);
+            log.Info("StepBtn_Click(...) STATE IS {0}", runState);
+            switch (runState)
+            {
+                case RunState.READY:
+                    if (PrepareToRun())
+                    {
+                        isSingleStep = true;
+                        SetRecipeState(RecipeState.RUNNING);
+                        SetState(RunState.RUNNING);
+                    }
+                    break;
+                case RunState.PAUSED:
+                    isSingleStep = true;
+                    SetState(RunState.RUNNING);
+                    break;
+            }
+
         }
 
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
             robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
+            UnboldRecipe();
             SetState(RunState.READY);
             SetRecipeState(recipeStateAtRun);
         }
@@ -1188,13 +1222,13 @@ namespace AutoGrind
                           *     # Zero or more occurrences of the aforementioned "non ')' char
                        )        # Close the capturing group
                    \)           # Ends with a ')' character  */
-                log.Info("EXEC params=\"{0}\"", parameters);
+                log.Trace("EXEC params=\"{0}\"", parameters);
 
                 // If nParams is specified (> 0), verify we have the right number!
                 if (nParams > 0)
                 {
                     int commaCount = parameters.Count(f => (f == ','));
-                    log.Info("EXEC sees {0} commas", commaCount);
+                    log.Trace("EXEC sees {0} commas", commaCount);
                     if (parameters.Count(f => (f == ',')) != nParams - 1)
                         return "";
                 }
@@ -1259,7 +1293,7 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
-            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
+            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting+1, line);
             string origLine = line;
 
             // Any variables to sub {varName}
@@ -1577,6 +1611,7 @@ namespace AutoGrind
             RecipeRTBCopy.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
         }
 
+        bool isSingleStep = false;
         int logFilter = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
@@ -1600,7 +1635,8 @@ namespace AutoGrind
                 }
             }
 
-            if (false)//!robotReady)  // Disabling so can run recipes offline
+            if (!robotReady)
+            //if (false)//!robotReady)  // Disable here if you want to run recipes with no bot connection
             {
                 // Only log this one time!
                 if (logFilter != 1)
@@ -1632,6 +1668,11 @@ namespace AutoGrind
                         SetCurrentLine(lineCurrentlyExecuting + 1);
                         string line = RecipeRTB.Lines[lineCurrentlyExecuting];
                         bool fContinue = ExecuteLine(lineCurrentlyExecuting, line);
+                        if (isSingleStep)
+                        {
+                            isSingleStep = false;
+                            SetState(RunState.PAUSED);
+                        }
                         if (!fContinue)
                         {
                             log.Info("EXEC Aborting execution");
@@ -2078,8 +2119,7 @@ namespace AutoGrind
         // \s*                              Ignore whitespace
         // (?<value>[A-Za-z0-9 _]+)         Group "value" is one or morealphanum space or underscore
         // \s*$"                            Ignore whitespace to EOL
-        static Regex directAssignmentRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<value>[A-Za-z0-9 _]+)$",
-            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static Regex directAssignmentRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<value>[\S ]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         // Regex to look for varname += or -= number expressions
         // @"^\s*                           Start of line, ignore leading whitespace
@@ -2089,16 +2129,14 @@ namespace AutoGrind
         // \s*                              Ignore whitespace
         // (?<value>[\-+]?[0-9.]+)          Group "value" can be optional (+ or -) followed by one or more digits and decimal
         // \s*$"                            Ignore whitespace to EOL
-        static Regex plusMinusEqualsRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*(?<operator>(\+=|\-=))\s*(?<value>[\-+]?[0-9.]+)$",
-            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static Regex plusMinusEqualsRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*(?<operator>(\+=|\-=))\s*(?<value>[\-+]?[0-9.]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         // Regex to look for varname += or -= number expressions
         // @"^\s*                           Start of line, ignore leading whitespace
         // (?<name>[A-Za-z][A-Za-z0-9_]*)   Group "name" is one alpha followed by 0 or more alphanum and underscore
         // (?<operator>(\+\+|\-\-))         Group "operator" can be ++ or --
         // \s*$"                            Ignore whitespace to EOL
-        static Regex plusPlusMinusMinusRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)(?<operator>(\+\+|\-\-))\s*$",
-            RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static Regex plusPlusMinusMinusRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)(?<operator>(\+\+|\-\-))\s*$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         /// <summary>
         /// Takes a "name=value" string and set variable "name" equal to "value"
@@ -2167,7 +2205,7 @@ namespace AutoGrind
             { }
 
             VariablesGrd.DataSource = variables;
-            
+
             // Clear the IsNew flags
             foreach (DataRow row in variables.Rows)
                 row["IsNew"] = false;
@@ -2233,7 +2271,7 @@ namespace AutoGrind
         /// <returns></returns>
         private string SelectedName(DataGridView dg)
         {
-            if (dg.SelectedCells.Count <1) return null;
+            if (dg.SelectedCells.Count < 1) return null;
             var cell = dg.SelectedCells[0];
             if (cell.ColumnIndex != 0) return null;
             if (cell.Value == null) return null;
