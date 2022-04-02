@@ -1,0 +1,39 @@
+clear
+x1 = 13
+assert(x1,13)
+
+x1++
+assert(x1,14)
+
+aaa=8
+assert(aaa,8)
+aaa--
+assert(aaa,7)
+aaa--
+assert(aaa,6)
+
+aaa += 7
+assert(aaa,13)
+aaa-=3
+assert(aaa,10)
+q1a={aaa}
+assert(q1a,10)
+aaa-=3.112
+assert(aaa,6.888)
+xxx2 = 12
+assert(xxx2,12)
+xxx2 -= -8.1
+assert(xxx2,20.1)
+xxx2++
+assert(xxx2,21.1)
+xxx2--
+assert(xxx2,20.1)
+a=5
+assert(a,5)
+a_=6
+assert(a_,6)
+a_+=-2
+assert(a_,4)
+
+test = this is a string
+assert(test,this is a string)

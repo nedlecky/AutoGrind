@@ -1,0 +1,9 @@
+n=0
+start:
+#grind_rect(50,50,2,50,10)
+#grind_rect(25,25,2,50,10)
+#grind_rect(5,5,2,50,10)
+movelinear(demo_flat)
+movelinear(demo_cyl)
+n++
+jump(start)

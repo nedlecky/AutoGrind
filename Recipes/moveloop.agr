@@ -1,9 +1,9 @@
 loop = 3
 
 start:
-prompt(Test)
-#movejoint(ToolH)
-#movejoint(ToolV)
+prompt(Tesat)
+moveposition(demo_cyl)
+moveposition(demo_sphere)
 set_linear_speed(300)
 set_linear_accel(400)
 

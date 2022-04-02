@@ -102,6 +102,42 @@ namespace AutoGrind
             SetRecipeState(RecipeState.NEW);
             SetState(RunState.IDLE);
         }
+        // Function key shortcut handling (primarily for development testing assistance)
+        private void MainForm_KeyDown(object sender, KeyEventArgs e)
+        {
+            log.Info("MainForm_KeyDown: {0}", e.KeyData);
+            switch (e.KeyData)
+            {
+                case Keys.F5:
+                    if (StartBtn.Enabled)
+                    {
+                        StartBtn_Click(null, null);
+                        e.Handled = true;
+                    }
+                    break;
+                case Keys.F6:
+                    if (StepBtn.Enabled)
+                    {
+                        StepBtn_Click(null, null);
+                        e.Handled = true;
+                    }
+                    break;
+                case Keys.F7:
+                    if (PauseBtn.Enabled)
+                    {
+                        PauseBtn_Click(null, null);
+                        e.Handled = true;
+                    }
+                    break;
+                case Keys.F8:
+                    if (StopBtn.Enabled)
+                    {
+                        StopBtn_Click(null, null);
+                        e.Handled = true;
+                    }
+                    break;
+            }
+        }
 
         private void StartupTmr_Tick(object sender, EventArgs e)
         {
@@ -663,7 +699,7 @@ namespace AutoGrind
                 if (result != DialogResult.OK) return false;
             }
 
-            SetCurrentLine(-1);
+            SetCurrentLine(0);
             bool goodLabels = BuildLabelTable();
             if (!goodLabels)
                 ErrorMessageBox("Error parsing labels from recipe.");
@@ -674,7 +710,7 @@ namespace AutoGrind
         {
             log.Info("StartBtn_Click(...)");
 
-            if(PrepareToRun())
+            if (PrepareToRun())
             {
                 isSingleStep = false;
                 SetRecipeState(RecipeState.RUNNING);
@@ -1133,18 +1169,20 @@ namespace AutoGrind
             return true;
         }
 
+        // 1-index line curently executing in recipe (1 is first line)
+        static int lineCurrentlyExecuting = 0;
         /// <summary>
         /// Set the lineCurrentlyExecuting to n and highlight it in the RecipeRTB
         /// </summary>
         /// <param name="n">Line number to start executing</param>
-        private void SetCurrentLine(int n)
+        private string SetCurrentLine(int n)
         {
             lineCurrentlyExecuting = n;
 
-            if (n >= 0 && n < RecipeRTB.Lines.Count())
+            if (n >= 1 && n <= RecipeRTB.Lines.Count())
             {
-                int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting);
-                int length = RecipeRTB.Lines[lineCurrentlyExecuting].Length;
+                int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting - 1);
+                int length = RecipeRTB.Lines[lineCurrentlyExecuting - 1].Length;
 
                 bool modified = RecipeRTB.Modified;
                 RecipeRTB.SelectAll();
@@ -1160,11 +1198,10 @@ namespace AutoGrind
                 RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
                 RecipeRTBCopy.ScrollToCaret();
                 RecipeRTBCopy.ScrollToCaret();
+                return RecipeRTB.Lines[lineCurrentlyExecuting - 1];
             }
+            return null;
         }
-
-
-        static int lineCurrentlyExecuting = 0;
 
         /// <summary>
         /// Read file looking for lines of the form "name=value" and pass then to the variable write function
@@ -1209,7 +1246,7 @@ namespace AutoGrind
         /// </summary>
         /// <param name="s">input string</param>
         /// <returns>Characters enclosed in (...) or ""</returns>
-        string ExtractParameters(string s, int nParams = 0)
+        string ExtractParameters(string s, int nParams = -1)
         {
             try
             {
@@ -1224,8 +1261,8 @@ namespace AutoGrind
                    \)           # Ends with a ')' character  */
                 log.Trace("EXEC params=\"{0}\"", parameters);
 
-                // If nParams is specified (> 0), verify we have the right number!
-                if (nParams > 0)
+                // If nParams is specified (> -1), verify we have the right number!
+                if (nParams > -1)
                 {
                     int commaCount = parameters.Count(f => (f == ','));
                     log.Trace("EXEC sees {0} commas", commaCount);
@@ -1269,23 +1306,26 @@ namespace AutoGrind
         // These recipe commands will be converted to sendrobot(prefix,[nParams additional parameters])
         Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
-            // SETTINGS
-            {"set_linear_speed",        new CommandSpec(){nParams=1, prefix="30,1" } },
-            {"set_linear_accel",        new CommandSpec(){nParams=1, prefix="30,2" } },
-            {"set_blend_radius",        new CommandSpec(){nParams=1, prefix="30,3" } },
-            {"set_joint_speed",         new CommandSpec(){nParams=1, prefix="30,4" } },
-            {"set_joint_accel",         new CommandSpec(){nParams=1, prefix="30,5" } },
-            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,6" } },
-            {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10" } },
-            {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11" } },
-            {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1" } },
-            {"grind_touch_retract",     new CommandSpec(){nParams=1, prefix="40,2" } },
+            // The main "send anything" command
+            {"sendrobot",               new CommandSpec(){nParams=-1, prefix="" } },
 
-            {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10" }  },
-            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,20" }  },
-            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,30" }  },
-            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,40" }  },
-            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,50" }  },
+            // SETTINGS
+            {"set_linear_speed",        new CommandSpec(){nParams=1, prefix="30,1," } },
+            {"set_linear_accel",        new CommandSpec(){nParams=1, prefix="30,2," } },
+            {"set_blend_radius",        new CommandSpec(){nParams=1, prefix="30,3," } },
+            {"set_joint_speed",         new CommandSpec(){nParams=1, prefix="30,4," } },
+            {"set_joint_accel",         new CommandSpec(){nParams=1, prefix="30,5," } },
+            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,6," } },
+            {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10," } },
+            {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11," } },
+            {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1," } },
+            {"grind_touch_retract",     new CommandSpec(){nParams=1, prefix="40,2," } },
+
+            {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10," }  },
+            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,20," }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,30," }  },
+            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,40," }  },
+            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,50," }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1293,7 +1333,7 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
-            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting+1, line);
+            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
             string origLine = line;
 
             // Any variables to sub {varName}
@@ -1354,6 +1394,32 @@ namespace AutoGrind
                 return true;
             }
 
+            // assert
+            if (command.StartsWith("assert("))
+            {
+                string[] parameters = ExtractParameters(command, 2).Split(',');
+                if (parameters.Length != 2)
+                {
+                    log.Error("Unknown assert command Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator("Unrecognized assert command: " + command);
+                    return true;
+                }
+                string value = ReadVariable(parameters[0],null);
+                if(value == null)
+                {
+                    log.Error("Unknown variable specified in assert Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator("Unknown variable in assert: " + command);
+                    return true;
+                }
+                if (value != parameters[1])
+                {
+                    log.Error("Assertion failure in  Line {0} Exec: {1}", lineNumber, command);
+                    PromptOperator(string.Format("Assertion failed: {0}\n{1} is {2}", command, parameters[0], value));
+                    return true;
+                }
+                return true;
+            }
+
             // jump
             if (command.StartsWith("jump("))
             {
@@ -1378,7 +1444,6 @@ namespace AutoGrind
             if (command.StartsWith("jump_gt_zero("))
             {
                 string[] parameters = ExtractParameters(command).Split(',');
-                //bool wasSuccessful = false;
                 if (parameters.Length != 2)
                 {
                     PromptOperator("Expected jump_gt_zero(variable,label):\nNot " + command);
@@ -1413,7 +1478,6 @@ namespace AutoGrind
                                     log.Info("EXEC {0:0000}: [JUMPGTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
                                     SetCurrentLine(jumpLine);
                                 }
-                                //wasSuccessful = true;
                                 return true;
                             }
                             catch
@@ -1442,14 +1506,14 @@ namespace AutoGrind
             }
 
             // movepose
-            if (command.StartsWith("movepose("))
+            if (command.StartsWith("movelinear("))
             {
                 string positionName = ExtractParameters(command);
-                LogInterpret("movepose", lineNumber, command);
+                LogInterpret("movelinear", lineNumber, command);
 
                 if (!GotoPositionPose(positionName))
                 {
-                    log.Error("Unknown position name specified in movepose Line {0} EXEC: {1}", lineNumber, command);
+                    log.Error("Unknown position name specified in movelinear Line {0} EXEC: {1}", lineNumber, command);
                     PromptOperator("Illegal position name: " + command);
                 }
                 return true;
@@ -1537,23 +1601,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // sendrobot
-            if (command.StartsWith("sendrobot("))
-            {
-                LogInterpret("sendrobot", lineNumber, command);
-                string parameters = ExtractParameters(command);
-                // Must be all numeric: Really, all (nnn,nnn,nnn)
-                if (!Regex.IsMatch(parameters, @"^[()+-.,0-9]*$"))
-                {
-                    log.Error("Illegal parameters for send_robot EXEC: {0.000} {1}", lineNumber, command);
-                    PromptOperator("Illegal send_robot command:\n" + command);
-                }
-                else
-                    robotCommandServer?.Send("(" + parameters + ")");
-                return true;
-            }
-
-            // Handle all of the other robot commands (which just use sendrobot, some prefeix params, and any other specified params)
+            // Handle all of the other robot commands (which just use sendrobot, some prefix params, and any other specified params)
             // Example:
             // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
             // grind_rect(30,30,5,20,10) ==> robotCommandServer.Send("(40,20,30,30,5,20,10)")
@@ -1578,10 +1626,10 @@ namespace AutoGrind
                     }
                     else
                     {
-                        if (parameters.Length > 0 || commandSpec.nParams == 0)
-                            robotCommandServer?.Send("(" + commandSpec.prefix + "," + parameters + ")");
+                        if (parameters.Length > 0 || commandSpec.nParams == -1)
+                            robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
                         else
-                            PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting + 1, commandSpec.nParams, command));
+                            PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
                     }
                     return true;
                 }
@@ -1594,8 +1642,8 @@ namespace AutoGrind
                 return true;
             }
 
-            log.Error("Unknown Command Line {0} Exec: {1}", lineNumber, command);
-            PromptOperator("Illegal recipe line:\n" + command);
+            log.Error("Unknown recipe line {0} EXEC: {1}", lineNumber, command);
+            PromptOperator("Unrecognized line in recipe:\n" + command);
             return true;
         }
 
@@ -1656,7 +1704,7 @@ namespace AutoGrind
                 {
                     // Resets such that the above log messages will happen
                     logFilter = 3;
-                    if (lineCurrentlyExecuting + 1 >= RecipeRTB.Lines.Count())
+                    if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
                         UnboldRecipe();
@@ -1665,8 +1713,7 @@ namespace AutoGrind
                     }
                     else
                     {
-                        SetCurrentLine(lineCurrentlyExecuting + 1);
-                        string line = RecipeRTB.Lines[lineCurrentlyExecuting];
+                        string line = SetCurrentLine(lineCurrentlyExecuting + 1);
                         bool fContinue = ExecuteLine(lineCurrentlyExecuting, line);
                         if (isSingleStep)
                         {
@@ -2639,5 +2686,6 @@ namespace AutoGrind
         {
 
         }
+
     }
 }

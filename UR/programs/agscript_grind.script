@@ -885,7 +885,7 @@ def pattern_circle_sphere(circle_diam_m, sphere_diam_m, n_cycles):
   sphere_radius_m = sphere_diam_m / 2.0
 
   # We're in contact at east side... compute where contact position would be at center of circle
-  p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m / 2.0, 0, 0])
+  p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m, 0, 0])
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
