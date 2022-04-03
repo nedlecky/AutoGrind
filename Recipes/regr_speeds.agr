@@ -9,6 +9,6 @@ select_tool(2F85)
 set_part_geometry(FLAT,0)
 
 rect:
-#grind_rect(50,50,1,50,10)
+grind_rect(40,40,1,50,10)
 circle:
-grind_circle(50,1,100,10)
+grind_circle(40,1,100,10)
