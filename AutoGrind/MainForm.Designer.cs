@@ -191,9 +191,9 @@
             // 
             this.CurrentLineLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.CurrentLineLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.CurrentLineLbl.Location = new System.Drawing.Point(5, 66);
+            this.CurrentLineLbl.Location = new System.Drawing.Point(5, 120);
             this.CurrentLineLbl.Name = "CurrentLineLbl";
-            this.CurrentLineLbl.Size = new System.Drawing.Size(786, 44);
+            this.CurrentLineLbl.Size = new System.Drawing.Size(788, 44);
             this.CurrentLineLbl.TabIndex = 79;
             this.CurrentLineLbl.TextChanged += new System.EventHandler(this.CurrentLineLbl_TextChanged);
             // 
@@ -214,11 +214,11 @@
             // RecipeRTB
             // 
             this.RecipeRTB.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeRTB.Location = new System.Drawing.Point(5, 122);
+            this.RecipeRTB.Location = new System.Drawing.Point(5, 166);
             this.RecipeRTB.Margin = new System.Windows.Forms.Padding(2);
             this.RecipeRTB.Name = "RecipeRTB";
             this.RecipeRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.RecipeRTB.Size = new System.Drawing.Size(788, 1022);
+            this.RecipeRTB.Size = new System.Drawing.Size(788, 978);
             this.RecipeRTB.TabIndex = 72;
             this.RecipeRTB.Text = "";
             this.RecipeRTB.TextChanged += new System.EventHandler(this.RecipeRTB_TextChanged);
@@ -290,7 +290,7 @@
             this.RecipeFilenameLbl.Location = new System.Drawing.Point(5, 15);
             this.RecipeFilenameLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameLbl.Name = "RecipeFilenameLbl";
-            this.RecipeFilenameLbl.Size = new System.Drawing.Size(786, 42);
+            this.RecipeFilenameLbl.Size = new System.Drawing.Size(788, 90);
             this.RecipeFilenameLbl.TabIndex = 77;
             this.RecipeFilenameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.RecipeFilenameLbl.TextChanged += new System.EventHandler(this.RecipeFilenameLbl_TextChanged);

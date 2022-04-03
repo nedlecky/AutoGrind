@@ -189,7 +189,7 @@ namespace AutoGrind
             string response = Receive();
             if (response != null)
             {
-                log.Error("{0} InquiryResponse already had a response waiting: {1}", logPrefix, response);
+                log.Error("{0} Already had a response waiting: {1}", logPrefix, response);
             }
 
             Stopwatch timer = new Stopwatch();
@@ -201,22 +201,22 @@ namespace AutoGrind
 
             if (response == null)
             {
-                log.Error("{0} InquiryResponse({1}) took too long. Waited {2} mS", logPrefix, inquiry, timeoutMs);
+                log.Error("{0} IR({1}) took too long. Waited {2} mS", logPrefix, inquiry, timeoutMs);
 
                 // Let's just wait a bit more?
                 while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs * 2) ;
                 timer.Stop();
                 if (response != null)
                 {
-                    log.Error("{0} InquiryResponse({1}) RETRY SUCCESS = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+                    log.Error("{0} IR({1}) RETRY SUCCESS = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
                     return response;
                 }
-                log.Error("{0} InquiryResponse({1}) RETRY FAIL. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
+                log.Error("{0} IR({1}) RETRY FAIL. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
                 return null;
             }
             timer.Stop();
 
-            log.Debug("{0} InquiryResponse({1}) = {2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+            log.Debug("{0} IR({1}) = {2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
             return response;
         }
     }
