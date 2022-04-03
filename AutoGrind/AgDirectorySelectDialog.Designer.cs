@@ -106,8 +106,8 @@
             this.Controls.Add(this.DirectoryListBox);
             this.Controls.Add(this.SelectBtn);
             this.Controls.Add(this.CancelBtn);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AgDirectorySelectDialog";
-            this.Text = "AgDirectorySelectDialog";
             this.Load += new System.EventHandler(this.AgDirectorySelectDialog_Load);
             this.ResumeLayout(false);
 

@@ -38,7 +38,7 @@
             // TitleLbl
             // 
             this.TitleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleLbl.Location = new System.Drawing.Point(22, 20);
+            this.TitleLbl.Location = new System.Drawing.Point(22, 3);
             this.TitleLbl.Name = "TitleLbl";
             this.TitleLbl.Size = new System.Drawing.Size(757, 48);
             this.TitleLbl.TabIndex = 85;
@@ -50,9 +50,9 @@
             this.FileListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FileListBox.FormattingEnabled = true;
             this.FileListBox.ItemHeight = 37;
-            this.FileListBox.Location = new System.Drawing.Point(22, 96);
+            this.FileListBox.Location = new System.Drawing.Point(22, 57);
             this.FileListBox.Name = "FileListBox";
-            this.FileListBox.Size = new System.Drawing.Size(757, 670);
+            this.FileListBox.Size = new System.Drawing.Size(757, 559);
             this.FileListBox.TabIndex = 84;
             this.FileListBox.Click += new System.EventHandler(this.FileListBox_Click);
             this.FileListBox.DoubleClick += new System.EventHandler(this.FileListBox_DoubleClick);
@@ -62,7 +62,7 @@
             this.SaveBtn.BackColor = System.Drawing.Color.Green;
             this.SaveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveBtn.Location = new System.Drawing.Point(148, 850);
+            this.SaveBtn.Location = new System.Drawing.Point(153, 670);
             this.SaveBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(228, 131);
@@ -77,7 +77,7 @@
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.White;
-            this.CancelBtn.Location = new System.Drawing.Point(430, 850);
+            this.CancelBtn.Location = new System.Drawing.Point(435, 670);
             this.CancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(228, 131);
@@ -89,7 +89,7 @@
             // FileNameTxt
             // 
             this.FileNameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FileNameTxt.Location = new System.Drawing.Point(22, 779);
+            this.FileNameTxt.Location = new System.Drawing.Point(22, 621);
             this.FileNameTxt.Name = "FileNameTxt";
             this.FileNameTxt.Size = new System.Drawing.Size(757, 44);
             this.FileNameTxt.TabIndex = 86;
@@ -100,8 +100,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelBtn;
-            this.ClientSize = new System.Drawing.Size(800, 1006);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(800, 810);
             this.Controls.Add(this.FileNameTxt);
             this.Controls.Add(this.TitleLbl);
             this.Controls.Add(this.FileListBox);
@@ -110,7 +109,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AgSaveAsDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "AgSaveAsDialog";
             this.Load += new System.EventHandler(this.AgSaveAsDialog_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

@@ -39,7 +39,7 @@
             this.OpenBtn.BackColor = System.Drawing.Color.Green;
             this.OpenBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OpenBtn.ForeColor = System.Drawing.Color.White;
-            this.OpenBtn.Location = new System.Drawing.Point(157, 792);
+            this.OpenBtn.Location = new System.Drawing.Point(159, 746);
             this.OpenBtn.Margin = new System.Windows.Forms.Padding(2);
             this.OpenBtn.Name = "OpenBtn";
             this.OpenBtn.Size = new System.Drawing.Size(228, 131);
@@ -54,7 +54,7 @@
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.White;
-            this.CancelBtn.Location = new System.Drawing.Point(439, 792);
+            this.CancelBtn.Location = new System.Drawing.Point(441, 746);
             this.CancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(228, 131);
@@ -65,12 +65,12 @@
             // 
             // FileListBox
             // 
-            this.FileListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FileListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FileListBox.FormattingEnabled = true;
-            this.FileListBox.ItemHeight = 37;
-            this.FileListBox.Location = new System.Drawing.Point(31, 85);
+            this.FileListBox.ItemHeight = 55;
+            this.FileListBox.Location = new System.Drawing.Point(31, 62);
             this.FileListBox.Name = "FileListBox";
-            this.FileListBox.Size = new System.Drawing.Size(757, 670);
+            this.FileListBox.Size = new System.Drawing.Size(757, 664);
             this.FileListBox.TabIndex = 80;
             this.FileListBox.DoubleClick += new System.EventHandler(this.FileListBox_DoubleClick);
             // 
@@ -90,8 +90,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelBtn;
-            this.ClientSize = new System.Drawing.Size(800, 934);
-            this.ControlBox = false;
+            this.ClientSize = new System.Drawing.Size(800, 891);
             this.Controls.Add(this.TitleLbl);
             this.Controls.Add(this.FileListBox);
             this.Controls.Add(this.OpenBtn);
@@ -99,7 +98,6 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "AgFileOpenDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "FileOpenForm";
             this.Load += new System.EventHandler(this.FileOpenForm_Load);
             this.ResumeLayout(false);
 

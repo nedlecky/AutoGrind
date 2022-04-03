@@ -63,7 +63,7 @@
             this.YminusBtn.BackColor = System.Drawing.Color.Green;
             this.YminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.YminusBtn.ForeColor = System.Drawing.Color.White;
-            this.YminusBtn.Location = new System.Drawing.Point(11, 229);
+            this.YminusBtn.Location = new System.Drawing.Point(129, 271);
             this.YminusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.YminusBtn.Name = "YminusBtn";
             this.YminusBtn.Size = new System.Drawing.Size(150, 107);
@@ -77,7 +77,7 @@
             this.ZminusBtn.BackColor = System.Drawing.Color.Green;
             this.ZminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZminusBtn.ForeColor = System.Drawing.Color.White;
-            this.ZminusBtn.Location = new System.Drawing.Point(211, 9);
+            this.ZminusBtn.Location = new System.Drawing.Point(329, 51);
             this.ZminusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZminusBtn.Name = "ZminusBtn";
             this.ZminusBtn.Size = new System.Drawing.Size(150, 115);
@@ -91,7 +91,7 @@
             this.ZplusBtn.BackColor = System.Drawing.Color.Green;
             this.ZplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZplusBtn.ForeColor = System.Drawing.Color.White;
-            this.ZplusBtn.Location = new System.Drawing.Point(11, 9);
+            this.ZplusBtn.Location = new System.Drawing.Point(129, 51);
             this.ZplusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZplusBtn.Name = "ZplusBtn";
             this.ZplusBtn.Size = new System.Drawing.Size(150, 115);
@@ -105,7 +105,7 @@
             this.ExitBtn.BackColor = System.Drawing.Color.Green;
             this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(1173, 911);
+            this.ExitBtn.Location = new System.Drawing.Point(1291, 953);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
             this.ExitBtn.Size = new System.Drawing.Size(165, 131);
@@ -119,7 +119,7 @@
             this.YplusBtn.BackColor = System.Drawing.Color.Green;
             this.YplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.YplusBtn.ForeColor = System.Drawing.Color.White;
-            this.YplusBtn.Location = new System.Drawing.Point(211, 229);
+            this.YplusBtn.Location = new System.Drawing.Point(329, 271);
             this.YplusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.YplusBtn.Name = "YplusBtn";
             this.YplusBtn.Size = new System.Drawing.Size(150, 107);
@@ -133,7 +133,7 @@
             this.XminusBtn.BackColor = System.Drawing.Color.Green;
             this.XminusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.XminusBtn.ForeColor = System.Drawing.Color.White;
-            this.XminusBtn.Location = new System.Drawing.Point(110, 128);
+            this.XminusBtn.Location = new System.Drawing.Point(228, 170);
             this.XminusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.XminusBtn.Name = "XminusBtn";
             this.XminusBtn.Size = new System.Drawing.Size(150, 97);
@@ -147,7 +147,7 @@
             this.XplusBtn.BackColor = System.Drawing.Color.Green;
             this.XplusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.XplusBtn.ForeColor = System.Drawing.Color.White;
-            this.XplusBtn.Location = new System.Drawing.Point(110, 341);
+            this.XplusBtn.Location = new System.Drawing.Point(228, 383);
             this.XplusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.XplusBtn.Name = "XplusBtn";
             this.XplusBtn.Size = new System.Drawing.Size(150, 97);
@@ -161,7 +161,7 @@
             this.RxPlusBtn.BackColor = System.Drawing.Color.Green;
             this.RxPlusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RxPlusBtn.ForeColor = System.Drawing.Color.White;
-            this.RxPlusBtn.Location = new System.Drawing.Point(11, 495);
+            this.RxPlusBtn.Location = new System.Drawing.Point(129, 537);
             this.RxPlusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RxPlusBtn.Name = "RxPlusBtn";
             this.RxPlusBtn.Size = new System.Drawing.Size(150, 150);
@@ -175,7 +175,7 @@
             this.RxMinusBtn.BackColor = System.Drawing.Color.Green;
             this.RxMinusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RxMinusBtn.ForeColor = System.Drawing.Color.White;
-            this.RxMinusBtn.Location = new System.Drawing.Point(211, 495);
+            this.RxMinusBtn.Location = new System.Drawing.Point(329, 537);
             this.RxMinusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RxMinusBtn.Name = "RxMinusBtn";
             this.RxMinusBtn.Size = new System.Drawing.Size(150, 150);
@@ -189,7 +189,7 @@
             this.RyPlusBtn.BackColor = System.Drawing.Color.Green;
             this.RyPlusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RyPlusBtn.ForeColor = System.Drawing.Color.White;
-            this.RyPlusBtn.Location = new System.Drawing.Point(110, 649);
+            this.RyPlusBtn.Location = new System.Drawing.Point(228, 691);
             this.RyPlusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RyPlusBtn.Name = "RyPlusBtn";
             this.RyPlusBtn.Size = new System.Drawing.Size(150, 89);
@@ -203,7 +203,7 @@
             this.RyMinusBtn.BackColor = System.Drawing.Color.Green;
             this.RyMinusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RyMinusBtn.ForeColor = System.Drawing.Color.White;
-            this.RyMinusBtn.Location = new System.Drawing.Point(110, 876);
+            this.RyMinusBtn.Location = new System.Drawing.Point(228, 918);
             this.RyMinusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RyMinusBtn.Name = "RyMinusBtn";
             this.RyMinusBtn.Size = new System.Drawing.Size(150, 89);
@@ -217,7 +217,7 @@
             this.RzMinusBtn.BackColor = System.Drawing.Color.Green;
             this.RzMinusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RzMinusBtn.ForeColor = System.Drawing.Color.White;
-            this.RzMinusBtn.Location = new System.Drawing.Point(211, 750);
+            this.RzMinusBtn.Location = new System.Drawing.Point(329, 792);
             this.RzMinusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RzMinusBtn.Name = "RzMinusBtn";
             this.RzMinusBtn.Size = new System.Drawing.Size(150, 113);
@@ -231,7 +231,7 @@
             this.RzPlusBtn.BackColor = System.Drawing.Color.Green;
             this.RzPlusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RzPlusBtn.ForeColor = System.Drawing.Color.White;
-            this.RzPlusBtn.Location = new System.Drawing.Point(11, 750);
+            this.RzPlusBtn.Location = new System.Drawing.Point(129, 792);
             this.RzPlusBtn.Margin = new System.Windows.Forms.Padding(2);
             this.RzPlusBtn.Name = "RzPlusBtn";
             this.RzPlusBtn.Size = new System.Drawing.Size(150, 113);
@@ -243,7 +243,7 @@
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(406, 277);
+            this.label1.Location = new System.Drawing.Point(524, 319);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(281, 42);
             this.label1.TabIndex = 15;
@@ -253,7 +253,7 @@
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(406, 665);
+            this.label2.Location = new System.Drawing.Point(524, 707);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(281, 87);
             this.label2.TabIndex = 17;
@@ -265,7 +265,7 @@
             this.ZeroRpyBtn.BackColor = System.Drawing.Color.Green;
             this.ZeroRpyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZeroRpyBtn.ForeColor = System.Drawing.Color.White;
-            this.ZeroRpyBtn.Location = new System.Drawing.Point(406, 860);
+            this.ZeroRpyBtn.Location = new System.Drawing.Point(524, 902);
             this.ZeroRpyBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroRpyBtn.Name = "ZeroRpyBtn";
             this.ZeroRpyBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -280,7 +280,7 @@
             this.FreeDriveBtn.BackColor = System.Drawing.Color.Green;
             this.FreeDriveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FreeDriveBtn.ForeColor = System.Drawing.Color.White;
-            this.FreeDriveBtn.Location = new System.Drawing.Point(765, 456);
+            this.FreeDriveBtn.Location = new System.Drawing.Point(883, 498);
             this.FreeDriveBtn.Margin = new System.Windows.Forms.Padding(2);
             this.FreeDriveBtn.Name = "FreeDriveBtn";
             this.FreeDriveBtn.Size = new System.Drawing.Size(332, 134);
@@ -293,7 +293,7 @@
             this.PurposeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PurposeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PurposeLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.PurposeLbl.Location = new System.Drawing.Point(512, 9);
+            this.PurposeLbl.Location = new System.Drawing.Point(630, 51);
             this.PurposeLbl.Name = "PurposeLbl";
             this.PurposeLbl.Size = new System.Drawing.Size(816, 52);
             this.PurposeLbl.TabIndex = 76;
@@ -305,7 +305,7 @@
             this.SaveBtn.BackColor = System.Drawing.Color.Green;
             this.SaveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveBtn.Location = new System.Drawing.Point(1173, 741);
+            this.SaveBtn.Location = new System.Drawing.Point(1291, 783);
             this.SaveBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(165, 131);
@@ -319,7 +319,7 @@
             this.ZeroPBtn.BackColor = System.Drawing.Color.Green;
             this.ZeroPBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZeroPBtn.ForeColor = System.Drawing.Color.White;
-            this.ZeroPBtn.Location = new System.Drawing.Point(765, 835);
+            this.ZeroPBtn.Location = new System.Drawing.Point(883, 877);
             this.ZeroPBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroPBtn.Name = "ZeroPBtn";
             this.ZeroPBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -334,7 +334,7 @@
             this.ZeroYBtn.BackColor = System.Drawing.Color.Green;
             this.ZeroYBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZeroYBtn.ForeColor = System.Drawing.Color.White;
-            this.ZeroYBtn.Location = new System.Drawing.Point(765, 947);
+            this.ZeroYBtn.Location = new System.Drawing.Point(883, 989);
             this.ZeroYBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroYBtn.Name = "ZeroYBtn";
             this.ZeroYBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -349,7 +349,7 @@
             this.FlipRBtn.BackColor = System.Drawing.Color.Green;
             this.FlipRBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FlipRBtn.ForeColor = System.Drawing.Color.White;
-            this.FlipRBtn.Location = new System.Drawing.Point(765, 667);
+            this.FlipRBtn.Location = new System.Drawing.Point(883, 709);
             this.FlipRBtn.Margin = new System.Windows.Forms.Padding(2);
             this.FlipRBtn.Name = "FlipRBtn";
             this.FlipRBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -364,7 +364,7 @@
             this.ToolLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.ToolLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ToolLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.ToolLbl.Location = new System.Drawing.Point(512, 84);
+            this.ToolLbl.Location = new System.Drawing.Point(630, 126);
             this.ToolLbl.Name = "ToolLbl";
             this.ToolLbl.Size = new System.Drawing.Size(816, 52);
             this.ToolLbl.TabIndex = 82;
@@ -379,7 +379,7 @@
             "BASE",
             "TOOL",
             "PART"});
-            this.CoordBox.Location = new System.Drawing.Point(406, 508);
+            this.CoordBox.Location = new System.Drawing.Point(524, 550);
             this.CoordBox.Name = "CoordBox";
             this.CoordBox.Size = new System.Drawing.Size(281, 45);
             this.CoordBox.TabIndex = 83;
@@ -395,7 +395,7 @@
             "25",
             "50",
             "100"});
-            this.DistanceBox.Location = new System.Drawing.Point(406, 322);
+            this.DistanceBox.Location = new System.Drawing.Point(524, 364);
             this.DistanceBox.Name = "DistanceBox";
             this.DistanceBox.Size = new System.Drawing.Size(281, 45);
             this.DistanceBox.TabIndex = 84;
@@ -412,7 +412,7 @@
             "10.0",
             "22.5",
             "45.0"});
-            this.AngleBox.Location = new System.Drawing.Point(406, 755);
+            this.AngleBox.Location = new System.Drawing.Point(524, 797);
             this.AngleBox.Name = "AngleBox";
             this.AngleBox.Size = new System.Drawing.Size(281, 45);
             this.AngleBox.TabIndex = 85;
@@ -420,7 +420,7 @@
             // label3
             // 
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(406, 456);
+            this.label3.Location = new System.Drawing.Point(524, 498);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(281, 49);
             this.label3.TabIndex = 86;
@@ -432,18 +432,18 @@
             this.PartLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.PartLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PartLbl.ImageAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.PartLbl.Location = new System.Drawing.Point(512, 162);
+            this.PartLbl.Location = new System.Drawing.Point(630, 204);
             this.PartLbl.Name = "PartLbl";
             this.PartLbl.Size = new System.Drawing.Size(816, 52);
             this.PartLbl.TabIndex = 87;
             this.PartLbl.Text = "Part:";
             this.PartLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // JoggingForm
+            // AgJoggingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1349, 1053);
+            this.ClientSize = new System.Drawing.Size(1599, 1158);
             this.ControlBox = false;
             this.Controls.Add(this.PartLbl);
             this.Controls.Add(this.label3);
@@ -474,7 +474,7 @@
             this.Controls.Add(this.ZminusBtn);
             this.Controls.Add(this.ZplusBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "JoggingForm";
+            this.Name = "AgJoggingDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Jog Robot";
             this.Load += new System.EventHandler(this.JoggingForm_Load);
