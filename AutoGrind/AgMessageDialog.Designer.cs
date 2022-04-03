@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class MessageForm
+    partial class AgMessageDialog
     {
         /// <summary>
         /// Required designer variable.

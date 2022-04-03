@@ -32,7 +32,7 @@ namespace AutoGrind
         static SplashForm splashForm;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
-        MessageForm waitingForOperatorMessageForm = null;
+        AgMessageDialog waitingForOperatorMessageForm = null;
 
         static DataTable variables;
         static DataTable tools;
@@ -185,13 +185,13 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            MessageForm messageForm = new MessageForm("AutoGrind Confirmation", question, "Yes", "No");
+            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Confirmation", question, "Yes", "No");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            MessageForm messageForm = new MessageForm("AutoGrind Error", message, "OK", "Cancel");
+            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Error", message, "OK", "Cancel");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -655,11 +655,6 @@ namespace AutoGrind
         {
             UrLogRTB.Clear();
         }
-        private void ClearUrDashboardLogRtbBtn_Click(object sender, EventArgs e)
-        {
-            UrDashboardLogRTB.Clear();
-        }
-
 
         private void ClearErrorLogRtbBtn_Click(object sender, EventArgs e)
         {
@@ -882,12 +877,13 @@ namespace AutoGrind
                     SaveRecipeBtn_Click(null, null);
             }
 
-            OpenFileDialog dialog = new OpenFileDialog()
+            AgFileOpenDialog dialog = new AgFileOpenDialog()
             {
                 Title = "Open an AutoGrind Recipe",
-                Filter = "AutoGrind Recipe Files|*.agr",
+                Filter = "*.agr",
                 InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
             };
+
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 if (LoadRecipeFile(dialog.FileName))
@@ -916,18 +912,30 @@ namespace AutoGrind
         private void SaveAsRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("SaveAsRecipeBtn_Click(...)");
-            SaveFileDialog dialog = new SaveFileDialog()
+            AgSaveAsDialog dialog = new AgSaveAsDialog()
             {
-                Filter = "AutoGrind Recipe Files|*.agr",
                 Title = "Save an Autogrind Recipe",
-                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes")
+                Filter = "*.agr",
+                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
+                FileName = RecipeFilenameLbl.Text,
             };
             if (dialog.ShowDialog() == DialogResult.OK)
             {
                 if (dialog.FileName != "")
                 {
-                    RecipeFilenameLbl.Text = dialog.FileName;
-                    SaveRecipeBtn_Click(null, null);
+                    string filename = dialog.FileName;
+                    if (!filename.EndsWith(".agr")) filename += ".agr";
+                    bool okToSave = true;
+                    if (File.Exists(filename))
+                    {
+                        if (DialogResult.OK != ConfirmMessageBox(string.Format("File {0} already exists. Overwrite?", filename)))
+                            okToSave = false;
+                    }
+                    if (okToSave)
+                    {
+                        RecipeFilenameLbl.Text = filename;
+                        SaveRecipeBtn_Click(null, null);
+                    }
                 }
             }
         }
@@ -1066,7 +1074,7 @@ namespace AutoGrind
         private void ChangeRootDirectoryBtn_Click(object sender, EventArgs e)
         {
             log.Info("ChangeRootDirectoryBtn_Click(...)");
-            FolderBrowserDialog dialog = new FolderBrowserDialog()
+            AgDirectorySelectDialog dialog = new AgDirectorySelectDialog()
             {
                 SelectedPath = AutoGrindRoot
             };
@@ -1088,7 +1096,7 @@ namespace AutoGrind
             if (partName != "FLAT")
                 partName += " " + DiameterLbl.Text + " mm DIA";
 
-            JoggingForm form = new JoggingForm(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
+            AgJoggingDialog form = new AgJoggingDialog(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
 
             form.ShowDialog(this);
         }
@@ -1236,7 +1244,7 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new MessageForm(heading, message, "Continue Execution", "Abort");
+            waitingForOperatorMessageForm = new AgMessageDialog(heading, message, "Continue Execution", "Abort");
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -1404,8 +1412,8 @@ namespace AutoGrind
                     PromptOperator("Unrecognized assert command: " + command);
                     return true;
                 }
-                string value = ReadVariable(parameters[0],null);
-                if(value == null)
+                string value = ReadVariable(parameters[0], null);
+                if (value == null)
                 {
                     log.Error("Unknown variable specified in assert Line {0} Exec: {1}", lineNumber, command);
                     PromptOperator("Unknown variable in assert: " + command);
@@ -2536,7 +2544,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingForm form = new JoggingForm(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
+            AgJoggingDialog form = new AgJoggingDialog(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
 
             form.ShowDialog(this);
 

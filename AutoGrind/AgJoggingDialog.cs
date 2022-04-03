@@ -10,7 +10,7 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class JoggingForm : Form
+    public partial class AgJoggingDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         readonly TcpServerSupport robot;
@@ -18,7 +18,7 @@ namespace AutoGrind
 
         MainForm mainForm;
 
-        public JoggingForm(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
+        public AgJoggingDialog(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;

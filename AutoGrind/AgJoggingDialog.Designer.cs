@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class JoggingForm
+    partial class AgJoggingDialog
     {
         /// <summary>
         /// Required designer variable.

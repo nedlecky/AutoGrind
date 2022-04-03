@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class MessageForm : Form
+    public partial class AgMessageDialog : Form
     {
         public DialogResult result = DialogResult.OK;
-        public MessageForm(string title, string label, string okText = "OK", string cancelText = "Cancel")
+        public AgMessageDialog(string title, string label, string okText = "OK", string cancelText = "Cancel")
         {
             InitializeComponent();
 
@@ -27,14 +27,12 @@ namespace AutoGrind
 
         private void OkBtn_Click(object sender, EventArgs e)
         {
-            result=DialogResult.OK;
-
+            result = DialogResult.OK;
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            result= DialogResult.Cancel;
-
+            result = DialogResult.Cancel;
         }
     }
 }
