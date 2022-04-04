@@ -322,7 +322,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
-                        ExecuteLine(-1, "grind_contact_enabled(0)");  // Set contact enabled = False
+                        ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -675,7 +675,12 @@ namespace AutoGrind
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
                 {
-                    robotCommandServer.Send(String.Format("(40,1,{0})", GrindContactEnabledBtn.BackColor != Color.Green ? 1 : 0));
+                    string var = ReadVariable("grind_contact_enable","0");
+                    // Increment current setting to cycle through 0, 1, 2
+                    int val = Convert.ToInt32(var);
+                    val++;
+                    val %= 3;
+                    robotCommandServer.Send(String.Format("(40,1,{0})", val));
                 }
         }
 
@@ -1326,7 +1331,7 @@ namespace AutoGrind
             {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,6," } },
             {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10," } },
             {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11," } },
-            {"grind_contact_enabled",   new CommandSpec(){nParams=1, prefix="40,1," } },
+            {"grind_contact_enable",    new CommandSpec(){nParams=1, prefix="40,1," } },
             {"grind_touch_retract",     new CommandSpec(){nParams=1, prefix="40,2," } },
 
             {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10," }  },
@@ -2114,8 +2119,26 @@ namespace AutoGrind
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
-                case "grind_contact_enabled":
-                    GrindContactEnabledBtn.BackColor = ColorFromBooleanName(valueTrimmed);
+                case "grind_contact_enable":
+                    switch (valueTrimmed)
+                    {
+                        case "0":
+                            GrindContactEnabledBtn.Text = "Touch OFF\nGrind OFF";
+                            GrindContactEnabledBtn.BackColor = Color.Red;
+                            break;
+                        case "1":
+                            GrindContactEnabledBtn.Text = "Touch ON\nGrind OFF";
+                            GrindContactEnabledBtn.BackColor = Color.Blue;
+                            break;
+                        case "2":
+                            GrindContactEnabledBtn.Text = "Touch ON\n Grind ON";
+                            GrindContactEnabledBtn.BackColor = Color.Green;
+                            break;
+                        default:
+                            GrindContactEnabledBtn.Text = "????";
+                            GrindContactEnabledBtn.BackColor = Color.Red;
+                            break;
+                    }
                     break;
             }
 

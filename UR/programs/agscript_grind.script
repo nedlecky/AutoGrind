@@ -9,7 +9,8 @@ global haltCount = 0
 global haltCommand = [0, 0]
 
 global grind_ready = True
-global grind_contact_enabled = False
+# grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+global grind_contact_enable = 0
 global grind_touch_retract_mm = 3
 
 MATH_PI = 3.1415926535
@@ -42,14 +43,11 @@ def pattern_grind():
   set_tcp(robot_tcp_part)
 
   if command[2] == 1:
-    global response = "set grind_contact_enabled"
-    if command[3] > 0:
-      global grind_contact_enabled = True
-      socket_send_line("grind_contact_enabled=True")
-    else:
-      global grind_contact_enabled = False
-      socket_send_line("grind_contact_enabled=False")
+    global response = "set grind_contact_enable"
+    if command[3] >= 0 and command[3] <= 2:
+      global grind_contact_enable = command[3]
     end
+    socket_set_var("grind_contact_enable", grind_contact_enable)
   elif command[2] == 2:
     global response = "set grind_touch_retract_mm"
     if command[3] >= 0:
@@ -141,17 +139,21 @@ def pattern_grind():
 end
 
 # Get into contact with part (or away from)
-def contact_part(on = False, enabled = False):
+# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+def contact_part(on = False, enable = 0):
   if on:
-    if enabled:
+    if enable == 0:
+      # Just do a small forward motion in the direction of touchoff
+      p1 = pose_trans(get_forward_kin(), p[0, 0, 0.005, 0, 0, 0])
+      movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    elif enable == 1:
+      # Advance until contact but retract 2X grind distance
+      return touchoff(grind_touch_retract_mm * 2.0)
+    elif enable == 2:
       # Advance until contact
       return touchoff(grind_touch_retract_mm)
-    else:
-      # Simulated....
-      p1 = pose_trans(get_forward_kin(), p[0, 0, 0.010, 0, 0, 0])
-      movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     end
-  else:
+  else:  # Contact off
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.010, 0, 0, 0])
     movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
@@ -159,24 +161,39 @@ def contact_part(on = False, enabled = False):
   return True
 end
 
-def tool_power(on = False, enabled = False):
-  if not enabled:
+# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+def tool_power(on = False, enable = 0):
+  if enable < 2:
     return None
+  end
+
+  if on:
+    # ON IO
+  else:
+    # OFF IO
   end
 
   return None
 end
 
-def coolant_flow(on = False, enabled = False):
-  if not enabled:
+# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+def coolant_flow(on = False, enable = 0):
+  if enable < 2:
     return None
+  end
+
+  if on:
+    # ON IO
+  else:
+    # OFF IO
   end
 
   return None
 end
 
-def apply_force(on = False, enabled = False):
-  if not enabled:
+# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+def apply_force(on = False, enable = 0):
+  if enable < 2:
     return None
   end
 
@@ -187,7 +204,6 @@ def apply_force(on = False, enabled = False):
     force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   else:
     end_force_mode()
-    #stopl(5.0)
   end
 
   return None
@@ -197,19 +213,19 @@ end
 global grinding_state = False
 def set_grinding_state(on = False):
   if on and not grinding_state:
-    if not contact_part(True, grind_contact_enabled):
+    if not contact_part(True, grind_contact_enable):
       return False
     end
-    tool_power(True, grind_contact_enabled)
-    coolant_flow(True, grind_contact_enabled)
-    apply_force(True, grind_contact_enabled)
+    tool_power(True, grind_contact_enable)
+    coolant_flow(True, grind_contact_enable)
+    apply_force(True, grind_contact_enable)
     grinding_state = True
     return True
   elif not on and grinding_state:
-    apply_force(False, grind_contact_enabled)
-    contact_part(False, grind_contact_enabled)
-    coolant_flow(False, grind_contact_enabled)
-    tool_power(False, grind_contact_enabled)
+    apply_force(False, grind_contact_enable)
+    contact_part(False, grind_contact_enable)
+    coolant_flow(False, grind_contact_enable)
+    tool_power(False, grind_contact_enable)
     grinding_state = False
     return True
   end
@@ -225,6 +241,7 @@ thread listener_thread():
     global haltCommand = socket_read_ascii_float(1, timeout = 0.1)
     if haltCommand[0] > 0:
       global haltCount = haltCount + 1
+      stopl(1.0)
     end
   end
 

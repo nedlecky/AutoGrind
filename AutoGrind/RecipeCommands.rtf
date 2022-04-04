@@ -36,9 +36,9 @@
 \af0\afs22\alang1025 \ltrch\fcs0 \fs22\lang1033\langfe1033\loch\f31506\hich\af31506\dbch\af31505\cgrid\langnp1033\langfenp1033 \snext0 \sqformat \spriority0 Normal;}{\*\cs10 \additive \ssemihidden \sunhideused \spriority1 Default Paragraph Font;}{\*
 \ts11\tsrowd\trftsWidthB3\trpaddl108\trpaddr108\trpaddfl3\trpaddft3\trpaddfb3\trpaddfr3\trcbpat1\trcfpat1\tblind0\tblindtype3\tsvertalt\tsbrdrt\tsbrdrl\tsbrdrb\tsbrdrr\tsbrdrdgl\tsbrdrdgr\tsbrdrh\tsbrdrv \ql \li0\ri0\sa160\sl259\slmult1
 \widctlpar\wrapdefault\aspalpha\aspnum\faauto\adjustright\rin0\lin0\itap0 \rtlch\fcs1 \af0\afs22\alang1025 \ltrch\fcs0 \fs22\lang1033\langfe1033\loch\f31506\hich\af31506\dbch\af31505\cgrid\langnp1033\langfenp1033 \snext11 \ssemihidden \sunhideused 
-Normal Table;}}{\*\rsidtbl \rsid1211250\rsid1599002\rsid2641496\rsid2712384\rsid4326294\rsid12537551\rsid12988150\rsid13264175\rsid16715356}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0\mdefJc1\mwrapIndent1440
-\mintLim0\mnaryLim1}{\info{\author Ned Lecky}{\operator Ned Lecky}{\creatim\yr2022\mo3\dy27\hr16\min37}{\revtim\yr2022\mo4\dy1\hr6\min38}{\version9}{\edmins10}{\nofpages3}{\nofwords153}{\nofchars874}{\nofcharsws1025}{\vern43}}{\*\xmlnstbl {\xmlns1 http://
-schemas.microsoft.com/office/word/2003/wordml}}\paperw15840\paperh12240\margl720\margr720\margt720\margb720\gutter0\ltrsect 
+Normal Table;}}{\*\rsidtbl \rsid1211250\rsid1599002\rsid2641496\rsid2712384\rsid4326294\rsid10046591\rsid12537551\rsid12988150\rsid13264175\rsid15156495\rsid16715356}{\mmathPr\mmathFont34\mbrkBin0\mbrkBinSub0\msmallFrac0\mdispDef1\mlMargin0\mrMargin0
+\mdefJc1\mwrapIndent1440\mintLim0\mnaryLim1}{\info{\author Ned Lecky}{\operator Ned Lecky}{\creatim\yr2022\mo3\dy27\hr16\min37}{\revtim\yr2022\mo4\dy3\hr19\min39}{\version11}{\edmins11}{\nofpages3}{\nofwords160}{\nofchars915}{\nofcharsws1073}{\vern45}}
+{\*\xmlnstbl {\xmlns1 http://schemas.microsoft.com/office/word/2003/wordml}}\paperw15840\paperh12240\margl720\margr720\margt720\margb720\gutter0\ltrsect 
 \widowctrl\ftnbj\aenddoc\trackmoves0\trackformatting1\donotembedsysfont0\relyonvml0\donotembedlingdata1\grfdocevents0\validatexml0\showplaceholdtext0\ignoremixedcontent0\saveinvalidxml0\showxmlerrors0\horzdoc\dghspace120\dgvspace120\dghorigin1701
 \dgvorigin1984\dghshow0\dgvshow3\jcompress\viewkind1\viewscale100\rsidroot1599002 \nouicompat \fet0{\*\wgrffmtfilter 2450}\nofeaturethrottle1\ilfomacatclnup0\ltrpar \sectd \ltrsect\lndscpsxn\linex0\sectlinegrid299\sectdefaultcl\sectrsid13264175\sftnbj 
 {\*\pnseclvl1\pnucrm\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl2\pnucltr\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl3\pndec\pnstart1\pnindent720\pnhang {\pntxta .}}{\*\pnseclvl4\pnlcltr\pnstart1\pnindent720\pnhang {\pntxta )}}
@@ -51,16 +51,18 @@ AUTOGRIND RECIPE COMMANDS
 \par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 grind_line(dx_mm, dy_mm, n_cycles, speed_mm/s, force_N)
 \par \hich\af2\dbch\af31505\loch\f2 grind_rect(dx_mm, dy_mm, n_cycles, speed_mm/s, force_N)
 \par \hich\af2\dbch\af31505\loch\f2 grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, speed_mm/s, force_N)
-\par \hich\af2\dbch\af31505\loch\f2 grin\hich\af2\dbch\af31505\loch\f2 d_circle(circle_diam_mm, n_cycles, speed_mm/s, force_N)
-\par \hich\af2\dbch\af31505\loch\f2 grind_spiral(circle1_diam_mm, grind_circle2_diam_mm, n_spirals, n_cycles, speed_mm/s, force_N)
-\par \hich\af2\dbch\af31505\loch\f2 grind_contact_enabled(0 | 1)}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294 
+\par \hich\af2\dbch\af31505\loch\f2 grind_circle(circle_diam_mm, n_cycles, speed_mm/s, force_N)
+\par \hich\af2\dbch\af31505\loch\f2 grind_spiral(circle1_diam_mm, grind_circle2_diam_mm, n_spi\hich\af2\dbch\af31505\loch\f2 rals, n_cycles, speed_mm/s, force_N)
+\par \hich\af2\dbch\af31505\loch\f2 grind_contact_enable(0}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid15156495 \hich\af2\dbch\af31505\loch\f2 =No Touch}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid10046591 ,}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 
+\f2\fs36\insrsid15156495 \hich\af2\dbch\af31505\loch\f2 No Grind  1=Touch,\hich\af2\dbch\af31505\loch\f2 No Grind  2=Touch,\hich\af2\dbch\af31505\loch\f2 Grind}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 
+\hich\af2\dbch\af31505\loch\f2 )}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294 
 \par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 set_touch_retract}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294 \hich\af2\dbch\af31505\loch\f2 (touch_retract_mm)}{\rtlch\fcs1 
 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 
 \par \hich\af2\dbch\af31505\loch\f2 select_tool(tool_name)
 \par \hich\af2\dbch\af31505\loch\f2 set_part_geometry(FLAT | CYLINDER | SPHERE, part_diam_mm)
 \par 
 \par }{\rtlch\fcs1 \ab\af2\afs36 \ltrch\fcs0 \b\f2\fs36\insrsid4326294\charrsid12988150 \hich\af2\dbch\af31505\loch\f2 VARIABLES
-\par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 import(filename)
+\par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 import(filenam\hich\af2\dbch\af31505\loch\f2 e)
 \par \hich\af2\dbch\af31505\loch\f2 clear()
 \par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294 \hich\af2\dbch\af31505\loch\f2 varName}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2  = 12.3}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 
 \f2\fs36\insrsid4326294 \hich\af2\dbch\af31505\loch\f2       varName = \{otherVar\}}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 
@@ -69,14 +71,15 @@ AUTOGRIND RECIPE COMMANDS
 \par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294 \hich\af2\dbch\af31505\loch\f2 varName -= 17.5     varName += 18}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 
 \par 
 \par }\pard \ltrpar\ql \li0\ri0\sa160\sl252\slmult1\widctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \ab\af2\afs36 \ltrch\fcs0 \b\f2\fs36\insrsid16715356\charrsid12988150 \hich\af2\dbch\af31505\loch\f2 FLOW CONTROL
-\par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid16715356\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 label:
+\par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\lang2058\langfe1033\langnp2058\insrsid16715356\charrsid15156495 \hich\af2\dbch\af31505\loch\f2 label:
 \par \hich\af2\dbch\af31505\loch\f2 jump(label)
 \par \hich\af2\dbch\af31505\loch\f2 jump_gt_zero(label)
-\par \hich\af2\dbch\af31505\loch\f2 end or end()
+\par }{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid16715356\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 end or end()
 \par \hich\af2\dbch\af31505\loch\f2 prompt(message)
 \par 
 \par }{\rtlch\fcs1 \ab\af2\afs36 \ltrch\fcs0 \b\f2\fs36\insrsid16715356\charrsid13264175 \hich\af2\dbch\af31505\loch\f2 MOTION
-\par }\pard \ltrpar\ql \li0\ri0\sa160\sl252\slmult1\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid4326294 {\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 movepose(position)
+\par }\pard \ltrpar\ql \li0\ri0\sa160\sl252\slmult1\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid4326294 {\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 move}{\rtlch\fcs1 \af2\afs36 
+\ltrch\fcs0 \f2\fs36\insrsid15156495 \hich\af2\dbch\af31505\loch\f2 linear}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid4326294\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 (position)
 \par \hich\af2\dbch\af31505\loch\f2 movejoint(position)
 \par }\pard \ltrpar\ql \li0\ri0\sa160\sl252\slmult1\widctlpar\wrapdefault\faauto\rin0\lin0\itap0\pararsid1599002 {\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid1599002\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 set_}{\rtlch\fcs1 \af2\afs36 
 \ltrch\fcs0 \f2\fs36\insrsid1599002 \hich\af2\dbch\af31505\loch\f2 linear_}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid1599002\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 speed(speed_m}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 
@@ -90,7 +93,7 @@ AUTOGRIND RECIPE COMMANDS
 \par }\pard \ltrpar\ql \li0\ri0\sa160\sl252\slmult1\widctlpar\wrapdefault\faauto\rin0\lin0\itap0 {\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid16715356\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 set_blend}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 
 \f2\fs36\insrsid1599002 \hich\af2\dbch\af31505\loch\f2 _radius}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid16715356\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 (blend_radius_m}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid1599002 
 \hich\af2\dbch\af31505\loch\f2 m}{\rtlch\fcs1 \af2\afs36 \ltrch\fcs0 \f2\fs36\insrsid16715356\charrsid1599002 \hich\af2\dbch\af31505\loch\f2 )
-\par \hich\af2\dbch\af31505\loch\f2 set\hich\af2\dbch\af31505\loch\f2 _tcp(x,y,x,rx,ry,rz)
+\par \hich\af2\dbch\af31505\loch\f2 set_tcp(x,y,x,rx,ry,rz)
 \par \hich\af2\dbch\af31505\loch\f2 set_payload(mass_kg,cog_x_m, cog_y_m, cog_z_m)
 \par 
 \par }{\*\themedata 504b030414000600080000002100e9de0fbfff0000001c020000130000005b436f6e74656e745f54797065735d2e786d6cac91cb4ec3301045f748fc83e52d4a
@@ -237,8 +240,8 @@ fffffffffffffffffdfffffffeffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
-ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e50000000000000000000000008046
-660abd45d801feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
+ffffffffffffffffffffffffffffffff52006f006f007400200045006e00740072007900000000000000000000000000000000000000000000000000000000000000000000000000000000000000000016000500ffffffffffffffffffffffff0c6ad98892f1d411a65f0040963251e50000000000000000000000001043
+1375bc47d801feffffff00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff00000000000000000000000000000000000000000000000000000000
 00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff0000000000000000000000000000000000000000000000000000
 000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000ffffffffffffffffffffffff000000000000000000000000000000000000000000000000
 0000000000000000000000000000000000000000000000000105000000000000}}
