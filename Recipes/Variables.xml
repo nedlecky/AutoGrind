@@ -26,99 +26,99 @@
   <Variables>
     <Name>robot_tool</Name>
     <Value>2F85</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.867Z</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.003Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_ready</Name>
     <Value>True</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-04T16:46:30.342Z</TimeStamp>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.503Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_index</Name>
-    <Value>55</Value>
+    <Value>16</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:46:23.656Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.485Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_response</Name>
-    <Value>grind_line</Value>
+    <Value>set_part_geometry()</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:46:30.327Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.502Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_linear_speed_mmps</Name>
     <Value>201</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.920Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.034Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_linear_accel_mmpss</Name>
     <Value>502</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.949Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.069Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_blend_radius_mm</Name>
     <Value>4</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.966Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.084Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_joint_speed_dps</Name>
     <Value>91</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.992Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.114Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_joint_accel_dpss</Name>
     <Value>179</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.006Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.130Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp</Name>
     <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.160Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.277Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tcp_part</Name>
     <Value>p[0,0,0.175,0,0,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.404Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.494Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_mass_kg</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.204Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.327Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_payload_cog_m</Name>
     <Value>[0,0,0.05]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.208Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.331Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_part_geometry</Name>
     <Value>[1,0]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.400Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.490Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
@@ -136,150 +136,80 @@
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
-    <Name>robot_tcp_part_2</Name>
-    <Value>0</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-03-27T00:32:24.432Z</TimeStamp>
-    <IsSystem>true</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>x1</Name>
-    <Value>14</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-02T16:45:30.645</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>aaa</Name>
-    <Value>10</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-02T16:45:48.394</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>actual_tcp_pose</Name>
-    <Value>p[0.0333228,-0.393767,0.0263355,-3.13201,-0.00204569,0.0135345]</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:50.715Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_ready</Name>
-    <Value>True</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:46:30.296Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_cycle</Name>
-    <Value>3</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:46:29.395Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_contact_enabled</Name>
-    <Value>False</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T23:43:38.686Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_touch_retract_mm</Name>
-    <Value>3</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.034Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_n_cycles</Name>
-    <Value>3</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:46:23.719Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>x</Name>
-    <Value>21</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T08:03:29.061</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>y</Name>
-    <Value>30</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T08:03:17.431</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>n_cycles</Name>
-    <Value>3</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T08:03:17.526</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>force</Name>
-    <Value>10</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T08:03:17.653</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>sped</Name>
-    <Value>13.1</Value>
-    <IsNew>false</IsNew>
-    <TimeStamp>2022-04-03T08:03:17.746</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
-    <Name>grind_contact_enable</Name>
-    <Value>0</Value>
-    <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.118Z</TimeStamp>
-    <IsSystem>false</IsSystem>
-  </Variables>
-  <Variables>
     <Name>robot_door_closed_io</Name>
     <Value>[3,1]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.079Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.202Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tool_on_io</Name>
     <Value>[1,1,3,1,-1,-1,-1,-1]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.241Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.364Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_tool_off_io</Name>
     <Value>[1,0,3,0,-1,-1,-1,-1]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.278Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.399Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_coolant_on_io</Name>
     <Value>[4,1,-1,-1,-1,-1,-1,-1]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.312Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.432Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
     <Name>robot_coolant_off_io</Name>
     <Value>[4,0,-1,-1,-1,-1,-1,-1]</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.365Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:39.469Z</TimeStamp>
     <IsSystem>true</IsSystem>
   </Variables>
   <Variables>
-    <Name>door_closed</Name>
+    <Name>robot_door_closed</Name>
     <Value>1</Value>
     <IsNew>true</IsNew>
-    <TimeStamp>2022-04-04T16:43:51.082Z</TimeStamp>
+    <TimeStamp>2022-04-04T18:09:48.191Z</TimeStamp>
+    <IsSystem>true</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>actual_tcp_pose</Name>
+    <Value>p[0.122884,-0.513092,0.0751872,-3.12979,-0.000946353,0.0132422]</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:38.706Z</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_ready</Name>
+    <Value>True</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.245Z</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_cycle</Name>
+    <Value>0</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.238Z</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_touch_retract_mm</Name>
+    <Value>3</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.159Z</TimeStamp>
+    <IsSystem>false</IsSystem>
+  </Variables>
+  <Variables>
+    <Name>grind_contact_enable</Name>
+    <Value>0</Value>
+    <IsNew>true</IsNew>
+    <TimeStamp>2022-04-04T18:09:39.241Z</TimeStamp>
     <IsSystem>false</IsSystem>
   </Variables>
 </NewDataSet>

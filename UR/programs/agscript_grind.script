@@ -381,7 +381,7 @@ def pattern_line_cylinder(dx_m, drx_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
       # TODO What should the speed adjustment be here? Pure rotation seems to need a 2*PI
-      movel(pdest, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(pdest, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
 
     # Alternate directions for multiple cycles
@@ -408,7 +408,7 @@ def pattern_line_sphere(drx_rad, dry_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
       # TODO What should the speed adjustment be here? Pure rotation seems to need a 2*PI
-      movel(pdest, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(pdest, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
     # Alternate directions for multiple cycles
     if pdest == p0:
@@ -487,21 +487,21 @@ def pattern_rect_flat(dx_m, dy_m, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
       p1 = pose_trans(p0, p[dx_m, 0, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[dx_m, dy_m, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[0, dy_m, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     if ok_to_proceed():
-      movel(p0, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p0, a = grind_accel, v = grind_speed, r = grind_blend)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -518,21 +518,21 @@ def pattern_rect_cylinder(dx_m, drx_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
       p1 = pose_trans(p0, p[dx_m, 0, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[dx_m, 0, 0, drx_rad, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[0, 0, 0, drx_rad, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     if ok_to_proceed():
-      movel(p0, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p0, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -549,21 +549,21 @@ def pattern_rect_sphere(drx_rad, dry_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
       p1 = pose_trans(p0, p[0, 0, 0, drx_rad, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[0, 0, 0, drx_rad, dry_rad, 0])
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
 
     if ok_to_proceed():
       p1 = pose_trans(p0, p[0, 0, 0, 0, dry_rad, 0])
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
 
     if ok_to_proceed():
-      movel(p0, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p0, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
     end
     grind_cycle = grind_cycle + 1
   end
@@ -657,7 +657,7 @@ def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
 
       # Move to the corresponding position
       p1 = pose_trans(p0, p[x_grid * grid_dx_m, y_grid * grid_dy_m, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -674,7 +674,7 @@ def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
 
       # Move to the corresponding position
       p1 = pose_trans(p0, p[x_grid * grid_dx_m, y_grid * grid_dy_m, 0, 0, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
 
       # Adjust y direction
       if y_grid >= n_ysteps:
@@ -721,7 +721,7 @@ def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
 
       # Move to the corresponding position
       p1 = pose_trans(p0, p[x_grid * grid_dx_m, 0, 0, y_grid * grid_drx_rad, 0, 0])
-      movel(p1, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed, r = grind_blend)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -739,7 +739,7 @@ def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
       # Move to the corresponding position
       p1 = pose_trans(p0, p[x_grid * grid_dx_m, 0, 0, y_grid * grid_drx_rad, 0, 0])
       # TODO Is this 2PI speed factor necessary
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
 
       # Adjust y direction
       if y_grid >= n_rxsteps:
@@ -787,7 +787,7 @@ def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
       # Move to the corresponding position
       p1 = pose_trans(p0, p[0, 0, 0, x_grid * grid_drx_rad, y_grid * grid_dry_rad, 0])
       # TODO Is this 2PI speed factor necessary
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
 
       # Adjust x direction
       if x_grid >= n_rxsteps:
@@ -805,7 +805,7 @@ def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
       # Move to the corresponding position
       p1 = pose_trans(p0, p[0, 0, 0, x_grid * grid_drx_rad, y_grid * grid_dry_rad, 0])
       # TODO Is this 2PI speed factor necessary
-      movel(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
+      movel_int(p1, a = grind_accel, v = grind_speed * 2.0 * MATH_PI, r = grind_blend)
 
       # Adjust y direction
       if y_grid >= n_rysteps:

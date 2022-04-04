@@ -114,7 +114,7 @@ def set_variable():
     socket_send_string("robot_door_closed_io=")
     return_vector(robot_door_closed_io, 2)
     socket_send_lf()
-    socket_set_var("door_closed", is_door_closed())
+    socket_set_var("robot_door_closed", is_door_closed())
     global response = "set_door_closed_io()"
   elif command[2] == 11:
     # Set tool on IO
@@ -263,6 +263,10 @@ def movel_ag(p):
   global response = "movel_ag()"
 end
 
+
+#
+# START AUTOMATED DOOR MONITORING THREAD
+#
 # Return True if door in closed state (or if door I/IO is undefined)
 def is_door_closed():
   if robot_door_closed_io[0] < 0:
@@ -275,6 +279,22 @@ def is_door_closed():
   end
   return f == robot_door_closed_io[1]
 end
+
+global robot_door_closed = is_door_closed()
+thread door_monitor_thread():
+  while True:
+    sleep(0.25)
+    new_door_closed = is_door_closed()
+    if robot_door_closed != new_door_closed:
+      robot_door_closed = new_door_closed
+      socket_set_var("robot_door_closed", robot_door_closed)
+    end
+  end
+end
+global doorMonitorThread = run door_monitor_thread()
+#
+# END AUTOMATED DOOR MONITORING THREAD
+#
 
 
 # Move to touchoff

@@ -2132,6 +2132,23 @@ namespace AutoGrind
                     SetDoorClosedInputBtn.Text = "Set Door Closed I/O = " + valueTrimmed;
                     DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
                     break;
+                case "robot_door_closed":
+                    switch (valueTrimmed)
+                    {
+                        case "0":
+                            DoorClosedLbl.Text = "DOOR OPEN";
+                            DoorClosedLbl.BackColor = Color.Red;
+                            break;
+                        case "1":
+                            DoorClosedLbl.Text = "DOOR CLOSED";
+                            DoorClosedLbl.BackColor = Color.Green;
+                            break;
+                        default:
+                            DoorClosedLbl.Text = "DOOR ????";
+                            DoorClosedLbl.BackColor = Color.Red;
+                            break;
+                    }
+                    break;
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
