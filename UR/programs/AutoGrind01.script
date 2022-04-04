@@ -1,21 +1,4 @@
 def AutoGrind01():
-  set_gravity([0.0, 0.0, 9.82])
-  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
-  set_tool_output_mode(0)
-  set_tool_digital_output_mode(0, 1)
-  set_tool_digital_output_mode(1, 1)
-  set_tool_voltage(0)
-  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
-  set_payload(1.0, [0.0, 0.0, 0.05])
-  step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 = 0.0
-  thread Step_Counter_Thread_37de43ba_9411_40cc_9039_f9f09a1d02c4():
-    while (True):
-      step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 = step_count_83fd529f_c3fc_4cd5_95d3_0adcfbce1502 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_37de43ba_9411_40cc_9039_f9f09a1d02c4()
-  set_safety_mode_transition_hardness(1)
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -23,6 +6,23 @@ def AutoGrind01():
   set_analog_outputdomain(0, 0)
   set_analog_outputdomain(1, 0)
   set_input_actions_to_default()
+  set_gravity([0.0, 0.0, 9.82])
+  step_count_a470082c_119c_4f68_bc4f_cffe035ac6f4 = 0.0
+  thread Step_Counter_Thread_d5e5f6c7_6437_47f6_bf14_aa8a6a2a754d():
+    while (True):
+      step_count_a470082c_119c_4f68_bc4f_cffe035ac6f4 = step_count_a470082c_119c_4f68_bc4f_cffe035ac6f4 + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_d5e5f6c7_6437_47f6_bf14_aa8a6a2a754d()
+  set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
+  set_tool_output_mode(0)
+  set_tool_digital_output_mode(0, 1)
+  set_tool_digital_output_mode(1, 1)
+  set_tool_voltage(0)
+  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
+  set_payload(1.0, [0.0, 0.0, 0.05])
+  set_safety_mode_transition_hardness(1)
   global Vertical_3_p=p[.138885408770, -.597734994115, .345465728645, .020328607375, .009472346729, .004936256276]
   global Vertical_3_q=[1.5825845003128052, -1.3035788101008912, 1.3692634741412562, -1.6159240208067835, -1.5805562178241175, 3.148454189300537]
   global Tilted_1_p=p[.138883686744, -.597728142783, .345429622193, -.448043800451, .010443563975, .002601926233]
@@ -350,7 +350,9 @@ def AutoGrind01():
     move_thread_flag = 2
     exit_critical
   end
-  def touchoff():
+  def touchoff(retract_mm):
+    retract_m = retract_mm/1000.0
+  
     move_thread_flag = 0
     move_thread_han = run move_thread()
     while (True):
@@ -365,7 +367,7 @@ def AutoGrind01():
         local retractTo = contactPose
         if (norm(posDir) > 1e-6):
           local normalizedPosDir = normalize(posDir)
-          local additionalRetraction = p[normalizedPosDir[0] * 0.001, normalizedPosDir[1] * 0.001, normalizedPosDir[2] * 0.001, 0, 0, 0]
+          local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
           retractTo = pose_sub(contactPose, additionalRetraction)
         end
         movel(retractTo, a = 1.0, v = 0.1)
@@ -399,6 +401,7 @@ def AutoGrind01():
   
   global grind_ready = True
   global grind_contact_enabled = False
+  global grind_touch_retract_mm = 3
   
   MATH_PI = 3.1415926535
   
@@ -414,7 +417,7 @@ def AutoGrind01():
     listenerThread = run listener_thread()
   
     global grind_cycle = 0
-    socket_set_var("grind_cycle",grind_cycle)
+    socket_set_var("grind_cycle", grind_cycle)
     global grind_n_cycles = 0
     global grind_dx_mm = 0
     global grind_dy_mm = 0
@@ -423,6 +426,8 @@ def AutoGrind01():
     global grind_n_spirals = 0
     global grind_xstep_mm = 0
     global grind_ystep_mm = 0
+    global grind_accel = 1
+    global grind_blend = 3
   
     # Install tcp that puts tcp at center of part (noop for flat parts!)
     set_tcp(robot_tcp_part)
@@ -436,13 +441,19 @@ def AutoGrind01():
         global grind_contact_enabled = False
         socket_send_line("grind_contact_enabled=False")
       end
+    elif command[2] == 2:
+      global response = "set grind_touch_retract_mm"
+      if command[3] >= 0:
+        global grind_touch_retract_mm = command[3]
+      end
+      socket_set_var("grind_touch_retract_mm", grind_touch_retract_mm)
       # LINEAR GRINDS
     elif command[2] == 10:
       global response = "grind_line"
       global grind_dx_mm = command[3]
       global grind_dy_mm = command[4]
       global grind_n_cycles = command[5]
-      socket_set_var("grind_n_cycles",grind_n_cycles)
+      socket_set_var("grind_n_cycles", grind_n_cycles)
       global grind_speed = command[6] / 1000.0
       global grind_force = command[7]
       # These may get calculated later!
@@ -456,7 +467,7 @@ def AutoGrind01():
       global grind_dx_mm = command[3]
       global grind_dy_mm = command[4]
       global grind_n_cycles = command[5]
-      socket_set_var("grind_n_cycles",grind_n_cycles)
+      socket_set_var("grind_n_cycles", grind_n_cycles)
       global grind_speed = command[6] / 1000.0
       global grind_force = command[7]
       # These may get calculated later!
@@ -472,7 +483,7 @@ def AutoGrind01():
       global grind_n_xsteps = limiter(command[5], 1, 10)
       global grind_n_ysteps = limiter(command[6], 1, 10)
       global grind_n_cycles = command[7]
-      socket_set_var("grind_n_cycles",grind_n_cycles)
+      socket_set_var("grind_n_cycles", grind_n_cycles)
       global grind_speed = command[8] / 1000.0
       global grind_force = command[9]
       # These may get calculated later!
@@ -485,7 +496,7 @@ def AutoGrind01():
       global response = "grind_circle"
       global grind_circle1_diam_mm = command[3]
       global grind_n_cycles = command[4]
-      socket_set_var("grind_n_cycles",grind_n_cycles)
+      socket_set_var("grind_n_cycles", grind_n_cycles)
       global grind_speed = command[5] / 1000.0
       global grind_force = command[6]
       # These may get calculated later!
@@ -525,7 +536,7 @@ def AutoGrind01():
     if on:
       if enabled:
         # Advance until contact
-        return touchoff()
+        return touchoff(grind_touch_retract_mm)
       else:
         # Simulated....
         p1 = pose_trans(get_forward_kin(), p[0, 0, 0.010, 0, 0, 0])
@@ -558,6 +569,16 @@ def AutoGrind01():
   def apply_force(on = False, enabled = False):
     if not enabled:
       return None
+    end
+  
+    if on:
+      sleep(0.02)
+      zero_ftsensor()
+      # TODO All params correct??
+      force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    else:
+      end_force_mode()
+      #stopl(5.0)
     end
   
     return None
@@ -966,7 +987,7 @@ def AutoGrind01():
     move_count = 0
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       # Skip first X move if we should start with a y move
       if grind_cycle != 1 or move_count != 0 or n_xsteps == 1:
         # Advance x_grid by x_incr
@@ -1030,7 +1051,7 @@ def AutoGrind01():
     move_count = 0
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       # Skip first X move if we should start with a y move
       if grind_cycle != 1 or move_count != 0 or n_xsteps == 1:
         # Advance x_grid by x_incr
@@ -1095,7 +1116,7 @@ def AutoGrind01():
     move_count = 0
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       # Skip first X move if we should start with a y move
       if grind_cycle != 1 or move_count != 0 or n_rxsteps == 1:
         # Advance x_grid by x_incr
@@ -1203,7 +1224,7 @@ def AutoGrind01():
   
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       i = 1
       while ok_to_proceed() and i <= n_points:
         theta = d2r(360.0 * i / n_points)
@@ -1230,7 +1251,7 @@ def AutoGrind01():
   
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       i = 1
       while ok_to_proceed() and i <= n_points:
         theta = d2r(360.0 * i / n_points)
@@ -1255,10 +1276,10 @@ def AutoGrind01():
     sphere_radius_m = sphere_diam_m / 2.0
   
     # We're in contact at east side... compute where contact position would be at center of circle
-    p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m / 2.0, 0, 0])
+    p_center = pose_trans(get_forward_kin(), p[0, 0, 0, -circle_diam_m / sphere_diam_m, 0, 0])
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       i = 1
       while ok_to_proceed() and i <= n_points:
         theta = d2r(360.0 * i / n_points)
@@ -1345,7 +1366,7 @@ def AutoGrind01():
   
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
-      socket_set_var("grind_cycle",grind_cycle)
+      socket_set_var("grind_cycle", grind_cycle)
       rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
       i = 0
       while ok_to_proceed() and i <= n_total_points:
