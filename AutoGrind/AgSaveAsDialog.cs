@@ -32,6 +32,10 @@ namespace AutoGrind
             fileList = Directory.GetFiles(InitialDirectory, Filter);
             foreach (string file in fileList)
                 FileListBox.Items.Add(Path.GetFileName(file));
+
+            FileNameTxt.Text = Path.GetFileName(FileName);
+            FileNameTxt.Select();
+            FileNameTxt.SelectAll();
         }
         private void FileListBox_Click(object sender, EventArgs e)
         {

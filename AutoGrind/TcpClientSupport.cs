@@ -138,7 +138,7 @@ namespace AutoGrind
                 return 1;
             }
 
-            log.Info("{0}==> {1}", logPrefix, request);
+            log.Debug("{0}==> {1}", logPrefix, request);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(request + "\r"), 0, request.Length + 1);
@@ -216,7 +216,7 @@ namespace AutoGrind
             }
             timer.Stop();
 
-            log.Debug("{0} IR({1}) = {2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+            log.Debug("{0} {1}={2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
             return response;
         }
     }

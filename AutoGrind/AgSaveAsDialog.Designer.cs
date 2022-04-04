@@ -67,7 +67,7 @@
             this.SaveBtn.Name = "SaveBtn";
             this.SaveBtn.Size = new System.Drawing.Size(228, 131);
             this.SaveBtn.TabIndex = 83;
-            this.SaveBtn.Text = "Save";
+            this.SaveBtn.Text = "&Save";
             this.SaveBtn.UseVisualStyleBackColor = false;
             this.SaveBtn.Click += new System.EventHandler(this.SaveBtn_Click);
             // 
@@ -82,7 +82,7 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(228, 131);
             this.CancelBtn.TabIndex = 82;
-            this.CancelBtn.Text = "Cancel";
+            this.CancelBtn.Text = "&Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 

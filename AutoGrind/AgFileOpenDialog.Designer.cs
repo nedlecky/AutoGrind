@@ -46,7 +46,7 @@
             this.OpenBtn.Name = "OpenBtn";
             this.OpenBtn.Size = new System.Drawing.Size(228, 131);
             this.OpenBtn.TabIndex = 79;
-            this.OpenBtn.Text = "Open";
+            this.OpenBtn.Text = "&Open";
             this.OpenBtn.UseVisualStyleBackColor = false;
             this.OpenBtn.Click += new System.EventHandler(this.OpenBtn_Click);
             // 
@@ -61,7 +61,7 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(228, 131);
             this.CancelBtn.TabIndex = 78;
-            this.CancelBtn.Text = "Cancel";
+            this.CancelBtn.Text = "&Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 

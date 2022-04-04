@@ -1,11 +1,6 @@
-n_cycles = 1
-set_blend_radius(5)
+a=3
 
-redo:
+grind_rect(40,40,2,40,10)
+b=3
 
-grind_rect(30, 30, 4, 40, 10)
-grind_circle(30,5,40,10)
-grind_serpentine(40,40,3,4,1,30,10)
-n_cycles++
-
-jump(redo)
+b++

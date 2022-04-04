@@ -185,13 +185,13 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Confirmation", question, "Yes", "No");
+            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Confirmation", question, "&Yes", "&No");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Error", message, "OK", "Cancel");
+            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Error", message, "&OK", "&Cancel");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -921,7 +921,7 @@ namespace AutoGrind
             log.Info("SaveAsRecipeBtn_Click(...)");
             AgSaveAsDialog dialog = new AgSaveAsDialog()
             {
-                Title = "Save an Autogrind Recipe",
+                Title = "Save an Autogrind Recipe As...",
                 Filter = "*.agr",
                 InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
                 FileName = RecipeFilenameLbl.Text,
@@ -1251,7 +1251,7 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new AgMessageDialog(heading, message, "Continue Execution", "Abort");
+            waitingForOperatorMessageForm = new AgMessageDialog(heading, message, "_Continue Execution", "_Abort");
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -2149,8 +2149,8 @@ namespace AutoGrind
                 case "robot_joint_accel_dpss":
                     SetJointAccelBtn.Text = "Joint Acceleration\n" + valueTrimmed + " deg/s^2";
                     break;
-                case "robot_door_closed_io":
-                    SetDoorClosedInputBtn.Text = "Set Door Closed I/O = " + valueTrimmed;
+                case "robot_door_closed_input":
+                    SetDoorClosedInputBtn.Text = "Set Door Closed Input = " + valueTrimmed;
                     DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
                     break;
                 case "robot_door_closed":
@@ -2163,6 +2163,8 @@ namespace AutoGrind
                         case "1":
                             DoorClosedLbl.Text = "DOOR CLOSED";
                             DoorClosedLbl.BackColor = Color.Green;
+                            if (runState == RunState.RUNNING)
+                                PauseBtn_Click(null, null);
                             break;
                         default:
                             DoorClosedLbl.Text = "DOOR ????";
@@ -2494,7 +2496,7 @@ namespace AutoGrind
         }
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
         {
-            ExecuteLine(-1, string.Format("set_door_closed_io({0})", DoorClosedInputTxt.Text));
+            ExecuteLine(-1, string.Format("set_door_closed_input({0})", DoorClosedInputTxt.Text));
 
         }
 

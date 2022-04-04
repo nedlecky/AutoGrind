@@ -55,7 +55,7 @@
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(282, 164);
             this.CancelBtn.TabIndex = 5;
-            this.CancelBtn.Text = "Cancel";
+            this.CancelBtn.Text = "&Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
@@ -70,23 +70,27 @@
             this.OkBtn.Name = "OkBtn";
             this.OkBtn.Size = new System.Drawing.Size(282, 164);
             this.OkBtn.TabIndex = 6;
-            this.OkBtn.Text = "OK";
+            this.OkBtn.Text = "&OK";
             this.OkBtn.UseVisualStyleBackColor = false;
             this.OkBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
-            // MessageForm
+            // AgMessageDialog
             // 
+            this.AcceptButton = this.OkBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.CancelButton = this.CancelBtn;
             this.ClientSize = new System.Drawing.Size(918, 636);
             this.ControlBox = false;
             this.Controls.Add(this.OkBtn);
             this.Controls.Add(this.CancelBtn);
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "MessageForm";
+            this.KeyPreview = true;
+            this.Name = "AgMessageDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MessageForm";
+            this.Load += new System.EventHandler(this.AgMessageDialog_Load);
             this.ResumeLayout(false);
 
         }

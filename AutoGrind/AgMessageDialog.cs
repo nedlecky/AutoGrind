@@ -12,6 +12,8 @@ namespace AutoGrind
 {
     public partial class AgMessageDialog : Form
     {
+        private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
+
         public DialogResult result = DialogResult.OK;
         public AgMessageDialog(string title, string label, string okText = "OK", string cancelText = "Cancel")
         {
@@ -25,6 +27,10 @@ namespace AutoGrind
             result = DialogResult.None;
         }
 
+        private void AgMessageDialog_Load(object sender, EventArgs e)
+        {
+
+        }
         private void OkBtn_Click(object sender, EventArgs e)
         {
             result = DialogResult.OK;

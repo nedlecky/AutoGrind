@@ -2,6 +2,8 @@
 coolant_on()
 tool_on()
 
+grind
+
 # line 3
 tool_off()
 coolant_off()
