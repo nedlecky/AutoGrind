@@ -161,6 +161,19 @@ def contact_part(on = False, enable = 0):
   return True
 end
 
+# Takes an 8-element list DOUT#,State x 4.  -1 indicates unused slot
+def set_digital_output_list(list):
+  i=0
+  while i<8:
+    if list[i]>=0:
+      b = list[i+1]==1
+      set_digital_out(list[i],b)
+    end
+    i = i + 2
+  end
+end
+
+
 # enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
 def tool_power(on = False, enable = 0):
   if enable < 2:
@@ -169,8 +182,10 @@ def tool_power(on = False, enable = 0):
 
   if on:
     # ON IO
+    set_digital_output_list(robot_tool_on_outputs)
   else:
     # OFF IO
+    set_digital_output_list(robot_tool_off_outputs)
   end
 
   return None
@@ -184,8 +199,10 @@ def coolant_flow(on = False, enable = 0):
 
   if on:
     # ON IO
+    set_digital_output_list(robot_coolant_on_outputs)
   else:
     # OFF IO
+    set_digital_output_list(robot_coolant_off_outputs)
   end
 
   return None

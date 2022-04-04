@@ -18,10 +18,10 @@
                 <xs:element name="cogx_m" type="xs:double" minOccurs="0" />
                 <xs:element name="cogy_m" type="xs:double" minOccurs="0" />
                 <xs:element name="cogz_m" type="xs:double" minOccurs="0" />
-                <xs:element name="ToolOnIo" type="xs:string" minOccurs="0" />
-                <xs:element name="ToolOffIO" type="xs:string" minOccurs="0" />
-                <xs:element name="CoolantOnIo" type="xs:string" minOccurs="0" />
-                <xs:element name="CoolantOffIo" type="xs:string" minOccurs="0" />
+                <xs:element name="ToolOnOuts" type="xs:string" minOccurs="0" />
+                <xs:element name="ToolOffOuts" type="xs:string" minOccurs="0" />
+                <xs:element name="CoolantOnOuts" type="xs:string" minOccurs="0" />
+                <xs:element name="CoolantOffOuts" type="xs:string" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -45,10 +45,10 @@
     <cogx_m>0</cogx_m>
     <cogy_m>0</cogy_m>
     <cogz_m>0</cogz_m>
-    <ToolOnIo>1,1</ToolOnIo>
-    <ToolOffIO>1,0</ToolOffIO>
-    <CoolantOnIo>3,1</CoolantOnIo>
-    <CoolantOffIo>3,0</CoolantOffIo>
+    <ToolOnOuts>1,1</ToolOnOuts>
+    <ToolOffOuts>1,0</ToolOffOuts>
+    <CoolantOnOuts>3,1</CoolantOnOuts>
+    <CoolantOffOuts>3,0</CoolantOffOuts>
   </Tools>
   <Tools>
     <Name>2F85</Name>
@@ -62,10 +62,10 @@
     <cogx_m>0</cogx_m>
     <cogy_m>0</cogy_m>
     <cogz_m>0.05</cogz_m>
-    <ToolOnIo>1,1,3,1</ToolOnIo>
-    <ToolOffIO>1,0,3,0</ToolOffIO>
-    <CoolantOnIo>4,1</CoolantOnIo>
-    <CoolantOffIo>4,0</CoolantOffIo>
+    <ToolOnOuts>1,1,3,1</ToolOnOuts>
+    <ToolOffOuts>1,0,3,0</ToolOffOuts>
+    <CoolantOnOuts>4,1</CoolantOnOuts>
+    <CoolantOffOuts>4,0</CoolantOffOuts>
   </Tools>
   <Tools>
     <Name>offset</Name>
@@ -79,9 +79,9 @@
     <cogx_m>0</cogx_m>
     <cogy_m>0</cogy_m>
     <cogz_m>0.05</cogz_m>
-    <ToolOnIo>1,1</ToolOnIo>
-    <ToolOffIO>1,0</ToolOffIO>
-    <CoolantOnIo>3,1</CoolantOnIo>
-    <CoolantOffIo>3,0</CoolantOffIo>
+    <ToolOnOuts>1,0,2,0</ToolOnOuts>
+    <ToolOffOuts>1,1,2,1</ToolOffOuts>
+    <CoolantOnOuts>3,0,4,0</CoolantOnOuts>
+    <CoolantOffOuts>3,1,4,1</CoolantOffOuts>
   </Tools>
 </NewDataSet>

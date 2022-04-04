@@ -323,7 +323,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
-                        ExecuteLine(-1, string.Format("set_door_closed_io({0})", ReadVariable("robot_door_closed_io", "0,1").Trim(new char[]{ '[', ']' })));
+                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_io", "0,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -655,6 +655,7 @@ namespace AutoGrind
         private void ClearUrLogRtbBtn_Click(object sender, EventArgs e)
         {
             UrLogRTB.Clear();
+            UrDashboardLogRTB.Clear();
         }
 
         private void ClearErrorLogRtbBtn_Click(object sender, EventArgs e)
@@ -676,7 +677,7 @@ namespace AutoGrind
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
                 {
-                    string var = ReadVariable("grind_contact_enable","0");
+                    string var = ReadVariable("grind_contact_enable", "0");
                     // Increment current setting to cycle through 0, 1, 2
                     int val = Convert.ToInt32(var);
                     val++;
@@ -1278,10 +1279,22 @@ namespace AutoGrind
                 // If nParams is specified (> -1), verify we have the right number!
                 if (nParams > -1)
                 {
-                    int commaCount = parameters.Count(f => (f == ','));
-                    log.Trace("EXEC sees {0} commas", commaCount);
-                    if (parameters.Count(f => (f == ',')) != nParams - 1)
-                        return "";
+                    if (nParams == 0)
+                    {
+                        if (parameters.Length != 0)
+                        {
+                            log.Trace("EXEC sees params={0} where none are expected", parameters);
+                            return "";
+
+                        }
+                    }
+                    else
+                    {
+                        int commaCount = parameters.Count(f => (f == ','));
+                        log.Trace("EXEC sees {0} commas", commaCount);
+                        if (commaCount != nParams - 1)
+                            return "";
+                    }
                 }
                 return parameters;
             }
@@ -1330,11 +1343,15 @@ namespace AutoGrind
             {"set_joint_speed",         new CommandSpec(){nParams=1,  prefix="30,4," } },
             {"set_joint_accel",         new CommandSpec(){nParams=1,  prefix="30,5," } },
             {"set_part_geometry_N",     new CommandSpec(){nParams=2,  prefix="30,6," } },
-            {"set_door_closed_io",      new CommandSpec(){nParams=-1, prefix="30,10," } },
-            {"set_tool_on_io",          new CommandSpec(){nParams=-1, prefix="30,11," } },
-            {"set_tool_off_io",         new CommandSpec(){nParams=-1, prefix="30,12," } },
-            {"set_coolant_on_io",       new CommandSpec(){nParams=-1, prefix="30,13," } },
-            {"set_coolant_off_io",      new CommandSpec(){nParams=-1, prefix="30,14," } },
+            {"set_door_closed_input",   new CommandSpec(){nParams=-1, prefix="30,10," } },
+            {"set_tool_on_outputs",     new CommandSpec(){nParams=-1, prefix="30,11," } },
+            {"set_tool_off_outputs",    new CommandSpec(){nParams=-1, prefix="30,12," } },
+            {"set_coolant_on_outputs",  new CommandSpec(){nParams=-1, prefix="30,13," } },
+            {"set_coolant_off_outputs", new CommandSpec(){nParams=-1, prefix="30,14," } },
+            {"tool_on",                 new CommandSpec(){nParams=0,  prefix="30,15" } },
+            {"tool_off",                new CommandSpec(){nParams=0,  prefix="30,16" } },
+            {"coolant_on",              new CommandSpec(){nParams=0,  prefix="30,17" } },
+            {"coolant_off",             new CommandSpec(){nParams=0,  prefix="30,18" } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
@@ -1560,10 +1577,14 @@ namespace AutoGrind
                 {
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
-                    ExecuteLine(-1, String.Format("set_tool_on_io({0})", row["ToolOnIo"]));
-                    ExecuteLine(-1, String.Format("set_tool_off_io({0})", row["ToolOffIo"]));
-                    ExecuteLine(-1, String.Format("set_coolant_on_io({0})", row["CoolantOnIo"]));
-                    ExecuteLine(-1, String.Format("set_coolant_off_io({0})", row["CoolantOffIo"]));
+                    ExecuteLine(-1, String.Format("tool_off()"));
+                    ExecuteLine(-1, String.Format("coolant_off()"));
+                    ExecuteLine(-1, String.Format("set_tool_on_outputs({0})", row["ToolOnOuts"]));
+                    ExecuteLine(-1, String.Format("set_tool_off_outputs({0})", row["ToolOffOuts"]));
+                    ExecuteLine(-1, String.Format("set_coolant_on_outputs({0})", row["CoolantOnOuts"]));
+                    ExecuteLine(-1, String.Format("set_coolant_off_outputs({0})", row["CoolantOffOuts"]));
+                    ExecuteLine(-1, String.Format("tool_off()"));
+                    ExecuteLine(-1, String.Format("coolant_off()"));
                     WriteVariable("robot_tool", row["Name"].ToString());
                     MountedToolBox.Text = (string)row["Name"];
                 }
@@ -1649,7 +1670,7 @@ namespace AutoGrind
                     }
                     else
                     {
-                        if (parameters.Length > 0 || commandSpec.nParams == -1)
+                        if (parameters.Length >= 0 || commandSpec.nParams == -1)
                             robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
                         else
                             PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
@@ -2415,10 +2436,10 @@ namespace AutoGrind
             tools.Columns.Add("cogx_m", typeof(System.Double));
             tools.Columns.Add("cogy_m", typeof(System.Double));
             tools.Columns.Add("cogz_m", typeof(System.Double));
-            tools.Columns.Add("ToolOnIo", typeof(System.String));
-            tools.Columns.Add("ToolOffIO", typeof(System.String));
-            tools.Columns.Add("CoolantOnIo", typeof(System.String));
-            tools.Columns.Add("CoolantOffIo", typeof(System.String));
+            tools.Columns.Add("ToolOnOuts", typeof(System.String));
+            tools.Columns.Add("ToolOffOuts", typeof(System.String));
+            tools.Columns.Add("CoolantOnOuts", typeof(System.String));
+            tools.Columns.Add("CoolantOffOuts", typeof(System.String));
             tools.CaseSensitive = true;
             tools.PrimaryKey = new DataColumn[] { name };
 
@@ -2466,9 +2487,9 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,"1,1","1,0","3,1","3,0"});
+                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0" });
                 tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0" });
-                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1", "1,0", "3,1", "3,0" });
+                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1" });
             }
         }
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)

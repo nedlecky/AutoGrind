@@ -1,3 +1,7 @@
 # line 1
-grind_rect(40,40,3,20,10)
+coolant_on()
+tool_on()
+
 # line 3
+tool_off()
+coolant_off()
