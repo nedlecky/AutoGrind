@@ -16,6 +16,11 @@ global robot_payload_mass_kg = 1.0
 global robot_payload_cog_m = [0, 0, 0.50]
 # Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_m)
 global robot_part_geometry = [0, 0]
+global robot_door_closed_io = [-1, -1]
+global robot_tool_on_io = [-1, -1, -1, -1, -1, -1, -1, -1]
+global robot_tool_off_io = [-1, -1, -1, -1, -1, -1, -1, -1]
+global robot_coolant_on_io = [-1, -1, -1, -1, -1, -1, -1, -1]
+global robot_coolant_off_io = [-1, -1, -1, -1, -1, -1, -1, -1]
 
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
@@ -30,7 +35,7 @@ def set_variable():
     if s > 0:
       robot_linear_speed_mps = s / 1000.0
     end
-    socket_set_var("robot_linear_speed_mmps",robot_linear_speed_mps * 1000.0)
+    socket_set_var("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
     #socket_send_string("robot_linear_speed_mmps=")
     #socket_send_string(robot_linear_speed_mps * 1000.0)
     #socket_send_lf()
@@ -41,7 +46,7 @@ def set_variable():
     if a > 0:
       robot_linear_accel_mpss = a / 1000.0
     end
-    socket_set_var("robot_linear_accel_mmpss",robot_linear_accel_mpss * 1000.0)
+    socket_set_var("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
     #socket_send_string("robot_linear_accel_mmpss=")
     #socket_send_string(robot_linear_accel_mpss * 1000.0)
     #socket_send_lf()
@@ -52,7 +57,7 @@ def set_variable():
     if b >= 0:
       robot_blend_radius_m = b / 1000.0
     end
-    socket_set_var("robot_blend_radius_mm",robot_blend_radius_m * 1000.0)
+    socket_set_var("robot_blend_radius_mm", robot_blend_radius_m * 1000.0)
     #socket_send_string("robot_blend_radius_mm=")
     #socket_send_string(robot_blend_radius_m * 1000.0)
     #socket_send_lf()
@@ -63,7 +68,7 @@ def set_variable():
     if s > 0:
       robot_joint_speed_rps = d2r(s)
     end
-    socket_set_var("robot_joint_speed_dps",r2d(robot_joint_speed_rps))
+    socket_set_var("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
     #socket_send_string("robot_joint_speed_dps=")
     #socket_send_string(r2d(robot_joint_speed_rps))
     #socket_send_lf()
@@ -74,7 +79,7 @@ def set_variable():
     if a > 0:
       robot_joint_accel_rpss = d2r(a)
     end
-    socket_set_var("robot_joint_accel_dpss",r2d(robot_joint_accel_rpss))
+    socket_set_var("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
     #socket_send_string("robot_joint_accel_dpss=")
     #socket_send_string(r2d(robot_joint_accel_rpss))
     #socket_send_lf()
@@ -100,6 +105,50 @@ def set_variable():
     return_pose("robot_tcp_part", robot_tcp_part)
     global response = "set_part_geometry()"
   elif command[2] == 10:
+    # Set door closed IO
+    if command[3] >= 0:
+      robot_door_closed_io[0] = command[3]
+      robot_door_closed_io[1] = command[4]
+    end
+
+    socket_send_string("robot_door_closed_io=")
+    return_vector(robot_door_closed_io, 2)
+    socket_send_lf()
+    socket_set_var("door_closed", is_door_closed())
+    global response = "set_door_closed_io()"
+  elif command[2] == 11:
+    # Set tool on IO
+    robot_tool_on_io = command_3_padded_8(command)
+
+    socket_send_string("robot_tool_on_io=")
+    return_vector(robot_tool_on_io, 8)
+    socket_send_lf()
+    global response = "set_tool_on_io()"
+  elif command[2] == 12:
+    # Set tool off IO
+    robot_tool_off_io = command_3_padded_8(command)
+
+    socket_send_string("robot_tool_off_io=")
+    return_vector(robot_tool_off_io, 8)
+    socket_send_lf()
+    global response = "set_tool_off_io()"
+  elif command[2] == 13:
+    # Set coolant on IO
+    robot_coolant_on_io = command_3_padded_8(command)
+
+    socket_send_string("robot_coolant_on_io=")
+    return_vector(robot_coolant_on_io, 8)
+    socket_send_lf()
+    global response = "set_coolant_on_io()"
+  elif command[2] == 14:
+    # Set coolant off IO
+    robot_coolant_off_io = command_3_padded_8(command)
+
+    socket_send_string("robot_coolant_off_io=")
+    return_vector(robot_coolant_off_io, 8)
+    socket_send_lf()
+    global response = "set_coolant_off_io()"
+  elif command[2] == 20:
     # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
     if command[3] > -10:
       robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
@@ -109,14 +158,14 @@ def set_variable():
     return_pose("robot_tcp", get_tcp_offset())
     return_pose("robot_tcp_part", robot_tcp_part)
     global response = "set_tcp()"
-  elif command[2] == 11:
+  elif command[2] == 21:
     # set_payload if command[3] > 0. Always return robot_m and robot_cog
     if command[3] > 0:
       robot_payload_mass_kg = command[3]
       robot_payload_cog_m = [command[4], command[5], command[6]]
       set_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
-    socket_set_var("robot_payload_mass_kg",robot_payload_mass_kg)
+    socket_set_var("robot_payload_mass_kg", robot_payload_mass_kg)
     #socket_send_string("robot_payload_mass_kg=")
     #socket_send_string(robot_payload_mass_kg)
     #socket_send_lf()
@@ -214,6 +263,19 @@ def movel_ag(p):
   global response = "movel_ag()"
 end
 
+# Return True if door in closed state (or if door I/IO is undefined)
+def is_door_closed():
+  if robot_door_closed_io[0] < 0:
+    return True
+  end
+  if get_standard_digital_in(robot_door_closed_io[0]):
+    f = 1
+  else:
+    f = 0
+  end
+  return f == robot_door_closed_io[1]
+end
+
 
 # Move to touchoff
 #
@@ -240,7 +302,7 @@ thread move_thread():
   exit_critical
 end
 def touchoff(retract_mm):
-  retract_m = retract_mm/1000.0
+  retract_m = retract_mm / 1000.0
 
   move_thread_flag = 0
   move_thread_han = run move_thread()

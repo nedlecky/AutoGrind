@@ -61,3 +61,16 @@ end
 def return_joints(name, p):
   return_position(name, False, p)
 end
+
+# Basically returns command[3:] padded out with -1s to always be 8 elements
+# Assumes length of command is encoded in command[0]
+def command_3_padded_8(command):
+  ret8 = [-1, -1, -1, -1, -1, -1, -1, -1]
+  i = 0
+  while i < command[0]-2:
+    ret8[i] = command[i + 3]
+    i = i + 1
+  end
+  return ret8
+end
+

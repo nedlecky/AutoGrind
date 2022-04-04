@@ -232,16 +232,52 @@ def set_grinding_state(on = False):
   return True
 end
 
-# Abort system
+# Interruptible Movel
+global movel_int_p = p[0, 0, 0, 0, 0, 0]
+global movel_int_a = 1.2
+global movel_int_v = 0.25
+global movel_int_t = 0
+global movel_int_r = 0
+global movel_int_in_process = False
+global movelThread = 0
+
+thread movel_int_thread():
+  movel_int_in_process = True
+  movel(movel_int_p, movel_int_a, movel_int_v, movel_int_t, movel_int_r)
+  movel_int_in_process = False
+end
+
+def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
+  global movel_int_in_process = True
+  if movelThread > 0:
+    kill movelThread
+    movelThread = 0
+  end
+  global movel_int_p = p
+  global movel_int_a = a
+  global movel_int_v = v
+  global movel_int_t = t
+  global movel_int_r = r
+  global movel_int_in_process = True
+  movelThread = run movel_int_thread()
+  while movel_int_in_process and ok_to_proceed():
+    sleep(0.01)
+  end
+  if movelThread > 0:
+    kill movelThread
+    movelThread = 0
+  end
+end
+
+# Listens while grinding
 thread listener_thread():
   global haltCommand = [0, 0]
   global haltCount = 0
   while (True):
     global threadCount = threadCount + 1
     global haltCommand = socket_read_ascii_float(1, timeout = 0.1)
-    if haltCommand[0] > 0:
+    if haltCommand[0] > 0 or not is_door_closed():
       global haltCount = haltCount + 1
-      stopl(1.0)
     end
   end
 
@@ -318,7 +354,7 @@ def pattern_line_flat(dx_m, dy_m, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     if ok_to_proceed():
-      movel(pdest, a = grind_accel, v = grind_speed, r = grind_blend)
+      movel_int(pdest, a = grind_accel, v = grind_speed, r = grind_blend)
     end
 
     # Alternate directions for multiple cycles

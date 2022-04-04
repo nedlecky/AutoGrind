@@ -1,0 +1,8 @@
+ Program
+   Robot Program
+     MoveL
+       Waypoint_1
+       Direction: Tool Z+
+         Until (io)
+         Until (tool_contact_detection)
+       Waypoint_1

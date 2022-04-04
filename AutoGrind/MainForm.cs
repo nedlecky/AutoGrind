@@ -322,8 +322,9 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
-                        ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
+                        ExecuteLine(-1, string.Format("set_door_closed_io({0})", ReadVariable("robot_door_closed_io", "0,1").Trim(new char[]{ '[', ']' })));
+                        ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -1323,22 +1324,27 @@ namespace AutoGrind
             {"sendrobot",               new CommandSpec(){nParams=-1, prefix="" } },
 
             // SETTINGS
-            {"set_linear_speed",        new CommandSpec(){nParams=1, prefix="30,1," } },
-            {"set_linear_accel",        new CommandSpec(){nParams=1, prefix="30,2," } },
-            {"set_blend_radius",        new CommandSpec(){nParams=1, prefix="30,3," } },
-            {"set_joint_speed",         new CommandSpec(){nParams=1, prefix="30,4," } },
-            {"set_joint_accel",         new CommandSpec(){nParams=1, prefix="30,5," } },
-            {"set_part_geometry_N",     new CommandSpec(){nParams=2, prefix="30,6," } },
-            {"set_tcp",                 new CommandSpec(){nParams=6, prefix="30,10," } },
-            {"set_payload",             new CommandSpec(){nParams=4, prefix="30,11," } },
-            {"grind_contact_enable",    new CommandSpec(){nParams=1, prefix="40,1," } },
-            {"grind_touch_retract",     new CommandSpec(){nParams=1, prefix="40,2," } },
+            {"set_linear_speed",        new CommandSpec(){nParams=1,  prefix="30,1," } },
+            {"set_linear_accel",        new CommandSpec(){nParams=1,  prefix="30,2," } },
+            {"set_blend_radius",        new CommandSpec(){nParams=1,  prefix="30,3," } },
+            {"set_joint_speed",         new CommandSpec(){nParams=1,  prefix="30,4," } },
+            {"set_joint_accel",         new CommandSpec(){nParams=1,  prefix="30,5," } },
+            {"set_part_geometry_N",     new CommandSpec(){nParams=2,  prefix="30,6," } },
+            {"set_door_closed_io",      new CommandSpec(){nParams=-1, prefix="30,10," } },
+            {"set_tool_on_io",          new CommandSpec(){nParams=-1, prefix="30,11," } },
+            {"set_tool_off_io",         new CommandSpec(){nParams=-1, prefix="30,12," } },
+            {"set_coolant_on_io",       new CommandSpec(){nParams=-1, prefix="30,13," } },
+            {"set_coolant_off_io",      new CommandSpec(){nParams=-1, prefix="30,14," } },
+            {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
+            {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
+            {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
+            {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
 
-            {"grind_line",              new CommandSpec(){nParams=5, prefix="40,10," }  },
-            {"grind_rect",              new CommandSpec(){nParams=5, prefix="40,20," }  },
-            {"grind_serpentine",        new CommandSpec(){nParams=7, prefix="40,30," }  },
-            {"grind_circle",            new CommandSpec(){nParams=4, prefix="40,40," }  },
-            {"grind_spiral",            new CommandSpec(){nParams=6, prefix="40,50," }  },
+            {"grind_line",              new CommandSpec(){nParams=5,  prefix="40,10," }  },
+            {"grind_rect",              new CommandSpec(){nParams=5,  prefix="40,20," }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=7,  prefix="40,30," }  },
+            {"grind_circle",            new CommandSpec(){nParams=4,  prefix="40,40," }  },
+            {"grind_spiral",            new CommandSpec(){nParams=6,  prefix="40,50," }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1518,7 +1524,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // movepose
+            // movelinear
             if (command.StartsWith("movelinear("))
             {
                 string positionName = ExtractParameters(command);
@@ -1554,6 +1560,10 @@ namespace AutoGrind
                 {
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
+                    ExecuteLine(-1, String.Format("set_tool_on_io({0})", row["ToolOnIo"]));
+                    ExecuteLine(-1, String.Format("set_tool_off_io({0})", row["ToolOffIo"]));
+                    ExecuteLine(-1, String.Format("set_coolant_on_io({0})", row["CoolantOnIo"]));
+                    ExecuteLine(-1, String.Format("set_coolant_off_io({0})", row["CoolantOffIo"]));
                     WriteVariable("robot_tool", row["Name"].ToString());
                     MountedToolBox.Text = (string)row["Name"];
                 }
@@ -1764,7 +1774,7 @@ namespace AutoGrind
             {
                 log.Error("Robot dashboard client initialization failure");
                 RobotDashboardStatusLbl.BackColor = Color.Red;
-                RobotDashboardStatusLbl.Text = "Dashboard Error";
+                RobotDashboardStatusLbl.Text = "Dashboard ERROR";
                 return;
             }
             else
@@ -1772,6 +1782,8 @@ namespace AutoGrind
                 log.Info("Robot dashboard connection ready");
                 string response = robotDashboardClient.Receive();
                 log.Info("DASH connection returns {0}", response);
+                RobotDashboardStatusLbl.BackColor = Color.Green;
+                RobotDashboardStatusLbl.Text = "Dashboard OK";
 
                 RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
                 RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
@@ -1816,9 +1828,6 @@ namespace AutoGrind
                     ErrorMessageBox(String.Format("Failed to start program playing. Response was \"{0}\"", playResponse));
                     return;
                 }
-
-                RobotDashboardStatusLbl.BackColor = Color.Green;
-                RobotDashboardStatusLbl.Text = "Dashboard Ready";
             }
 
             // Setup a server for the UR to connect to
@@ -1856,6 +1865,9 @@ namespace AutoGrind
             }
             RobotDashboardStatusLbl.BackColor = Color.Red;
             RobotDashboardStatusLbl.Text = "OFF";
+            RobotModeBtn.BackColor = Color.Red;
+            SafetyStatusBtn.BackColor = Color.Red;
+            ProgramStateBtn.BackColor = Color.Red;
 
             // Close command server
             if (robotCommandServer != null)
@@ -2116,6 +2128,10 @@ namespace AutoGrind
                 case "robot_joint_accel_dpss":
                     SetJointAccelBtn.Text = "Joint Acceleration\n" + valueTrimmed + " deg/s^2";
                     break;
+                case "robot_door_closed_io":
+                    SetDoorClosedInputBtn.Text = "Set Door Closed I/O = " + valueTrimmed;
+                    DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
+                    break;
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
@@ -2142,7 +2158,7 @@ namespace AutoGrind
                     break;
             }
 
-            variables.AcceptChanges();
+            //variables.AcceptChanges();
             Monitor.Exit(lockObject);
 
             // This is a special capability that is not necessarily the best way to handle this!
@@ -2382,6 +2398,10 @@ namespace AutoGrind
             tools.Columns.Add("cogx_m", typeof(System.Double));
             tools.Columns.Add("cogy_m", typeof(System.Double));
             tools.Columns.Add("cogz_m", typeof(System.Double));
+            tools.Columns.Add("ToolOnIo", typeof(System.String));
+            tools.Columns.Add("ToolOffIO", typeof(System.String));
+            tools.Columns.Add("CoolantOnIo", typeof(System.String));
+            tools.Columns.Add("CoolantOffIo", typeof(System.String));
             tools.CaseSensitive = true;
             tools.PrimaryKey = new DataColumn[] { name };
 
@@ -2429,11 +2449,17 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 });
-                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050 });
-                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050 });
+                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 ,"1,1","1,0","3,1","3,0"});
+                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0" });
+                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1", "1,0", "3,1", "3,0" });
             }
         }
+        private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, string.Format("set_door_closed_io({0})", DoorClosedInputTxt.Text));
+
+        }
+
 
         private DataRow FindTool(string name)
         {
