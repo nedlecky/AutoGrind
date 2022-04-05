@@ -280,7 +280,7 @@ def movel_ag(p):
 end
 
 
-#
+# ####################################################################################
 # START AUTOMATED DOOR MONITORING THREAD
 #
 # Return True if door in closed state (or if door I/IO is undefined)
@@ -310,10 +310,11 @@ end
 global doorMonitorThread = run door_monitor_thread()
 #
 # END AUTOMATED DOOR MONITORING THREAD
-#
+# ####################################################################################
 
 
-# Move to touchoff
+# ####################################################################################
+# START TOUCHOFF HANDLER
 #
 def calculate_point_to_move_towards(feature, direction, position_distance):
   local posDir = [direction[0], direction[1], direction[2]]
@@ -329,15 +330,22 @@ end
 #$ 8 "MoveL"
 #$ 9 "Direction: Tool Z+"
 global move_thread_flag = 0
+global move_thread_approach_speed_mps = 0.01
 thread move_thread():
   enter_critical
   move_thread_flag = 1
   local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
-  movel(towardsPos, a = 0.5, v = 0.02)
+  movel(towardsPos, a = 0.5, v = move_thread_approach_speed_mps)
   move_thread_flag = 2
   exit_critical
 end
-def touchoff(retract_mm):
+# Currently using speed_mmps for both approach and 2X for departure
+def touchoff(approach_speed_mmps, retract_mm):
+  approach_speed_mps = approach_speed_mmps / 1000.0
+  global move_thread_approach_speed_mps = approach_speed_mps
+
+  retract_speed_mps = approach_speed_mps * 2.0
+  
   retract_m = retract_mm / 1000.0
 
   move_thread_flag = 0
@@ -357,7 +365,7 @@ def touchoff(retract_mm):
         local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
-      movel(retractTo, a = 1.0, v = 0.1)
+      movel(retractTo, a = 1.0, v = retract_speed_mps)
       #$ 10 "Until (tool_contact_detection)"
       return True
       break
@@ -375,3 +383,6 @@ def touchoff(retract_mm):
   end
   return False
 end
+#
+# END TOUCHOFF HANDLER
+# ####################################################################################

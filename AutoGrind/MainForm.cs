@@ -165,22 +165,13 @@ namespace AutoGrind
         bool forceClose = false;
         private void CloseTmr_Tick(object sender, EventArgs e)
         {
-            // First time this fires, tell all the threads to stop
-            //if (++fireCounter == 1)
-            //    EndThreads();
-            //else
-            //{
-            // Second time it fires, we can disconnect and shut down!
             CloseTmr.Enabled = false;
-            RobotDisconnectBtn_Click(null, null);
-            //StopJint();
+            RobotDisconnect();
             MessageTmr_Tick(null, null);
             forceClose = true;
             SaveConfigBtn_Click(null, null);
             NLog.LogManager.Shutdown(); // Flush and close down internal threads and timers
             this.Close();
-
-            //}
         }
 
         private DialogResult ConfirmMessageBox(string question)
@@ -323,7 +314,8 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
-                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_io", "0,1").Trim(new char[] { '[', ']' })));
+                        ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
+                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -623,7 +615,8 @@ namespace AutoGrind
                 robotDashboardClient?.InquiryResponse("stop", 500);
                 RobotCommandStatusLbl.BackColor = Color.Red;
                 RobotCommandStatusLbl.Text = "OFF";
-
+                RobotReadyLbl.BackColor = Color.Red;
+                GrindReadyLbl.BackColor = Color.Red;
             }
             else
                 robotDashboardClient?.InquiryResponse("play", 500);
@@ -1356,6 +1349,7 @@ namespace AutoGrind
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
+            {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
 
             {"grind_line",              new CommandSpec(){nParams=5,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=5,  prefix="40,20," }  },
@@ -1782,9 +1776,44 @@ namespace AutoGrind
         // ===================================================================
         // START ROBOT INTERFACE
         // ===================================================================
+        private void RobotDisconnect()
+        {
+            // Disconnect client from dashboard
+            if (robotDashboardClient != null)
+            {
+                if (robotDashboardClient.IsClientConnected)
+                {
+                    robotDashboardClient.Send("stop");
+                    robotDashboardClient.Send("quit");
+                    robotDashboardClient.Disconnect();
+                }
+                robotDashboardClient = null;
+            }
+            RobotConnectBtn.BackColor = Color.Red;
+            RobotConnectBtn.Text = "OFF";
+            RobotModeBtn.BackColor = Color.Red;
+            SafetyStatusBtn.BackColor = Color.Red;
+            ProgramStateBtn.BackColor = Color.Red;
+
+            // Close command server
+            if (robotCommandServer != null)
+            {
+                if (robotCommandServer.IsConnected())
+                {
+                    robotCommandServer.Send("(98)");
+                    robotCommandServer.Disconnect();
+                }
+                robotCommandServer = null;
+            }
+            RobotCommandStatusLbl.BackColor = Color.Red;
+            RobotCommandStatusLbl.Text = "OFF";
+        }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
-            RobotDisconnectBtn_Click(null, null);
+            bool fReconnect = RobotConnectBtn.Text == "OFF";
+            RobotDisconnect();
+
+            if (!fReconnect) return;
 
             // Connect client to the UR dashboard
             robotDashboardClient = new TcpClientSupport("DASH")
@@ -1794,8 +1823,8 @@ namespace AutoGrind
             if (robotDashboardClient.Connect(RobotIpTxt.Text, "29999") > 0)
             {
                 log.Error("Robot dashboard client initialization failure");
-                RobotDashboardStatusLbl.BackColor = Color.Red;
-                RobotDashboardStatusLbl.Text = "Dashboard ERROR";
+                RobotConnectBtn.BackColor = Color.Red;
+                RobotConnectBtn.Text = "Dashboard ERROR";
                 return;
             }
             else
@@ -1803,8 +1832,8 @@ namespace AutoGrind
                 log.Info("Robot dashboard connection ready");
                 string response = robotDashboardClient.Receive();
                 log.Info("DASH connection returns {0}", response);
-                RobotDashboardStatusLbl.BackColor = Color.Green;
-                RobotDashboardStatusLbl.Text = "Dashboard OK";
+                RobotConnectBtn.BackColor = Color.Green;
+                RobotConnectBtn.Text = "Dashboard OK";
 
                 RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
                 RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
@@ -1871,39 +1900,6 @@ namespace AutoGrind
             }
         }
 
-        private void RobotDisconnectBtn_Click(object sender, EventArgs e)
-        {
-            // Disconnect client from dashboard
-            if (robotDashboardClient != null)
-            {
-                if (robotDashboardClient.IsClientConnected)
-                {
-                    robotDashboardClient.Send("stop");
-                    robotDashboardClient.Send("quit");
-                    robotDashboardClient.Disconnect();
-                }
-                robotDashboardClient = null;
-            }
-            RobotDashboardStatusLbl.BackColor = Color.Red;
-            RobotDashboardStatusLbl.Text = "OFF";
-            RobotModeBtn.BackColor = Color.Red;
-            SafetyStatusBtn.BackColor = Color.Red;
-            ProgramStateBtn.BackColor = Color.Red;
-
-            // Close command server
-            if (robotCommandServer != null)
-            {
-                if (robotCommandServer.IsConnected())
-                {
-                    robotCommandServer.Send("(98)");
-                    robotCommandServer.Disconnect();
-                }
-                robotCommandServer = null;
-            }
-            RobotCommandStatusLbl.BackColor = Color.Red;
-            RobotCommandStatusLbl.Text = "OFF";
-        }
-
         private void RobotSendBtn_Click(object sender, EventArgs e)
         {
             if (robotCommandServer != null)
@@ -1958,6 +1954,16 @@ namespace AutoGrind
             if (form.ShowDialog(this) == DialogResult.OK)
             {
                 ExecuteLine(-1, String.Format("set_joint_accel({0})", form.value));
+            }
+        }
+
+        private void SetTouchSpeedBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(ReadVariable("grind_touch_speed_mmps"), "grind TOUCH SPEED, mm/s", 3);
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_touch_speed({0})", form.value));
             }
         }
 
@@ -2174,6 +2180,9 @@ namespace AutoGrind
                     break;
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
+                    break;
+                case "grind_touch_speed_mmps":
+                    SetTouchSpeedBtn.Text = "Grind Touch Speed\n" + valueTrimmed + " mm/s";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)

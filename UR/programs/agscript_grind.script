@@ -12,6 +12,7 @@ global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
 global grind_contact_enable = 0
 global grind_touch_retract_mm = 3
+global grind_touch_speed_mmps = 0.1
 
 MATH_PI = 3.1415926535
 
@@ -54,6 +55,12 @@ def pattern_grind():
       global grind_touch_retract_mm = command[3]
     end
     socket_set_var("grind_touch_retract_mm", grind_touch_retract_mm)
+  elif command[2] == 3:
+    global response = "set grind_touch_speed_mmps"
+    if command[3] >= 0:
+      global grind_touch_speed_mmps = command[3]
+    end
+    socket_set_var("grind_touch_speed_mmps", grind_touch_speed_mmps)
     # LINEAR GRINDS
   elif command[2] == 10:
     global response = "grind_line"
@@ -148,10 +155,10 @@ def contact_part(on = False, enable = 0):
       movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     elif enable == 1:
       # Advance until contact but retract 2X grind distance
-      return touchoff(grind_touch_retract_mm * 2.0)
+      return touchoff(grind_touch_speed_mmps, grind_touch_retract_mm * 2.0)
     elif enable == 2:
       # Advance until contact
-      return touchoff(grind_touch_retract_mm)
+      return touchoff(grind_touch_speed_mmps, grind_touch_retract_mm)
     end
   else:  # Contact off
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.010, 0, 0, 0])
@@ -163,11 +170,11 @@ end
 
 # Takes an 8-element list DOUT#,State x 4.  -1 indicates unused slot
 def set_digital_output_list(list):
-  i=0
-  while i<8:
-    if list[i]>=0:
-      b = list[i+1]==1
-      set_digital_out(list[i],b)
+  i = 0
+  while i < 8:
+    if list[i] >= 0:
+      b = list[i + 1] == 1
+      set_digital_out(list[i], b)
     end
     i = i + 2
   end
@@ -209,7 +216,7 @@ def coolant_flow(on = False, enable = 0):
 end
 
 # enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
-def apply_force(on = False, enable = 0):
+def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
   if enable < 2:
     return None
   end
@@ -217,8 +224,12 @@ def apply_force(on = False, enable = 0):
   if on:
     sleep(0.02)
     zero_ftsensor()
-    # TODO All params correct??
-    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force, 0.0, 0.0, 0.0], 2, [0.1, 0.1, 0.15, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    # Force is in tool frame
+    # Compliant in Tool Z
+    # Applying grind_force in Z+
+    # 2: Force frame not transformed
+    # Speed limits
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   else:
     end_force_mode()
   end
@@ -235,11 +246,11 @@ def set_grinding_state(on = False):
     end
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
-    apply_force(True, grind_contact_enable)
+    apply_force(True, grind_contact_enable, grind_touch_speed_mmps)
     grinding_state = True
     return True
   elif not on and grinding_state:
-    apply_force(False, grind_contact_enable)
+    apply_force(False, grind_contact_enable, 0)
     contact_part(False, grind_contact_enable)
     coolant_flow(False, grind_contact_enable)
     tool_power(False, grind_contact_enable)
