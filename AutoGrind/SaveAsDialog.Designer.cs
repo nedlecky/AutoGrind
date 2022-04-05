@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class AgSaveAsDialog
+    partial class SaveAsDialog
     {
         /// <summary>
         /// Required designer variable.

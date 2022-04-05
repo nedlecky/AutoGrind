@@ -32,7 +32,7 @@ namespace AutoGrind
         static SplashForm splashForm;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
-        AgMessageDialog waitingForOperatorMessageForm = null;
+        MessageDialog waitingForOperatorMessageForm = null;
 
         static DataTable variables;
         static DataTable tools;
@@ -176,13 +176,13 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Confirmation", question, "&Yes", "&No");
+            MessageDialog messageForm = new MessageDialog("AutoGrind Confirmation", question, "&Yes", "&No");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            AgMessageDialog messageForm = new AgMessageDialog("AutoGrind Error", message, "&OK", "&Cancel");
+            MessageDialog messageForm = new MessageDialog("AutoGrind Error", message, "&OK", "&Cancel");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -877,7 +877,7 @@ namespace AutoGrind
                     SaveRecipeBtn_Click(null, null);
             }
 
-            AgFileOpenDialog dialog = new AgFileOpenDialog()
+            FileOpenDialog dialog = new FileOpenDialog()
             {
                 Title = "Open an AutoGrind Recipe",
                 Filter = "*.agr",
@@ -912,7 +912,7 @@ namespace AutoGrind
         private void SaveAsRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("SaveAsRecipeBtn_Click(...)");
-            AgSaveAsDialog dialog = new AgSaveAsDialog()
+            SaveAsDialog dialog = new SaveAsDialog()
             {
                 Title = "Save an Autogrind Recipe As...",
                 Filter = "*.agr",
@@ -1074,7 +1074,7 @@ namespace AutoGrind
         private void ChangeRootDirectoryBtn_Click(object sender, EventArgs e)
         {
             log.Info("ChangeRootDirectoryBtn_Click(...)");
-            AgDirectorySelectDialog dialog = new AgDirectorySelectDialog()
+            DirectorySelectDialog dialog = new DirectorySelectDialog()
             {
                 SelectedPath = AutoGrindRoot
             };
@@ -1096,7 +1096,7 @@ namespace AutoGrind
             if (partName != "FLAT")
                 partName += " " + DiameterLbl.Text + " mm DIA";
 
-            AgJoggingDialog form = new AgJoggingDialog(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
+            JoggingDialog form = new JoggingDialog(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
 
             form.ShowDialog(this);
         }
@@ -1244,7 +1244,7 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new AgMessageDialog(heading, message, "_Continue Execution", "_Abort");
+            waitingForOperatorMessageForm = new MessageDialog(heading, message, "_Continue Execution", "_Abort");
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -1345,6 +1345,7 @@ namespace AutoGrind
             {"tool_off",                new CommandSpec(){nParams=0,  prefix="30,16" } },
             {"coolant_on",              new CommandSpec(){nParams=0,  prefix="30,17" } },
             {"coolant_off",             new CommandSpec(){nParams=0,  prefix="30,18" } },
+            {"freedrive",               new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
@@ -2642,7 +2643,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            AgJoggingDialog form = new AgJoggingDialog(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
+            JoggingDialog form = new JoggingDialog(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
 
             form.ShowDialog(this);
 

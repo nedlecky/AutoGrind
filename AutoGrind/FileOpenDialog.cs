@@ -11,7 +11,7 @@ using System.IO;
 
 namespace AutoGrind
 {
-    public partial class AgFileOpenDialog : Form
+    public partial class FileOpenDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
@@ -23,7 +23,7 @@ namespace AutoGrind
         private string[] fileList;
         private List<string> directoryList;
 
-        public AgFileOpenDialog()
+        public FileOpenDialog()
         {
             InitializeComponent();
         }

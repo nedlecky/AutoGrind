@@ -10,12 +10,12 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class AgMessageDialog : Form
+    public partial class MessageDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
         public DialogResult result = DialogResult.OK;
-        public AgMessageDialog(string title, string label, string okText = "OK", string cancelText = "Cancel")
+        public MessageDialog(string title, string label, string okText = "OK", string cancelText = "Cancel")
         {
             InitializeComponent();
 

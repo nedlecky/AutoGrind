@@ -11,14 +11,14 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class AgDirectorySelectDialog : Form
+    public partial class DirectorySelectDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         public string SelectedPath { get; set; }
         public string Title { get; set; }
 
         List<string> directoryList;
-        public AgDirectorySelectDialog()
+        public DirectorySelectDialog()
         {
             InitializeComponent();
         }

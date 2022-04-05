@@ -92,29 +92,29 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AgDirectorySelectDialog.cs">
+    <Compile Include="DirectorySelectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AgDirectorySelectDialog.Designer.cs">
-      <DependentUpon>AgDirectorySelectDialog.cs</DependentUpon>
+    <Compile Include="DirectorySelectDialog.Designer.cs">
+      <DependentUpon>DirectorySelectDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgFileOpenDialog.cs">
+    <Compile Include="FileOpenDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AgFileOpenDialog.Designer.cs">
-      <DependentUpon>AgFileOpenDialog.cs</DependentUpon>
+    <Compile Include="FileOpenDialog.Designer.cs">
+      <DependentUpon>FileOpenDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgSaveAsDialog.cs">
+    <Compile Include="SaveAsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AgSaveAsDialog.Designer.cs">
-      <DependentUpon>AgSaveAsDialog.cs</DependentUpon>
+    <Compile Include="SaveAsDialog.Designer.cs">
+      <DependentUpon>SaveAsDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgJoggingDialog.cs">
+    <Compile Include="JoggingDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AgJoggingDialog.Designer.cs">
-      <DependentUpon>AgJoggingDialog.cs</DependentUpon>
+    <Compile Include="JoggingDialog.Designer.cs">
+      <DependentUpon>JoggingDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
@@ -122,11 +122,11 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="AgMessageDialog.cs">
+    <Compile Include="MessageDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="AgMessageDialog.Designer.cs">
-      <DependentUpon>AgMessageDialog.cs</DependentUpon>
+    <Compile Include="MessageDialog.Designer.cs">
+      <DependentUpon>MessageDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -144,23 +144,23 @@
     </Compile>
     <Compile Include="TcpClientSupport.cs" />
     <Compile Include="TcpServerSupport.cs" />
-    <EmbeddedResource Include="AgDirectorySelectDialog.resx">
-      <DependentUpon>AgDirectorySelectDialog.cs</DependentUpon>
+    <EmbeddedResource Include="DirectorySelectDialog.resx">
+      <DependentUpon>DirectorySelectDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AgFileOpenDialog.resx">
-      <DependentUpon>AgFileOpenDialog.cs</DependentUpon>
+    <EmbeddedResource Include="FileOpenDialog.resx">
+      <DependentUpon>FileOpenDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AgSaveAsDialog.resx">
-      <DependentUpon>AgSaveAsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="SaveAsDialog.resx">
+      <DependentUpon>SaveAsDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AgJoggingDialog.resx">
-      <DependentUpon>AgJoggingDialog.cs</DependentUpon>
+    <EmbeddedResource Include="JoggingDialog.resx">
+      <DependentUpon>JoggingDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="AgMessageDialog.resx">
-      <DependentUpon>AgMessageDialog.cs</DependentUpon>
+    <EmbeddedResource Include="MessageDialog.resx">
+      <DependentUpon>MessageDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

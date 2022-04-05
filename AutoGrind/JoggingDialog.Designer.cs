@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class AgJoggingDialog
+    partial class JoggingDialog
     {
         /// <summary>
         /// Required designer variable.
@@ -245,7 +245,7 @@
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label1.Location = new System.Drawing.Point(524, 319);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(281, 42);
+            this.label1.Size = new System.Drawing.Size(312, 42);
             this.label1.TabIndex = 15;
             this.label1.Text = "Jog Step MM";
             this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -255,7 +255,7 @@
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label2.Location = new System.Drawing.Point(524, 707);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(281, 87);
+            this.label2.Size = new System.Drawing.Size(312, 87);
             this.label2.TabIndex = 17;
             this.label2.Text = "Jog Angle Degrees";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -269,7 +269,7 @@
             this.ZeroRpyBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ZeroRpyBtn.Name = "ZeroRpyBtn";
             this.ZeroRpyBtn.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.ZeroRpyBtn.Size = new System.Drawing.Size(332, 182);
+            this.ZeroRpyBtn.Size = new System.Drawing.Size(312, 182);
             this.ZeroRpyBtn.TabIndex = 18;
             this.ZeroRpyBtn.Text = "Align Rxyz\r\n180,0,0";
             this.ZeroRpyBtn.UseVisualStyleBackColor = false;
@@ -287,6 +287,7 @@
             this.FreeDriveBtn.TabIndex = 19;
             this.FreeDriveBtn.Text = "Free Drive";
             this.FreeDriveBtn.UseVisualStyleBackColor = false;
+            this.FreeDriveBtn.Click += new System.EventHandler(this.FreeDriveBtn_Click);
             // 
             // PurposeLbl
             // 
@@ -373,7 +374,11 @@
             // 
             // CoordBox
             // 
-            this.CoordBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CoordBox.BackColor = System.Drawing.Color.Green;
+            this.CoordBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.CoordBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CoordBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CoordBox.ForeColor = System.Drawing.Color.White;
             this.CoordBox.FormattingEnabled = true;
             this.CoordBox.Items.AddRange(new object[] {
             "BASE",
@@ -381,12 +386,16 @@
             "PART"});
             this.CoordBox.Location = new System.Drawing.Point(524, 550);
             this.CoordBox.Name = "CoordBox";
-            this.CoordBox.Size = new System.Drawing.Size(281, 45);
+            this.CoordBox.Size = new System.Drawing.Size(312, 63);
             this.CoordBox.TabIndex = 83;
             // 
             // DistanceBox
             // 
-            this.DistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DistanceBox.BackColor = System.Drawing.Color.Green;
+            this.DistanceBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.DistanceBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.DistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DistanceBox.ForeColor = System.Drawing.Color.White;
             this.DistanceBox.FormattingEnabled = true;
             this.DistanceBox.Items.AddRange(new object[] {
             "1",
@@ -397,12 +406,16 @@
             "100"});
             this.DistanceBox.Location = new System.Drawing.Point(524, 364);
             this.DistanceBox.Name = "DistanceBox";
-            this.DistanceBox.Size = new System.Drawing.Size(281, 45);
+            this.DistanceBox.Size = new System.Drawing.Size(312, 63);
             this.DistanceBox.TabIndex = 84;
             // 
             // AngleBox
             // 
-            this.AngleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AngleBox.BackColor = System.Drawing.Color.Green;
+            this.AngleBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.AngleBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.AngleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AngleBox.ForeColor = System.Drawing.Color.White;
             this.AngleBox.FormattingEnabled = true;
             this.AngleBox.Items.AddRange(new object[] {
             "0.1",
@@ -414,7 +427,7 @@
             "45.0"});
             this.AngleBox.Location = new System.Drawing.Point(524, 797);
             this.AngleBox.Name = "AngleBox";
-            this.AngleBox.Size = new System.Drawing.Size(281, 45);
+            this.AngleBox.Size = new System.Drawing.Size(312, 63);
             this.AngleBox.TabIndex = 85;
             // 
             // label3
@@ -422,7 +435,7 @@
             this.label3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label3.Location = new System.Drawing.Point(524, 498);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(281, 49);
+            this.label3.Size = new System.Drawing.Size(312, 49);
             this.label3.TabIndex = 86;
             this.label3.Text = "Coordinates";
             this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -439,7 +452,7 @@
             this.PartLbl.Text = "Part:";
             this.PartLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // AgJoggingDialog
+            // JoggingDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -474,7 +487,7 @@
             this.Controls.Add(this.ZminusBtn);
             this.Controls.Add(this.ZplusBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "AgJoggingDialog";
+            this.Name = "JoggingDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Jog Robot";
             this.Load += new System.EventHandler(this.JoggingForm_Load);

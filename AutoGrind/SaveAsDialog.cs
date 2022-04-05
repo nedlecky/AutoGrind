@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class AgSaveAsDialog : Form
+    public partial class SaveAsDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
@@ -22,7 +22,7 @@ namespace AutoGrind
 
         private string[] fileList;
 
-        public AgSaveAsDialog()
+        public SaveAsDialog()
         {
             InitializeComponent();
         }

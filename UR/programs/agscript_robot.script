@@ -21,6 +21,7 @@ global robot_tool_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_tool_off_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_coolant_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_coolant_off_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
+global robot_freedrive_mode = 0
 
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
@@ -164,6 +165,18 @@ def set_variable():
     # coolant_off
     coolant_flow(False, grind_contact_enable)
     global response = "coolant_off()"
+  elif command[2] == 19:
+    # freedrive on/off
+    if (command[3] > 0):
+      freedrive_mode()
+      robot_freedrive_mode = 1
+      socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
+    else:
+      end_freedrive_mode()
+      robot_freedrive_mode = 0
+      socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
+    end
+    global response = "freedrive_mode()"
   elif command[2] == 20:
     # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
     if command[3] > -10:
@@ -345,7 +358,7 @@ def touchoff(approach_speed_mmps, retract_mm):
   global move_thread_approach_speed_mps = approach_speed_mps
 
   retract_speed_mps = approach_speed_mps * 2.0
-  
+
   retract_m = retract_mm / 1000.0
 
   move_thread_flag = 0

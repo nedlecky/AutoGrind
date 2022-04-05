@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class AgDirectorySelectDialog
+    partial class DirectorySelectDialog
     {
         /// <summary>
         /// Required designer variable.

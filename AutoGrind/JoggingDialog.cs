@@ -10,15 +10,16 @@ using System.Windows.Forms;
 
 namespace AutoGrind
 {
-    public partial class AgJoggingDialog : Form
+    public partial class JoggingDialog : Form
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         readonly TcpServerSupport robot;
         public bool ShouldSave { get; set; }
+        private bool SaveButtonEnabled = false;
 
         MainForm mainForm;
 
-        public AgJoggingDialog(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool saveable = false)
+        public JoggingDialog(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool _SaveButtonEnabled = false)
         {
             InitializeComponent();
             PurposeLbl.Text = purpose;
@@ -27,8 +28,9 @@ namespace AutoGrind
             robot = _robot;
             mainForm = _mainForm;
             ShouldSave = false;
-            SaveBtn.Enabled = saveable;
-            SaveBtn.BackColor = saveable ? Color.Green : Color.Gray;
+            SaveButtonEnabled = _SaveButtonEnabled;
+            SaveBtn.Enabled = SaveButtonEnabled;
+            SaveBtn.BackColor = SaveButtonEnabled ? Color.Green : Color.Gray;
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
@@ -116,7 +118,7 @@ namespace AutoGrind
         private void ZminusBtn_Click(object sender, EventArgs e)
         {
             double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, -distance/1000.0, 0, 0, 0 };
+            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
             Jog(p);
         }
 
@@ -181,5 +183,48 @@ namespace AutoGrind
             robot.Send(string.Format("(18,{0},0,0)", Deg2Rad(180)));
         }
 
+        // Run through all the controls in the form and enable/disable buttons and comboboxes
+        // Don't adjust the FreeDriveButton and keep SaveBtn
+        private void ButtonEnable(bool enable)
+        {
+            foreach (Control c in this.Controls)
+            {
+                log.Info("type={0}", c.GetType());
+                if (c != FreeDriveBtn && (c.GetType().Name == "Button" || c.GetType().Name == "ComboBox"))
+                {
+                    if (c == SaveBtn)
+                    {
+                        if (enable)
+                            c.Enabled = SaveButtonEnabled;
+                        else
+                            c.Enabled = false;
+                    }
+                    else
+                        c.Enabled = enable;
+
+                    c.BackColor = c.Enabled ? Color.Green : Color.Gray;
+                }
+
+            }
+
+        }
+        private void FreeDriveBtn_Click(object sender, EventArgs e)
+        {
+            if (FreeDriveBtn.Text.Contains("ON"))
+            {
+                robot.Send("(30,19,0)");
+
+                FreeDriveBtn.Text = "FreeDrive";
+                FreeDriveBtn.BackColor = Color.Green;
+                ButtonEnable(true);
+            }
+            else
+            {
+                robot.Send("(30,19,1)");
+                FreeDriveBtn.Text = "FreeDrive\nON";
+                FreeDriveBtn.BackColor = Color.Blue;
+                ButtonEnable(false);
+            }
+        }
     }
 }

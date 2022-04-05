@@ -1,6 +1,6 @@
 ﻿namespace AutoGrind
 {
-    partial class AgFileOpenDialog
+    partial class FileOpenDialog
     {
         /// <summary>
         /// Required designer variable.
