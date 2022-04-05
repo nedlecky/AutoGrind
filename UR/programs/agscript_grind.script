@@ -3,10 +3,11 @@
 # Version 1.0
 # Programmer: Ned Lecky
 
-global listenerThread = 0
-global threadCount = 0
-global haltCount = 0
-global haltCommand = [0, 0]
+global listener_thread_handle = 0
+global pattern_grind_thread_handle = 0
+
+global halt_count = 0
+global halt_command = [0, 0]
 
 global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
@@ -21,11 +22,11 @@ def pattern_grind():
   global grind_ready = False
   socket_send_line("grind_ready=False")
 
-  if listenerThread > 0:
-    kill listenerThread
-    listenerThread = 0
+  if listener_thread_handle > 0:
+    kill listener_thread_handle
+    listener_thread_handle = 0
   end
-  listenerThread = run listener_thread()
+  listener_thread_handle = run listener_thread()
 
   global grind_cycle = 0
   socket_set_var("grind_cycle", grind_cycle)
@@ -138,8 +139,10 @@ def pattern_grind():
   # Restore tool-only tcp
   set_tcp(robot_tcp)
 
-  kill listenerThread
-  listenerThread = 0
+  if listener_thread_handle > 0:
+    kill listener_thread_handle
+    listener_thread_handle = 0
+  end
 
   global grind_ready = True
   socket_send_line("grind_ready=True")
@@ -269,6 +272,10 @@ global movel_int_r = 0
 global movel_int_in_process = False
 global movelThread = 0
 
+
+###################################################################
+# Movel_int  Interruptable movel
+#
 thread movel_int_thread():
   movel_int_in_process = True
   movel(movel_int_p, movel_int_a, movel_int_v, movel_int_t, movel_int_r)
@@ -276,6 +283,9 @@ thread movel_int_thread():
 end
 
 def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
+  movel(p, a, v, t, r)
+  return None
+
   global movel_int_in_process = True
   if movelThread > 0:
     kill movelThread
@@ -296,16 +306,18 @@ def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
     movelThread = 0
   end
 end
+#
+# Movel_int  Interruptable movel
+###################################################################
 
 # Listens while grinding
 thread listener_thread():
-  global haltCommand = [0, 0]
-  global haltCount = 0
+  global halt_command = [0, 0]
+  global halt_count = 0
   while (True):
-    global threadCount = threadCount + 1
-    global haltCommand = socket_read_ascii_float(1, timeout = 0.1)
-    if haltCommand[0] > 0 or not is_door_closed():
-      global haltCount = haltCount + 1
+    global halt_command = socket_read_ascii_float(1, timeout = 0.1)
+    if halt_command[0] > 0 or not is_door_closed():
+      global halt_count = halt_count + 1
     end
   end
 
@@ -313,7 +325,7 @@ thread listener_thread():
 end
 
 def ok_to_proceed():
-  return haltCount == 0
+  return halt_count == 0
 end
 
 # Grind along a line dx_mm x dy_mm centered on current tool position. Repeat n_cycles times.

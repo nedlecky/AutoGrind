@@ -1843,6 +1843,20 @@ namespace AutoGrind
                 pollDashboardStateNow = true;
 
 
+                string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
+                string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
+                if (isInRemoteControlResponse == null)
+                {
+                    log.Error("Failed to be able to check remote control");
+                    ErrorMessageBox(String.Format("Failed to check reomte control mode. No response."));
+                    return;
+                }
+                if (isInRemoteControlResponse != "true")
+                {
+                    log.Error("Robot not in remote control mode");
+                    ErrorMessageBox(String.Format("Robot not in remote control mode!"));
+                    return;
+                }
                 string loadedProgramResponse = robotDashboardClient.InquiryResponse("load " + RobotProgramTxt.Text, 1000);
                 if (loadedProgramResponse == null)
                 {
