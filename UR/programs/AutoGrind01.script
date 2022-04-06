@@ -908,7 +908,7 @@ def AutoGrind01():
     movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
   
-  # Move along a flat line dx_m x dy_m starting at current position. Repeat n_cycles times.
+  # Move along a flat line dx_m x dy_m centered on p_center. Repeat n_cycles times.
   # Move in x direction first, then y
   def pattern_line_flat(dx_m, dy_m, n_cycles):
     # We're in contact at sw side...
@@ -934,7 +934,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a cylindrical line dx_mm,drx_rad starting at current position. Repeat n_cycles times.
+  # Move along a cylindrical line dx_mm,drx_rad centered on p_center. Repeat n_cycles times.
   # Move in x direction first, then rx
   def pattern_line_cylinder(dx_m, drx_rad, n_cycles):
     # We're in contact at sw side...
@@ -961,7 +961,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a spherical line drx_rad,dry_rad starting at current tool position. Repeat n_cycles times.
+  # Move along a spherical line drx_rad,dry_rad centered on p_center. Repeat n_cycles times.
   # Move in rx direction first, then ry
   def pattern_line_sphere(drx_rad, dry_rad, n_cycles):
     # We're in contact at sw side...
@@ -1042,7 +1042,7 @@ def AutoGrind01():
     movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
   
-  # Move along a flat rect dx_m x dy_m starting at current position. Repeat n_cycles times.
+  # Move along a flat rect dx_m x dy_m centered on p_center. Repeat n_cycles times.
   # Move in x direction first, then y
   def pattern_rect_flat(dx_m, dy_m, n_cycles):
     # We're in contact at sw side...
@@ -1073,7 +1073,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a cylindrical rect dx_mm,drx_rad starting at current position. Repeat n_cycles times.
+  # Move along a cylindrical rect dx_mm,drx_rad centered on p_center. Repeat n_cycles times.
   # Move in x direction first, then rx
   def pattern_rect_cylinder(dx_m, drx_rad, n_cycles):
     # We're in contact at sw side...
@@ -1104,7 +1104,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a sperical rect drx_rad,dry_rad starting at current tool position. Repeat n_cycles times.
+  # Move along a sperical rect drx_rad,dry_rad centered on p_center. Repeat n_cycles times.
   # Move in rx direction first, then ry
   def pattern_rect_sphere(drx_rad, dry_rad, n_cycles):
     # We're in contact at sw side...
@@ -1195,7 +1195,7 @@ def AutoGrind01():
     movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
   
-  # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps starting at current tool position. Repeat n_cycles times.
+  # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps centered on p_center. Repeat n_cycles times.
   # Move in direction of whichever nsteps is 1 first
   def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
     # We're in contact at sw side...
@@ -1259,7 +1259,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a cylindrical serpentine dx_m,drx_rad in n_xsteps,n_rxsteps starting at current tool position. Repeat n_cycles times.
+  # Move along a cylindrical serpentine dx_m,drx_rad in n_xsteps,n_rxsteps centered on p_center. Repeat n_cycles times.
   # Move in direction of whichever nsteps is 1 first
   def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
     # We're in contact at sw side...
@@ -1324,7 +1324,7 @@ def AutoGrind01():
     end
   end
   
-  # Move along a sperical serpentine drx_rad,dry_rad in n_rxsteps,n_rysteps starting at current tool position. Repeat n_cycles times.
+  # Move along a sperical serpentine drx_rad,dry_rad in n_rxsteps,n_rysteps centered on p_center. Repeat n_cycles times.
   # Move in direction of whichever nsteps is 1 first
   def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
     # We're in contact at sw side...
@@ -1440,7 +1440,7 @@ def AutoGrind01():
     movel(p0, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
   
-  # Grind along a flat circle circle_diam_m starting at current tool position. Repeat n_cycles times.
+  # Grind along a flat circle circle_diam_m centered on p_center. Repeat n_cycles times.
   def pattern_circle_flat(circle_diam_m, n_cycles):
   
     # Unit conversion
