@@ -2,7 +2,12 @@
 #
 a=3
 
-grind_rect(40,40,2,20,10)
+movelinear(demo_flat)
+
+#grind_line(20,20,2,20,10,0)
+#grind_line(20,-20,2,20,10,0)
+grind_rect(40,40,2,20,10,1)
+grind_rect(15,15,2,20,10,0)
 
 a++
 

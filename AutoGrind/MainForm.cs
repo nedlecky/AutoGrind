@@ -1244,7 +1244,7 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new MessageDialog(heading, message, "_Continue Execution", "_Abort");
+            waitingForOperatorMessageForm = new MessageDialog(heading, message, "&Continue Execution", "&Abort");
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -1352,11 +1352,11 @@ namespace AutoGrind
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
 
-            {"grind_line",              new CommandSpec(){nParams=5,  prefix="40,10," }  },
-            {"grind_rect",              new CommandSpec(){nParams=5,  prefix="40,20," }  },
-            {"grind_serpentine",        new CommandSpec(){nParams=7,  prefix="40,30," }  },
-            {"grind_circle",            new CommandSpec(){nParams=4,  prefix="40,40," }  },
-            {"grind_spiral",            new CommandSpec(){nParams=6,  prefix="40,50," }  },
+            {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
+            {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
+            {"grind_serpentine",        new CommandSpec(){nParams=8,  prefix="40,30," }  },
+            {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,40," }  },
+            {"grind_spiral",            new CommandSpec(){nParams=7,  prefix="40,50," }  },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -1639,7 +1639,7 @@ namespace AutoGrind
                 PromptOperator(ExtractParameters(command));
                 return true;
             }
-
+            
             // Handle all of the other robot commands (which just use sendrobot, some prefix params, and any other specified params)
             // Example:
             // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
@@ -1665,7 +1665,7 @@ namespace AutoGrind
                     }
                     else
                     {
-                        if (parameters.Length >= 0 || commandSpec.nParams == -1)
+                        if (parameters.Length > 0 || commandSpec.nParams <= 0)
                             robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
                         else
                             PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
@@ -2668,7 +2668,7 @@ namespace AutoGrind
                 if (robotReady)
                 {
                     copyPositionAtWrite = varName;
-                    robotCommandServer.Send("(25)");
+                    robotCommandServer?.Send("(25)");
                 }
 
             }
@@ -2683,7 +2683,7 @@ namespace AutoGrind
                 {
                     string msg = "(21," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
-                    robotCommandServer.Send(msg);
+                    robotCommandServer?.Send(msg);
                     return true;
                 }
             }
@@ -2699,7 +2699,7 @@ namespace AutoGrind
                 {
                     string msg = "(22," + ExtractScalars(q) + ')';
                     log.Trace("Sending {0}", msg);
-                    robotCommandServer.Send(msg);
+                    robotCommandServer?.Send(msg);
                     return true;
                 }
             }
