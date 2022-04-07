@@ -212,7 +212,7 @@ namespace AutoGrind
         {
             if (FreeDriveBtn.Text.Contains("ON"))
             {
-                robot.Send("(30,19,0)");
+                robot?.Send("(30,19,0)");
 
                 FreeDriveBtn.Text = "FreeDrive";
                 FreeDriveBtn.BackColor = Color.Green;
@@ -220,7 +220,7 @@ namespace AutoGrind
             }
             else
             {
-                robot.Send("(30,19,1)");
+                robot?.Send("(30,19,1)");
                 FreeDriveBtn.Text = "FreeDrive\nON";
                 FreeDriveBtn.BackColor = Color.Blue;
                 ButtonEnable(false);
