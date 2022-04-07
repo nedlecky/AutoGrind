@@ -333,15 +333,17 @@ namespace AutoGrind
                         log.Info("Changing robot connection to READY");
 
                         // Send defaults speeds and accelerations
+                        ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
+                        ExecuteLine(-1, "grind_retract()");  // Ensure we're not on the part
                         ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_linear_speed_mmps", "200")));
                         ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_linear_accel_mmpss", "500")));
                         ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
                         ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
-                        ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
                         ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
+                        ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
+                        ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_S", "500")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
-                        ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -642,6 +644,7 @@ namespace AutoGrind
                 RobotCommandStatusLbl.Text = "OFF";
                 RobotReadyLbl.BackColor = Color.Red;
                 GrindReadyLbl.BackColor = Color.Red;
+                GrindProcessStateLbl.BackColor = Color.Red;
                 CloseCommandServer();
             }
             else
@@ -1384,9 +1387,11 @@ namespace AutoGrind
             {"freedrive",               new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
+            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,0," } },
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
+            {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="40,4," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -2019,6 +2024,16 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_touch_retract({0})", form.value));
             }
         }
+        private void SetForceDwellBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm(ReadVariable("grind_force_dwell_mS"), "grind FORCE DWELL TIME, mS", 3);
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_force_dwell({0})", form.value));
+            }
+
+        }
 
 
 
@@ -2075,6 +2090,7 @@ namespace AutoGrind
                 }
             RobotReadyLbl.BackColor = Color.Red;
             GrindReadyLbl.BackColor = Color.Red;
+            GrindProcessStateLbl.BackColor = Color.Red;
         }
 
         // ===================================================================
@@ -2103,14 +2119,14 @@ namespace AutoGrind
         }
 
 
-        private Color ColorFromBooleanName(string name)
+        private Color ColorFromBooleanName(string name, bool invert = false)
         {
             switch (name)
             {
                 case "True":
-                    return Color.Green;
+                    return invert ? Color.Red : Color.Green;
                 case "False":
-                    return Color.Red;
+                    return invert ? Color.Green : Color.Red;
                 default:
                     return Color.Yellow;
             }
@@ -2180,6 +2196,9 @@ namespace AutoGrind
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
+                case "grind_process_state":
+                    GrindProcessStateLbl.BackColor = ColorFromBooleanName(valueTrimmed, true);
+                    break;
                 case "grind_n_cycles":
                     GrindNCyclesLbl.Text = valueTrimmed;
                     break;
@@ -2224,11 +2243,14 @@ namespace AutoGrind
                             break;
                     }
                     break;
+                case "grind_touch_speed_mmps":
+                    SetTouchSpeedBtn.Text = "Grind Touch Speed\n" + valueTrimmed + " mm/s";
+                    break;
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
-                case "grind_touch_speed_mmps":
-                    SetTouchSpeedBtn.Text = "Grind Touch Speed\n" + valueTrimmed + " mm/s";
+                case "grind_force_dwell_mS":
+                    SetForceDwellBtn.Text = "Grind Force Dwell Time\n" + valueTrimmed + " mS";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
@@ -124,9 +124,6 @@
             this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.MovePage = new System.Windows.Forms.TabPage();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
-            this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
-            this.SetTouchRetractBtn = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -165,6 +162,11 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.RobotIndexLbl = new System.Windows.Forms.Label();
             this.AllowRunningOfflineChk = new System.Windows.Forms.CheckBox();
+            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.SetForceDwellBtn = new System.Windows.Forms.Button();
+            this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
+            this.SetTouchRetractBtn = new System.Windows.Forms.Button();
+            this.GrindProcessStateLbl = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).BeginInit();
@@ -179,7 +181,6 @@
             this.RunPage.SuspendLayout();
             this.ProgramPage.SuspendLayout();
             this.MovePage.SuspendLayout();
-            this.groupBox11.SuspendLayout();
             this.groupBox9.SuspendLayout();
             this.SetupPage.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -188,6 +189,7 @@
             this.groupBox1.SuspendLayout();
             this.LogPage.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.groupBox11.SuspendLayout();
             this.SuspendLayout();
             // 
             // CurrentLineLbl
@@ -558,14 +560,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -637,14 +639,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1049,6 +1051,7 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.GrindProcessStateLbl);
             this.RunPage.Controls.Add(this.RobotIndexLbl);
             this.RunPage.Controls.Add(this.RunStartedTimeLbl);
             this.RunPage.Controls.Add(this.label14);
@@ -1296,7 +1299,6 @@
             // MovePage
             // 
             this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MovePage.Controls.Add(this.groupBox11);
             this.MovePage.Controls.Add(this.groupBox9);
             this.MovePage.Controls.Add(this.JogBtn);
             this.MovePage.Location = new System.Drawing.Point(4, 100);
@@ -1305,39 +1307,6 @@
             this.MovePage.TabIndex = 3;
             this.MovePage.Text = "Move";
             this.MovePage.UseVisualStyleBackColor = true;
-            // 
-            // groupBox11
-            // 
-            this.groupBox11.Controls.Add(this.SetTouchSpeedBtn);
-            this.groupBox11.Controls.Add(this.SetTouchRetractBtn);
-            this.groupBox11.Location = new System.Drawing.Point(216, 632);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(655, 373);
-            this.groupBox11.TabIndex = 116;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Grind Move Control";
-            // 
-            // SetTouchSpeedBtn
-            // 
-            this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(49, 71);
-            this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
-            this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetTouchSpeedBtn.TabIndex = 115;
-            this.SetTouchSpeedBtn.Text = "Set Touch Speed";
-            this.SetTouchSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetTouchSpeedBtn.Click += new System.EventHandler(this.SetTouchSpeedBtn_Click);
-            // 
-            // SetTouchRetractBtn
-            // 
-            this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchRetractBtn.Location = new System.Drawing.Point(325, 71);
-            this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
-            this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetTouchRetractBtn.TabIndex = 114;
-            this.SetTouchRetractBtn.Text = "Set Touch Retract";
-            this.SetTouchRetractBtn.UseVisualStyleBackColor = false;
-            this.SetTouchRetractBtn.Click += new System.EventHandler(this.SetTouchRetractBtn_Click);
             // 
             // groupBox9
             // 
@@ -1356,6 +1325,7 @@
             // SetupPage
             // 
             this.SetupPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.SetupPage.Controls.Add(this.groupBox11);
             this.SetupPage.Controls.Add(this.groupBox2);
             this.SetupPage.Controls.Add(this.groupBox8);
             this.SetupPage.Controls.Add(this.DefaultConfigBtn);
@@ -1375,9 +1345,9 @@
             this.groupBox2.Controls.Add(this.DashboardSendBtn);
             this.groupBox2.Controls.Add(this.RobotSendBtn);
             this.groupBox2.Controls.Add(this.RobotMessageTxt);
-            this.groupBox2.Location = new System.Drawing.Point(1695, 574);
+            this.groupBox2.Location = new System.Drawing.Point(1695, 492);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(432, 305);
+            this.groupBox2.Size = new System.Drawing.Size(432, 339);
             this.groupBox2.TabIndex = 110;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Robot Testing";
@@ -1471,23 +1441,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle12;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1530,7 +1500,7 @@
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(1090, 1057);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(1859, 1056);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(217, 72);
             this.DefaultConfigBtn.TabIndex = 99;
@@ -1541,7 +1511,7 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(572, 1057);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(1341, 1056);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(217, 72);
             this.LoadConfigBtn.TabIndex = 98;
@@ -1552,7 +1522,7 @@
             // SaveConfigBtn
             // 
             this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveConfigBtn.Location = new System.Drawing.Point(831, 1057);
+            this.SaveConfigBtn.Location = new System.Drawing.Point(1600, 1056);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(217, 72);
             this.SaveConfigBtn.TabIndex = 97;
@@ -1573,7 +1543,7 @@
             this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
             this.groupBox1.Controls.Add(this.ChangeRootDirectoryBtn);
             this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 574);
+            this.groupBox1.Location = new System.Drawing.Point(3, 492);
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
@@ -1769,7 +1739,7 @@
             // 
             this.RobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotIndexLbl.Location = new System.Drawing.Point(1905, 567);
+            this.RobotIndexLbl.Location = new System.Drawing.Point(1905, 707);
             this.RobotIndexLbl.Name = "RobotIndexLbl";
             this.RobotIndexLbl.Size = new System.Drawing.Size(187, 52);
             this.RobotIndexLbl.TabIndex = 135;
@@ -1786,6 +1756,64 @@
             this.AllowRunningOfflineChk.Text = "Allow Running Offline";
             this.AllowRunningOfflineChk.UseMnemonic = false;
             this.AllowRunningOfflineChk.UseVisualStyleBackColor = true;
+            // 
+            // groupBox11
+            // 
+            this.groupBox11.Controls.Add(this.SetForceDwellBtn);
+            this.groupBox11.Controls.Add(this.SetTouchSpeedBtn);
+            this.groupBox11.Controls.Add(this.SetTouchRetractBtn);
+            this.groupBox11.Location = new System.Drawing.Point(3, 836);
+            this.groupBox11.Name = "groupBox11";
+            this.groupBox11.Size = new System.Drawing.Size(927, 234);
+            this.groupBox11.TabIndex = 117;
+            this.groupBox11.TabStop = false;
+            this.groupBox11.Text = "Grind Move Control";
+            // 
+            // SetForceDwellBtn
+            // 
+            this.SetForceDwellBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetForceDwellBtn.Location = new System.Drawing.Point(607, 71);
+            this.SetForceDwellBtn.Name = "SetForceDwellBtn";
+            this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetForceDwellBtn.TabIndex = 116;
+            this.SetForceDwellBtn.Text = "Set Force Dwell";
+            this.SetForceDwellBtn.UseVisualStyleBackColor = false;
+            this.SetForceDwellBtn.Click += new System.EventHandler(this.SetForceDwellBtn_Click);
+            // 
+            // SetTouchSpeedBtn
+            // 
+            this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(49, 71);
+            this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
+            this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetTouchSpeedBtn.TabIndex = 115;
+            this.SetTouchSpeedBtn.Text = "Set Touch Speed";
+            this.SetTouchSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetTouchSpeedBtn.Click += new System.EventHandler(this.SetTouchSpeedBtn_Click);
+            // 
+            // SetTouchRetractBtn
+            // 
+            this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTouchRetractBtn.Location = new System.Drawing.Point(325, 71);
+            this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
+            this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetTouchRetractBtn.TabIndex = 114;
+            this.SetTouchRetractBtn.Text = "Set Touch Retract";
+            this.SetTouchRetractBtn.UseVisualStyleBackColor = false;
+            this.SetTouchRetractBtn.Click += new System.EventHandler(this.SetTouchRetractBtn_Click);
+            // 
+            // GrindProcessStateLbl
+            // 
+            this.GrindProcessStateLbl.BackColor = System.Drawing.Color.Gray;
+            this.GrindProcessStateLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindProcessStateLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindProcessStateLbl.ForeColor = System.Drawing.Color.White;
+            this.GrindProcessStateLbl.Location = new System.Drawing.Point(1905, 569);
+            this.GrindProcessStateLbl.Name = "GrindProcessStateLbl";
+            this.GrindProcessStateLbl.Size = new System.Drawing.Size(187, 125);
+            this.GrindProcessStateLbl.TabIndex = 136;
+            this.GrindProcessStateLbl.Text = "Grind Process Safe";
+            this.GrindProcessStateLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -1837,7 +1865,6 @@
             this.RunPage.PerformLayout();
             this.ProgramPage.ResumeLayout(false);
             this.MovePage.ResumeLayout(false);
-            this.groupBox11.ResumeLayout(false);
             this.groupBox9.ResumeLayout(false);
             this.SetupPage.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -1849,6 +1876,7 @@
             this.groupBox1.PerformLayout();
             this.LogPage.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.groupBox11.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1967,8 +1995,6 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.RichTextBox RecipeRTBCopy;
         private System.Windows.Forms.GroupBox groupBox9;
-        private System.Windows.Forms.Button SetTouchRetractBtn;
-        private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Button JogRunBtn;
         private System.Windows.Forms.Label RunStartedTimeLbl;
         private System.Windows.Forms.Label label14;
@@ -1979,7 +2005,6 @@
         private System.Windows.Forms.TextBox DoorClosedInputTxt;
         private System.Windows.Forms.Button SetDoorClosedInputBtn;
         private System.Windows.Forms.Label DoorClosedLbl;
-        private System.Windows.Forms.Button SetTouchSpeedBtn;
         private System.Windows.Forms.GroupBox groupBox2;
         private System.Windows.Forms.TextBox DashboardMessageTxt;
         private System.Windows.Forms.Button DashboardSendBtn;
@@ -1987,6 +2012,11 @@
         private System.Windows.Forms.TextBox RobotMessageTxt;
         private System.Windows.Forms.Label RobotIndexLbl;
         private System.Windows.Forms.CheckBox AllowRunningOfflineChk;
+        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.Button SetForceDwellBtn;
+        private System.Windows.Forms.Button SetTouchSpeedBtn;
+        private System.Windows.Forms.Button SetTouchRetractBtn;
+        private System.Windows.Forms.Label GrindProcessStateLbl;
     }
 }
 
