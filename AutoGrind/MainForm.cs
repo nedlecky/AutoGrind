@@ -176,13 +176,13 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            MessageDialog messageForm = new MessageDialog("AutoGrind Confirmation", question, "&Yes", "&No");
+            MessageDialog messageForm = new MessageDialog("System Confirmation", question, "&Yes", "&No");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            MessageDialog messageForm = new MessageDialog("AutoGrind Error", message, "&OK", "&Cancel");
+            MessageDialog messageForm = new MessageDialog("System Error", message, "&OK", "&Cancel");
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -288,14 +288,39 @@ namespace AutoGrind
                     color = Color.Red;
                     if (robotmodeResponse != null)
                         if (robotmodeResponse.StartsWith("PLAYING"))
+                        {
                             color = Color.Green;
+                            if (robotCommandServer == null)
+                            {
+                                // Setup a server for the UR to connect to
+                                robotCommandServer = new TcpServerSupport()
+                                {
+                                    ReceiveCallback = CommandCallback
+                                };
+                                if (robotCommandServer.Connect(ServerIpTxt.Text, "30000") > 0)
+                                {
+                                    log.Error("Robot command server initialization failure");
+                                    RobotCommandStatusLbl.BackColor = Color.Red;
+                                    RobotCommandStatusLbl.Text = "Command Error";
+                                }
+                                else
+                                {
+                                    log.Info("Robot command connection ready");
+
+                                    RobotCommandStatusLbl.BackColor = Color.Red;
+                                    RobotCommandStatusLbl.Text = "Command Waiting";
+                                }
+                            }
+                        }
                     ProgramStateBtn.Text = robotmodeResponse;
                     ProgramStateBtn.BackColor = color;
                 }
 
             // Manage whether robot command is connected and init when it does
             bool newRobotReady = false;
-            if (robotCommandServer != null)
+            if (robotCommandServer == null)
+                robotReady = false;
+            else
             {
                 if (robotCommandServer.IsClientConnected)
                     newRobotReady = true;
@@ -617,6 +642,7 @@ namespace AutoGrind
                 RobotCommandStatusLbl.Text = "OFF";
                 RobotReadyLbl.BackColor = Color.Red;
                 GrindReadyLbl.BackColor = Color.Red;
+                CloseCommandServer();
             }
             else
                 robotDashboardClient?.InquiryResponse("play", 500);
@@ -690,8 +716,16 @@ namespace AutoGrind
             // This allows offline dry runs but makes sure you know!
             if (!robotReady)
             {
-                var result = ConfirmMessageBox("Robot not connected. Run anyway?");
-                if (result != DialogResult.OK) return false;
+                if (AllowRunningOfflineChk.Checked)
+                {
+                    var result = ConfirmMessageBox("Robot not connected.\nRun anyway?");
+                    if (result != DialogResult.OK) return false;
+                }
+                else
+                {
+                    var result = ErrorMessageBox("Robot not connected.\nRunning not allowed per Setup checkbox.");
+                    return false;
+                }
             }
 
             SetCurrentLine(0);
@@ -981,6 +1015,7 @@ namespace AutoGrind
             RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
             ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
             UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
+            AllowRunningOfflineChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AllowRunningOfflineChk.Checked", "False"));
 
             // Operator Mode
             operatorMode = (OperatorMode)(Int32)AppNameKey.GetValue("operatorMode", 0);
@@ -1032,6 +1067,7 @@ namespace AutoGrind
             AppNameKey.SetValue("RobotIpTxt.Text", RobotIpTxt.Text);
             AppNameKey.SetValue("ServerIpTxt.Text", ServerIpTxt.Text);
             AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
+            AppNameKey.SetValue("AllowRunningOfflineChk.Checked", AllowRunningOfflineChk.Checked);
 
             // Operator Mode
             AppNameKey.SetValue("operatorMode", (Int32)operatorMode);
@@ -1530,8 +1566,8 @@ namespace AutoGrind
 
                 if (!GotoPositionJoint(positionName))
                 {
-                    log.Error("Unknown position name specified in movejoint Line {0} EXEC: {1}", lineNumber, command);
-                    PromptOperator("Illegal position name: " + command);
+                    log.Error("Move failed in movejoint Line {0} EXEC: {1}", lineNumber, command);
+                    PromptOperator("Move failed: " + command);
                 }
                 return true;
             }
@@ -1544,8 +1580,8 @@ namespace AutoGrind
 
                 if (!GotoPositionPose(positionName))
                 {
-                    log.Error("Unknown position name specified in movelinear Line {0} EXEC: {1}", lineNumber, command);
-                    PromptOperator("Illegal position name: " + command);
+                    log.Error("Move failed in movelinear Line {0} EXEC: {1}", lineNumber, command);
+                    PromptOperator("Move failed: " + command);
                 }
                 return true;
             }
@@ -1639,7 +1675,7 @@ namespace AutoGrind
                 PromptOperator(ExtractParameters(command));
                 return true;
             }
-            
+
             // Handle all of the other robot commands (which just use sendrobot, some prefix params, and any other specified params)
             // Example:
             // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
@@ -1666,7 +1702,11 @@ namespace AutoGrind
                     else
                     {
                         if (parameters.Length > 0 || commandSpec.nParams <= 0)
+                        {
                             robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
+                            if (robotCommandServer == null)
+                                PromptOperator("Command failed:\n" + command);
+                        }
                         else
                             PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
                     }
@@ -1722,8 +1762,8 @@ namespace AutoGrind
                 }
             }
 
-            if (!robotReady)
-            //if (false)//!robotReady)  // Disable here if you want to run recipes with no bot connection
+            // Waiting on robotReady or will cook along if AllowRunningOffline
+            if (!(robotReady || AllowRunningOfflineChk.Checked))
             {
                 // Only log this one time!
                 if (logFilter != 1)
@@ -1777,7 +1817,7 @@ namespace AutoGrind
         // ===================================================================
         // START ROBOT INTERFACE
         // ===================================================================
-        private void RobotDisconnect()
+        private void CloseDashboardClient()
         {
             // Disconnect client from dashboard
             if (robotDashboardClient != null)
@@ -1795,7 +1835,9 @@ namespace AutoGrind
             RobotModeBtn.BackColor = Color.Red;
             SafetyStatusBtn.BackColor = Color.Red;
             ProgramStateBtn.BackColor = Color.Red;
-
+        }
+        private void CloseCommandServer()
+        {
             // Close command server
             if (robotCommandServer != null)
             {
@@ -1808,6 +1850,11 @@ namespace AutoGrind
             }
             RobotCommandStatusLbl.BackColor = Color.Red;
             RobotCommandStatusLbl.Text = "OFF";
+        }
+        private void RobotDisconnect()
+        {
+            CloseDashboardClient();
+            CloseCommandServer();
         }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
@@ -1893,25 +1940,6 @@ namespace AutoGrind
                     ErrorMessageBox(String.Format("Failed to start program playing. Response was \"{0}\"", playResponse));
                     return;
                 }
-            }
-
-            // Setup a server for the UR to connect to
-            robotCommandServer = new TcpServerSupport()
-            {
-                ReceiveCallback = CommandCallback
-            };
-            if (robotCommandServer.Connect(ServerIpTxt.Text, "30000") > 0)
-            {
-                log.Error("Robot command server initialization failure");
-                RobotCommandStatusLbl.BackColor = Color.Red;
-                RobotCommandStatusLbl.Text = "Command Error";
-            }
-            else
-            {
-                log.Info("Robot command connection ready");
-
-                RobotCommandStatusLbl.BackColor = Color.Red;
-                RobotCommandStatusLbl.Text = "Command Waiting";
             }
         }
 
@@ -2142,6 +2170,9 @@ namespace AutoGrind
             {
                 case "robot_ready":
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    break;
+                case "robot_index":
+                    RobotIndexLbl.Text = valueTrimmed;
                     break;
                 case "robot_tool":
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
