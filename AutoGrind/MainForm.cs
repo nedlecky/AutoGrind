@@ -421,6 +421,7 @@ namespace AutoGrind
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
+                    RecipeRTB.Enabled = true;
                     break;
                 case RunState.READY:
                     ExitBtn.Enabled = true;
@@ -437,7 +438,7 @@ namespace AutoGrind
                     StopBtn.Enabled = false;
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
-
+                    RecipeRTB.Enabled = true;
                     break;
                 case RunState.RUNNING:
                     ExitBtn.Enabled = false;
@@ -454,6 +455,7 @@ namespace AutoGrind
                     PauseBtn.Text = "Pause";
                     StopBtn.Enabled = true;
                     CurrentLineLbl.Text = "";
+                    RecipeRTB.Enabled = false;
 
                     ExecTmr.Interval = 100;
                     ExecTmr.Enabled = true;
@@ -473,6 +475,8 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     PauseBtn.Text = "Continue";
                     StopBtn.Enabled = true;
+                    RecipeRTB.Enabled = false;
+
                     ExecTmr.Enabled = false;
                     break;
             }
@@ -762,6 +766,8 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     // Perform CONTINUE function
+                    var result = ConfirmMessageBox("Repeat highlighted line or move on?");
+                    if (result == DialogResult.OK) lineCurrentlyExecuting--;
                     SetState(RunState.RUNNING);
                     break;
             }
@@ -792,6 +798,10 @@ namespace AutoGrind
         {
             log.Info("StopBtn_Click(...)");
             robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
+            
+            // Make sure we are off the part
+            ExecuteLine(-1, "grind_retract()");
+            
             UnboldRecipe();
             SetState(RunState.READY);
             SetRecipeState(recipeStateAtRun);
@@ -1466,6 +1476,16 @@ namespace AutoGrind
                 return true;
             }
 
+            // sleep?
+            if (command.StartsWith("sleep("))
+            {
+                LogInterpret("sleep", lineNumber, command);
+                sleepMs = Convert.ToDouble(ExtractParameters(command, 1).ToString());
+                sleepTimer = new Stopwatch();
+                sleepTimer.Start();
+                return true;
+            }
+
             // assert
             if (command.StartsWith("assert("))
             {
@@ -1745,6 +1765,8 @@ namespace AutoGrind
 
         bool isSingleStep = false;
         int logFilter = 0;
+        Stopwatch sleepTimer = null;
+        double sleepMs = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) lineCurrentlyExecuting={0}", lineCurrentlyExecuting);
@@ -1765,6 +1787,15 @@ namespace AutoGrind
                         waitingForOperatorMessageForm = null;
                         break;
                 }
+            }
+
+            // Stopwatch
+            if (sleepTimer != null)
+            {
+                if (sleepTimer.ElapsedMilliseconds > sleepMs)
+                    sleepTimer = null;
+                else
+                    return;
             }
 
             // Waiting on robotReady or will cook along if AllowRunningOffline
@@ -1791,6 +1822,10 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
+                        
+                        // Make sure we're retracted
+                        ExecuteLine(-1, "grind_retract()");
+                        
                         UnboldRecipe();
                         SetRecipeState(recipeStateAtRun);
                         SetState(RunState.READY);

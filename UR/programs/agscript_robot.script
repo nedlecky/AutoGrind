@@ -262,7 +262,7 @@ def movel_relative_tcp_part(p1):
   global response = "movel_relative_tcp_part()"
 end
 
-# Change one element of current pose and movel there
+# Change one element of curren#t pose and movel there
 def movel_one_only(index = 0, val = 0):
   p = get_actual_tcp_pose()
   p[index] = val
@@ -310,13 +310,27 @@ def is_door_closed():
 end
 
 global robot_door_closed = is_door_closed()
+global time_in_uncommanded_grind = 0
+global time_door_check_rate_S = 0.250
 thread door_monitor_thread():
   while True:
-    sleep(0.25)
+    sleep(time_door_check_rate_S)
     new_door_closed = is_door_closed()
     if robot_door_closed != new_door_closed:
       robot_door_closed = new_door_closed
       socket_set_var("robot_door_closed", robot_door_closed)
+    end
+
+    # Check for still in grind process but not executing a grind command
+    # This is what happens after a grind_...(....,1) executes while waiting for next command
+    if grind_process_state and grind_ready:
+      time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_S
+      # No new grind commands for 1.5 seconds... get off the part!
+      if time_in_uncommanded_grind > 1.5:
+        set_grind_process_state(False)
+      end
+    else:
+      time_in_uncommanded_grind = 0
     end
   end
 end

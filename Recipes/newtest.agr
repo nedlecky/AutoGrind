@@ -1,13 +1,14 @@
 # Starting test
 #
 a=3
-grind_retract()
+#grind_retract()
 #end
 
 movelinear(demo_flat)
 
 grind_line(20,20,2,20,5,1)
-#grind_line(20,-20,2,20,5,0)
+grind_line(20,-20,2,20,5,1)
+sleep(4000)
 
 #grind_rect(40,40,2,40,10,1)
 #grind_rect(15,15,2,40,10,0)
@@ -21,7 +22,7 @@ grind_line(20,20,2,20,5,1)
 
 #grind_spiral(40,10,3,2,40,10,1)
 #grind_spiral(60,10,5,2,20,10,0)
-grind_retract()
+#grind_retract()
 a++
 
 # Ending
