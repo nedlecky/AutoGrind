@@ -359,7 +359,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
-                        ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_S", "500")));
+                        ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_mS", "500")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -683,11 +683,6 @@ namespace AutoGrind
         {
             Close();
         }
-        private void SecondaryExitBtn_Click(object sender, EventArgs e)
-        {
-            ExitBtn.PerformClick();
-        }
-
 
         private void ClearAllLogRtbBtn_Click(object sender, EventArgs e)
         {
@@ -2293,12 +2288,12 @@ namespace AutoGrind
                         case "0":
                             DoorClosedLbl.Text = "DOOR OPEN";
                             DoorClosedLbl.BackColor = Color.Red;
+                            if (runState == RunState.RUNNING)
+                                PauseBtn_Click(null, null);
                             break;
                         case "1":
                             DoorClosedLbl.Text = "DOOR CLOSED";
                             DoorClosedLbl.BackColor = Color.Green;
-                            if (runState == RunState.RUNNING)
-                                PauseBtn_Click(null, null);
                             break;
                         default:
                             DoorClosedLbl.Text = "DOOR ????";

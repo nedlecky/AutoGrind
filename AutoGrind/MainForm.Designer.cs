@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
@@ -126,7 +126,6 @@
             this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.MovePage = new System.Windows.Forms.TabPage();
-            this.SecondaryExitBtn = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
@@ -306,7 +305,7 @@
             this.SaveAsRecipeBtn.Enabled = false;
             this.SaveAsRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveAsRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveAsRecipeBtn.Location = new System.Drawing.Point(1435, 11);
+            this.SaveAsRecipeBtn.Location = new System.Drawing.Point(1631, 11);
             this.SaveAsRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveAsRecipeBtn.Name = "SaveAsRecipeBtn";
             this.SaveAsRecipeBtn.Size = new System.Drawing.Size(188, 95);
@@ -319,7 +318,7 @@
             // 
             this.NewRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NewRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.NewRecipeBtn.Location = new System.Drawing.Point(1216, 11);
+            this.NewRecipeBtn.Location = new System.Drawing.Point(1409, 11);
             this.NewRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.NewRecipeBtn.Name = "NewRecipeBtn";
             this.NewRecipeBtn.Size = new System.Drawing.Size(99, 95);
@@ -332,7 +331,7 @@
             // 
             this.LoadRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.LoadRecipeBtn.Location = new System.Drawing.Point(1102, 11);
+            this.LoadRecipeBtn.Location = new System.Drawing.Point(1299, 11);
             this.LoadRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.LoadRecipeBtn.Name = "LoadRecipeBtn";
             this.LoadRecipeBtn.Size = new System.Drawing.Size(102, 95);
@@ -346,7 +345,7 @@
             this.SaveRecipeBtn.Enabled = false;
             this.SaveRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveRecipeBtn.Location = new System.Drawing.Point(1324, 11);
+            this.SaveRecipeBtn.Location = new System.Drawing.Point(1516, 11);
             this.SaveRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveRecipeBtn.Name = "SaveRecipeBtn";
             this.SaveRecipeBtn.Size = new System.Drawing.Size(107, 95);
@@ -561,14 +560,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -640,14 +639,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -865,12 +864,12 @@
             // ExitBtn
             // 
             this.ExitBtn.BackColor = System.Drawing.Color.Green;
-            this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(1971, 12);
+            this.ExitBtn.Location = new System.Drawing.Point(603, 57);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
-            this.ExitBtn.Size = new System.Drawing.Size(160, 94);
+            this.ExitBtn.Size = new System.Drawing.Size(125, 51);
             this.ExitBtn.TabIndex = 96;
             this.ExitBtn.Text = "Exit";
             this.ExitBtn.UseVisualStyleBackColor = false;
@@ -909,7 +908,7 @@
             "OPERATOR",
             "EDITOR",
             "ENGINEERING"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(1653, 39);
+            this.OperatorModeBox.Location = new System.Drawing.Point(1845, 39);
             this.OperatorModeBox.Name = "OperatorModeBox";
             this.OperatorModeBox.Size = new System.Drawing.Size(294, 47);
             this.OperatorModeBox.TabIndex = 103;
@@ -1116,7 +1115,7 @@
             // 
             this.RunStartedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunStartedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1126, 435);
+            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1126, 371);
             this.RunStartedTimeLbl.Name = "RunStartedTimeLbl";
             this.RunStartedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunStartedTimeLbl.TabIndex = 134;
@@ -1126,7 +1125,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(876, 432);
+            this.label14.Location = new System.Drawing.Point(876, 368);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(244, 55);
             this.label14.TabIndex = 133;
@@ -1148,7 +1147,7 @@
             // 
             this.RunElapsedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunElapsedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1126, 499);
+            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1126, 435);
             this.RunElapsedTimeLbl.Name = "RunElapsedTimeLbl";
             this.RunElapsedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunElapsedTimeLbl.TabIndex = 132;
@@ -1158,7 +1157,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(803, 496);
+            this.label12.Location = new System.Drawing.Point(803, 432);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(317, 55);
             this.label12.TabIndex = 131;
@@ -1169,10 +1168,10 @@
             this.JogRunBtn.BackColor = System.Drawing.Color.Green;
             this.JogRunBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.JogRunBtn.ForeColor = System.Drawing.Color.White;
-            this.JogRunBtn.Location = new System.Drawing.Point(820, 786);
+            this.JogRunBtn.Location = new System.Drawing.Point(820, 688);
             this.JogRunBtn.Margin = new System.Windows.Forms.Padding(2);
             this.JogRunBtn.Name = "JogRunBtn";
-            this.JogRunBtn.Size = new System.Drawing.Size(630, 158);
+            this.JogRunBtn.Size = new System.Drawing.Size(659, 158);
             this.JogRunBtn.TabIndex = 130;
             this.JogRunBtn.Text = "Jog Robot";
             this.JogRunBtn.UseVisualStyleBackColor = false;
@@ -1194,7 +1193,7 @@
             // 
             this.Grind.AutoSize = true;
             this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(1227, 352);
+            this.Grind.Location = new System.Drawing.Point(1227, 288);
             this.Grind.Name = "Grind";
             this.Grind.Size = new System.Drawing.Size(64, 55);
             this.Grind.TabIndex = 128;
@@ -1204,7 +1203,7 @@
             // 
             this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1298, 352);
+            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1298, 288);
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
@@ -1214,7 +1213,7 @@
             // 
             this.GrindCycleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindCycleLbl.Location = new System.Drawing.Point(1126, 351);
+            this.GrindCycleLbl.Location = new System.Drawing.Point(1126, 287);
             this.GrindCycleLbl.Name = "GrindCycleLbl";
             this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
             this.GrindCycleLbl.TabIndex = 126;
@@ -1233,7 +1232,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(846, 351);
+            this.label10.Location = new System.Drawing.Point(846, 287);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(274, 55);
             this.label10.TabIndex = 124;
@@ -1243,7 +1242,7 @@
             // 
             this.RecipeFilenameOnlyLblCopy.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RecipeFilenameOnlyLblCopy.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameOnlyLblCopy.Location = new System.Drawing.Point(820, 181);
+            this.RecipeFilenameOnlyLblCopy.Location = new System.Drawing.Point(820, 117);
             this.RecipeFilenameOnlyLblCopy.Name = "RecipeFilenameOnlyLblCopy";
             this.RecipeFilenameOnlyLblCopy.Size = new System.Drawing.Size(630, 146);
             this.RecipeFilenameOnlyLblCopy.TabIndex = 123;
@@ -1256,7 +1255,7 @@
             this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(820, 87);
+            this.label9.Location = new System.Drawing.Point(820, 23);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(630, 94);
             this.label9.TabIndex = 122;
@@ -1323,7 +1322,6 @@
             // MovePage
             // 
             this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MovePage.Controls.Add(this.SecondaryExitBtn);
             this.MovePage.Controls.Add(this.groupBox9);
             this.MovePage.Controls.Add(this.JogBtn);
             this.MovePage.Location = new System.Drawing.Point(4, 100);
@@ -1332,20 +1330,6 @@
             this.MovePage.TabIndex = 3;
             this.MovePage.Text = "Move";
             this.MovePage.UseVisualStyleBackColor = true;
-            // 
-            // SecondaryExitBtn
-            // 
-            this.SecondaryExitBtn.BackColor = System.Drawing.Color.Green;
-            this.SecondaryExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SecondaryExitBtn.ForeColor = System.Drawing.Color.White;
-            this.SecondaryExitBtn.Location = new System.Drawing.Point(25, 30);
-            this.SecondaryExitBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.SecondaryExitBtn.Name = "SecondaryExitBtn";
-            this.SecondaryExitBtn.Size = new System.Drawing.Size(384, 173);
-            this.SecondaryExitBtn.TabIndex = 119;
-            this.SecondaryExitBtn.Text = "Exit (If you in the wrong screen resolution?)";
-            this.SecondaryExitBtn.UseVisualStyleBackColor = false;
-            this.SecondaryExitBtn.Click += new System.EventHandler(this.SecondaryExitBtn_Click);
             // 
             // groupBox9
             // 
@@ -1525,23 +1509,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle24;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1838,11 +1822,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2160, 1440);
             this.ControlBox = false;
+            this.Controls.Add(this.ExitBtn);
             this.Controls.Add(this.DoorClosedLbl);
             this.Controls.Add(this.timeLbl);
             this.Controls.Add(this.RecipeFilenameOnlyLbl);
             this.Controls.Add(this.OperatorModeBox);
-            this.Controls.Add(this.ExitBtn);
             this.Controls.Add(this.SaveAsRecipeBtn);
             this.Controls.Add(this.NewRecipeBtn);
             this.Controls.Add(this.LoadRecipeBtn);
@@ -2034,7 +2018,6 @@
         private System.Windows.Forms.Button SetTouchSpeedBtn;
         private System.Windows.Forms.Button SetTouchRetractBtn;
         private System.Windows.Forms.Label GrindProcessStateLbl;
-        private System.Windows.Forms.Button SecondaryExitBtn;
     }
 }
 

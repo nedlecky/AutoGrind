@@ -435,6 +435,8 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
+  else:
+    stopl(1.0)
   end
   return True
 end
@@ -469,6 +471,8 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
+  else:
+    stopl(1.0)
   end
   return True
 end
@@ -508,6 +512,8 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
+  else:
+    stopl(1.0)
   end
   return True
 end
@@ -538,6 +544,8 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
+  else:
+    stopl(1.0)
   end
   return True
 end
@@ -569,6 +577,8 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
+  else:
+    stopl(1.0)
   end
   return True
 end
