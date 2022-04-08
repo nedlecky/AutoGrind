@@ -126,6 +126,7 @@
             this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.MovePage = new System.Windows.Forms.TabPage();
+            this.SecondaryExitBtn = new System.Windows.Forms.Button();
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
@@ -305,7 +306,7 @@
             this.SaveAsRecipeBtn.Enabled = false;
             this.SaveAsRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveAsRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveAsRecipeBtn.Location = new System.Drawing.Point(1516, 11);
+            this.SaveAsRecipeBtn.Location = new System.Drawing.Point(1435, 11);
             this.SaveAsRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveAsRecipeBtn.Name = "SaveAsRecipeBtn";
             this.SaveAsRecipeBtn.Size = new System.Drawing.Size(188, 95);
@@ -318,7 +319,7 @@
             // 
             this.NewRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.NewRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.NewRecipeBtn.Location = new System.Drawing.Point(1297, 11);
+            this.NewRecipeBtn.Location = new System.Drawing.Point(1216, 11);
             this.NewRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.NewRecipeBtn.Name = "NewRecipeBtn";
             this.NewRecipeBtn.Size = new System.Drawing.Size(99, 95);
@@ -331,7 +332,7 @@
             // 
             this.LoadRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.LoadRecipeBtn.Location = new System.Drawing.Point(1183, 11);
+            this.LoadRecipeBtn.Location = new System.Drawing.Point(1102, 11);
             this.LoadRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.LoadRecipeBtn.Name = "LoadRecipeBtn";
             this.LoadRecipeBtn.Size = new System.Drawing.Size(102, 95);
@@ -345,7 +346,7 @@
             this.SaveRecipeBtn.Enabled = false;
             this.SaveRecipeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveRecipeBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveRecipeBtn.Location = new System.Drawing.Point(1405, 11);
+            this.SaveRecipeBtn.Location = new System.Drawing.Point(1324, 11);
             this.SaveRecipeBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SaveRecipeBtn.Name = "SaveRecipeBtn";
             this.SaveRecipeBtn.Size = new System.Drawing.Size(107, 95);
@@ -893,7 +894,7 @@
             this.MountedToolBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.MountedToolBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.MountedToolBox.FormattingEnabled = true;
-            this.MountedToolBox.Location = new System.Drawing.Point(1142, 1293);
+            this.MountedToolBox.Location = new System.Drawing.Point(1142, 1288);
             this.MountedToolBox.Name = "MountedToolBox";
             this.MountedToolBox.Size = new System.Drawing.Size(305, 63);
             this.MountedToolBox.TabIndex = 99;
@@ -905,12 +906,12 @@
             this.OperatorModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OperatorModeBox.FormattingEnabled = true;
             this.OperatorModeBox.Items.AddRange(new object[] {
-            "Operator",
-            "Editor",
-            "Engineering"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(1726, 39);
+            "OPERATOR",
+            "EDITOR",
+            "ENGINEERING"});
+            this.OperatorModeBox.Location = new System.Drawing.Point(1653, 39);
             this.OperatorModeBox.Name = "OperatorModeBox";
-            this.OperatorModeBox.Size = new System.Drawing.Size(221, 47);
+            this.OperatorModeBox.Size = new System.Drawing.Size(294, 47);
             this.OperatorModeBox.TabIndex = 103;
             this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
@@ -1322,6 +1323,7 @@
             // MovePage
             // 
             this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.MovePage.Controls.Add(this.SecondaryExitBtn);
             this.MovePage.Controls.Add(this.groupBox9);
             this.MovePage.Controls.Add(this.JogBtn);
             this.MovePage.Location = new System.Drawing.Point(4, 100);
@@ -1331,6 +1333,20 @@
             this.MovePage.Text = "Move";
             this.MovePage.UseVisualStyleBackColor = true;
             // 
+            // SecondaryExitBtn
+            // 
+            this.SecondaryExitBtn.BackColor = System.Drawing.Color.Green;
+            this.SecondaryExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SecondaryExitBtn.ForeColor = System.Drawing.Color.White;
+            this.SecondaryExitBtn.Location = new System.Drawing.Point(25, 30);
+            this.SecondaryExitBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.SecondaryExitBtn.Name = "SecondaryExitBtn";
+            this.SecondaryExitBtn.Size = new System.Drawing.Size(384, 173);
+            this.SecondaryExitBtn.TabIndex = 119;
+            this.SecondaryExitBtn.Text = "Exit (If you in the wrong screen resolution?)";
+            this.SecondaryExitBtn.UseVisualStyleBackColor = false;
+            this.SecondaryExitBtn.Click += new System.EventHandler(this.SecondaryExitBtn_Click);
+            // 
             // groupBox9
             // 
             this.groupBox9.Controls.Add(this.SetLinearAccelBtn);
@@ -1338,7 +1354,7 @@
             this.groupBox9.Controls.Add(this.SetJointSpeedBtn);
             this.groupBox9.Controls.Add(this.SetJointAccelBtn);
             this.groupBox9.Controls.Add(this.SetLinearSpeedBtn);
-            this.groupBox9.Location = new System.Drawing.Point(216, 77);
+            this.groupBox9.Location = new System.Drawing.Point(101, 208);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(927, 498);
             this.groupBox9.TabIndex = 115;
@@ -1794,7 +1810,7 @@
             // 
             this.RecipeFilenameOnlyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RecipeFilenameOnlyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameOnlyLbl.Location = new System.Drawing.Point(684, 17);
+            this.RecipeFilenameOnlyLbl.Location = new System.Drawing.Point(607, 17);
             this.RecipeFilenameOnlyLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameOnlyLbl.Name = "RecipeFilenameOnlyLbl";
             this.RecipeFilenameOnlyLbl.Size = new System.Drawing.Size(459, 42);
@@ -2018,6 +2034,7 @@
         private System.Windows.Forms.Button SetTouchSpeedBtn;
         private System.Windows.Forms.Button SetTouchRetractBtn;
         private System.Windows.Forms.Label GrindProcessStateLbl;
+        private System.Windows.Forms.Button SecondaryExitBtn;
     }
 }
 

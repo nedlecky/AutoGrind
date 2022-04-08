@@ -39,6 +39,10 @@ namespace AutoGrind
         static DataTable positions;
         static string[] diameterDefaults = { "0.00", "77.2", "81.9" };
 
+        // App screen design sizes (Zebra L10 Tablet)
+        const int screenDesignWidth = 2160;
+        const int screenDesignHeight = 1440;
+
         private enum RunState
         {
             INIT,
@@ -90,6 +94,19 @@ namespace AutoGrind
             log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
             log.Info(caption);
             log.Info("================================================================");
+
+            // Check screen dimensions.....
+            Rectangle r = Screen.FromControl(this).Bounds;
+            log.Info("Screen Dimensions: {0}x{1}", r.Width, r.Height);
+            if (r.Width < screenDesignWidth || r.Height < screenDesignHeight)
+            {
+                DialogResult result = ConfirmMessageBox(String.Format("Screen dimensions for this application must be at least {0} x {1}. Continue anyway?", screenDesignWidth, screenDesignHeight));
+                if (result != DialogResult.OK)
+                {
+                    forceClose = true;
+                    Close();
+                }
+            }
 
             // 1-second tick
             HeartbeatTmr.Interval = 1000;
@@ -372,14 +389,13 @@ namespace AutoGrind
         // START MAIN UI BUTTONS
         // ===================================================================
 
-        // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
         private void MainTab_SelectedIndexChanged(object sender, EventArgs e)
         {
             string tabName = MainTab.TabPages[MainTab.SelectedIndex].Text;
-            log.Info("Main Tab changed to " + tabName);
 
             if (tabName == "Log")
             {
+                // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
                 for (int i = 0; i < 2; i++)
                 {
                     AllLogRTB.Refresh();
@@ -541,7 +557,6 @@ namespace AutoGrind
         }
 
         //const int standardWidth = 1050;
-        const int fullWidth = 1920;
         private void OperatorModeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             OperatorMode origOperatorMode = operatorMode;
@@ -554,7 +569,7 @@ namespace AutoGrind
                 case OperatorMode.OPERATOR:
                     break;
                 case OperatorMode.EDITOR:
-                    form = new SetValueForm("", "Please enter passcode for EDITOR", 0, true);
+                    form = new SetValueForm("", "passcode for EDITOR", 0, true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
@@ -562,12 +577,14 @@ namespace AutoGrind
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    //form = new SetValueForm("", "Please enter passcode for ENGINEERING", 0, true);
-                    //if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
-                    //{
-                    //    OperatorModeBox.SelectedIndex = 0;
-                    //    return;
-                    //}
+#if !DEBUG
+                    form = new SetValueForm("", "passcode for ENGINEERING", 0, true);
+                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    {
+                        OperatorModeBox.SelectedIndex = 0;
+                        return;
+                    }
+#endif
                     break;
             }
 
@@ -666,6 +683,11 @@ namespace AutoGrind
         {
             Close();
         }
+        private void SecondaryExitBtn_Click(object sender, EventArgs e)
+        {
+            ExitBtn.PerformClick();
+        }
+
 
         private void ClearAllLogRtbBtn_Click(object sender, EventArgs e)
         {
@@ -798,10 +820,10 @@ namespace AutoGrind
         {
             log.Info("StopBtn_Click(...)");
             robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
-            
+
             // Make sure we are off the part
             ExecuteLine(-1, "grind_retract()");
-            
+
             UnboldRecipe();
             SetState(RunState.READY);
             SetRecipeState(recipeStateAtRun);
@@ -1018,8 +1040,8 @@ namespace AutoGrind
             // Zebra L10 Tablet runs best at 2160x1440 100% mag
             Left = 0;// (Int32)AppNameKey.GetValue("Left", 0);
             Top = 0;// (Int32)AppNameKey.GetValue("Top", 0);
-            Width = 2160;// (Int32)AppNameKey.GetValue("Width", 1920);
-            Height = 1440;
+            Width = screenDesignWidth;// (Int32)AppNameKey.GetValue("Width", 1920);
+            Height = screenDesignHeight;
 
             // From Setup Tab
             AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
@@ -1031,11 +1053,17 @@ namespace AutoGrind
             AllowRunningOfflineChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AllowRunningOfflineChk.Checked", "False"));
 
             // Operator Mode
-            operatorMode = (OperatorMode)(Int32)AppNameKey.GetValue("operatorMode", 0);
+            // Ignore persistence here: if we're running in debug it will kindly start us in Engineering mode else Operator
+#if DEBUG
+            operatorMode = OperatorMode.ENGINEERING;
+#else
+            operatorMode = OperatorMode.OPERATOR; // (OperatorMode)(Int32)AppNameKey.GetValue("operatorMode", 0);
+#endif
             OperatorModeBox.SelectedIndex = (int)operatorMode;
 
-            // Debug Level selection
-            DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "INFO");
+            // Debug Level selection (forced to INFO now)
+            // DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "Info");
+            DebugLevelCombo.Text = "Info";
 
             // Load the tools table
             LoadToolsBtn_Click(null, null);
@@ -1822,10 +1850,10 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
-                        
+
                         // Make sure we're retracted
                         ExecuteLine(-1, "grind_retract()");
-                        
+
                         UnboldRecipe();
                         SetRecipeState(recipeStateAtRun);
                         SetState(RunState.READY);
@@ -2226,7 +2254,7 @@ namespace AutoGrind
                     RobotIndexLbl.Text = valueTrimmed;
                     break;
                 case "robot_tool":
-                    RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    MountedToolBox.Text = valueTrimmed;
                     break;
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
@@ -2420,7 +2448,7 @@ namespace AutoGrind
                     m = plusPlusMinusMinusRegex.Match(assignment);
                     if (m.Success)
                     {
-                        log.Info("IncrAssignment {0}{1}{2}", m.Groups["name"].Value, m.Groups["operator"].Value, m.Groups["value"].Value);
+                        log.Info("IncrAssignment {0}{1}", m.Groups["name"].Value, m.Groups["operator"].Value);
                         string v = ReadVariable(m.Groups["name"].Value);
                         if (v != null)
                         {
