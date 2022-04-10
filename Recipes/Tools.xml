@@ -22,6 +22,8 @@
                 <xs:element name="ToolOffOuts" type="xs:string" minOccurs="0" />
                 <xs:element name="CoolantOnOuts" type="xs:string" minOccurs="0" />
                 <xs:element name="CoolantOffOuts" type="xs:string" minOccurs="0" />
+                <xs:element name="MountPosition" type="xs:string" minOccurs="0" />
+                <xs:element name="HomePosition" type="xs:string" minOccurs="0" />
               </xs:sequence>
             </xs:complexType>
           </xs:element>
@@ -34,7 +36,7 @@
     </xs:element>
   </xs:schema>
   <Tools>
-    <Name>faceplate</Name>
+    <Name>none</Name>
     <x_m>0</x_m>
     <y_m>0</y_m>
     <z_m>0</z_m>
@@ -49,6 +51,8 @@
     <ToolOffOuts>1,0</ToolOffOuts>
     <CoolantOnOuts>3,1</CoolantOnOuts>
     <CoolantOffOuts>3,0</CoolantOffOuts>
+    <MountPosition>none_mount</MountPosition>
+    <HomePosition>none_home</HomePosition>
   </Tools>
   <Tools>
     <Name>2F85</Name>
@@ -66,6 +70,8 @@
     <ToolOffOuts>1,0,3,0</ToolOffOuts>
     <CoolantOnOuts>4,1</CoolantOnOuts>
     <CoolantOffOuts>4,0</CoolantOffOuts>
+    <MountPosition>2F85_mount</MountPosition>
+    <HomePosition>2F85_home</HomePosition>
   </Tools>
   <Tools>
     <Name>offset</Name>
@@ -83,5 +89,45 @@
     <ToolOffOuts>1,1,2,1</ToolOffOuts>
     <CoolantOnOuts>3,0,4,0</CoolantOnOuts>
     <CoolantOffOuts>3,1,4,1</CoolantOffOuts>
+    <MountPosition>offset_mount</MountPosition>
+    <HomePosition>offset_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>2F85Angle</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.175</z_m>
+    <rx_rad>0.4</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.05</cogz_m>
+    <ToolOnOuts>1,0,2,0</ToolOnOuts>
+    <ToolOffOuts>1,1,2,1</ToolOffOuts>
+    <CoolantOnOuts>3,0,4,0</CoolantOnOuts>
+    <CoolantOffOuts>3,1,4,1</CoolantOffOuts>
+    <MountPosition>2F85a_mount</MountPosition>
+    <HomePosition>2F85a_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>vertest</Name>
+    <x_m>0</x_m>
+    <y_m>0.2</y_m>
+    <z_m>0.05</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>2.2214</ry_rad>
+    <rz_rad>2.2214</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.05</cogz_m>
+    <ToolOnOuts>1,1,2,1</ToolOnOuts>
+    <ToolOffOuts>1,0,2,0</ToolOffOuts>
+    <CoolantOnOuts>3,0,4,0</CoolantOnOuts>
+    <CoolantOffOuts>3,1,4,1</CoolantOffOuts>
+    <MountPosition>vertest_mount</MountPosition>
+    <HomePosition>vertest_home</HomePosition>
   </Tools>
 </NewDataSet>

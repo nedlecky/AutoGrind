@@ -556,7 +556,6 @@ namespace AutoGrind
             UpdateGeometryToRobot();
         }
 
-        //const int standardWidth = 1050;
         private void OperatorModeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             OperatorMode origOperatorMode = operatorMode;
@@ -1665,6 +1664,10 @@ namespace AutoGrind
                     ExecuteLine(-1, String.Format("tool_off()"));
                     ExecuteLine(-1, String.Format("coolant_off()"));
                     WriteVariable("robot_tool", row["Name"].ToString());
+                    // Set Move buttons
+                    MoveToolMountBtn.Text = row["MountPosition"].ToString();
+                    MoveToolHomeBtn.Text = row["HomePosition"].ToString();
+
                     MountedToolBox.Text = (string)row["Name"];
                 }
                 return true;
@@ -2533,11 +2536,14 @@ namespace AutoGrind
         // ===================================================================
         // START TOOL SYSTEM
         // ===================================================================
-        /// <summary>
-        /// Return a selected value from column 1 of a DataGridView. Return null for any errors
-        /// </summary>
-        /// <param name="dg"></param>
-        /// <returns></returns>
+        private DataRow SelectedRow(DataGridView dg)
+        {
+            if (dg.SelectedCells.Count < 1) return null;
+            var cell = dg.SelectedCells[0];
+            if (cell.ColumnIndex != 0) return null;
+            if (cell.Value == null) return null;
+            return (DataRow)((DataRowView)dg.Rows[cell.RowIndex].DataBoundItem).Row;
+        }
         private string SelectedName(DataGridView dg)
         {
             if (dg.SelectedCells.Count < 1) return null;
@@ -2558,6 +2564,33 @@ namespace AutoGrind
             }
         }
 
+        private void JointMoveMountBtn_Click(object sender, EventArgs e)
+        {
+            string name = SelectedName(ToolsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a tool in the tool table.");
+            else
+            {
+                string position = SelectedRow(ToolsGrd)["MountPosition"].ToString();
+                log.Info("Joint Move Tool Mount to {0}", position.ToString());
+                GotoPositionJoint(position);
+            }
+        }
+
+        private void JointMoveHomeBtn_Click(object sender, EventArgs e)
+        {
+            string name = SelectedName(ToolsGrd);
+            if (name == null)
+                ErrorMessageBox("Please select a tool in the tool table.");
+            else
+            {
+                string position = SelectedRow(ToolsGrd)["HomePosition"].ToString();
+                log.Info("Joint Move Tool Home to {0}", position);
+                GotoPositionJoint(position);
+            }
+        }
+
+
         readonly string toolsFilename = "Tools.xml";
         private void ClearAndInitializeTools()
         {
@@ -2577,6 +2610,8 @@ namespace AutoGrind
             tools.Columns.Add("ToolOffOuts", typeof(System.String));
             tools.Columns.Add("CoolantOnOuts", typeof(System.String));
             tools.Columns.Add("CoolantOffOuts", typeof(System.String));
+            tools.Columns.Add("MountPosition", typeof(System.String));
+            tools.Columns.Add("HomePosition", typeof(System.String));
             tools.CaseSensitive = true;
             tools.PrimaryKey = new DataColumn[] { name };
 
@@ -2624,11 +2659,25 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "faceplate", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0" });
-                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0" });
-                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1" });
+                tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0" ,"none_mount", "none_home"});
+                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
+                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
+                tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
+                tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });
             }
         }
+
+
+        private void MoveToolMountBtn_Click(object sender, EventArgs e)
+        {
+            GotoPositionJoint(MoveToolMountBtn.Text);
+        }
+
+        private void MoveToolHomeBtn_Click(object sender, EventArgs e)
+        {
+            GotoPositionJoint(MoveToolHomeBtn.Text);
+        }
+
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
         {
             ExecuteLine(-1, string.Format("set_door_closed_input({0})", DoorClosedInputTxt.Text));
@@ -2913,11 +2962,5 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
-
-        private void RunPage_Click(object sender, EventArgs e)
-        {
-
-        }
-
     }
 }

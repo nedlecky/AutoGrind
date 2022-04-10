@@ -46,4 +46,52 @@
     <Pose>p[-0.103878,-0.493247,0.108092,3.14156,-8.11408e-05,6.93148e-06]</Pose>
     <IsSystem>true</IsSystem>
   </Positions>
+  <Positions>
+    <Name>vertest_mount</Name>
+    <Joints>[2.13186,-1.34251,1.80966,-0.484498,0.793834,3.17144]</Joints>
+    <Pose>p[0.618739,-0.371668,0.303674,-1.06782,1.37489,-1.37244]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>vertest_home</Name>
+    <Joints>[1.28368,-1.40963,1.83864,-0.429167,1.28379,3.14198]</Joints>
+    <Pose>p[0.00780298,-0.594918,0.119349,-3.14152,3.62618e-05,3.29577e-06]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>2F85_mount</Name>
+    <Joints>[2.02067,-1.08135,1.80362,-3.60221,-0.532948,2.97706]</Joints>
+    <Pose>p[0.618149,-0.428482,0.338274,1.38685,1.21788,1.13975]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>2F85_home</Name>
+    <Joints>[1.32963,-1.38598,1.76344,-1.94813,-1.57045,2.90059]</Joints>
+    <Pose>p[0.000304351,-0.55871,0.161276,3.14158,7.11782e-06,-3.15698e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>none_mount</Name>
+    <Joints>[2.0207,-1.08127,1.80356,-3.6022,-0.5329,2.97703]</Joints>
+    <Pose>p[0.618177,-0.42847,0.338254,1.38681,1.21795,1.13981]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>none_home</Name>
+    <Joints>[1.32962,-1.38599,1.76344,-1.9481,-1.57043,2.90058]</Joints>
+    <Pose>p[0.000304578,-0.558704,0.33628,3.14159,7.08508e-06,9.45048e-06]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>2F85a_mount</Name>
+    <Joints>[2.02063,-1.08137,1.80361,-3.60221,-0.532948,2.97705]</Joints>
+    <Pose>p[0.618133,-0.428503,0.338295,1.38682,1.21786,1.1397]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>2F85a_home</Name>
+    <Joints>[1.27103,-1.55144,2.11808,-2.52127,-1.45467,2.86499]</Joints>
+    <Pose>p[0.000291254,-0.558692,0.161265,-3.14157,-1.06128e-05,2.74448e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>
