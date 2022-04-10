@@ -393,6 +393,8 @@ namespace AutoGrind
         {
             string tabName = MainTab.TabPages[MainTab.SelectedIndex].Text;
 
+            if(operatorMode == OperatorMode.OPERATOR)
+
             if (tabName == "Log")
             {
                 // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
@@ -406,6 +408,13 @@ namespace AutoGrind
                 }
             }
         }
+        // Prevents selecting (seeing) a tab page that is not enabled
+        private void MainTab_Selecting(object sender, TabControlCancelEventArgs e)
+        {
+            if (e.TabPageIndex < 0) return;
+            e.Cancel = !e.TabPage.Enabled;
+        }
+
 
         private void SetState(RunState s, bool fEditing = false, bool fForce = false)
         {
@@ -424,7 +433,10 @@ namespace AutoGrind
             {
                 case RunState.IDLE:
                     ExitBtn.Enabled = true;
+                    JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
+                    MoveToolMountBtn.Enabled = robotReady;
+                    MoveToolHomeBtn.Enabled = robotReady;
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
@@ -441,7 +453,10 @@ namespace AutoGrind
                     break;
                 case RunState.READY:
                     ExitBtn.Enabled = true;
+                    JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
+                    MoveToolMountBtn.Enabled = robotReady;
+                    MoveToolHomeBtn.Enabled = robotReady;
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
@@ -458,7 +473,10 @@ namespace AutoGrind
                     break;
                 case RunState.RUNNING:
                     ExitBtn.Enabled = false;
+                    JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
+                    MoveToolMountBtn.Enabled = false;
+                    MoveToolHomeBtn.Enabled = false;
 
                     LoadRecipeBtn.Enabled = false;
                     NewRecipeBtn.Enabled = false;
@@ -479,7 +497,10 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     ExitBtn.Enabled = false;
+                    JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
+                    MoveToolMountBtn.Enabled = false;
+                    MoveToolHomeBtn.Enabled = false;
 
                     LoadRecipeBtn.Enabled = false;
                     NewRecipeBtn.Enabled = false;
@@ -507,7 +528,10 @@ namespace AutoGrind
             }
 
             ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
+            JogRunBtn.BackColor = JogRunBtn.Enabled ? Color.Green : Color.Gray;
             JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
+            MoveToolMountBtn.BackColor = MoveToolMountBtn.Enabled ? Color.Green : Color.Gray;
+            MoveToolHomeBtn.BackColor = MoveToolHomeBtn.Enabled ? Color.Green : Color.Gray;
 
             LoadRecipeBtn.BackColor = LoadRecipeBtn.Enabled ? Color.Green : Color.Gray;
             NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
@@ -556,24 +580,66 @@ namespace AutoGrind
             UpdateGeometryToRobot();
         }
 
+        public enum ControlSetting
+        {
+            HIDDEN,
+            DISABLED,
+            NORMAL
+        };
+        public class ControlSpec
+        {
+            public Control control;
+            public ControlSetting[] settings = new ControlSetting[3];
+            public ControlSpec(Control c, ControlSetting operatorSetting, ControlSetting editorSetting, ControlSetting engineeringSetting)
+            {
+                control = c;
+                settings[0] = operatorSetting;
+                settings[1] = editorSetting;
+                settings[2] = engineeringSetting;
+            }
+        }
+        static private ControlSpec[] controlSpecs = null;
+        private void BuildEnableTable()
+        {
+            controlSpecs = new ControlSpec[]
+            {
+                // Position Test Buttons
+                new ControlSpec(PositionTestButtonGrp, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(LoadPositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(SavePositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(ClearPositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(ClearAllPositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+
+                // Set Position Button
+                new ControlSpec(PositionSetBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+            };
+
+        }
+
         private void OperatorModeBox_SelectedIndexChanged(object sender, EventArgs e)
         {
+            if (controlSpecs == null) BuildEnableTable();
+
             OperatorMode origOperatorMode = operatorMode;
 
             OperatorMode newOperatorMode = (OperatorMode)OperatorModeBox.SelectedIndex;
             log.Info(string.Format("OperatorMode changing to {0}", newOperatorMode));
+
+            // Enforce any password requirements
             SetValueForm form;
             switch (newOperatorMode)
             {
                 case OperatorMode.OPERATOR:
                     break;
                 case OperatorMode.EDITOR:
+#if !DEBUG
                     form = new SetValueForm("", "passcode for EDITOR", 0, true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
+#endif
                     break;
                 case OperatorMode.ENGINEERING:
 #if !DEBUG
@@ -586,8 +652,8 @@ namespace AutoGrind
 #endif
                     break;
             }
-
             operatorMode = newOperatorMode;
+
             // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
             if (MainTab.TabPages[1] != null)
             {
@@ -599,12 +665,14 @@ namespace AutoGrind
                         MainTab.TabPages[2].Enabled = false;
                         MainTab.TabPages[3].Enabled = false;
                         MainTab.TabPages[4].Enabled = false;
+                        MainTab.SelectedIndex = 0;
                         break;
                     case OperatorMode.EDITOR:
                         MainTab.TabPages[1].Enabled = true;
                         MainTab.TabPages[2].Enabled = true;
                         MainTab.TabPages[3].Enabled = false;
                         MainTab.TabPages[4].Enabled = false;
+                        MainTab.SelectedIndex = 1;
                         break;
                     case OperatorMode.ENGINEERING:
                         MainTab.TabPages[1].Enabled = true;
@@ -612,6 +680,29 @@ namespace AutoGrind
                         MainTab.TabPages[3].Enabled = true;
                         MainTab.TabPages[4].Enabled = true;
                         break;
+                }
+            }
+
+            foreach (ControlSpec spec in controlSpecs)
+            {
+                Control c = spec.control;
+                switch (spec.settings[(int)operatorMode])
+                {
+                    case ControlSetting.HIDDEN:
+                        c.Enabled = false;
+                        c.Visible = false;
+                        break;
+                    case ControlSetting.DISABLED:
+                        c.Enabled = false;
+                        c.Visible = true;
+                        if (c.GetType().Name == "Button") c.BackColor = Color.Gray;
+                        break;
+                    case ControlSetting.NORMAL:
+                        c.Enabled = true;
+                        c.Visible = true;
+                        if (c.GetType().Name == "Button") c.BackColor = Color.Green;
+                        break;
+
                 }
             }
         }
@@ -2967,5 +3058,6 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
+
     }
 }
