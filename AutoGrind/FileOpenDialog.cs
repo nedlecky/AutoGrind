@@ -27,12 +27,17 @@ namespace AutoGrind
         {
             InitializeComponent();
         }
-        private void LoadFiles(string path)
+        private void LoadFiles(string path, string nameStartsWith = null)
         {
             fileList = Directory.GetFiles(path, Filter);
             FileListBox.Items.Clear();
             foreach (string file in fileList)
-                FileListBox.Items.Add(Path.GetFileName(file));
+            {
+                string filename = Path.GetFileName(file);
+
+                if (nameStartsWith == null || filename.StartsWith(nameStartsWith))
+                    FileListBox.Items.Add(Path.GetFileName(file));
+            }
         }
         private void LoadDirectory(string path)
         {
@@ -57,15 +62,10 @@ namespace AutoGrind
                 directoryList.Add(directory);
             }
 
+            FileNameTxt.Select();
+            FileNameTxt.Text = "";
             LoadFiles(path);
 
-        }
-
-        private void DirectoryListBox_Click(object sender, EventArgs e)
-        {
-            // Single click on directory previews files
-            if(DirectoryListBox.SelectedIndex < 1) return;
-            LoadFiles(directoryList[DirectoryListBox.SelectedIndex]);
         }
 
         private void DirectoryListBox_DoubleClick(object sender, EventArgs e)
@@ -80,27 +80,42 @@ namespace AutoGrind
             LoadDirectory(InitialDirectory);
         }
 
+        private void FileListBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            PreviewRTB.LoadFile(Path.Combine(DirectoryNameLbl.Text, FileListBox.Items[FileListBox.SelectedIndex].ToString()), System.Windows.Forms.RichTextBoxStreamType.PlainText);
+        }
         private void FileListBox_DoubleClick(object sender, EventArgs e)
         {
             OpenBtn_Click(null, null);
         }
 
+
+        private void FileNameTxt_TextChanged(object sender, EventArgs e)
+        {
+            LoadFiles(DirectoryNameLbl.Text, FileNameTxt.Text);
+        }
         private void OpenBtn_Click(object sender, EventArgs e)
         {
-            // Do nothing if nothing selected
-            if (FileListBox.SelectedIndex < 0) return;
+            // If nothing selected, try to interpret as a typein?
+            if (FileListBox.SelectedIndex < 0)
+            {
+                string filename = Path.Combine(DirectoryNameLbl.Text, FileNameTxt.Text);
+                FileName = Path.ChangeExtension(filename, ".txt");
+            }
+            else
+            {
 
-            FileName = fileList[FileListBox.SelectedIndex];
+                //FileName = fileList[FileListBox.SelectedIndex];
+                FileName = Path.Combine(DirectoryNameLbl.Text, FileListBox.SelectedItem.ToString());
+            }
             log.Debug("OpenBtn_Click(...) Filename={0}", FileName);
             DialogResult = DialogResult.OK;
         }
-
         private void CancelBtn_Click(object sender, EventArgs e)
         {
             log.Debug("CancelBtn_Click(...)");
             DialogResult = DialogResult.Cancel;
             Close();
         }
-
     }
 }

@@ -940,11 +940,16 @@ namespace AutoGrind
                     SaveRecipeBtn_Click(null, null);
             }
 
+            string initialDirectory;
+            if (RecipeFilenameLbl.Text != "Untitled" && RecipeFilenameLbl.Text.Length > 0)
+                initialDirectory = Path.GetDirectoryName(RecipeFilenameLbl.Text);
+            else
+                initialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
             FileOpenDialog dialog = new FileOpenDialog()
             {
                 Title = "Open an AutoGrind Recipe",
-                Filter = "*.agr",
-                InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
+                Filter = "*.txt",
+                InitialDirectory = initialDirectory
             };
 
             if (dialog.ShowDialog() == DialogResult.OK)
@@ -978,7 +983,7 @@ namespace AutoGrind
             SaveAsDialog dialog = new SaveAsDialog()
             {
                 Title = "Save an Autogrind Recipe As...",
-                Filter = "*.agr",
+                Filter = "*.txt",
                 InitialDirectory = Path.Combine(AutoGrindRoot, "Recipes"),
                 FileName = RecipeFilenameLbl.Text,
             };
@@ -987,7 +992,7 @@ namespace AutoGrind
                 if (dialog.FileName != "")
                 {
                     string filename = dialog.FileName;
-                    if (!filename.EndsWith(".agr")) filename += ".agr";
+                    if (!filename.EndsWith(".txt")) filename += ".txt";
                     bool okToSave = true;
                     if (File.Exists(filename))
                     {
@@ -2659,7 +2664,7 @@ namespace AutoGrind
             {
 
                 ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0" ,"none_mount", "none_home"});
+                tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0", "none_mount", "none_home" });
                 tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
                 tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
                 tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
