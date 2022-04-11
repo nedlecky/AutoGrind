@@ -1,18 +1,2 @@
-aaa = 13
-aaa++
-aaa--
-aaa--
-aaa += 7
-aaa-=3
-q1a={aaa}
-aaa-=3.112
-ned = 12
-ned   -= -8.1
-ned++
-ned--
-a=5
-a_=6
-a_+=-2
-#prompt(a_={a_}  ned={ned})
-#fred(12)
-#a--=3
+movelinear(demo_flat)
+grind_rect(40,40,1,20,10,0)

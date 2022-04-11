@@ -32,6 +32,7 @@ namespace AutoGrind
         static SplashForm splashForm;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
+        TcpClientSupport robotUrControlClient = null;
         MessageDialog waitingForOperatorMessageForm = null;
 
         static DataTable variables;
@@ -393,8 +394,6 @@ namespace AutoGrind
         {
             string tabName = MainTab.TabPages[MainTab.SelectedIndex].Text;
 
-            if(operatorMode == OperatorMode.OPERATOR)
-
             if (tabName == "Log")
             {
                 // This forces the log RTBs to all update... otherwise there are artifacts left over from NLog the first time in on program start
@@ -625,33 +624,31 @@ namespace AutoGrind
             OperatorMode newOperatorMode = (OperatorMode)OperatorModeBox.SelectedIndex;
             log.Info(string.Format("OperatorMode changing to {0}", newOperatorMode));
 
-            // Enforce any password requirements
+#if !DEBUG
+            // Enforce any password requirements (unless we're in DEBUG for convenience)
             SetValueForm form;
             switch (newOperatorMode)
             {
                 case OperatorMode.OPERATOR:
                     break;
                 case OperatorMode.EDITOR:
-#if !DEBUG
                     form = new SetValueForm("", "passcode for EDITOR", 0, true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
-#endif
                     break;
                 case OperatorMode.ENGINEERING:
-#if !DEBUG
                     form = new SetValueForm("", "passcode for ENGINEERING", 0, true);
                     if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
-#endif
                     break;
             }
+#endif
             operatorMode = newOperatorMode;
 
             // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
@@ -1071,7 +1068,7 @@ namespace AutoGrind
         private void SaveAsRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("SaveAsRecipeBtn_Click(...)");
-            SaveAsDialog dialog = new SaveAsDialog()
+            FileSaveAsDialog dialog = new FileSaveAsDialog()
             {
                 Title = "Save an Autogrind Recipe As...",
                 Filter = "*.txt",
@@ -1298,6 +1295,15 @@ namespace AutoGrind
         {
             ChangeLogLevel(DebugLevelCombo.Text);
         }
+        private void DashboardSendBtn_Click(object sender, EventArgs e)
+        {
+            robotDashboardClient?.InquiryResponse(DashboardMessageTxt.Text);
+        }
+        private void URControlSendBtn_Click(object sender, EventArgs e)
+        {
+            robotUrControlClient?.Send(URControlMessageTxt.Text);
+        }
+
 
         // ===================================================================
         // END SETUP
@@ -1515,7 +1521,7 @@ namespace AutoGrind
             {"freedrive",               new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
-            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,0," } },
+            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,0" } },
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
@@ -1998,6 +2004,20 @@ namespace AutoGrind
             SafetyStatusBtn.BackColor = Color.Red;
             ProgramStateBtn.BackColor = Color.Red;
         }
+        private void CloseRealtimeClient()
+        {
+            // Disconnect client from RTDE
+            if (robotUrControlClient != null)
+            {
+                if (robotUrControlClient.IsClientConnected)
+                {
+                    robotDashboardClient.Disconnect();
+                }
+                robotUrControlClient = null;
+            }
+            RobotURControlStatusLbl.BackColor = Color.Red;
+            RobotURControlStatusLbl.Text = "OFF";
+        }
         private void CloseCommandServer()
         {
             // Close command server
@@ -2015,8 +2035,9 @@ namespace AutoGrind
         }
         private void RobotDisconnect()
         {
-            CloseDashboardClient();
             CloseCommandServer();
+            CloseRealtimeClient();
+            CloseDashboardClient();
         }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
@@ -2037,71 +2058,88 @@ namespace AutoGrind
                 RobotConnectBtn.Text = "Dashboard ERROR";
                 return;
             }
-            else
+            log.Info("Robot dashboard connection ready");
+            string response = robotDashboardClient.Receive();
+            log.Info("DASH connection returns {0}", response);
+            RobotConnectBtn.BackColor = Color.Green;
+            RobotConnectBtn.Text = "Dashboard OK";
+
+            // Connect to URControl port
+            robotUrControlClient = new TcpClientSupport("DASHRT")
             {
-                log.Info("Robot dashboard connection ready");
-                string response = robotDashboardClient.Receive();
-                log.Info("DASH connection returns {0}", response);
-                RobotConnectBtn.BackColor = Color.Green;
-                RobotConnectBtn.Text = "Dashboard OK";
+                ReceiveCallback = RealtimeCallback
+            };
+            if (robotUrControlClient.Connect(RobotIpTxt.Text, "30001") > 0)
+            {
+                log.Error("Robot URControl client initialization failure");
+                RobotURControlStatusLbl.BackColor = Color.Red;
+                RobotURControlStatusLbl.Text = "URControl OFF";
+                return;
+            }
+            log.Info("Robot realtime connection ready");
+            response = robotUrControlClient.Receive();
+            log.Info("RTDE connection returns {0}", response);
+            RobotURControlStatusLbl.BackColor = Color.Green;
+            RobotURControlStatusLbl.Text = "URControl Connected";
 
-                RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
-                RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
-                robotDashboardClient.InquiryResponse("stop");
 
-                pollDashboardStateNow = true;
+            // Start querying the bot
+            RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
+            RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
+            robotDashboardClient.InquiryResponse("stop");
+
+            pollDashboardStateNow = true;
 
 
-                string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
-                string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
-                if (isInRemoteControlResponse == null)
-                {
-                    log.Error("Failed to be able to check remote control");
-                    ErrorMessageBox(String.Format("Failed to check reomte control mode. No response."));
-                    return;
-                }
-                if (isInRemoteControlResponse != "true")
-                {
-                    log.Error("Robot not in remote control mode");
-                    ErrorMessageBox(String.Format("Robot not in remote control mode!"));
-                    return;
-                }
-                string loadedProgramResponse = robotDashboardClient.InquiryResponse("load " + RobotProgramTxt.Text, 1000);
-                if (loadedProgramResponse == null)
-                {
-                    log.Error("Failed to load {0}. No response.", RobotProgramTxt.Text);
-                    ErrorMessageBox(String.Format("Failed to load {0}. No response.", RobotProgramTxt.Text));
-                    return;
-                }
-                if (loadedProgramResponse.StartsWith("File not found"))
-                {
-                    log.Error("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse);
-                    ErrorMessageBox(String.Format("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse));
-                    return;
-                }
+            string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
+            string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
+            if (isInRemoteControlResponse == null)
+            {
+                log.Error("Failed to be able to check remote control");
+                ErrorMessageBox(String.Format("Failed to check reomte control mode. No response."));
+                return;
+            }
+            if (isInRemoteControlResponse != "true")
+            {
+                log.Error("Robot not in remote control mode");
+                ErrorMessageBox(String.Format("Robot not in remote control mode!"));
+                return;
+            }
+            string loadedProgramResponse = robotDashboardClient.InquiryResponse("load " + RobotProgramTxt.Text, 1000);
+            if (loadedProgramResponse == null)
+            {
+                log.Error("Failed to load {0}. No response.", RobotProgramTxt.Text);
+                ErrorMessageBox(String.Format("Failed to load {0}. No response.", RobotProgramTxt.Text));
+                return;
+            }
+            if (loadedProgramResponse.StartsWith("File not found"))
+            {
+                log.Error("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse);
+                ErrorMessageBox(String.Format("Failed to load {0}. Response was \"{1}\"", RobotProgramTxt.Text, loadedProgramResponse));
+                return;
+            }
 
-                string getLoadedProgramResponse = robotDashboardClient.InquiryResponse("get loaded program", 1000);
-                if (getLoadedProgramResponse == null)
-                {
-                    log.Error("Failed to verify loading {0}. No response.", RobotProgramTxt.Text);
-                    ErrorMessageBox(String.Format("Failed to verify loading {0}. No response", RobotProgramTxt.Text));
-                    return;
-                }
+            string getLoadedProgramResponse = robotDashboardClient.InquiryResponse("get loaded program", 1000);
+            if (getLoadedProgramResponse == null)
+            {
+                log.Error("Failed to verify loading {0}. No response.", RobotProgramTxt.Text);
+                ErrorMessageBox(String.Format("Failed to verify loading {0}. No response", RobotProgramTxt.Text));
+                return;
+            }
 
-                if (!getLoadedProgramResponse.Contains(RobotProgramTxt.Text))
-                {
-                    log.Error("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse);
-                    ErrorMessageBox(String.Format("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse));
-                    return;
-                }
+            if (!getLoadedProgramResponse.Contains(RobotProgramTxt.Text))
+            {
+                log.Error("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse);
+                ErrorMessageBox(String.Format("Failed to verify loading {0}. Response was \"{1}\"", RobotProgramTxt.Text, getLoadedProgramResponse));
+                return;
+            }
 
-                string playResponse = robotDashboardClient.InquiryResponse("play", 1000);
-                if (!playResponse.StartsWith("Starting program"))
-                {
-                    log.Error("Failed to start program playing. Response was \"{0}\"", playResponse);
-                    ErrorMessageBox(String.Format("Failed to start program playing. Response was \"{0}\"", playResponse));
-                    return;
-                }
+            string playResponse = robotDashboardClient.InquiryResponse("play", 1000);
+            if (!playResponse.StartsWith("Starting program"))
+            {
+                log.Error("Failed to start program playing. Response was \"{0}\"", playResponse);
+                ErrorMessageBox(String.Format("Failed to start program playing. Response was \"{0}\"", playResponse));
+                return;
             }
         }
 
@@ -2232,12 +2270,21 @@ namespace AutoGrind
         {
             log.Info("DASH<== {0}", message);
         }
+        int nRealtimeMessages = 0;
+        void RealtimeCallback(string message)
+        {
+            if (true)//nRealtimeMessages++ % 100 == 0)
+                log.Info("DASHRT<== {0}", message.Length > 80 ? message.Substring(0, 80) : message);
+        }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
             //if (robotDashboardClient != null)
             //    if (robotDashboardClient.IsClientConnected)
             //        robotDashboardClient.Receive();
+            if (robotUrControlClient != null)
+                if (robotUrControlClient.IsClientConnected)
+                    robotUrControlClient.Receive();
 
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
@@ -3002,10 +3049,6 @@ namespace AutoGrind
             robotDashboardClient?.InquiryResponse("unlock protective stop");
         }
 
-        private void DashboardSendBtn_Click(object sender, EventArgs e)
-        {
-            robotDashboardClient?.InquiryResponse(DashboardMessageTxt.Text);
-        }
         // ===================================================================
         // END POSITIONS SYSTEM
         // ===================================================================
@@ -3035,10 +3078,6 @@ namespace AutoGrind
         // ===================================================================
         // END MANUAL SYSTEM
         // ===================================================================
-        private void RecipeFilenameOnlyLbl_TextChanged(object sender, EventArgs e)
-        {
-            RecipeFilenameOnlyLblCopy.Text = RecipeFilenameOnlyLbl.Text;
-        }
 
         private void CurrentLineLbl_TextChanged(object sender, EventArgs e)
         {
@@ -3047,7 +3086,7 @@ namespace AutoGrind
 
         private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
         {
-            RecipeFilenameOnlyLbl.Text = Path.GetFileName(RecipeFilenameLbl.Text);
+            RecipeFilenameOnlyLbl.Text = Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
         }
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)
@@ -3058,6 +3097,5 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
-
     }
 }

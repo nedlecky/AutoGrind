@@ -156,6 +156,7 @@ def pattern_grind():
     global grind_circle2_diam_mm = command[4]
     global grind_n_spirals = command[5]
     global grind_n_cycles = command[6]
+    socket_set_var("grind_n_cycles", grind_n_cycles)
     global grind_speed_mps = command[7] / 1000.0
     global grind_force_N = command[8]
     global grind_continue = command[9] > 0
@@ -218,7 +219,6 @@ def set_digital_output_list(list):
     i = i + 2
   end
 end
-
 
 # enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
 def tool_power(on = False, enable = 0):
@@ -582,7 +582,6 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   end
   return True
 end
-
 
 
 
@@ -977,13 +976,25 @@ end
 ######################################################################################
 # CIRCULAR PATTERNS
 ######################################################################################
+# What is a good number of points to use for a circular pattern?
+def recommend_npoints(diam_m, blend_radius_m):
+  circum_m = diam_m * MATH_PI
+  if blend_radius_m > 0:
+    # How many blend_radii to cover the circumference
+    n_points = ceil(circum_m / blend_radius_m)
+  else:
+    # Blend radius is 0... model would be 10 points for a 10mm diameter (1000 points for 1m diameter!)
+    n_points = ceil(diam_m * 1000.0)
+  end
+  return limiter(n_points, 1, 100)
+end
 
 # Grind along a flat circle circle_diam_m centered on p_center. Repeat n_cycles times.
 def pattern_circle_flat(p_center, circle_diam_m, n_cycles):
 
-  # Unit conversion
-  n_points = ceil(circle_diam_m * 1000.0)   # 10 points in a 10mm diam circle... linear n_points up and down from there
-  circle_radius_m = circle_diam_m / 2.0     # Circle radius is half of specified dx
+  # Local calculations
+  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
+  circle_radius_m = circle_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -1005,8 +1016,9 @@ end
 
 # Move along a cylindrical circle circle_diam_m on a cylinder_diam_m object starting at the current tool position. Repeat n_cycles times.
 def pattern_circle_cylinder(p_center, circle_diam_m, cylinder_radius_m, n_cycles):
-  # Unit conversion
-  n_points = ceil(circle_diam_m * 1000.0)   # 10 points in a 10mm diam circle... linear n_points up and down from there
+
+  # Local calculations
+  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
   circle_radius_m = circle_diam_m / 2.0
 
   global grind_cycle = 1
@@ -1030,8 +1042,8 @@ end
 
 # Move along a spherical circle circle_diam_m on a sphere_diam_m object starting at the current tool position. Repeat n_cycles times.
 def pattern_circle_sphere(p_center, circle_diam_m, sphere_diam_m, n_cycles):
-  # Unit conversion
-  n_points = ceil(circle_diam_m * 1000.0)   # 10 points in a 10mm diam circle... linear n_points up and down from there
+  # Local calculations
+  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
   circle_radius_m = circle_diam_m / 2.0
   sphere_radius_m = sphere_diam_m / 2.0
 
@@ -1059,18 +1071,21 @@ end
 ######################################################################################
 # SPIRAL PATTERNS
 ######################################################################################
-
+def max(n1, n2):
+  if n1 > n2:
+    return n1
+  else:
+    return n2
+  end
+end
 def pattern_spiral_flat(p_center, circle1_diam_m, circle2_diam_m, n_spirals, n_cycles):
-  # Unit conversion
+  # Local calculations
+  # IDI DROP ALL GLOBALS
+  max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  global n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_total_points = n_spirals * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
-
-  max_diam_m = circle1_radius_m
-  if circle2_diam_m > max_diam_m:
-    max_diam_m = circle2_radius_m
-  end
-  n_points = ceil(max_diam_m * 1000.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-  n_total_points = n_spirals * n_points
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -1079,11 +1094,11 @@ def pattern_spiral_flat(p_center, circle1_diam_m, circle2_diam_m, n_spirals, n_c
     i = 0
     while ok_to_proceed() and i <= n_total_points:
       theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
-      r_instantaneous = i * rslope + circle1_radius_m
-      x = r_instantaneous * cos(theta)
-      y = r_instantaneous * sin(theta)
+      global r_instantaneous = i * rslope + circle1_radius_m
+      global x = r_instantaneous * cos(theta)
+      global y = r_instantaneous * sin(theta)
 
-      p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
+      global p1 = pose_trans(p_center, p[x, y, 0, 0, 0, 0])
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
       i = i + 1
     end
@@ -1097,16 +1112,12 @@ def pattern_spiral_flat(p_center, circle1_diam_m, circle2_diam_m, n_spirals, n_c
 end
 
 def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals, cylinder_radius_m, n_cycles):
-  # Unit conversion
+  # Local calculations
+  max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_total_points = n_spirals * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
-
-  max_diam_m = circle1_radius_m
-  if circle2_diam_m > max_diam_m:
-    max_diam_m = circle2_radius_m
-  end
-  n_points = ceil(max_diam_m * 1000.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-  n_total_points = n_spirals * n_points
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -1134,17 +1145,13 @@ def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals,
 end
 
 def pattern_spiral_sphere(p_center, circle1_diam_m, circle2_diam_m, n_spirals, sphere_diam_m, n_cycles):
-  # Unit conversion
+  # Local calculations
+  max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_total_points = n_spirals * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
   sphere_radius_m = sphere_diam_m / 2.0
-
-  max_diam_m = circle1_radius_m
-  if circle2_diam_m > max_diam_m:
-    max_diam_m = circle2_radius_m
-  end
-  n_points = ceil(max_diam_m * 1000.0) # 10 points in a 10mm diam circle... linear n_points up and down from there
-  n_total_points = n_spirals * n_points
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):

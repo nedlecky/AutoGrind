@@ -104,11 +104,11 @@
     <Compile Include="FileOpenDialog.Designer.cs">
       <DependentUpon>FileOpenDialog.cs</DependentUpon>
     </Compile>
-    <Compile Include="SaveAsDialog.cs">
+    <Compile Include="FileSaveAsDialog.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="SaveAsDialog.Designer.cs">
-      <DependentUpon>SaveAsDialog.cs</DependentUpon>
+    <Compile Include="FileSaveAsDialog.Designer.cs">
+      <DependentUpon>FileSaveAsDialog.cs</DependentUpon>
     </Compile>
     <Compile Include="JoggingDialog.cs">
       <SubType>Form</SubType>
@@ -150,8 +150,8 @@
     <EmbeddedResource Include="FileOpenDialog.resx">
       <DependentUpon>FileOpenDialog.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="SaveAsDialog.resx">
-      <DependentUpon>SaveAsDialog.cs</DependentUpon>
+    <EmbeddedResource Include="FileSaveAsDialog.resx">
+      <DependentUpon>FileSaveAsDialog.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="JoggingDialog.resx">
       <DependentUpon>JoggingDialog.cs</DependentUpon>

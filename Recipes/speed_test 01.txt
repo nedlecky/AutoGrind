@@ -1,6 +1,4 @@
-# Rect Speed Test
-# All should be ~2S on a side
-# Passed 4/11/2022
+# speed_test Regression Tester
 
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)

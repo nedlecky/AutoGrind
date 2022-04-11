@@ -1,0 +1,28 @@
+# Circle Speed Test
+# All should be ~10S
+# TESTING 4/11/2022
+
+# 40mm diam is 125mm circum
+speed = 12.5
+jump(sphere)
+
+movelinear(demo_flat)
+set_part_geometry(FLAT,0)
+grind_circle(40,1,{speed},10,0)
+
+movelinear(demo_cyl)
+#set_part_geometry(CYLINDER,77.9)
+#grind_circle(40,1,{speed},10,0)
+set_part_geometry(CYLINDER,200)
+grind_circle(40,1,{speed},10,0)
+set_part_geometry(CYLINDER,500)
+grind_circle(40,1,{speed},10,0)
+sphere:
+movelinear(demo_sphere)
+#set_part_geometry(SPHERE,81.9)
+#grind_circle(40,1,{speed},10,0)
+set_part_geometry(SPHERE,200)
+grind_circle(40,1,{speed},10,0)
+set_part_geometry(SPHERE,500)
+grind_circle(40,1,{speed},10,0)
+
