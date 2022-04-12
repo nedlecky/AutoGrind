@@ -1,6 +1,6 @@
 # AutoGrind Grinding Functions
 # File: agscript_grind.script
-# Version 1.0
+# Version 2022.04 A
 # Programmer: Ned Lecky
 
 global grind_abort_listener_thread_handle = 0
@@ -1030,6 +1030,7 @@ def pattern_circle_cylinder(p_center, circle_diam_m, cylinder_radius_m, speed_fa
   # Local calculations
   n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
   circle_radius_m = circle_diam_m / 2.0
+  speed_slope = speed_factor - 1
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -1039,10 +1040,11 @@ def pattern_circle_cylinder(p_center, circle_diam_m, cylinder_radius_m, speed_fa
       theta = d2r(180.0 + 360.0 * i / n_points)
       x = circle_radius_m * cos(theta)
       y = circle_radius_m * sin(theta)
-      rx = y / cylinder_radius_m
+      rx = 2.0 * y / cylinder_radius_m
 
       p1 = pose_trans(p_center, p[x, 0, 0, rx, 0, 0])
-      this_speed_factor = 1.0 + (speed_factor-1.0) * abs(sin(theta))
+      # Speed_factor needs to be applied when running radially, and needs to be 1.0 when running laterally. This smooths it all the way around!
+      this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m)
       i = i + 1
     end
@@ -1065,9 +1067,9 @@ def pattern_circle_sphere(p_center, circle_diam_m, sphere_diam_m, speed_factor, 
     while ok_to_proceed() and i <= n_points:
       theta = d2r(180.0 + 360.0 * i / n_points)
       x = circle_radius_m * cos(theta)
-      rx = x / sphere_radius_m
+      rx = 2.0 * x / sphere_radius_m
       y = circle_radius_m * sin(theta)
-      ry = y / sphere_radius_m
+      ry = 2.0 * y / sphere_radius_m
 
       p1 = pose_trans(p_center, p[0, 0, 0, rx, ry, 0])
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m)
@@ -1133,10 +1135,12 @@ def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals,
       r_instantaneous = i * rslope + circle1_radius_m
       x = r_instantaneous * cos(theta)
       y = r_instantaneous * sin(theta)
-      rx = y / cylinder_radius_m
+      rx = 2.0 * y / cylinder_radius_m
 
       p1 = pose_trans(p_center, p[x, 0, 0, rx, 0, 0])
-      this_speed_factor = 1.0 + (speed_factor-1.0) * abs(sin(theta))
+
+      # Speed_factor needs to be applied when running radially, and needs to be 1.0 when running laterally. This smooths it all the way around!
+      this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m)
       i = i + 1
     end
@@ -1167,9 +1171,9 @@ def pattern_spiral_sphere(p_center, circle1_diam_m, circle2_diam_m, n_spirals, s
       theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
       r_instantaneous = i * rslope + circle1_radius_m
       x = r_instantaneous * cos(theta)
-      rx = x / sphere_radius_m
+      rx = 2.0 * x / sphere_radius_m
       y = r_instantaneous * sin(theta)
-      ry = y / sphere_radius_m
+      ry = 2.0 * y / sphere_radius_m
 
       p1 = pose_trans(p_center, p[0, 0, 0, rx, ry, 0])
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m)

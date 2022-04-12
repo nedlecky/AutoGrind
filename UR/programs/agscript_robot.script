@@ -1,7 +1,8 @@
 # AutoGrind Robot Functions
 # File: agscript_robot.script
-# Version 1.0
+# Version 2022.04 A
 # Programmer: Ned Lecky
+
 
 global response = "unknown"
 
@@ -89,7 +90,7 @@ def set_variable():
     # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
     shape = command[3]
     if shape > 0:
-      diameter_m = limiter(command[4],50,1100) / 1000.0
+      diameter_m = limiter(command[4], 50, 1100) / 1000.0
       robot_part_geometry = [shape, diameter_m]
     end
 
@@ -338,6 +339,18 @@ global doorMonitorThread = run door_monitor_thread()
 #
 # END AUTOMATED DOOR MONITORING THREAD
 # ####################################################################################
+
+global ticks = 0
+global runtime = 0
+thread ticker_thread():
+  while (True):
+    global ticks = ticks + 1
+    global runtime = ticks / 500
+    sync()
+  end
+end
+global tickerThread = run ticker_thread()
+
 
 
 # ####################################################################################

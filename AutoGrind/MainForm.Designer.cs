@@ -176,6 +176,8 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1077,6 +1079,8 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.label13);
+            this.RunPage.Controls.Add(this.label16);
             this.RunPage.Controls.Add(this.RobotURControlStatusLbl);
             this.RunPage.Controls.Add(this.label15);
             this.RunPage.Controls.Add(this.label11);
@@ -1205,7 +1209,7 @@
             // 
             this.RunStartedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunStartedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1128, 380);
+            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1133, 447);
             this.RunStartedTimeLbl.Name = "RunStartedTimeLbl";
             this.RunStartedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunStartedTimeLbl.TabIndex = 134;
@@ -1214,12 +1218,13 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(878, 377);
+            this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label14.Location = new System.Drawing.Point(956, 447);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(244, 55);
+            this.label14.Size = new System.Drawing.Size(165, 37);
             this.label14.TabIndex = 133;
             this.label14.Text = "Start Time";
+            this.label14.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // RobotConnectBtn
             // 
@@ -1237,7 +1242,7 @@
             // 
             this.RunElapsedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunElapsedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1128, 444);
+            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1133, 511);
             this.RunElapsedTimeLbl.Name = "RunElapsedTimeLbl";
             this.RunElapsedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunElapsedTimeLbl.TabIndex = 132;
@@ -1246,12 +1251,13 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(805, 441);
+            this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label12.Location = new System.Drawing.Point(909, 511);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(317, 55);
+            this.label12.Size = new System.Drawing.Size(212, 37);
             this.label12.TabIndex = 131;
             this.label12.Text = "Elapsed Time";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // JogRunBtn
             // 
@@ -1282,12 +1288,13 @@
             // Grind
             // 
             this.Grind.AutoSize = true;
-            this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Grind.Location = new System.Drawing.Point(1229, 297);
             this.Grind.Name = "Grind";
-            this.Grind.Size = new System.Drawing.Size(64, 55);
+            this.Grind.Size = new System.Drawing.Size(44, 37);
             this.Grind.TabIndex = 128;
             this.Grind.Text = "of";
+            this.Grind.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // GrindNCyclesLbl
             // 
@@ -1321,12 +1328,13 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(848, 296);
+            this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label10.Location = new System.Drawing.Point(922, 297);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(274, 55);
+            this.label10.Size = new System.Drawing.Size(183, 37);
             this.label10.TabIndex = 124;
             this.label10.Text = "Grind Cycle";
+            this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label9
             // 
@@ -1940,6 +1948,27 @@
             this.DoorClosedLbl.Text = "Door Closed?";
             this.DoorClosedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // label13
+            // 
+            this.label13.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(1128, 352);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(353, 52);
+            this.label13.TabIndex = 144;
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label16.Location = new System.Drawing.Point(839, 352);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(280, 37);
+            this.label16.TabIndex = 143;
+            this.label16.Text = "Time in This Grind";
+            this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2152,6 +2181,8 @@
         private System.Windows.Forms.Label RobotURControlStatusLbl;
         private System.Windows.Forms.TextBox URControlMessageTxt;
         private System.Windows.Forms.Button URControlSendBtn;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label label16;
     }
 }
 

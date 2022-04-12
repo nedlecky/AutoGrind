@@ -1551,12 +1551,12 @@ namespace AutoGrind
         /// <param name="lowLim">Lowest allowable int</param>
         /// <param name="hiLim">Highest allowable int</param>
         /// <returns></returns>
-        private bool ValidNumericString(string s, int lowLim, int hiLim)
+        private bool ValidNumericString(string s, double lowLim, double hiLim)
         {
             try
             {
-                int i = Convert.ToInt32(s);
-                if (i < lowLim || i > hiLim)
+                double x = Convert.ToDouble(s);
+                if (x < lowLim || x > hiLim)
                     return false;
                 return true;
             }
@@ -1926,13 +1926,15 @@ namespace AutoGrind
 
         private void UnboldRecipe()
         {
-            bool modified = RecipeRTB.Modified;
+            bool wasModified = RecipeRTB.Modified;
             RecipeRTB.SelectAll();
             RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
-            RecipeRTB.Modified = modified;
+            RecipeRTB.Modified = wasModified;
+            RecipeRTB.DeselectAll();
 
             RecipeRTBCopy.SelectAll();
             RecipeRTBCopy.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
+            RecipeRTBCopy.DeselectAll();
         }
 
         bool isSingleStep = false;

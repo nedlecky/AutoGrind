@@ -1,4 +1,4 @@
-# Circle Speed Test
+# Spiral Speed Test
 # All should be ~10S
 # PASSED 4/12/2022
 
@@ -9,20 +9,20 @@ speed30 = 9.4
 
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 
 cylinder:
 movelinear(demo_cyl)
 set_part_geometry(CYLINDER,77.9)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(CYLINDER,200)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(CYLINDER,500)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(CYLINDER,800)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(CYLINDER,1100)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 
 sphere:
 movelinear(demo_sphere)

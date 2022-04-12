@@ -1,6 +1,6 @@
 # AutoGrind General UR Utilities
 # File: agscript_util.script
-# Version 1.0
+# Version 2022.04 A
 # Programmer: Ned Lecky
 
 def max(n1, n2):
