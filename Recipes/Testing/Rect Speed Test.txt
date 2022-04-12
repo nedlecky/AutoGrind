@@ -19,9 +19,8 @@ set_part_geometry(CYLINDER,500)
 grind_rect(40,40,1,{speed},10,0)
 set_part_geometry(CYLINDER,800)
 grind_rect(40,40,1,{speed},10,0)
-set_part_geometry(CYLINDER,1200)
+set_part_geometry(CYLINDER,1100)
 grind_rect(40,40,1,{speed},10,0)
-
 
 sphere:
 movelinear(demo_sphere)
@@ -33,6 +32,6 @@ set_part_geometry(SPHERE,500)
 grind_rect(40,40,1,{speed},10,0)
 set_part_geometry(SPHERE,800)
 grind_rect(40,40,1,{speed},10,0)
-set_part_geometry(SPHERE,1200)
+set_part_geometry(SPHERE,1100)
 grind_rect(40,40,1,{speed},10,0)
 

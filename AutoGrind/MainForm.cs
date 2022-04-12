@@ -626,22 +626,38 @@ namespace AutoGrind
 
 #if !DEBUG
             // Enforce any password requirements (unless we're in DEBUG for convenience)
-            SetValueForm form;
+
             switch (newOperatorMode)
             {
                 case OperatorMode.OPERATOR:
                     break;
                 case OperatorMode.EDITOR:
-                    form = new SetValueForm("", "passcode for EDITOR", 0, true);
-                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "9")
+                    SetValueForm form = new SetValueForm()
+                    {
+                        Value = "",
+                        Label = "Passcode for EDITOR",
+                        NumberOfDecimals = 0,
+                        MaxAllowed = 999999,
+                        MinAllowed = 0,
+                        IsPassword=true,
+                    };
+                    if (form.ShowDialog(this) != DialogResult.OK || form.Value != "9")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
                     }
                     break;
                 case OperatorMode.ENGINEERING:
-                    form = new SetValueForm("", "passcode for ENGINEERING", 0, true);
-                    if (form.ShowDialog(this) != DialogResult.OK || form.value != "99")
+                    form = new SetValueForm()
+                    {
+                        Value = "",
+                        Label = "Passcode for ENGINEERING",
+                        NumberOfDecimals = 0,
+                        MaxAllowed = 999999,
+                        MinAllowed = 0,
+                        IsPassword = true,
+                    };
+                    if (form.ShowDialog(this) != DialogResult.OK || form.Value != "99")
                     {
                         OperatorModeBox.SelectedIndex = 0;
                         return;
