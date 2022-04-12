@@ -1,0 +1,14 @@
+# Tool and Geometry Test
+# PASSED 4/12/2022
+
+set_part_geometry(FLAT,0)
+sleep(1000)
+set_part_geometry(CYLINDER,201)
+sleep(1000)
+set_part_geometry(CYLINDER,802)
+sleep(1000)
+set_part_geometry(SPHERE,203)
+sleep(1000)
+set_part_geometry(SPHERE,804)
+sleep(1000)
+

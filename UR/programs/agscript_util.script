@@ -3,6 +3,28 @@
 # Version 1.0
 # Programmer: Ned Lecky
 
+def max(n1, n2):
+  if n1 > n2:
+    return n1
+  else:
+    return n2
+  end
+end
+def min(n1, n2):
+  if n1 < n2:
+    return n1
+  else:
+    return n2
+  end
+end
+def abs(n):
+  if n < 0:
+    return -n
+  else:
+    return n
+  end
+end
+
 # Limit a param to values lowLim <= param <= hiLim
 def limiter(param, loLim, hiLim):
   if param < loLim:

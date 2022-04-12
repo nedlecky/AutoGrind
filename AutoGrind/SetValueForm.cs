@@ -14,24 +14,28 @@ namespace AutoGrind
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-        public string value { get; set; }
-        public string label { get; set; }
-        private int nDecimals { get; set; }
-        private bool isPassword { get; set; }
+        public string Value { get; set; } = "0.000";
+        public string Label { get; set; } = "Unspecified";
+        public int NumberOfDecimals { get; set; } = 3;
+        public bool IsPassword { get; set; } = false;
+        public double MaxAllowed { get; set; } = 0;
+        public double MinAllowed { get; set; } = 0;
 
-        public SetValueForm(string val = "0.000", string lab = "??", int nDecimals_ = 3, bool isPassword_ = false)
+
+        public SetValueForm()
         {
             InitializeComponent();
-            value = val;
-            label = lab;
-            nDecimals = nDecimals_;
-            isPassword = isPassword_;
-            LabelLbl.Text = "Enter " + label;
-            ValueTxt.Text = value;
-            if (isPassword) ValueTxt.PasswordChar = '*';
         }
         private void SetValueForm_Load(object sender, EventArgs e)
         {
+            LabelLbl.Text = "Enter\n" + Label;
+            ValueTxt.Text = Value;
+            if (MinAllowed != 0 || MaxAllowed != 0)
+            {
+                MinMaxLabel.Text = String.Format("Limit {0} to {1}", MinAllowed, MaxAllowed);
+            }
+            if (IsPassword) ValueTxt.PasswordChar = '*';
+
             ValueTxt.Select();
             ValueTxt.SelectAll();
         }
@@ -40,27 +44,51 @@ namespace AutoGrind
         {
             if (ValueTxt.Text == "")
             {
-                value = "";
+                Value = "";
                 Close();
                 return;
             }
             try
             {
                 double x = Convert.ToDouble(ValueTxt.Text);
-                string fmt = "0";
-                if (nDecimals > 0)
+                bool valueOk = true;
+                if (MinAllowed != 0 || MaxAllowed != 0)
                 {
-                    fmt = "0.";
-                    for (int i = 0; i < nDecimals; i++)
-                        fmt += "0";
+                    if (x < MinAllowed)
+                    {
+                        Value = MinAllowed.ToString();
+                        ValueTxt.Text = Value;
+                        ValueTxt.Select();
+                        ValueTxt.SelectAll();
+                        valueOk = false;
+                    }
+                    else if (x > MaxAllowed)
+                    {
+                        Value = MaxAllowed.ToString();
+                        ValueTxt.Text = Value;
+                        ValueTxt.Select();
+                        ValueTxt.SelectAll();
+                        valueOk = false;
+                    }
                 }
-                value = x.ToString(fmt);
-                this.DialogResult = DialogResult.OK;
-                if (isPassword)
-                    log.Info("Setting {0} = ********", label);
-                else
-                    log.Info("Setting {0} = {1}", label, value);
-                Close();
+
+                if (valueOk)
+                {
+                    string fmt = "0";
+                    if (NumberOfDecimals > 0)
+                    {
+                        fmt = "0.";
+                        for (int i = 0; i < NumberOfDecimals; i++)
+                            fmt += "0";
+                    }
+                    Value = x.ToString(fmt);
+                    this.DialogResult = DialogResult.OK;
+                    if (IsPassword)
+                        log.Info("Setting {0} = ********", Label);
+                    else
+                        log.Info("Setting {0} = {1}", Label, Value);
+                    Close();
+                }
             }
             catch
             {

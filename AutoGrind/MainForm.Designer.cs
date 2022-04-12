@@ -1052,9 +1052,9 @@
             this.DiameterDimLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DiameterDimLbl.Location = new System.Drawing.Point(1936, 1284);
             this.DiameterDimLbl.Name = "DiameterDimLbl";
-            this.DiameterDimLbl.Size = new System.Drawing.Size(184, 55);
+            this.DiameterDimLbl.Size = new System.Drawing.Size(197, 55);
             this.DiameterDimLbl.TabIndex = 114;
-            this.DiameterDimLbl.Text = "mmDIA";
+            this.DiameterDimLbl.Text = "mm DIA";
             // 
             // MainTab
             // 

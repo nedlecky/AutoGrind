@@ -1272,11 +1272,18 @@ namespace AutoGrind
 
         private void DiameterLbl_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(DiameterLbl.Text, PartGeometryBox.Text + " DIAM, MM", 1);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = DiameterLbl.Text,
+                Label = PartGeometryBox.Text + " DIAM, MM",
+                NumberOfDecimals = 0,
+                MaxAllowed = 1100,
+                MinAllowed = 75,
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                DiameterLbl.Text = form.value;
+                DiameterLbl.Text = form.Value;
             }
 
             // Save value in slot associated with this geometry
@@ -1537,6 +1544,28 @@ namespace AutoGrind
         {
             log.Info("EXEC {0:0000}: [{1}] {2}", lineNumber, command.ToUpper(), line);
         }
+        /// <summary>
+        /// Return true iff string 'str' represents a number between lowLim and hiLim
+        /// </summary>
+        /// <param name="str">String to be checked</param>
+        /// <param name="lowLim">Lowest allowable int</param>
+        /// <param name="hiLim">Highest allowable int</param>
+        /// <returns></returns>
+        private bool ValidNumericString(string s, int lowLim, int hiLim)
+        {
+            try
+            {
+                int i = Convert.ToInt32(s);
+                if (i < lowLim || i > hiLim)
+                    return false;
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
+
+        }
         private bool ExecuteLine(int lineNumber, string line)
         {
             CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
@@ -1795,19 +1824,29 @@ namespace AutoGrind
                     return true;
                 }
 
-                int geomIndex = 0;
                 switch (paramList[0])
                 {
                     case "FLAT":
-                        geomIndex = 1;
                         break;
                     case "CYLINDER":
-                        geomIndex = 2;
+                        if(!ValidNumericString(paramList[1],75,1100))
+                        {
+                            log.Error("Diameter must be between 75 and 1100 EXEC: {0.000} {1}", lineNumber, command);
+                            PromptOperator("Diameter be between 75 and 1100:\n" + command);
+                            return true;
+                        }
                         DiameterLbl.Text = paramList[1];
+                        diameterDefaults[1] = paramList[1];
                         break;
                     case "SPHERE":
-                        geomIndex = 3;
+                        if (!ValidNumericString(paramList[1], 75, 1100))
+                        {
+                            log.Error("Diameter must be between 75 and 1100 EXEC: {0.000} {1}", lineNumber, command);
+                            PromptOperator("Diameter be between 75 and 1100:\n" + command);
+                            return true;
+                        }
                         DiameterLbl.Text = paramList[1];
+                        diameterDefaults[2] = paramList[1];
                         break;
                     default:
                         log.Error("First argument to must be FLAT, CYLINDER, or SPHERE EXEC: {0.000} {1}", lineNumber, command);
@@ -1815,8 +1854,13 @@ namespace AutoGrind
                         return true;
                 }
 
-                ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", geomIndex, paramList[1]));
-                PartGeometryBox.Text = paramList[0];
+                // If we're about to change geometry shape, that will automatically UpdateGeometryToRobot()
+                // If we're only changing diameter, we need to call explicitly
+                // sets us, picks the new default diam, and send to robot!
+                if (PartGeometryBox.Text == paramList[0])
+                    UpdateGeometryToRobot();
+                else
+                    PartGeometryBox.Text = paramList[0];
                 return true;
             }
 
@@ -2153,81 +2197,136 @@ namespace AutoGrind
         }
         private void SetLinearSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_linear_speed_mmps"), "default robot SPEED, mm/s", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("robot_linear_speed_mmps"),
+                Label = "default Robot LINEAR SPEED, mm/s",
+                NumberOfDecimals = 1,
+                MinAllowed = 10,
+                MaxAllowed = 500
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("set_linear_speed({0})", form.value));
+                ExecuteLine(-1, String.Format("set_linear_speed({0})", form.Value));
             }
         }
 
         private void SetLinearAccelBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_linear_accel_mmpss"), "default robot ACCELERATION, mm/s^2", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("robot_linear_accel_mmpss"),
+                Label = "default Robot LINEAR ACCELERATION, mm/s^2",
+                NumberOfDecimals = 1,
+                MinAllowed = 10,
+                MaxAllowed = 2000
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("set_linear_accel({0})", form.value));
+                ExecuteLine(-1, String.Format("set_linear_accel({0})", form.Value));
             }
         }
 
         private void SetBlendRadiusBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_blend_radius_mm"), "default robot BLEND RADIUS, mm", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("robot_blend_radius_mm"),
+                Label = "default Robot BLEND RADIUS, mm",
+                NumberOfDecimals = 1,
+                MinAllowed = 0,
+                MaxAllowed = 10
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("set_blend_radius({0})", form.value));
+                ExecuteLine(-1, String.Format("set_blend_radius({0})", form.Value));
             }
         }
         private void SetJointSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_joint_speed_dps"), "default robot JOINT SPEED, deg/s", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("robot_joint_speed_dps"),
+                Label = "default Robot JOINT SPEED, deg/s",
+                NumberOfDecimals = 1,
+                MinAllowed = 2,
+                MaxAllowed = 45
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("set_joint_speed({0})", form.value));
+                ExecuteLine(-1, String.Format("set_joint_speed({0})", form.Value));
             }
         }
 
         private void SetJointAccelBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("robot_joint_accel_dpss"), "default robot JOINT ACCELERATION, deg/s^2", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("robot_joint_accel_dpss"),
+                Label = "default Robot JOINT ACCELERATION, deg/s^2",
+                NumberOfDecimals = 1,
+                MinAllowed = 2,
+                MaxAllowed = 180
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("set_joint_accel({0})", form.value));
+                ExecuteLine(-1, String.Format("set_joint_accel({0})", form.Value));
             }
         }
 
         private void SetTouchSpeedBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("grind_touch_speed_mmps"), "grind TOUCH SPEED, mm/s", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_touch_speed_mmps"),
+                Label = "Grind TOUCH SPEED, mm/s",
+                NumberOfDecimals = 1,
+                MinAllowed = 1,
+                MaxAllowed = 15
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("grind_touch_speed({0})", form.value));
+                ExecuteLine(-1, String.Format("grind_touch_speed({0})", form.Value));
             }
         }
 
         private void SetTouchRetractBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("grind_touch_retract_mm"), "grind TOUCH RETRACT DISTANCE, mm", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_touch_retract_mm"),
+                Label = "Grind TOUCH RETRACT DISTANCE, mm",
+                NumberOfDecimals = 1,
+                MinAllowed = 0,
+                MaxAllowed = 10
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("grind_touch_retract({0})", form.value));
+                ExecuteLine(-1, String.Format("grind_touch_retract({0})", form.Value));
             }
         }
         private void SetForceDwellBtn_Click(object sender, EventArgs e)
         {
-            SetValueForm form = new SetValueForm(ReadVariable("grind_force_dwell_mS"), "grind FORCE DWELL TIME, mS", 3);
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_force_dwell_mS"),
+                Label = "Grind FORCE DWELL TIME, mS",
+                NumberOfDecimals = 0,
+                MinAllowed = 0,
+                MaxAllowed = 2000
+            };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("grind_force_dwell({0})", form.value));
+                ExecuteLine(-1, String.Format("grind_force_dwell({0})", form.Value));
             }
-
         }
 
 
