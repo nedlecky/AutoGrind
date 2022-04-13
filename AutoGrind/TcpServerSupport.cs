@@ -197,7 +197,7 @@ namespace AutoGrind
                         if (cleanLine.Length > 0)
                         {
                             if(inputLines.Length>1)
-                                log.Debug("UR<== {0} Line {1} of {2}", cleanLine, lineNo,inputLines.Length);
+                                log.Debug("UR<== {0} Line {1} of {2}", cleanLine, lineNo,inputLines.Length-1);
                             else
                                 log.Debug("UR<== {0}", cleanLine);
                             ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax

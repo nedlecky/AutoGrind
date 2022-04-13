@@ -29,7 +29,6 @@ namespace AutoGrind
 
         static string AutoGrindRoot = "./";
         private static NLog.Logger log;
-        static SplashForm splashForm;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
         TcpClientSupport robotUrControlClient = null;
@@ -74,7 +73,7 @@ namespace AutoGrind
             string executable = Application.ExecutablePath;
             string filename = Path.GetFileName(executable);
             string directory = Path.GetDirectoryName(executable);
-            string caption = companyName + " " + appName + " " + productVersion;
+            string caption = companyName + " " + appName + " Rev " + productVersion;
 #if DEBUG
             caption += " RUNNING IN DEBUG MODE";
 #endif
@@ -159,7 +158,10 @@ namespace AutoGrind
 
         private void StartupTmr_Tick(object sender, EventArgs e)
         {
-            splashForm = new SplashForm();
+            SplashForm splashForm = new SplashForm()
+            {
+                AutoClose = true,
+            };
             splashForm.Show();
 
             log.Info("StartupTmr()...");
@@ -194,13 +196,25 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            MessageDialog messageForm = new MessageDialog("System Confirmation", question, "&Yes", "&No");
+            MessageDialog messageForm = new MessageDialog()
+            {
+                Title = "System Confirmation",
+                Label = question,
+                OkText = "&Yes",
+                CancelText = "&No"
+            };
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            MessageDialog messageForm = new MessageDialog("System Error", message, "&OK", "&Cancel");
+            MessageDialog messageForm = new MessageDialog()
+            {
+                Title = "System ERROR",
+                Label = message,
+                OkText = "&OK",
+                CancelText = "&Cancel"
+            };
             DialogResult result = messageForm.ShowDialog();
             return result;
         }
@@ -233,7 +247,8 @@ namespace AutoGrind
         bool robotReady = false;
         int nDashboard = 0;
         bool pollDashboardStateNow = false;
-        DateTime runStartedTime;
+        DateTime runStartedTime;   // When did the user hit run?
+        DateTime stepStartedTime;  // When did the current reecipe line start executing?
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
@@ -245,6 +260,9 @@ namespace AutoGrind
             {
                 TimeSpan elapsed = now - runStartedTime;
                 RunElapsedTimeLbl.Text = elapsed.ToString(@"d\:hh\:mm\:ss");
+
+                TimeSpan stepElapsed = now - stepStartedTime;
+                StepElapsedTimeLbl.Text = stepElapsed.ToString(@"d\:hh\:mm\:ss");
             }
 
             // Ping the dashboard every few seconds
@@ -361,6 +379,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
                         ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_mS", "500")));
+                        ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -492,6 +511,7 @@ namespace AutoGrind
 
                     ExecTmr.Interval = 100;
                     ExecTmr.Enabled = true;
+                    waitingForOperatorMessageForm = null;
 
                     break;
                 case RunState.PAUSED:
@@ -667,31 +687,38 @@ namespace AutoGrind
 #endif
             operatorMode = newOperatorMode;
 
-            // 0=Run  1=Program  2=Move  3=Setup  4=Io  5=Log
+            const int RunPage = 0;
+            const int ProgramPage = 1;
+            const int MovePage = 2;
+            const int SetupPage = 3;
+            const int LogPage = 4;
             if (MainTab.TabPages[1] != null)
             {
                 log.Info("Setting Operator Mode {0}", operatorMode);
                 switch (operatorMode)
                 {
                     case OperatorMode.OPERATOR:
-                        MainTab.TabPages[1].Enabled = false;
-                        MainTab.TabPages[2].Enabled = false;
-                        MainTab.TabPages[3].Enabled = false;
-                        MainTab.TabPages[4].Enabled = false;
+                        MainTab.TabPages[RunPage].Enabled = true;
+                        MainTab.TabPages[ProgramPage].Enabled = false;
+                        MainTab.TabPages[MovePage].Enabled = false;
+                        MainTab.TabPages[SetupPage].Enabled = false;
+                        MainTab.TabPages[LogPage].Enabled = true;
                         MainTab.SelectedIndex = 0;
                         break;
                     case OperatorMode.EDITOR:
-                        MainTab.TabPages[1].Enabled = true;
-                        MainTab.TabPages[2].Enabled = true;
-                        MainTab.TabPages[3].Enabled = false;
-                        MainTab.TabPages[4].Enabled = false;
+                        MainTab.TabPages[RunPage].Enabled = true;
+                        MainTab.TabPages[ProgramPage].Enabled = true;
+                        MainTab.TabPages[MovePage].Enabled = true;
+                        MainTab.TabPages[SetupPage].Enabled = false;
+                        MainTab.TabPages[LogPage].Enabled = true;
                         MainTab.SelectedIndex = 1;
                         break;
                     case OperatorMode.ENGINEERING:
-                        MainTab.TabPages[1].Enabled = true;
-                        MainTab.TabPages[2].Enabled = true;
-                        MainTab.TabPages[3].Enabled = true;
-                        MainTab.TabPages[4].Enabled = true;
+                        MainTab.TabPages[RunPage].Enabled = true;
+                        MainTab.TabPages[ProgramPage].Enabled = true;
+                        MainTab.TabPages[MovePage].Enabled = true;
+                        MainTab.TabPages[SetupPage].Enabled = true;
+                        MainTab.TabPages[LogPage].Enabled = true;
                         break;
                 }
             }
@@ -808,6 +835,16 @@ namespace AutoGrind
         {
             ErrorLogRTB.Clear();
         }
+
+        private void InfoBtn_Click(object sender, EventArgs e)
+        {
+            SplashForm splashForm = new SplashForm()
+            {
+                AutoClose = false
+            };
+            splashForm.ShowDialog();
+        }
+
 
         // ===================================================================
         // END MAIN UI BUTTONS
@@ -1166,7 +1203,7 @@ namespace AutoGrind
 
             // Debug Level selection (forced to INFO now)
             // DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "Info");
-            DebugLevelCombo.Text = "Info";
+            LogLevelCombo.Text = "Info";
 
             // Load the tools table
             LoadToolsBtn_Click(null, null);
@@ -1217,7 +1254,7 @@ namespace AutoGrind
             AppNameKey.SetValue("operatorMode", (Int32)operatorMode);
 
             // Debug Level selection
-            AppNameKey.SetValue("DebugLevelCombo.Text", DebugLevelCombo.Text);
+            AppNameKey.SetValue("DebugLevelCombo.Text", LogLevelCombo.Text);
 
             // Save currently mounted tool and tools table
             AppNameKey.SetValue("MountedToolBox.Text", MountedToolBox.Text);
@@ -1316,7 +1353,7 @@ namespace AutoGrind
         }
         private void DebugLevelCombo_SelectedIndexChanged(object sender, EventArgs e)
         {
-            ChangeLogLevel(DebugLevelCombo.Text);
+            ChangeLogLevel(LogLevelCombo.Text);
         }
         private void DashboardSendBtn_Click(object sender, EventArgs e)
         {
@@ -1440,7 +1477,13 @@ namespace AutoGrind
         private void PromptOperator(string message, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new MessageDialog(heading, message, "&Continue Execution", "&Abort");
+            waitingForOperatorMessageForm = new MessageDialog()
+            {
+                Title = heading,
+                Label = message,
+                OkText = "&Continue Execution",
+                CancelText = "&Abort"
+            };
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -1549,6 +1592,7 @@ namespace AutoGrind
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
             {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="40,4," } },
+            {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="40,5," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -1558,7 +1602,10 @@ namespace AutoGrind
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
-            log.Info("EXEC {0:0000}: [{1}] {2}", lineNumber, command.ToUpper(), line);
+            if (lineNumber < 1)
+                log.Info("EXEC [{0}] {1}", command.ToUpper(), line);
+            else
+                log.Info("EXEC {0:0000}: [{1}] {2}", lineNumber, command.ToUpper(), line);
         }
         /// <summary>
         /// Return true iff string 'str' represents a number between lowLim and hiLim
@@ -1584,6 +1631,8 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
+            stepStartedTime = DateTime.Now;
+
             CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
             string origLine = line;
 
@@ -1845,7 +1894,7 @@ namespace AutoGrind
                     case "FLAT":
                         break;
                     case "CYLINDER":
-                        if(!ValidNumericString(paramList[1],75,1100))
+                        if (!ValidNumericString(paramList[1], 75, 1100))
                         {
                             log.Error("Diameter must be between 75 and 1100 EXEC: {0.000} {1}", lineNumber, command);
                             PromptOperator("Diameter be between 75 and 1100:\n" + command);
@@ -2347,6 +2396,24 @@ namespace AutoGrind
             }
         }
 
+        private void SetMaxWaitBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_max_wait_mS"),
+                Label = "Grind MAX WAIT TIME, mS",
+                NumberOfDecimals = 0,
+                MinAllowed = 0,
+                MaxAllowed = 3000
+            };
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_max_wait({0})", form.Value));
+            }
+        }
+
+
 
 
         /// <summary>
@@ -2572,6 +2639,9 @@ namespace AutoGrind
                     break;
                 case "grind_force_dwell_mS":
                     SetForceDwellBtn.Text = "Grind Force Dwell Time\n" + valueTrimmed + " mS";
+                    break;
+                case "grind_max_wait_mS":
+                    SetMaxWaitBtn.Text = "Grind Max Wait Time\n" + valueTrimmed + " mS";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)
@@ -3214,5 +3284,6 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
+
     }
 }

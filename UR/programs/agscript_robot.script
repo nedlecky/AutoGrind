@@ -313,10 +313,13 @@ end
 global robot_door_closed = is_door_closed()
 global time_in_uncommanded_grind = 0
 global time_door_check_rate_S = 0.250
+global grind_max_wait_mS = 1500
 thread door_monitor_thread():
   while True:
     sleep(time_door_check_rate_S)
     new_door_closed = is_door_closed()
+
+    # Notify host if door state has changed
     if robot_door_closed != new_door_closed:
       robot_door_closed = new_door_closed
       socket_set_var("robot_door_closed", robot_door_closed)
@@ -327,7 +330,7 @@ thread door_monitor_thread():
     if grind_process_state and grind_ready:
       time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_S
       # No new grind commands for 1.5 seconds... get off the part!
-      if time_in_uncommanded_grind > 1.5:
+      if time_in_uncommanded_grind > grind_max_wait_mS / 1000.0:
         set_grind_process_state(False)
       end
     else:
@@ -340,17 +343,23 @@ global doorMonitorThread = run door_monitor_thread()
 # END AUTOMATED DOOR MONITORING THREAD
 # ####################################################################################
 
-global ticks = 0
-global runtime = 0
-thread ticker_thread():
-  while (True):
-    global ticks = ticks + 1
-    global runtime = ticks / 500
-    sync()
-  end
-end
-global tickerThread = run ticker_thread()
 
+# ####################################################################################
+# TIMER TICK THREAD (NOT IN USE)
+#
+#global ticks = 0
+#global runtime = 0
+#thread ticker_thread():
+#  while (True):
+#    global ticks = ticks + 1
+#    global runtime = ticks / 500
+#    sync()
+#  end
+#end
+#global tickerThread = run ticker_thread()
+#
+# END TIMER TICK THREAD
+# ####################################################################################
 
 
 # ####################################################################################

@@ -15,22 +15,28 @@ namespace AutoGrind
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
         public DialogResult result = DialogResult.OK;
-        public MessageDialog(string title, string label, string okText = "OK", string cancelText = "Cancel")
+
+        public string Title { get; set; } = "??";
+        public string Label { get; set; } = "???";
+        public string OkText { get; set; } = "OK";
+        public string CancelText { get; set; } = "Cancel";
+
+        public MessageDialog()
         {
             InitializeComponent();
+        }
 
-            Text = title;
-            label1.Text = label;
-            OkBtn.Text = okText;
-            CancelBtn.Text = cancelText;
+        private void MessageDialog_Load(object sender, EventArgs e)
+        {
+
+            Text = Title;
+            label1.Text = Label;
+            OkBtn.Text = OkText;
+            CancelBtn.Text = CancelText;
 
             result = DialogResult.None;
         }
 
-        private void AgMessageDialog_Load(object sender, EventArgs e)
-        {
-
-        }
         private void OkBtn_Click(object sender, EventArgs e)
         {
             result = DialogResult.OK;
@@ -38,7 +44,7 @@ namespace AutoGrind
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            result = DialogResult.Cancel;
+            result=DialogResult.Cancel;
         }
     }
 }

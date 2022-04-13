@@ -74,7 +74,7 @@
             this.OkBtn.UseVisualStyleBackColor = false;
             this.OkBtn.Click += new System.EventHandler(this.OkBtn_Click);
             // 
-            // AgMessageDialog
+            // MessageDialog
             // 
             this.AcceptButton = this.OkBtn;
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -87,10 +87,10 @@
             this.Controls.Add(this.label1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.KeyPreview = true;
-            this.Name = "AgMessageDialog";
+            this.Name = "MessageDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MessageForm";
-            this.Load += new System.EventHandler(this.AgMessageDialog_Load);
+            this.Load += new System.EventHandler(this.MessageDialog_Load);
             this.ResumeLayout(false);
 
         }

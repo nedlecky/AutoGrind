@@ -59,5 +59,35 @@ namespace AutoGrind.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Lecky_Engineering_Logo_12_4_2020_Full {
+            get {
+                object obj = ResourceManager.GetObject("Lecky Engineering Logo 12-4-2020 Full", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap O_C_Logo {
+            get {
+                object obj = ResourceManager.GetObject("O-C Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap TQ_Logo {
+            get {
+                object obj = ResourceManager.GetObject("TQ Logo", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }

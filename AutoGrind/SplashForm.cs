@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -14,6 +16,8 @@ namespace AutoGrind
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
+        public bool AutoClose { get; set; } = true;
+
         public SplashForm()
         {
             InitializeComponent();
@@ -21,14 +25,40 @@ namespace AutoGrind
 
         private void SplashForm_Load(object sender, EventArgs e)
         {
-            CloseTmr.Interval = 2000;
-            CloseTmr.Enabled = true;
+            string companyName = Application.CompanyName;
+            string appName = Application.ProductName;
+            string productVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            string executable = Application.ExecutablePath;
+            string filename = Path.GetFileName(executable);
+            string directory = Path.GetDirectoryName(executable);
+            string caption = "Product: " + appName + " Rev " + productVersion;
+#if DEBUG
+            caption += "\nRUNNING IN DEBUG MODE";
+#endif
+            Text = caption;
+
+            VersionLbl.Text = caption;
+            
+            if (AutoClose)
+            {
+                Left = 50;
+                Top = 150;
+                CloseBtn.Visible = false;
+                CloseTmr.Interval = 5000;
+                CloseTmr.Enabled = true;
+            }
+            else
+                CloseBtn.Visible = true;
         }
+
         private void CloseTmr_Tick(object sender, EventArgs e)
         {
             Close();
         }
 
-
+        private void CloseBtn_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
     }
 }

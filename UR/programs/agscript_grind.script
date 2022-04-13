@@ -87,6 +87,12 @@ def pattern_grind():
       global grind_force_dwell_mS = command[3]
     end
     socket_set_var("grind_force_dwell_mS", grind_force_dwell_mS)
+  elif command[2] == 5:
+    global response = "set grind_max_wait_mS"
+    if command[3] >= 0:
+      global grind_max_wait_mS = command[3]
+    end
+    socket_set_var("grind_max_wait_mS", grind_max_wait_mS)
 
     # LINEAR GRINDS
   elif command[2] == 10:

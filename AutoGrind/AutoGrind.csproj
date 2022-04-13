@@ -207,5 +207,10 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG" />
+    <None Include="Graphics\O-C Logo.png" />
+    <Content Include="Graphics\TQ Logo.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
