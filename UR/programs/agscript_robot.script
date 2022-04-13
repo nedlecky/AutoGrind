@@ -372,12 +372,28 @@ def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
   p0 = get_target_tcp_pose()
   global grind_distance_m = pose_dist(p0, p)
   n_segments = 4
-  segment = 1
-  while (segment <= n_segments and ok_to_proceed()):
-    p1 = interpolate_pose(p0, p, segment / n_segments)
+  #poses = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]
+  i = 1
+  while i <= n_segments and ok_to_proceed():
+    #poses[i] = interpolate_pose(p0, p, i / n_segments)
+    p1 = interpolate_pose(p0, p, i / n_segments)
     movel(p1, a = a, v = v, r = r)
-    segment = segment + 1
+  i = i + 1
   end
+
+  #i = 1
+  #while i <= n_segments:
+  #  poses[i] = pose_trans(poses[i], p[0, 0, -robot_part_geometry[1], 0, 0, 0])
+  #  i = i + 1
+  #end
+
+  #set_tcp(robot_tcp)
+  #i = 1
+  #while (i <= n_segments and ok_to_proceed()):
+  #  movel(poses[i], a = a, v = v, r = r)
+  #  i = i + 1
+  #end
+  #set_tcp(robot_tcp_part)
   return None
 end
 #

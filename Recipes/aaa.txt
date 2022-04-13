@@ -1,7 +1,5 @@
 movelinear(demo_cyl)
+speed = 3
 
-grind_rect(40,40,1,20,10,0)
-#grind_rect(10,10,1,20,10,1)
-#prompt(hey!)
-
-#sleep(4000)
+grind_rect(40,40,1,{speed},10,0)
+#grind_rect(10,10,1,{speed},10,1)
