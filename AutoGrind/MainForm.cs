@@ -244,6 +244,12 @@ namespace AutoGrind
             }
         }
 
+        // Something isn't right. If we're running, select PAUSE
+        private void EnsureNotRunning()
+        {
+            if (runState == RunState.RUNNING)
+                SetState(RunState.PAUSED);
+        }
         bool robotReady = false;
         int nDashboard = 0;
         bool pollDashboardStateNow = false;
@@ -280,18 +286,23 @@ namespace AutoGrind
                             color = Color.Green;
                             break;
                         case "Robotmode: IDLE":
+                            EnsureNotRunning();
                             color = Color.Blue;
                             break;
                         case "Robotmode: POWER_OFF":
+                            EnsureNotRunning();
                             color = Color.Red;
                             break;
                         case "Robotmode: POWER_ON":
+                            EnsureNotRunning();
                             color = Color.Blue;
                             break;
                         case "Robotmode: BOOTING":
+                            EnsureNotRunning();
                             color = Color.Coral;
                             break;
                         default:
+                            EnsureNotRunning();
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -309,9 +320,11 @@ namespace AutoGrind
                             color = Color.Green;
                             break;
                         case "Safetystatus: PROTECTIVE_STOP":
+                            EnsureNotRunning();
                             color = Color.Red;
                             break;
                         default:
+                            EnsureNotRunning();
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -398,6 +411,7 @@ namespace AutoGrind
                         RobotCommandStatusLbl.Text = "WAIT";
                         // Restore all button settings with same current state
                         SetState(runState, true, true);
+                        EnsureNotRunning();
                     }
                 }
 
@@ -799,9 +813,13 @@ namespace AutoGrind
                 CloseCommandServer();
             }
             else
+            {
                 robotDashboardClient?.InquiryResponse("play", 500);
+                // If we're starting back in the middle of something, this will abort it
+                robotCommandServer?.Send("(10)");
+            }
 
-            pollDashboardStateNow = true;
+                pollDashboardStateNow = true;
         }
 
         private void KeyboardBtn_Click(object sender, EventArgs e)
@@ -923,7 +941,14 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     // Perform CONTINUE function
-                    var result = ConfirmMessageBox("Repeat highlighted line or move on?");
+                    MessageDialog messageForm = new MessageDialog()
+                    {
+                        Title = "System Question",
+                        Label = "Repeat highlighted line or move on ?",
+                        OkText = "&Repeat",
+                        CancelText = "&Move On"
+                    };
+                    DialogResult result = messageForm.ShowDialog();
                     if (result == DialogResult.OK) lineCurrentlyExecuting--;
                     SetState(RunState.RUNNING);
                     break;
