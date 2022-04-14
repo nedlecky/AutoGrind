@@ -74,6 +74,25 @@
     <HomePosition>2F85_home</HomePosition>
   </Tools>
   <Tools>
+    <Name>2F85long</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.275</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.05</cogz_m>
+    <ToolOnOuts>1,1,3,1</ToolOnOuts>
+    <ToolOffOuts>1,0,3,0</ToolOffOuts>
+    <CoolantOnOuts>4,1</CoolantOnOuts>
+    <CoolantOffOuts>4,0</CoolantOffOuts>
+    <MountPosition>2F85_mount</MountPosition>
+    <HomePosition>2F85_home</HomePosition>
+  </Tools>
+  <Tools>
     <Name>offset</Name>
     <x_m>0</x_m>
     <y_m>0.1</y_m>

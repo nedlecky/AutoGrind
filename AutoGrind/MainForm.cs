@@ -905,7 +905,7 @@ namespace AutoGrind
                 }
                 else
                 {
-                    var result = ErrorMessageBox("Robot not connected.\nRunning not allowed per Setup checkbox.");
+                    ErrorMessageBox("Robot not connected.\nRunning not allowed per Setup checkbox.");
                     return false;
                 }
             }
@@ -1447,7 +1447,10 @@ namespace AutoGrind
 
             if (n >= 1 && n <= RecipeRTB.Lines.Count())
             {
+                bool oldWordwrap = RecipeRTB.WordWrap;
+                RecipeRTB.WordWrap = false;
                 int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting - 1);
+                RecipeRTB.WordWrap = oldWordwrap;
                 int length = RecipeRTB.Lines[lineCurrentlyExecuting - 1].Length;
 
                 bool modified = RecipeRTB.Modified;
@@ -1588,7 +1591,7 @@ namespace AutoGrind
         };
 
         // These recipe commands will be converted to sendrobot(prefix,[nParams additional parameters])
-        Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
+        readonly Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // The main "send anything" command
             {"sendrobot",               new CommandSpec(){nParams=-1, prefix="" } },
@@ -1760,8 +1763,7 @@ namespace AutoGrind
             {
                 string labelName = ExtractParameters(command);
 
-                int jumpLine;
-                if (labels.TryGetValue(labelName, out jumpLine))
+                if (labels.TryGetValue(labelName, out int jumpLine))
                 {
                     log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", lineNumber, command, jumpLine);
                     SetCurrentLine(jumpLine);
@@ -1789,8 +1791,7 @@ namespace AutoGrind
                     string variableName = parameters[0];
                     string labelName = parameters[1];
 
-                    int jumpLine;
-                    if (!labels.TryGetValue(labelName, out jumpLine))
+                    if (!labels.TryGetValue(labelName, out int jumpLine))
                     {
                         PromptOperator("Expected jump_gt_zero(variable,label):\nLabel not found: " + labelName);
                         return true;
@@ -1975,8 +1976,7 @@ namespace AutoGrind
             if (openParenIndex > -1 && closeParenIndex > openParenIndex)
             {
                 string commandInRecipe = command.Substring(0, openParenIndex);
-                CommandSpec commandSpec;
-                if (robotAlias.TryGetValue(commandInRecipe, out commandSpec))
+                if (robotAlias.TryGetValue(commandInRecipe, out CommandSpec commandSpec))
                 {
                     LogInterpret(commandInRecipe, lineNumber, command);
                     string parameters = ExtractParameters(command, commandSpec.nParams);
@@ -2479,7 +2479,6 @@ namespace AutoGrind
         {
             log.Info("DASH<== {0}", message);
         }
-        int nRealtimeMessages = 0;
         void RealtimeCallback(string message)
         {
             if (true)//nRealtimeMessages++ % 100 == 0)
@@ -2488,9 +2487,6 @@ namespace AutoGrind
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            //if (robotDashboardClient != null)
-            //    if (robotDashboardClient.IsClientConnected)
-            //        robotDashboardClient.Receive();
             if (robotUrControlClient != null)
                 if (robotUrControlClient.IsClientConnected)
                     robotUrControlClient.Receive();
@@ -2746,7 +2742,7 @@ namespace AutoGrind
         // \s*                              Ignore whitespace
         // (?<value>[A-Za-z0-9 _]+)         Group "value" is one or morealphanum space or underscore
         // \s*$"                            Ignore whitespace to EOL
-        static Regex directAssignmentRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<value>[\S ]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static readonly Regex directAssignmentRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*=\s*(?<value>[\S ]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         // Regex to look for varname += or -= number expressions
         // @"^\s*                           Start of line, ignore leading whitespace
@@ -2756,14 +2752,14 @@ namespace AutoGrind
         // \s*                              Ignore whitespace
         // (?<value>[\-+]?[0-9.]+)          Group "value" can be optional (+ or -) followed by one or more digits and decimal
         // \s*$"                            Ignore whitespace to EOL
-        static Regex plusMinusEqualsRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*(?<operator>(\+=|\-=))\s*(?<value>[\-+]?[0-9.]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static readonly Regex plusMinusEqualsRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)\s*(?<operator>(\+=|\-=))\s*(?<value>[\-+]?[0-9.]+)$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         // Regex to look for varname += or -= number expressions
         // @"^\s*                           Start of line, ignore leading whitespace
         // (?<name>[A-Za-z][A-Za-z0-9_]*)   Group "name" is one alpha followed by 0 or more alphanum and underscore
         // (?<operator>(\+\+|\-\-))         Group "operator" can be ++ or --
         // \s*$"                            Ignore whitespace to EOL
-        static Regex plusPlusMinusMinusRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)(?<operator>(\+\+|\-\-))\s*$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
+        static readonly Regex plusPlusMinusMinusRegex = new Regex(@"^\s*(?<name>[A-Za-z][A-Za-z0-9_]*)(?<operator>(\+\+|\-\-))\s*$", RegexOptions.ExplicitCapture & RegexOptions.Compiled);
 
         /// <summary>
         /// Takes a "name=value" string and set variable "name" equal to "value"
@@ -3016,6 +3012,7 @@ namespace AutoGrind
                 ClearAndInitializeTools();
                 tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0", "none_mount", "none_home" });
                 tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
+                tools.Rows.Add(new object[] { "2F85long", 0, 0, 0.275, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
                 tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
                 tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
                 tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });

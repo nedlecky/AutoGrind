@@ -418,7 +418,7 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
   radius_m = robot_part_geometry[1] / 2.0
-  drx_rad = dy_m / radius_m
+  drx_rad = dx_m / radius_m
   dry_rad = dy_m / radius_m
   speed_factor = 0.5 / robot_part_geometry[1]  # 0.5 / diam_m is the speedup needed on rotational moves
 

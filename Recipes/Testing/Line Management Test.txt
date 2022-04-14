@@ -1,0 +1,19 @@
+# Line Management Test
+
+# Line 3
+sleep(1000)
+
+diameter = 20
+speed = 20
+force = 10
+n_cycles = 2
+n=0
+
+movelinear(demo_flat)
+
+repeat:
+grind_circle({diameter},{n_cycles},{speed},{force},0)
+
+n++
+prompt(Just completed cycle {n})
+jump(repeat)
