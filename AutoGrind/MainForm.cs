@@ -232,7 +232,7 @@ namespace AutoGrind
             {
                 if (RecipeRTB.Modified)
                 {
-                    var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                    var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                     if (result == DialogResult.OK)
                         SaveRecipeBtn_Click(null, null);
                 }
@@ -393,6 +393,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
                         ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_mS", "500")));
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
+                        ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -1084,7 +1085,7 @@ namespace AutoGrind
             log.Info("NewRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                 if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -1101,7 +1102,7 @@ namespace AutoGrind
             log.Info("LoadRecipeBtn_Click(...)");
             if (RecipeRTB.Modified)
             {
-                var result = ConfirmMessageBox(String.Format("Recipe {0} has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                 if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -1621,6 +1622,7 @@ namespace AutoGrind
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
             {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="40,4," } },
             {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="40,5," } },
+            {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="40,6," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -1661,10 +1663,9 @@ namespace AutoGrind
         {
             stepStartedTime = DateTime.Now;
 
-            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
-            string origLine = line;
 
             // Any variables to sub {varName}
+            string origLine = line;
             line = Regex.Replace(line, @"\{([^}]*)\}", m => ReadVariable(m.Groups[1].Value, "var_not_found"));
             /* {            # Bracket, means "starts with a '{' character"
                    (        # Parentheses in a regex mean "put (capture) the stuff in between into the Groups array
@@ -1674,6 +1675,9 @@ namespace AutoGrind
                }            # Ends with a '}' character  */
             if (line != origLine)
                 log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
+            
+            // Line gets shown on screen with variables substututed
+            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
 
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -2437,8 +2441,22 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_max_wait({0})", form.Value));
             }
         }
+        private void SetGrindBlendRadiusBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_blend_radius_mm"),
+                Label = "Grind BLEND RADIUS, mm",
+                NumberOfDecimals = 1,
+                MinAllowed = 0,
+                MaxAllowed = 2.0
+            };
 
-
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_blend_radius({0})", form.Value));
+            }
+        }
 
 
         /// <summary>
@@ -2663,6 +2681,9 @@ namespace AutoGrind
                     break;
                 case "grind_max_wait_mS":
                     SetMaxWaitBtn.Text = "Grind Max Wait Time\n" + valueTrimmed + " mS";
+                    break;
+                case "grind_blend_radius_mm":
+                    SetGrindBlendRadiusBtn.Text = "Grind Blend Radius\n" + valueTrimmed + " mm";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)

@@ -1,37 +1,37 @@
 # Rect Speed Test
-# All should take 2S on a side
-# PASSED 4/12/2022
+# All should alternate 3s, 2s per side
+# PASSED 4/15/2022
 
 speed = 20
+cmd=grind_rect(60,40,1,{speed},10,0)
 
 flat:
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 
 cylinder:
 movelinear(demo_cyl)
 set_part_geometry(CYLINDER,80)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(CYLINDER,200)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(CYLINDER,500)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(CYLINDER,800)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(CYLINDER,1100)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 
 sphere:
 movelinear(demo_sphere)
 set_part_geometry(SPHERE,80)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(SPHERE,200)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(SPHERE,500)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(SPHERE,800)
-grind_rect(40,40,1,{speed},10,0)
+{cmd}
 set_part_geometry(SPHERE,1100)
-grind_rect(40,40,1,{speed},10,0)
-
+{cmd}

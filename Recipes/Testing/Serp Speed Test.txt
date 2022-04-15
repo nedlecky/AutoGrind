@@ -1,48 +1,50 @@
 # Serp Speed Test
-# All should take 2S on long side
-# PASSED 4/12/2022
+# All should alternate 3s, 2s on long side
+# PASSED 4/15/2022
 
 speed = 20
+cmd1 = grind_serpentine(60,40,1,3,1,{speed},10,0)
+cmd2 = grind_serpentine(60,40,3,1,1,{speed},10,0)
 
 flat: 
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 
 cylinder:
 movelinear(demo_cyl)
 set_part_geometry(CYLINDER,80)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(CYLINDER,200)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(CYLINDER,500)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(CYLINDER,800)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(CYLINDER,1100)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 
 sphere:
 movelinear(demo_sphere)
 set_part_geometry(SPHERE,80)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(SPHERE,200)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(SPHERE,500)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(SPHERE,800)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 set_part_geometry(SPHERE,1100)
-grind_serpentine(40,40,1,3,1,{speed},10,0)
-grind_serpentine(40,40,3,1,1,{speed},10,0)
+{cmd1}
+{cmd2}
 

@@ -1,6 +1,6 @@
 # Circle Speed Test
 # All should be ~10S
-# PASSED 4/12/2022
+# PASSED 4/15/2022
 
 # 40mm diam is 125mm circum
 # 30mm diam is 94mm circum
@@ -35,5 +35,5 @@ grind_circle(40,1,{speed40},10,0)
 set_part_geometry(SPHERE,800)
 grind_circle(40,1,{speed40},10,0)
 set_part_geometry(SPHERE,1100)
-grind_circle(40,2,{speed40},10,0)
+grind_circle(40,1,{speed40},10,0)
 

@@ -6,6 +6,7 @@
 # 30mm diam is 94mm circum
 speed40 = 12.5
 speed30 = 9.4
+jump(cylinder)
 
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)

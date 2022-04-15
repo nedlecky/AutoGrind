@@ -1,6 +1,6 @@
 # Line Speed Test
 # All should take 2S
-# PASSED 4/12/2022
+# PASSED 4/15/2022
 
 speed = 20
 
@@ -35,7 +35,7 @@ grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 
-set_part_geometry(CYLINDER,1200)
+set_part_geometry(CYLINDER,1100)
 grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
@@ -62,7 +62,7 @@ grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 
-set_part_geometry(SPHERE,1200)
+set_part_geometry(SPHERE,1100)
 grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
