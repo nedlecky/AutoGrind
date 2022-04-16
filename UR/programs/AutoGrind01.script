@@ -462,7 +462,7 @@ def AutoGrind01():
         time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_S
         # No new grind commands for 1.5 seconds... get off the part!
         if time_in_uncommanded_grind > grind_max_wait_mS / 1000.0:
-          set_grind_process_state(False)
+          global halt_grind = True
         end
       else:
         time_in_uncommanded_grind = 0
@@ -474,6 +474,20 @@ def AutoGrind01():
   # END AUTOMATED DOOR MONITORING THREAD
   # ####################################################################################
   
+  global no_command_count = 0
+  global halt_grind  = False
+  def no_command():
+    global no_command_count = no_command_count + 1
+  
+    if halt_grind:
+      halt_grind=False
+      # Simulate receiving a (40,0) (grind_retract
+      command[0]=3
+      command[1]=40
+      command[2]=0
+      pattern_grind()
+    end
+  end
   
   # ####################################################################################
   # TIMER TICK THREAD (NOT IN USE)
@@ -959,6 +973,7 @@ def AutoGrind01():
       contact_part(False, grind_contact_enable)
       coolant_flow(False, grind_contact_enable)
       tool_power(False, grind_contact_enable)
+      global aaa_p_operator_init = p_operator_init
       movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
       grind_process_state = False
     end
@@ -1935,6 +1950,8 @@ def AutoGrind01():
       end
     else:
       $ 73 "Else" "noBreak"
+      $ 74 "no_command()"
+      no_command()
     end
   end
 end

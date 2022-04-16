@@ -72,7 +72,7 @@
          socket_is_open≔ False 
          Halt
      Else
-       'socket_set_var("robot_index", command_index)'
+       no_command()
    AG_50
      MoveL
        Vertical_3

@@ -305,21 +305,14 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
 end
 
 # Setup for grinding
-sgps_already_running = False
 global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
-  if sgps_already_running:
-    return False
-  end
-
-  sgps_already_running = True
   if on and not grind_process_state:
     global p_operator_init = get_target_tcp_pose()
 
     # Move to start position for touchoff
     shape = robot_part_geometry[0]
     if shape < 1 or shape > 3:
-      sgps_already_running = False
       return False
     end
 
@@ -331,7 +324,6 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       # Failure to contact part should abort... don't set grind_process_state and return False
       movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
       socket_send_line("grind_process_state=False")
-      sgps_already_running = False
       return False
     end
 
@@ -353,6 +345,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     contact_part(False, grind_contact_enable)
     coolant_flow(False, grind_contact_enable)
     tool_power(False, grind_contact_enable)
+    global aaa_p_operator_init = p_operator_init
     movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     grind_process_state = False
   end
@@ -363,7 +356,6 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
   else:
     socket_send_line("grind_process_state=False")
   end
-  sgps_already_running = False
   return True
 end
 

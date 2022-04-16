@@ -1478,13 +1478,7 @@ namespace AutoGrind
 
             if (n >= 1 && n <= RecipeRTB.Lines.Count())
             {
-                RecipeRTB.SuspendDrawing();
-
-                bool wordWrap = RecipeRTB.WordWrap;
-                RecipeRTB.WordWrap = false;
-                int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting - 1);
-                int length = RecipeRTB.Lines[lineCurrentlyExecuting - 1].Length + 1;
-                RecipeRTB.WordWrap = wordWrap;
+                (int start, int length) = RecipeRTB.GetLineExtents(lineCurrentlyExecuting - 1);
 
                 RecipeRTB.SelectAll();
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
@@ -1493,8 +1487,6 @@ namespace AutoGrind
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Bold);
                 RecipeRTB.ScrollToCaret();
                 RecipeRTB.ScrollToCaret();
-
-                RecipeRTB.ResumeDrawing();
 
                 RecipeRTBCopy.Select(start, length);
                 RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
@@ -3381,19 +3373,19 @@ namespace AutoGrind
     }
     public static class RichTextBoxExtensions
     {
-        [DllImport("user32.dll")]
-        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
-        private const int WM_SETREDRAW = 0x0b;
-
-        public static void SuspendDrawing(this System.Windows.Forms.RichTextBox richTextBox)
+        /// <summary>
+        /// Dependable replacement for RTB.GetFirstCharIndexFromLine. Actuall adds up the previous lines plus terminator.
+        /// When you don't do this, you get odd behavior with line wrapping and if you toggle it off, you get flashing of the control.
+        /// </summary>
+        /// <param name="n">0-indexed line number to examine</param>
+        /// <returns></returns>
+        public static (int start, int length) GetLineExtents(this System.Windows.Forms.RichTextBox richTextBox, int n)
         {
-            SendMessage(richTextBox.Handle, WM_SETREDRAW, (IntPtr)0, IntPtr.Zero);
-        }
+            int start = 0;
+            for (int i = 0; i < n; i++)
+                start += richTextBox.Lines[i].Length + 1;
 
-        public static void ResumeDrawing(this System.Windows.Forms.RichTextBox richTextBox)
-        {
-            SendMessage(richTextBox.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
-            richTextBox.Invalidate();
+            return (start, richTextBox.Lines[n].Length);
         }
     }
 }

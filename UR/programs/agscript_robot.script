@@ -314,9 +314,9 @@ thread door_monitor_thread():
     # This is what happens after a grind_...(....,1) executes while waiting for next command
     if grind_process_state and grind_ready:
       time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_S
-      # No new grind commands for 1.5 seconds... get off the part!
+      # No new grind commands for grind_max_wait_mS... schedule a grind_retract!
       if time_in_uncommanded_grind > grind_max_wait_mS / 1000.0:
-        set_grind_process_state(False)
+        global halt_grind = True
       end
     else:
       time_in_uncommanded_grind = 0
@@ -328,6 +328,28 @@ global doorMonitorThread = run door_monitor_thread()
 # END AUTOMATED DOOR MONITORING THREAD
 # ####################################################################################
 
+# ####################################################################################
+# START NO_COMMAND HOUSEKEEPING
+# This gets called when the PolyScope receives no command (about 1/second)
+# We can fire off any command here safely since no others will be seen until we exit
+#
+global no_command_count = 0
+global halt_grind  = False
+def no_command():
+  global no_command_count = no_command_count + 1
+
+  if halt_grind:
+    halt_grind=False
+    # Simulate receiving a (40,0) (grind_retract)
+    command[0]=3
+    command[1]=40
+    command[2]=0
+    pattern_grind()
+  end
+end
+#
+# END NO_COMMAND HOUSEKEEPING
+# ####################################################################################
 
 # ####################################################################################
 # TIMER TICK THREAD (NOT IN USE)
