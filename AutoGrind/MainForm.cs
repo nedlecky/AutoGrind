@@ -394,6 +394,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_mS", "500")));
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
                         ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
+                        ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -1623,6 +1624,7 @@ namespace AutoGrind
             {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="40,4," } },
             {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="40,5," } },
             {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="40,6," } },
+            {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="40,7," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -2457,6 +2459,22 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_blend_radius({0})", form.Value));
             }
         }
+        private void SetTrialSpeedBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_trial_speed_mmps"),
+                Label = "Grind TRIAL SPEED, mm/s",
+                NumberOfDecimals = 1,
+                MinAllowed = 1,
+                MaxAllowed = 25
+            };
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_trial_speed({0})", form.Value));
+            }
+        }
 
 
         /// <summary>
@@ -2684,6 +2702,9 @@ namespace AutoGrind
                     break;
                 case "grind_blend_radius_mm":
                     SetGrindBlendRadiusBtn.Text = "Grind Blend Radius\n" + valueTrimmed + " mm";
+                    break;
+                case "grind_trial_speed_mmps":
+                    SetTrialSpeedBtn.Text = "Grind Trial Speed\n" + valueTrimmed + " mm/s";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)

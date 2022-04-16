@@ -136,6 +136,7 @@
             this.groupBox9 = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
             this.SetMaxWaitBtn = new System.Windows.Forms.Button();
             this.SetForceDwellBtn = new System.Windows.Forms.Button();
             this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
@@ -180,7 +181,7 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
-            this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
+            this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1475,6 +1476,7 @@
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.SetTrialSpeedBtn);
             this.groupBox11.Controls.Add(this.SetGrindBlendRadiusBtn);
             this.groupBox11.Controls.Add(this.SetMaxWaitBtn);
             this.groupBox11.Controls.Add(this.SetForceDwellBtn);
@@ -1482,15 +1484,26 @@
             this.groupBox11.Controls.Add(this.SetTouchRetractBtn);
             this.groupBox11.Location = new System.Drawing.Point(3, 836);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(1430, 234);
+            this.groupBox11.Size = new System.Drawing.Size(1664, 234);
             this.groupBox11.TabIndex = 117;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Grind Move Control";
             // 
+            // SetGrindBlendRadiusBtn
+            // 
+            this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(1131, 71);
+            this.SetGrindBlendRadiusBtn.Name = "SetGrindBlendRadiusBtn";
+            this.SetGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetGrindBlendRadiusBtn.TabIndex = 118;
+            this.SetGrindBlendRadiusBtn.Text = "Set Blend Radius";
+            this.SetGrindBlendRadiusBtn.UseVisualStyleBackColor = false;
+            this.SetGrindBlendRadiusBtn.Click += new System.EventHandler(this.SetGrindBlendRadiusBtn_Click);
+            // 
             // SetMaxWaitBtn
             // 
             this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetMaxWaitBtn.Location = new System.Drawing.Point(890, 71);
+            this.SetMaxWaitBtn.Location = new System.Drawing.Point(852, 71);
             this.SetMaxWaitBtn.Name = "SetMaxWaitBtn";
             this.SetMaxWaitBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxWaitBtn.TabIndex = 117;
@@ -1501,7 +1514,7 @@
             // SetForceDwellBtn
             // 
             this.SetForceDwellBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetForceDwellBtn.Location = new System.Drawing.Point(607, 71);
+            this.SetForceDwellBtn.Location = new System.Drawing.Point(569, 71);
             this.SetForceDwellBtn.Name = "SetForceDwellBtn";
             this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
             this.SetForceDwellBtn.TabIndex = 116;
@@ -1512,7 +1525,7 @@
             // SetTouchSpeedBtn
             // 
             this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(49, 71);
+            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(11, 71);
             this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
             this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchSpeedBtn.TabIndex = 115;
@@ -1523,7 +1536,7 @@
             // SetTouchRetractBtn
             // 
             this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchRetractBtn.Location = new System.Drawing.Point(325, 71);
+            this.SetTouchRetractBtn.Location = new System.Drawing.Point(287, 71);
             this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
             this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchRetractBtn.TabIndex = 114;
@@ -1999,16 +2012,16 @@
             this.DoorClosedLbl.Text = "Door Closed?";
             this.DoorClosedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // SetGrindBlendRadiusBtn
+            // SetTrialSpeedBtn
             // 
-            this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(1169, 71);
-            this.SetGrindBlendRadiusBtn.Name = "SetGrindBlendRadiusBtn";
-            this.SetGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetGrindBlendRadiusBtn.TabIndex = 118;
-            this.SetGrindBlendRadiusBtn.Text = "Set Blend Radius";
-            this.SetGrindBlendRadiusBtn.UseVisualStyleBackColor = false;
-            this.SetGrindBlendRadiusBtn.Click += new System.EventHandler(this.SetGrindBlendRadiusBtn_Click);
+            this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(1405, 71);
+            this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
+            this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetTrialSpeedBtn.TabIndex = 119;
+            this.SetTrialSpeedBtn.Text = "Set Trial Speed";
+            this.SetTrialSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetTrialSpeedBtn.Click += new System.EventHandler(this.SetTrialSpeedBtn_Click);
             // 
             // MainForm
             // 
@@ -2227,6 +2240,7 @@
         private System.Windows.Forms.Button SetMaxWaitBtn;
         private System.Windows.Forms.Button InfoBtn;
         private System.Windows.Forms.Button SetGrindBlendRadiusBtn;
+        private System.Windows.Forms.Button SetTrialSpeedBtn;
     }
 }
 

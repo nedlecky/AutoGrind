@@ -15,7 +15,8 @@ global grind_contact_enable = 0
 global grind_touch_retract_mm = 3       # How far to retract after touch  (we do 2X this for ghrind_contact_enable=1)
 global grind_touch_speed_mmps = 0.1     # How fast to go in for the touch
 global grind_force_dwell_mS = 500       # How long to dwell after turning force more on
-global grind_blend_radius_m = 0.001
+global grind_blend_radius_m = 0.001     # Blend radius to use while grinding
+global grind_trial_speed_mmps = 20      # Grinding speed when not really grinding!
 
 # Planning points
 global p_operator_init = p[0, 0, 0, 0, 0, 0]    # Where we were when operator issued first grind command
@@ -25,7 +26,12 @@ global p_contact_center = p[0, 0, 0, 0, 0, 0]   # Computed where center of patte
 MATH_PI = 3.1415926535
 
 def speed_setter(speed_mmps):
-  global grind_speed_mps = speed_mmps / 1000.0
+  if grind_contact_enable == 2:
+    global grind_speed_mps = speed_mmps / 1000.0
+  else:
+    global grind_speed_mps = grind_trial_speed_mmps / 1000.0
+  end
+
   global grind_accel_mpss = 2.0
 
   # Default rotational speeds same as linear
@@ -78,10 +84,7 @@ def pattern_grind():
   # Variable Setting
   if command[2] == 0:
     global response = "grind retract"
-    # We're still on and the monitor thread hasn't called to set us off yet!
-    if set_grind_process_state_in_progress:
-      set_grind_process_state(False)
-    end
+    set_grind_process_state(False)
   elif command[2] == 1:
     global response = "set grind_contact_enable"
     if command[3] >= 0 and command[3] <= 2:
@@ -120,6 +123,12 @@ def pattern_grind():
     socket_send_string("grind_blend_radius_mm=")
     socket_send_string(grind_blend_radius_m * 1000.0)
     socket_send_lf()
+  elif command[2] == 7:
+    global response = "set grind_trial_speed_mmps"
+    if command[3] > 0:
+      global grind_trial_speed_mmps = command[3]
+    end
+    socket_set_var("grind_trial_speed_mmps", grind_trial_speed_mmps)
 
     # LINEAR GRINDS
   elif command[2] == 10:
@@ -296,16 +305,21 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
 end
 
 # Setup for grinding
+sgps_already_running = False
 global grind_process_state = False
-global set_grind_process_state_in_progress = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
-  set_grind_process_state_in_progress = on
+  if sgps_already_running:
+    return False
+  end
+
+  sgps_already_running = True
   if on and not grind_process_state:
-    p_operator_init = get_target_tcp_pose()
+    global p_operator_init = get_target_tcp_pose()
 
     # Move to start position for touchoff
     shape = robot_part_geometry[0]
     if shape < 1 or shape > 3:
+      sgps_already_running = False
       return False
     end
 
@@ -317,6 +331,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       # Failure to contact part should abort... don't set grind_process_state and return False
       movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
       socket_send_line("grind_process_state=False")
+      sgps_already_running = False
       return False
     end
 
@@ -327,7 +342,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       reverse_pose_to_center[i] = -reverse_pose_to_center[i]
       i = i + 1
     end
-    p_contact_center = pose_trans(p_contact_init, reverse_pose_to_center)
+    global p_contact_center = pose_trans(p_contact_init, reverse_pose_to_center)
 
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
@@ -348,6 +363,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
   else:
     socket_send_line("grind_process_state=False")
   end
+  sgps_already_running = False
   return True
 end
 
