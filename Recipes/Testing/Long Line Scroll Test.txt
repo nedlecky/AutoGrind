@@ -1,0 +1,31 @@
+# Long Line Scroll Test
+
+a=4
+
+redo:
+
+a++
+
+# Here we are
+# 1And why not a super long line so we can see what that does?
+
+a+=5
+
+abc = 5
+
+grind_retract()
+
+# aasddaa
+
+# ddfasdfasafsddd
+
+# 2And why not a super long line so we can see what that does?
+
+# 3And why not a super long line so we can see what that does?
+
+# 4And why not a super long line so we can see what that does?
+
+# 5And why not a super long line so we can see what that does?
+
+
+jump(redo)

@@ -133,9 +133,10 @@
             this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.MovePage = new System.Windows.Forms.TabPage();
-            this.groupBox9 = new System.Windows.Forms.GroupBox();
+            this.DefaultMoveSetupGrp = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
             this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
             this.SetMaxWaitBtn = new System.Windows.Forms.Button();
             this.SetForceDwellBtn = new System.Windows.Forms.Button();
@@ -181,7 +182,7 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
-            this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
+            this.VariableTestButtonGrp = new System.Windows.Forms.GroupBox();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -197,7 +198,7 @@
             this.RunPage.SuspendLayout();
             this.ProgramPage.SuspendLayout();
             this.MovePage.SuspendLayout();
-            this.groupBox9.SuspendLayout();
+            this.DefaultMoveSetupGrp.SuspendLayout();
             this.SetupPage.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox2.SuspendLayout();
@@ -206,6 +207,7 @@
             this.groupBox1.SuspendLayout();
             this.LogPage.SuspendLayout();
             this.groupBox3.SuspendLayout();
+            this.VariableTestButtonGrp.SuspendLayout();
             this.SuspendLayout();
             // 
             // CurrentLineLbl
@@ -493,7 +495,7 @@
             this.PositionTestButtonGrp.Controls.Add(this.ClearPositionsBtn);
             this.PositionTestButtonGrp.Controls.Add(this.SavePositionsBtn);
             this.PositionTestButtonGrp.Controls.Add(this.ClearAllPositionsBtn);
-            this.PositionTestButtonGrp.Location = new System.Drawing.Point(14, 866);
+            this.PositionTestButtonGrp.Location = new System.Drawing.Point(6, 879);
             this.PositionTestButtonGrp.Name = "PositionTestButtonGrp";
             this.PositionTestButtonGrp.Size = new System.Drawing.Size(1273, 163);
             this.PositionTestButtonGrp.TabIndex = 99;
@@ -502,46 +504,54 @@
             // 
             // LoadPositionsBtn
             // 
+            this.LoadPositionsBtn.BackColor = System.Drawing.Color.Gray;
             this.LoadPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadPositionsBtn.Location = new System.Drawing.Point(16, 43);
+            this.LoadPositionsBtn.ForeColor = System.Drawing.Color.White;
+            this.LoadPositionsBtn.Location = new System.Drawing.Point(6, 38);
             this.LoadPositionsBtn.Name = "LoadPositionsBtn";
-            this.LoadPositionsBtn.Size = new System.Drawing.Size(208, 100);
+            this.LoadPositionsBtn.Size = new System.Drawing.Size(240, 110);
             this.LoadPositionsBtn.TabIndex = 94;
-            this.LoadPositionsBtn.Text = " Reload";
-            this.LoadPositionsBtn.UseVisualStyleBackColor = true;
+            this.LoadPositionsBtn.Text = "Reload";
+            this.LoadPositionsBtn.UseVisualStyleBackColor = false;
             this.LoadPositionsBtn.Click += new System.EventHandler(this.LoadPositionsBtn_Click);
             // 
             // ClearPositionsBtn
             // 
+            this.ClearPositionsBtn.BackColor = System.Drawing.Color.Gray;
             this.ClearPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearPositionsBtn.Location = new System.Drawing.Point(463, 43);
+            this.ClearPositionsBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearPositionsBtn.Location = new System.Drawing.Point(546, 38);
             this.ClearPositionsBtn.Name = "ClearPositionsBtn";
-            this.ClearPositionsBtn.Size = new System.Drawing.Size(155, 100);
+            this.ClearPositionsBtn.Size = new System.Drawing.Size(240, 110);
             this.ClearPositionsBtn.TabIndex = 92;
             this.ClearPositionsBtn.Text = "Clear";
-            this.ClearPositionsBtn.UseVisualStyleBackColor = true;
+            this.ClearPositionsBtn.UseVisualStyleBackColor = false;
             this.ClearPositionsBtn.Click += new System.EventHandler(this.ClearPositionsBtn_Click);
             // 
             // SavePositionsBtn
             // 
+            this.SavePositionsBtn.BackColor = System.Drawing.Color.Gray;
             this.SavePositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SavePositionsBtn.Location = new System.Drawing.Point(260, 43);
+            this.SavePositionsBtn.ForeColor = System.Drawing.Color.White;
+            this.SavePositionsBtn.Location = new System.Drawing.Point(276, 38);
             this.SavePositionsBtn.Name = "SavePositionsBtn";
-            this.SavePositionsBtn.Size = new System.Drawing.Size(155, 100);
+            this.SavePositionsBtn.Size = new System.Drawing.Size(240, 110);
             this.SavePositionsBtn.TabIndex = 93;
             this.SavePositionsBtn.Text = "Save";
-            this.SavePositionsBtn.UseVisualStyleBackColor = true;
+            this.SavePositionsBtn.UseVisualStyleBackColor = false;
             this.SavePositionsBtn.Click += new System.EventHandler(this.SavePositionsBtn_Click);
             // 
             // ClearAllPositionsBtn
             // 
+            this.ClearAllPositionsBtn.BackColor = System.Drawing.Color.Gray;
             this.ClearAllPositionsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllPositionsBtn.Location = new System.Drawing.Point(666, 43);
+            this.ClearAllPositionsBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearAllPositionsBtn.Location = new System.Drawing.Point(816, 38);
             this.ClearAllPositionsBtn.Name = "ClearAllPositionsBtn";
-            this.ClearAllPositionsBtn.Size = new System.Drawing.Size(258, 100);
+            this.ClearAllPositionsBtn.Size = new System.Drawing.Size(240, 110);
             this.ClearAllPositionsBtn.TabIndex = 95;
             this.ClearAllPositionsBtn.Text = "Clear All";
-            this.ClearAllPositionsBtn.UseVisualStyleBackColor = true;
+            this.ClearAllPositionsBtn.UseVisualStyleBackColor = false;
             this.ClearAllPositionsBtn.Click += new System.EventHandler(this.ClearAllPositionsBtn_Click);
             // 
             // PositionMoveArmBtn
@@ -603,15 +613,12 @@
             this.PositionsGrd.Name = "PositionsGrd";
             this.PositionsGrd.RowTemplate.Height = 34;
             this.PositionsGrd.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.Size = new System.Drawing.Size(1281, 664);
+            this.PositionsGrd.Size = new System.Drawing.Size(1281, 677);
             this.PositionsGrd.TabIndex = 85;
             // 
             // variablesPage
             // 
-            this.variablesPage.Controls.Add(this.ClearAllVariablesBtn);
-            this.variablesPage.Controls.Add(this.LoadVariablesBtn);
-            this.variablesPage.Controls.Add(this.SaveVariablesBtn);
-            this.variablesPage.Controls.Add(this.ClearVariablesBtn);
+            this.variablesPage.Controls.Add(this.VariableTestButtonGrp);
             this.variablesPage.Controls.Add(this.VariablesGrd);
             this.variablesPage.Location = new System.Drawing.Point(4, 64);
             this.variablesPage.Name = "variablesPage";
@@ -623,46 +630,54 @@
             // 
             // ClearAllVariablesBtn
             // 
+            this.ClearAllVariablesBtn.BackColor = System.Drawing.Color.Gray;
             this.ClearAllVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(816, 911);
+            this.ClearAllVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(816, 38);
             this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
-            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(239, 108);
+            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(240, 110);
             this.ClearAllVariablesBtn.TabIndex = 91;
             this.ClearAllVariablesBtn.Text = "Clear All";
-            this.ClearAllVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearAllVariablesBtn.UseVisualStyleBackColor = false;
             this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
             // 
             // LoadVariablesBtn
             // 
+            this.LoadVariablesBtn.BackColor = System.Drawing.Color.Gray;
             this.LoadVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadVariablesBtn.Location = new System.Drawing.Point(6, 911);
+            this.LoadVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.LoadVariablesBtn.Location = new System.Drawing.Point(6, 38);
             this.LoadVariablesBtn.Name = "LoadVariablesBtn";
-            this.LoadVariablesBtn.Size = new System.Drawing.Size(239, 108);
+            this.LoadVariablesBtn.Size = new System.Drawing.Size(240, 110);
             this.LoadVariablesBtn.TabIndex = 90;
             this.LoadVariablesBtn.Text = "Reload";
-            this.LoadVariablesBtn.UseVisualStyleBackColor = true;
+            this.LoadVariablesBtn.UseVisualStyleBackColor = false;
             this.LoadVariablesBtn.Click += new System.EventHandler(this.LoadVariablesBtn_Click);
             // 
             // SaveVariablesBtn
             // 
+            this.SaveVariablesBtn.BackColor = System.Drawing.Color.Gray;
             this.SaveVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveVariablesBtn.Location = new System.Drawing.Point(276, 911);
+            this.SaveVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.SaveVariablesBtn.Location = new System.Drawing.Point(276, 38);
             this.SaveVariablesBtn.Name = "SaveVariablesBtn";
-            this.SaveVariablesBtn.Size = new System.Drawing.Size(239, 108);
+            this.SaveVariablesBtn.Size = new System.Drawing.Size(240, 110);
             this.SaveVariablesBtn.TabIndex = 89;
             this.SaveVariablesBtn.Text = "Save";
-            this.SaveVariablesBtn.UseVisualStyleBackColor = true;
+            this.SaveVariablesBtn.UseVisualStyleBackColor = false;
             this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
             // 
             // ClearVariablesBtn
             // 
+            this.ClearVariablesBtn.BackColor = System.Drawing.Color.Gray;
             this.ClearVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearVariablesBtn.Location = new System.Drawing.Point(546, 911);
+            this.ClearVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearVariablesBtn.Location = new System.Drawing.Point(546, 38);
             this.ClearVariablesBtn.Name = "ClearVariablesBtn";
-            this.ClearVariablesBtn.Size = new System.Drawing.Size(239, 108);
+            this.ClearVariablesBtn.Size = new System.Drawing.Size(240, 110);
             this.ClearVariablesBtn.TabIndex = 88;
             this.ClearVariablesBtn.Text = "Clear";
-            this.ClearVariablesBtn.UseVisualStyleBackColor = true;
+            this.ClearVariablesBtn.UseVisualStyleBackColor = false;
             this.ClearVariablesBtn.Click += new System.EventHandler(this.ClearVariablesBtn_Click);
             // 
             // VariablesGrd
@@ -682,7 +697,7 @@
             this.VariablesGrd.Name = "VariablesGrd";
             this.VariablesGrd.RowTemplate.Height = 34;
             this.VariablesGrd.RowTemplate.Resizable = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.Size = new System.Drawing.Size(1296, 885);
+            this.VariablesGrd.Size = new System.Drawing.Size(1296, 868);
             this.VariablesGrd.TabIndex = 84;
             // 
             // manualPage
@@ -699,24 +714,28 @@
             // 
             // LoadManualBtn
             // 
+            this.LoadManualBtn.BackColor = System.Drawing.Color.Gray;
             this.LoadManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadManualBtn.ForeColor = System.Drawing.Color.White;
             this.LoadManualBtn.Location = new System.Drawing.Point(18, 922);
             this.LoadManualBtn.Name = "LoadManualBtn";
-            this.LoadManualBtn.Size = new System.Drawing.Size(192, 108);
+            this.LoadManualBtn.Size = new System.Drawing.Size(231, 108);
             this.LoadManualBtn.TabIndex = 106;
             this.LoadManualBtn.Text = "Reload";
-            this.LoadManualBtn.UseVisualStyleBackColor = true;
+            this.LoadManualBtn.UseVisualStyleBackColor = false;
             this.LoadManualBtn.Click += new System.EventHandler(this.LoadManualBtn_Click);
             // 
             // SaveManualBtn
             // 
+            this.SaveManualBtn.BackColor = System.Drawing.Color.Gray;
             this.SaveManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveManualBtn.Location = new System.Drawing.Point(230, 922);
+            this.SaveManualBtn.ForeColor = System.Drawing.Color.White;
+            this.SaveManualBtn.Location = new System.Drawing.Point(262, 922);
             this.SaveManualBtn.Name = "SaveManualBtn";
-            this.SaveManualBtn.Size = new System.Drawing.Size(155, 108);
+            this.SaveManualBtn.Size = new System.Drawing.Size(225, 108);
             this.SaveManualBtn.TabIndex = 105;
             this.SaveManualBtn.Text = "Save";
-            this.SaveManualBtn.UseVisualStyleBackColor = true;
+            this.SaveManualBtn.UseVisualStyleBackColor = false;
             this.SaveManualBtn.Click += new System.EventHandler(this.SaveManualBtn_Click);
             // 
             // InstructionsRTB
@@ -1434,7 +1453,7 @@
             // MovePage
             // 
             this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MovePage.Controls.Add(this.groupBox9);
+            this.MovePage.Controls.Add(this.DefaultMoveSetupGrp);
             this.MovePage.Controls.Add(this.JogBtn);
             this.MovePage.Location = new System.Drawing.Point(4, 100);
             this.MovePage.Name = "MovePage";
@@ -1443,19 +1462,19 @@
             this.MovePage.Text = "Move";
             this.MovePage.UseVisualStyleBackColor = true;
             // 
-            // groupBox9
+            // DefaultMoveSetupGrp
             // 
-            this.groupBox9.Controls.Add(this.SetLinearAccelBtn);
-            this.groupBox9.Controls.Add(this.SetBlendRadiusBtn);
-            this.groupBox9.Controls.Add(this.SetJointSpeedBtn);
-            this.groupBox9.Controls.Add(this.SetJointAccelBtn);
-            this.groupBox9.Controls.Add(this.SetLinearSpeedBtn);
-            this.groupBox9.Location = new System.Drawing.Point(581, 583);
-            this.groupBox9.Name = "groupBox9";
-            this.groupBox9.Size = new System.Drawing.Size(927, 498);
-            this.groupBox9.TabIndex = 115;
-            this.groupBox9.TabStop = false;
-            this.groupBox9.Text = "Default (non-Grind) Moves";
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearAccelBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetBlendRadiusBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointSpeedBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointAccelBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearSpeedBtn);
+            this.DefaultMoveSetupGrp.Location = new System.Drawing.Point(581, 583);
+            this.DefaultMoveSetupGrp.Name = "DefaultMoveSetupGrp";
+            this.DefaultMoveSetupGrp.Size = new System.Drawing.Size(927, 498);
+            this.DefaultMoveSetupGrp.TabIndex = 115;
+            this.DefaultMoveSetupGrp.TabStop = false;
+            this.DefaultMoveSetupGrp.Text = "Default (non-Grind) Moves";
             // 
             // SetupPage
             // 
@@ -1488,6 +1507,17 @@
             this.groupBox11.TabIndex = 117;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Grind Move Control";
+            // 
+            // SetTrialSpeedBtn
+            // 
+            this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(1405, 71);
+            this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
+            this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetTrialSpeedBtn.TabIndex = 119;
+            this.SetTrialSpeedBtn.Text = "Set Trial Speed";
+            this.SetTrialSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetTrialSpeedBtn.Click += new System.EventHandler(this.SetTrialSpeedBtn_Click);
             // 
             // SetGrindBlendRadiusBtn
             // 
@@ -2012,16 +2042,18 @@
             this.DoorClosedLbl.Text = "Door Closed?";
             this.DoorClosedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // SetTrialSpeedBtn
+            // VariableTestButtonGrp
             // 
-            this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(1405, 71);
-            this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
-            this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetTrialSpeedBtn.TabIndex = 119;
-            this.SetTrialSpeedBtn.Text = "Set Trial Speed";
-            this.SetTrialSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetTrialSpeedBtn.Click += new System.EventHandler(this.SetTrialSpeedBtn_Click);
+            this.VariableTestButtonGrp.Controls.Add(this.LoadVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.ClearAllVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.ClearVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.SaveVariablesBtn);
+            this.VariableTestButtonGrp.Location = new System.Drawing.Point(6, 880);
+            this.VariableTestButtonGrp.Name = "VariableTestButtonGrp";
+            this.VariableTestButtonGrp.Size = new System.Drawing.Size(1296, 159);
+            this.VariableTestButtonGrp.TabIndex = 92;
+            this.VariableTestButtonGrp.TabStop = false;
+            this.VariableTestButtonGrp.Text = "Variable Test Buttons";
             // 
             // MainForm
             // 
@@ -2074,7 +2106,7 @@
             this.RunPage.PerformLayout();
             this.ProgramPage.ResumeLayout(false);
             this.MovePage.ResumeLayout(false);
-            this.groupBox9.ResumeLayout(false);
+            this.DefaultMoveSetupGrp.ResumeLayout(false);
             this.SetupPage.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
             this.groupBox2.ResumeLayout(false);
@@ -2086,6 +2118,7 @@
             this.groupBox1.PerformLayout();
             this.LogPage.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
+            this.VariableTestButtonGrp.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2202,7 +2235,7 @@
         private System.Windows.Forms.Label CurrentLineLblCopy;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.RichTextBox RecipeRTBCopy;
-        private System.Windows.Forms.GroupBox groupBox9;
+        private System.Windows.Forms.GroupBox DefaultMoveSetupGrp;
         private System.Windows.Forms.Button JogRunBtn;
         private System.Windows.Forms.Label RunStartedTimeLbl;
         private System.Windows.Forms.Label label14;
@@ -2241,6 +2274,7 @@
         private System.Windows.Forms.Button InfoBtn;
         private System.Windows.Forms.Button SetGrindBlendRadiusBtn;
         private System.Windows.Forms.Button SetTrialSpeedBtn;
+        private System.Windows.Forms.GroupBox VariableTestButtonGrp;
     }
 }
 

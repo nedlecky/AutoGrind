@@ -14,6 +14,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -24,6 +25,23 @@ using NLog;
 
 namespace AutoGrind
 {
+    public static class RichTextBoxExtensions
+    {
+        [DllImport("user32.dll")]
+        private static extern IntPtr SendMessage(IntPtr hWnd, int msg, IntPtr wp, IntPtr lp);
+        private const int WM_SETREDRAW = 0x0b;
+
+        public static void SuspendDrawing(this System.Windows.Forms.RichTextBox richTextBox)
+        {
+            SendMessage(richTextBox.Handle, WM_SETREDRAW, (IntPtr)0, IntPtr.Zero);
+        }
+
+        public static void ResumeDrawing(this System.Windows.Forms.RichTextBox richTextBox)
+        {
+            SendMessage(richTextBox.Handle, WM_SETREDRAW, (IntPtr)1, IntPtr.Zero);
+            richTextBox.Invalidate();
+        }
+    }
     public partial class MainForm : Form
     {
 
@@ -177,7 +195,7 @@ namespace AutoGrind
                 if (LoadRecipeFile(recipeFileToAutoload))
                 {
                     SetRecipeState(RecipeState.LOADED);
-                    SetState(RunState.READY, true);
+                    SetState(RunState.READY);
                 }
 
             log.Info("System ready.");
@@ -230,7 +248,7 @@ namespace AutoGrind
 
             if (!e.Cancel)
             {
-                if (RecipeRTB.Modified)
+                if (RecipeWasModified())
                 {
                     var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                     if (result == DialogResult.OK)
@@ -404,7 +422,7 @@ namespace AutoGrind
                         RobotCommandStatusLbl.BackColor = Color.Green;
                         RobotCommandStatusLbl.Text = "Command Ready";
                         // Restore all button settings with same current state
-                        SetState(runState, true, true);
+                        SetState(runState, true);
                     }
                     else
                     {
@@ -412,7 +430,7 @@ namespace AutoGrind
                         RobotCommandStatusLbl.BackColor = Color.Red;
                         RobotCommandStatusLbl.Text = "WAIT";
                         // Restore all button settings with same current state
-                        SetState(runState, true, true);
+                        SetState(runState, true);
                         EnsureNotRunning();
                     }
                 }
@@ -450,18 +468,18 @@ namespace AutoGrind
         }
 
 
-        private void SetState(RunState s, bool fEditing = false, bool fForce = false)
+        private void SetState(RunState s, bool fForce = false)
         {
             if (fForce || runState != s)
             {
                 runState = s;
                 log.Info("EXEC SetState({0})", s.ToString());
 
-                EnterRunState(fEditing);
+                EnterRunState();
             }
         }
 
-        private void EnterRunState(bool fEditing)
+        private void EnterRunState()
         {
             switch (runState)
             {
@@ -469,13 +487,19 @@ namespace AutoGrind
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
+                    PositionMovePoseBtn.Enabled = robotReady;
+                    PositionMoveArmBtn.Enabled = robotReady;
+                    PositionSetBtn.Enabled = robotReady;
+
                     MoveToolMountBtn.Enabled = robotReady;
                     MoveToolHomeBtn.Enabled = robotReady;
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
-                    SaveRecipeBtn.Enabled = RecipeRTB.Modified;
+                    SaveRecipeBtn.Enabled = RecipeWasModified();
                     SaveAsRecipeBtn.Enabled = true;
+
+                    DefaultMoveSetupGrp.Enabled = true;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = false;
@@ -489,13 +513,18 @@ namespace AutoGrind
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
+                    PositionMovePoseBtn.Enabled = robotReady;
+                    PositionMoveArmBtn.Enabled = robotReady;
+                    PositionSetBtn.Enabled = robotReady;
                     MoveToolMountBtn.Enabled = robotReady;
                     MoveToolHomeBtn.Enabled = robotReady;
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
-                    SaveRecipeBtn.Enabled = RecipeRTB.Modified;
+                    SaveRecipeBtn.Enabled = RecipeWasModified();
                     SaveAsRecipeBtn.Enabled = true;
+
+                    DefaultMoveSetupGrp.Enabled = true;
 
                     StartBtn.Enabled = true;
                     StepBtn.Enabled = true;
@@ -509,6 +538,9 @@ namespace AutoGrind
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
+                    PositionMovePoseBtn.Enabled = false;
+                    PositionMoveArmBtn.Enabled = false;
+                    PositionSetBtn.Enabled = false;
                     MoveToolMountBtn.Enabled = false;
                     MoveToolHomeBtn.Enabled = false;
 
@@ -516,6 +548,8 @@ namespace AutoGrind
                     NewRecipeBtn.Enabled = false;
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
+
+                    DefaultMoveSetupGrp.Enabled = false;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = false;
@@ -534,6 +568,9 @@ namespace AutoGrind
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
+                    PositionMovePoseBtn.Enabled = false;
+                    PositionMoveArmBtn.Enabled = false;
+                    PositionSetBtn.Enabled = false;
                     MoveToolMountBtn.Enabled = false;
                     MoveToolHomeBtn.Enabled = false;
 
@@ -541,6 +578,8 @@ namespace AutoGrind
                     NewRecipeBtn.Enabled = false;
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
+
+                    DefaultMoveSetupGrp.Enabled = false;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = true;
@@ -553,18 +592,12 @@ namespace AutoGrind
                     break;
             }
 
-            // Set the colors
-            if (fEditing)
-            {
-                ;
-            }
-            else
-            {
-            }
-
             ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
             JogRunBtn.BackColor = JogRunBtn.Enabled ? Color.Green : Color.Gray;
             JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
+            PositionMovePoseBtn.BackColor = PositionMovePoseBtn.Enabled ? Color.Green : Color.Gray;
+            PositionMoveArmBtn.BackColor = PositionMoveArmBtn.Enabled ? Color.Green : Color.Gray;
+            PositionSetBtn.BackColor = PositionSetBtn.Enabled ? Color.Green : Color.Gray;
             MoveToolMountBtn.BackColor = MoveToolMountBtn.Enabled ? Color.Green : Color.Gray;
             MoveToolHomeBtn.BackColor = MoveToolHomeBtn.Enabled ? Color.Green : Color.Gray;
 
@@ -644,6 +677,13 @@ namespace AutoGrind
                 new ControlSpec(SavePositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
                 new ControlSpec(ClearPositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
                 new ControlSpec(ClearAllPositionsBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+
+                // Variable Test Buttons
+                new ControlSpec(VariableTestButtonGrp, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(LoadVariablesBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(SaveVariablesBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(ClearVariablesBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+                new ControlSpec(ClearAllVariablesBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
 
                 // Set Position Button
                 new ControlSpec(PositionSetBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
@@ -821,7 +861,7 @@ namespace AutoGrind
                 robotCommandServer?.Send("(10)");
             }
 
-                pollDashboardStateNow = true;
+            pollDashboardStateNow = true;
         }
 
         private void KeyboardBtn_Click(object sender, EventArgs e)
@@ -1062,6 +1102,11 @@ namespace AutoGrind
         /// </summary>
         /// <param name="file">The file to be loaded.</param>
         /// <returns></returns>
+        private string recipeAsLoaded = "";  // As it was when loaded so we can test for actual mods
+        private bool RecipeWasModified()
+        {
+            return recipeAsLoaded != RecipeRTB.Text;
+        }
         bool LoadRecipeFile(string file)
         {
             log.Info("LoadRecipeFile({0})", file);
@@ -1070,8 +1115,8 @@ namespace AutoGrind
             try
             {
                 RecipeRTB.LoadFile(file, System.Windows.Forms.RichTextBoxStreamType.PlainText);
-                RecipeRTB.Modified = false;
                 RecipeFilenameLbl.Text = file;
+                recipeAsLoaded = RecipeRTB.Text;
                 return true;
             }
             catch (Exception ex)
@@ -1084,7 +1129,7 @@ namespace AutoGrind
         private void NewRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("NewRecipeBtn_Click(...)");
-            if (RecipeRTB.Modified)
+            if (RecipeWasModified())
             {
                 var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                 if (result == DialogResult.OK)
@@ -1092,16 +1137,17 @@ namespace AutoGrind
             }
 
             SetRecipeState(RecipeState.NEW);
-            SetState(RunState.IDLE, true);
+            SetState(RunState.IDLE);
             RecipeFilenameLbl.Text = "Untitled";
             RecipeRTB.Clear();
+            recipeAsLoaded = "";
             MainTab.SelectedIndex = 1; // = "Program";
         }
 
         private void LoadRecipeBtn_Click(object sender, EventArgs e)
         {
             log.Info("LoadRecipeBtn_Click(...)");
-            if (RecipeRTB.Modified)
+            if (RecipeWasModified())
             {
                 var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
                 if (result == DialogResult.OK)
@@ -1125,7 +1171,7 @@ namespace AutoGrind
                 if (LoadRecipeFile(dialog.FileName))
                 {
                     SetRecipeState(RecipeState.LOADED);
-                    SetState(RunState.READY, true);
+                    SetState(RunState.READY);
                 }
             }
         }
@@ -1139,9 +1185,9 @@ namespace AutoGrind
             {
                 log.Info("Save Recipe program to {0}", RecipeFilenameLbl.Text);
                 RecipeRTB.SaveFile(RecipeFilenameLbl.Text, System.Windows.Forms.RichTextBoxStreamType.PlainText);
-                RecipeRTB.Modified = false;
+                recipeAsLoaded = RecipeRTB.Text;
                 SetRecipeState(RecipeState.LOADED);
-                SetState(RunState.READY, true);
+                SetState(RunState.READY);
             }
         }
 
@@ -1449,13 +1495,14 @@ namespace AutoGrind
 
             if (n >= 1 && n <= RecipeRTB.Lines.Count())
             {
-                bool oldWordwrap = RecipeRTB.WordWrap;
+                RecipeRTB.SuspendDrawing();
+
+                bool wordWrap = RecipeRTB.WordWrap;
                 RecipeRTB.WordWrap = false;
                 int start = RecipeRTB.GetFirstCharIndexFromLine(lineCurrentlyExecuting - 1);
-                RecipeRTB.WordWrap = oldWordwrap;
-                int length = RecipeRTB.Lines[lineCurrentlyExecuting - 1].Length;
+                int length = RecipeRTB.Lines[lineCurrentlyExecuting - 1].Length + 1;
+                RecipeRTB.WordWrap = wordWrap;
 
-                bool modified = RecipeRTB.Modified;
                 RecipeRTB.SelectAll();
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
 
@@ -1463,7 +1510,8 @@ namespace AutoGrind
                 RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Bold);
                 RecipeRTB.ScrollToCaret();
                 RecipeRTB.ScrollToCaret();
-                RecipeRTB.Modified = modified;
+
+                RecipeRTB.ResumeDrawing();
 
                 RecipeRTBCopy.Select(start, length);
                 RecipeRTBCopy.SelectionFont = new Font(RecipeRTBCopy.Font, FontStyle.Bold);
@@ -1677,7 +1725,7 @@ namespace AutoGrind
                }            # Ends with a '}' character  */
             if (line != origLine)
                 log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
-            
+
             // Line gets shown on screen with variables substututed
             CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
 
@@ -2022,10 +2070,8 @@ namespace AutoGrind
 
         private void UnboldRecipe()
         {
-            bool wasModified = RecipeRTB.Modified;
             RecipeRTB.SelectAll();
             RecipeRTB.SelectionFont = new Font(RecipeRTB.Font, FontStyle.Regular);
-            RecipeRTB.Modified = wasModified;
             RecipeRTB.DeselectAll();
 
             RecipeRTBCopy.SelectAll();
