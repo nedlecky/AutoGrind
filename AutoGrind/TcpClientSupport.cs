@@ -201,17 +201,17 @@ namespace AutoGrind
 
             if (response == null)
             {
-                log.Error("{0} IR({1}) took too long. Waited {2} mS", logPrefix, inquiry, timeoutMs);
+                log.Info("{0} IR({1}) waited {2} mS. Retrying...", logPrefix, inquiry, timeoutMs);
 
                 // Let's just wait a bit more?
                 while ((response = Receive()) == null && timer.ElapsedMilliseconds < timeoutMs * 2) ;
                 timer.Stop();
                 if (response != null)
                 {
-                    log.Error("{0} IR({1}) RETRY SUCCESS = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+                    log.Info("{0} IR({1}) Retry succeeded = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
                     return response;
                 }
-                log.Error("{0} IR({1}) RETRY FAIL. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
+                log.Error("{0} IR({1}) Failed even with retry. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
                 return null;
             }
             timer.Stop();

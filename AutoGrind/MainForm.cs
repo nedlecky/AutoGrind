@@ -249,13 +249,23 @@ namespace AutoGrind
         private void EnsureNotRunning()
         {
             if (runState == RunState.RUNNING)
-                SetState(RunState.PAUSED);
+                PauseBtn_Click(null, null);
+        }
+        // Something isn't right. If we're not stopped, select STOP
+        private void EnsureStopped()
+        {
+            if (runState != RunState.READY)
+                StopBtn_Click(null, null);
         }
         bool robotReady = false;
         int nDashboard = 0;
         bool pollDashboardStateNow = false;
         DateTime runStartedTime;   // When did the user hit run?
         DateTime stepStartedTime;  // When did the current reecipe line start executing?
+        static int noRobotmodeResponseCount = 0;     // How many times in a row have we gotten no response to "robotmode"
+        static int noSafetystatusResponseCount = 0;  // How many times in a row have we gotten no response to "safetystatus"
+        static int noProgramstateResponseCount = 0;  // How many times in a row have we gotten no response to "programstate"
+        static int inquiryResponseWaitTimeMs = 100;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
@@ -278,32 +288,41 @@ namespace AutoGrind
                 {
                     pollDashboardStateNow = false;
                     // Poll and interpret robotmode
-                    string robotmodeResponse = robotDashboardClient.InquiryResponse("robotmode", 100);
+                    string robotmodeResponse = robotDashboardClient.InquiryResponse("robotmode", inquiryResponseWaitTimeMs);
                     Color color = Color.Red;
                     string buttonText = robotmodeResponse;
                     switch (robotmodeResponse)
                     {
                         case "Robotmode: RUNNING":
+                            noRobotmodeResponseCount = 0;
                             color = Color.Green;
                             break;
                         case "Robotmode: IDLE":
-                            EnsureNotRunning();
+                            noRobotmodeResponseCount = 0;
+                            EnsureStopped();
                             color = Color.Blue;
                             break;
                         case "Robotmode: POWER_OFF":
-                            EnsureNotRunning();
+                            noRobotmodeResponseCount = 0;
+                            EnsureStopped();
                             color = Color.Red;
                             break;
                         case "Robotmode: POWER_ON":
-                            EnsureNotRunning();
+                            noRobotmodeResponseCount = 0;
+                            EnsureStopped();
                             color = Color.Blue;
                             break;
                         case "Robotmode: BOOTING":
-                            EnsureNotRunning();
+                            noRobotmodeResponseCount = 0;
+                            EnsureStopped();
                             color = Color.Coral;
                             break;
                         default:
-                            EnsureNotRunning();
+                            if (++noRobotmodeResponseCount > 3)
+                            {
+                                log.Error("Too many sequential missed responses from robotmode");
+                                EnsureStopped();
+                            }
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -312,20 +331,26 @@ namespace AutoGrind
                     RobotModeBtn.BackColor = color;
 
                     // Poll and interpret safetystatus
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus", 100);
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus", inquiryResponseWaitTimeMs);
                     color = Color.Red;
                     buttonText = robotmodeResponse;
                     switch (robotmodeResponse)
                     {
                         case "Safetystatus: NORMAL":
+                            noSafetystatusResponseCount = 0;
                             color = Color.Green;
                             break;
                         case "Safetystatus: PROTECTIVE_STOP":
+                            noSafetystatusResponseCount = 0;
                             EnsureNotRunning();
                             color = Color.Red;
                             break;
                         default:
-                            EnsureNotRunning();
+                            if (++noSafetystatusResponseCount > 3)
+                            {
+                                log.Error("Too many sequential missed responses from safetystatus");
+                                EnsureStopped();
+                            }
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -334,11 +359,17 @@ namespace AutoGrind
                     SafetyStatusBtn.BackColor = color;
 
                     // Poll and interpret programstate
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate", 100);
+                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate", inquiryResponseWaitTimeMs);
                     color = Color.Red;
                     if (robotmodeResponse != null)
-                        if (robotmodeResponse.StartsWith("PLAYING"))
+                        if (robotmodeResponse.StartsWith("STOPPED"))
                         {
+                            noProgramstateResponseCount = 0;
+                            EnsureStopped();
+                        }
+                        else if (robotmodeResponse.StartsWith("PLAYING"))
+                        {
+                            noProgramstateResponseCount = 0;
                             color = Color.Green;
                             if (robotCommandServer == null)
                             {
@@ -360,6 +391,15 @@ namespace AutoGrind
                                     RobotCommandStatusLbl.BackColor = Color.Red;
                                     RobotCommandStatusLbl.Text = "Command Waiting";
                                 }
+                            }
+                        }
+                        else
+                        {
+                            // Unknown response from programstate
+                            if (++noProgramstateResponseCount > 3)
+                            {
+                                log.Error("Too many sequential missed responses from programstate");
+                                EnsureStopped();
                             }
                         }
                     ProgramStateBtn.Text = robotmodeResponse;
@@ -2020,8 +2060,6 @@ namespace AutoGrind
                         if (parameters.Length > 0 || commandSpec.nParams <= 0)
                         {
                             robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
-                            if (robotCommandServer == null)
-                                PromptOperator("Command failed:\n" + command);
                         }
                         else
                             PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
