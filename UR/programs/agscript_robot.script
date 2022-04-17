@@ -297,11 +297,11 @@ end
 
 global robot_door_closed = is_door_closed()
 global time_in_uncommanded_grind = 0
-global time_door_check_rate_S = 0.250
-global grind_max_wait_mS = 1500
+global time_door_check_rate_s = 0.250
+global grind_max_wait_ms = 1500
 thread door_monitor_thread():
   while True:
-    sleep(time_door_check_rate_S)
+    sleep(time_door_check_rate_s)
     new_door_closed = is_door_closed()
 
     # Notify host if door state has changed
@@ -313,9 +313,9 @@ thread door_monitor_thread():
     # Check for still in grind process but not executing a grind command
     # This is what happens after a grind_...(....,1) executes while waiting for next command
     if grind_process_state and grind_ready:
-      time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_S
-      # No new grind commands for grind_max_wait_mS... schedule a grind_retract!
-      if time_in_uncommanded_grind > grind_max_wait_mS / 1000.0:
+      time_in_uncommanded_grind = time_in_uncommanded_grind + time_door_check_rate_s
+      # No new grind commands for grind_max_wait_ms... schedule a grind_retract!
+      if time_in_uncommanded_grind > grind_max_wait_ms / 1000.0:
         global halt_grind = True
       end
     else:

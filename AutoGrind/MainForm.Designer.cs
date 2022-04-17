@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
@@ -67,10 +67,11 @@
             this.PositionSetBtn = new System.Windows.Forms.Button();
             this.PositionsGrd = new System.Windows.Forms.DataGridView();
             this.variablesPage = new System.Windows.Forms.TabPage();
-            this.ClearAllVariablesBtn = new System.Windows.Forms.Button();
+            this.VariableTestButtonGrp = new System.Windows.Forms.GroupBox();
             this.LoadVariablesBtn = new System.Windows.Forms.Button();
-            this.SaveVariablesBtn = new System.Windows.Forms.Button();
+            this.ClearAllVariablesBtn = new System.Windows.Forms.Button();
             this.ClearVariablesBtn = new System.Windows.Forms.Button();
+            this.SaveVariablesBtn = new System.Windows.Forms.Button();
             this.VariablesGrd = new System.Windows.Forms.DataGridView();
             this.manualPage = new System.Windows.Forms.TabPage();
             this.LoadManualBtn = new System.Windows.Forms.Button();
@@ -105,6 +106,8 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.StepTimeEstimateLbl = new System.Windows.Forms.Label();
+            this.label13 = new System.Windows.Forms.Label();
             this.StepElapsedTimeLbl = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.RobotURControlStatusLbl = new System.Windows.Forms.Label();
@@ -126,7 +129,7 @@
             this.GrindCycleLbl = new System.Windows.Forms.Label();
             this.CurrentLineLblCopy = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.label9 = new System.Windows.Forms.Label();
+            this.RunStateLbl = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
             this.RobotModelLbl = new System.Windows.Forms.Label();
@@ -182,12 +185,14 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
-            this.VariableTestButtonGrp = new System.Windows.Forms.GroupBox();
+            this.StepTimeRemainingLbl = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).BeginInit();
             this.variablesPage.SuspendLayout();
+            this.VariableTestButtonGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).BeginInit();
             this.manualPage.SuspendLayout();
             this.groupBox10.SuspendLayout();
@@ -207,7 +212,6 @@
             this.groupBox1.SuspendLayout();
             this.LogPage.SuspendLayout();
             this.groupBox3.SuspendLayout();
-            this.VariableTestButtonGrp.SuspendLayout();
             this.SuspendLayout();
             // 
             // CurrentLineLbl
@@ -600,14 +604,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -628,18 +632,18 @@
             this.variablesPage.Text = "Variables";
             this.variablesPage.UseVisualStyleBackColor = true;
             // 
-            // ClearAllVariablesBtn
+            // VariableTestButtonGrp
             // 
-            this.ClearAllVariablesBtn.BackColor = System.Drawing.Color.Gray;
-            this.ClearAllVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.ClearAllVariablesBtn.ForeColor = System.Drawing.Color.White;
-            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(816, 38);
-            this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
-            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(240, 110);
-            this.ClearAllVariablesBtn.TabIndex = 91;
-            this.ClearAllVariablesBtn.Text = "Clear All";
-            this.ClearAllVariablesBtn.UseVisualStyleBackColor = false;
-            this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
+            this.VariableTestButtonGrp.Controls.Add(this.LoadVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.ClearAllVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.ClearVariablesBtn);
+            this.VariableTestButtonGrp.Controls.Add(this.SaveVariablesBtn);
+            this.VariableTestButtonGrp.Location = new System.Drawing.Point(6, 880);
+            this.VariableTestButtonGrp.Name = "VariableTestButtonGrp";
+            this.VariableTestButtonGrp.Size = new System.Drawing.Size(1296, 159);
+            this.VariableTestButtonGrp.TabIndex = 92;
+            this.VariableTestButtonGrp.TabStop = false;
+            this.VariableTestButtonGrp.Text = "Variable Test Buttons";
             // 
             // LoadVariablesBtn
             // 
@@ -654,18 +658,18 @@
             this.LoadVariablesBtn.UseVisualStyleBackColor = false;
             this.LoadVariablesBtn.Click += new System.EventHandler(this.LoadVariablesBtn_Click);
             // 
-            // SaveVariablesBtn
+            // ClearAllVariablesBtn
             // 
-            this.SaveVariablesBtn.BackColor = System.Drawing.Color.Gray;
-            this.SaveVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveVariablesBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveVariablesBtn.Location = new System.Drawing.Point(276, 38);
-            this.SaveVariablesBtn.Name = "SaveVariablesBtn";
-            this.SaveVariablesBtn.Size = new System.Drawing.Size(240, 110);
-            this.SaveVariablesBtn.TabIndex = 89;
-            this.SaveVariablesBtn.Text = "Save";
-            this.SaveVariablesBtn.UseVisualStyleBackColor = false;
-            this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
+            this.ClearAllVariablesBtn.BackColor = System.Drawing.Color.Gray;
+            this.ClearAllVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearAllVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearAllVariablesBtn.Location = new System.Drawing.Point(816, 38);
+            this.ClearAllVariablesBtn.Name = "ClearAllVariablesBtn";
+            this.ClearAllVariablesBtn.Size = new System.Drawing.Size(240, 110);
+            this.ClearAllVariablesBtn.TabIndex = 91;
+            this.ClearAllVariablesBtn.Text = "Clear All";
+            this.ClearAllVariablesBtn.UseVisualStyleBackColor = false;
+            this.ClearAllVariablesBtn.Click += new System.EventHandler(this.ClearAllVariablesBtn_Click);
             // 
             // ClearVariablesBtn
             // 
@@ -680,18 +684,31 @@
             this.ClearVariablesBtn.UseVisualStyleBackColor = false;
             this.ClearVariablesBtn.Click += new System.EventHandler(this.ClearVariablesBtn_Click);
             // 
+            // SaveVariablesBtn
+            // 
+            this.SaveVariablesBtn.BackColor = System.Drawing.Color.Gray;
+            this.SaveVariablesBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveVariablesBtn.ForeColor = System.Drawing.Color.White;
+            this.SaveVariablesBtn.Location = new System.Drawing.Point(276, 38);
+            this.SaveVariablesBtn.Name = "SaveVariablesBtn";
+            this.SaveVariablesBtn.Size = new System.Drawing.Size(240, 110);
+            this.SaveVariablesBtn.TabIndex = 89;
+            this.SaveVariablesBtn.Text = "Save";
+            this.SaveVariablesBtn.UseVisualStyleBackColor = false;
+            this.SaveVariablesBtn.Click += new System.EventHandler(this.SaveVariablesBtn_Click);
+            // 
             // VariablesGrd
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1102,6 +1119,10 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
+            this.RunPage.Controls.Add(this.label17);
+            this.RunPage.Controls.Add(this.StepTimeEstimateLbl);
+            this.RunPage.Controls.Add(this.label13);
             this.RunPage.Controls.Add(this.StepElapsedTimeLbl);
             this.RunPage.Controls.Add(this.label16);
             this.RunPage.Controls.Add(this.RobotURControlStatusLbl);
@@ -1123,7 +1144,7 @@
             this.RunPage.Controls.Add(this.GrindCycleLbl);
             this.RunPage.Controls.Add(this.CurrentLineLblCopy);
             this.RunPage.Controls.Add(this.label10);
-            this.RunPage.Controls.Add(this.label9);
+            this.RunPage.Controls.Add(this.RunStateLbl);
             this.RunPage.Controls.Add(this.label8);
             this.RunPage.Controls.Add(this.label7);
             this.RunPage.Controls.Add(this.RobotModelLbl);
@@ -1144,6 +1165,27 @@
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
             // 
+            // StepTimeEstimateLbl
+            // 
+            this.StepTimeEstimateLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.StepTimeEstimateLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StepTimeEstimateLbl.Location = new System.Drawing.Point(1170, 647);
+            this.StepTimeEstimateLbl.Name = "StepTimeEstimateLbl";
+            this.StepTimeEstimateLbl.Size = new System.Drawing.Size(353, 52);
+            this.StepTimeEstimateLbl.TabIndex = 146;
+            this.StepTimeEstimateLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label13.Location = new System.Drawing.Point(802, 647);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(367, 46);
+            this.label13.TabIndex = 145;
+            this.label13.Text = "Step Time Estimate";
+            this.label13.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // StepElapsedTimeLbl
             // 
             this.StepElapsedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -1158,7 +1200,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(836, 594);
+            this.label16.Location = new System.Drawing.Point(835, 592);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(329, 46);
             this.label16.TabIndex = 143;
@@ -1333,7 +1375,7 @@
             // 
             this.Grind.AutoSize = true;
             this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(1279, 659);
+            this.Grind.Location = new System.Drawing.Point(1277, 763);
             this.Grind.Name = "Grind";
             this.Grind.Size = new System.Drawing.Size(54, 46);
             this.Grind.TabIndex = 128;
@@ -1344,7 +1386,7 @@
             // 
             this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1347, 656);
+            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1337, 757);
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
@@ -1354,7 +1396,7 @@
             // 
             this.GrindCycleLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindCycleLbl.Location = new System.Drawing.Point(1170, 656);
+            this.GrindCycleLbl.Location = new System.Drawing.Point(1170, 757);
             this.GrindCycleLbl.Name = "GrindCycleLbl";
             this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
             this.GrindCycleLbl.TabIndex = 126;
@@ -1373,25 +1415,25 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(936, 659);
+            this.label10.Location = new System.Drawing.Point(940, 757);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(229, 46);
             this.label10.TabIndex = 124;
             this.label10.Text = "Grind Cycle";
             this.label10.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // label9
+            // RunStateLbl
             // 
-            this.label9.BackColor = System.Drawing.Color.Gray;
-            this.label9.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.ForeColor = System.Drawing.Color.White;
-            this.label9.Location = new System.Drawing.Point(857, 311);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(666, 94);
-            this.label9.TabIndex = 122;
-            this.label9.Text = "Current Step";
-            this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.RunStateLbl.BackColor = System.Drawing.Color.Gray;
+            this.RunStateLbl.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunStateLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RunStateLbl.ForeColor = System.Drawing.Color.White;
+            this.RunStateLbl.Location = new System.Drawing.Point(857, 311);
+            this.RunStateLbl.Name = "RunStateLbl";
+            this.RunStateLbl.Size = new System.Drawing.Size(666, 94);
+            this.RunStateLbl.TabIndex = 122;
+            this.RunStateLbl.Text = "Current Step";
+            this.RunStateLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label8
             // 
@@ -1722,23 +1764,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -2042,18 +2084,26 @@
             this.DoorClosedLbl.Text = "Door Closed?";
             this.DoorClosedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // VariableTestButtonGrp
+            // StepTimeRemainingLbl
             // 
-            this.VariableTestButtonGrp.Controls.Add(this.LoadVariablesBtn);
-            this.VariableTestButtonGrp.Controls.Add(this.ClearAllVariablesBtn);
-            this.VariableTestButtonGrp.Controls.Add(this.ClearVariablesBtn);
-            this.VariableTestButtonGrp.Controls.Add(this.SaveVariablesBtn);
-            this.VariableTestButtonGrp.Location = new System.Drawing.Point(6, 880);
-            this.VariableTestButtonGrp.Name = "VariableTestButtonGrp";
-            this.VariableTestButtonGrp.Size = new System.Drawing.Size(1296, 159);
-            this.VariableTestButtonGrp.TabIndex = 92;
-            this.VariableTestButtonGrp.TabStop = false;
-            this.VariableTestButtonGrp.Text = "Variable Test Buttons";
+            this.StepTimeRemainingLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.StepTimeRemainingLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StepTimeRemainingLbl.Location = new System.Drawing.Point(1170, 702);
+            this.StepTimeRemainingLbl.Name = "StepTimeRemainingLbl";
+            this.StepTimeRemainingLbl.Size = new System.Drawing.Size(353, 52);
+            this.StepTimeRemainingLbl.TabIndex = 148;
+            this.StepTimeRemainingLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label17.Location = new System.Drawing.Point(954, 702);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(210, 46);
+            this.label17.TabIndex = 147;
+            this.label17.Text = "Remaining";
+            this.label17.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 
@@ -2095,6 +2145,7 @@
             this.PositionTestButtonGrp.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.PositionsGrd)).EndInit();
             this.variablesPage.ResumeLayout(false);
+            this.VariableTestButtonGrp.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.VariablesGrd)).EndInit();
             this.manualPage.ResumeLayout(false);
             this.groupBox10.ResumeLayout(false);
@@ -2118,7 +2169,6 @@
             this.groupBox1.PerformLayout();
             this.LogPage.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
-            this.VariableTestButtonGrp.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2228,7 +2278,7 @@
         private System.Windows.Forms.Label RobotModelLbl;
         private System.Windows.Forms.Label RobotSerialNumberLbl;
         private System.Windows.Forms.RichTextBox UrDashboardLogRTB;
-        private System.Windows.Forms.Label label9;
+        private System.Windows.Forms.Label RunStateLbl;
         private System.Windows.Forms.Label Grind;
         private System.Windows.Forms.Label GrindNCyclesLbl;
         private System.Windows.Forms.Label GrindCycleLbl;
@@ -2275,6 +2325,10 @@
         private System.Windows.Forms.Button SetGrindBlendRadiusBtn;
         private System.Windows.Forms.Button SetTrialSpeedBtn;
         private System.Windows.Forms.GroupBox VariableTestButtonGrp;
+        private System.Windows.Forms.Label StepTimeEstimateLbl;
+        private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Label StepTimeRemainingLbl;
+        private System.Windows.Forms.Label label17;
     }
 }
 

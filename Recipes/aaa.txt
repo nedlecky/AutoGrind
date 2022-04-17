@@ -1,5 +1,6 @@
 movelinear(demo_cyl)
 speed = 2
+sleep(5000)
 
 grind_rect(20,20,1,{speed},10,1)
 grind_rect(10,10,1,{speed},10,1)

@@ -14,7 +14,7 @@ global grind_ready = True
 global grind_contact_enable = 0
 global grind_touch_retract_mm = 3       # How far to retract after touch  (we do 2X this for ghrind_contact_enable=1)
 global grind_touch_speed_mmps = 0.1     # How fast to go in for the touch
-global grind_force_dwell_mS = 500       # How long to dwell after turning force more on
+global grind_force_dwell_ms = 500       # How long to dwell after turning force more on
 global grind_blend_radius_m = 0.001     # Blend radius to use while grinding
 global grind_trial_speed_mmps = 20      # Grinding speed when not really grinding!
 
@@ -104,17 +104,17 @@ def pattern_grind():
     end
     socket_set_var("grind_touch_speed_mmps", grind_touch_speed_mmps)
   elif command[2] == 4:
-    global response = "set grind_force_dwell_mS"
+    global response = "set grind_force_dwell_ms"
     if command[3] >= 0:
-      global grind_force_dwell_mS = command[3]
+      global grind_force_dwell_ms = command[3]
     end
-    socket_set_var("grind_force_dwell_mS", grind_force_dwell_mS)
+    socket_set_var("grind_force_dwell_ms", grind_force_dwell_ms)
   elif command[2] == 5:
-    global response = "set grind_max_wait_mS"
+    global response = "set grind_max_wait_ms"
     if command[3] >= 0:
-      global grind_max_wait_mS = command[3]
+      global grind_max_wait_ms = command[3]
     end
-    socket_set_var("grind_max_wait_mS", grind_max_wait_mS)
+    socket_set_var("grind_max_wait_ms", grind_max_wait_ms)
   elif command[2] == 6:
     global response = "set grind_blend_radius_mm"
     if command[3] >= 0:
@@ -296,7 +296,7 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
     # 2: Force frame not transformed
     # Speed limits
     force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
-    sleep(grind_force_dwell_mS / 1000.0)
+    sleep(grind_force_dwell_ms / 1000.0)
   else:
     end_force_mode()
   end
@@ -401,6 +401,9 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
   drx_rad = dx_m / radius_m
   dry_rad = dy_m / radius_m
 
+  # Grind time estimate
+  time_ms = sqrt(dx_mm * dx_mm + dy_mm * dy_mm) * n_cycles / grind_speed_mps
+  socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
     return False
@@ -444,6 +447,10 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   dry_rad = dy_m / radius_m
   speed_factor = 0.5 / robot_part_geometry[1]  # 0.5 / diam_m is the speedup needed on rotational moves
 
+  # Grind time estimate
+  time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_speed_mps
+  socket_set_var("robot_step_time_estimate_ms", time_ms)
+
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
     return False
   end
@@ -485,6 +492,10 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   drx_rad = dy_m / part_radius_m
   dry_rad = dy_m / part_radius_m
 
+  # Grind time estimate
+  time_ms = (dx_mm * n_ysteps + dy_mm * n_xsteps) * n_cycles / grind_speed_mps
+  socket_set_var("robot_step_time_estimate_ms", time_ms)
+
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
     return False
   end
@@ -516,6 +527,11 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   # Unit conversion
   circle_diam_m = circle_diam_mm / 1000.0
   part_diam_m = robot_part_geometry[1]
+
+  # Grind time estimate
+  time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps
+  socket_set_var("robot_step_time_estimate_ms", time_ms)
+
 
   if not set_grind_process_state(True, [p[-circle_diam_m / 2.0, 0, 0, 0, 0, 0], p[-circle_diam_m / 2.0, 0, 0, 0, 0, 0], p[0, 0, 0, -circle_diam_m / part_diam_m, 0, 0]]):
     return False
@@ -549,6 +565,10 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   circle1_diam_m = circle1_diam_mm / 1000.0
   circle2_diam_m = circle2_diam_mm / 1000.0
   part_diam_m = robot_part_geometry[1]
+
+  # Grind time estimate based on avergae diam
+  time_ms = MATH_PI * (circle1_diam_mm + circle2_diam_mm) / 2 * n_cycles / grind_speed_mps
+  socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-circle1_diam_m / 2.0, 0, 0, 0, 0, 0], p[-circle1_diam_m / 2.0, 0, 0, 0, 0, 0], p[0, 0, 0, -circle1_diam_m / part_diam_m, 0, 0]]):
     return False

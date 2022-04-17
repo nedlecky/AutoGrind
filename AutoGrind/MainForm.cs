@@ -257,11 +257,13 @@ namespace AutoGrind
             if (runState != RunState.READY)
                 StopBtn_Click(null, null);
         }
-        bool robotReady = false;
-        int nDashboard = 0;
-        bool pollDashboardStateNow = false;
-        DateTime runStartedTime;   // When did the user hit run?
-        DateTime stepStartedTime;  // When did the current reecipe line start executing?
+
+        static bool robotReady = false;
+        static int nDashboard = 0;
+        static bool pollDashboardStateNow = false;
+        static DateTime runStartedTime;   // When did the user hit run?
+        static DateTime stepStartedTime;  // When did the current recipe line start executing?
+        static DateTime stepEndTimeEstimate;  // When do we think it will end?
         static int noRobotmodeResponseCount = 0;     // How many times in a row have we gotten no response to "robotmode"
         static int noSafetystatusResponseCount = 0;  // How many times in a row have we gotten no response to "safetystatus"
         static int noProgramstateResponseCount = 0;  // How many times in a row have we gotten no response to "programstate"
@@ -280,6 +282,9 @@ namespace AutoGrind
 
                 TimeSpan stepElapsed = now - stepStartedTime;
                 StepElapsedTimeLbl.Text = stepElapsed.ToString(@"d\:hh\:mm\:ss");
+
+                TimeSpan timeRemaining = stepEndTimeEstimate - now;
+                StepTimeRemainingLbl.Text = timeRemaining.ToString(@"mm\:ss");
             }
 
             // Ping the dashboard every few seconds
@@ -507,6 +512,9 @@ namespace AutoGrind
             switch (runState)
             {
                 case RunState.IDLE:
+                    RunStateLbl.Text = "IDLE";
+                    RunStateLbl.BackColor = Color.Gray;
+
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
@@ -533,6 +541,9 @@ namespace AutoGrind
                     RecipeRTB.Enabled = true;
                     break;
                 case RunState.READY:
+                    RunStateLbl.Text = "READY";
+                    RunStateLbl.BackColor = Color.Red;
+
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
@@ -558,6 +569,9 @@ namespace AutoGrind
                     RecipeRTB.Enabled = true;
                     break;
                 case RunState.RUNNING:
+                    RunStateLbl.Text = "RUNNING";
+                    RunStateLbl.BackColor = Color.Green;
+
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
@@ -588,6 +602,9 @@ namespace AutoGrind
 
                     break;
                 case RunState.PAUSED:
+                    RunStateLbl.Text = "PAUSED";
+                    RunStateLbl.BackColor = Color.DarkOrange;
+
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
                     JogBtn.Enabled = false;
@@ -738,7 +755,7 @@ namespace AutoGrind
                         NumberOfDecimals = 0,
                         MaxAllowed = 999999,
                         MinAllowed = 0,
-                        IsPassword=true,
+                        IsPassword = true,
                     };
                     if (form.ShowDialog(this) != DialogResult.OK || form.Value != "9")
                     {
@@ -959,6 +976,8 @@ namespace AutoGrind
             RunStartedTimeLbl.Text = runStartedTime.ToString();
             GrindCycleLbl.Text = "";
             GrindNCyclesLbl.Text = "";
+            StepTimeEstimateLbl.Text = "";
+
 
             // This allows offline dry runs but makes sure you know!
             if (!robotReady)
@@ -1726,8 +1745,12 @@ namespace AutoGrind
         }
         private bool ExecuteLine(int lineNumber, string line)
         {
+            // Step is starting now
             stepStartedTime = DateTime.Now;
 
+            // Default time estimate to complete step is 0
+            stepEndTimeEstimate = stepStartedTime;
+            StepTimeEstimateLbl.Text = "0.000";
 
             // Any variables to sub {varName}
             string origLine = line;
@@ -1798,10 +1821,12 @@ namespace AutoGrind
                 sleepMs = Convert.ToDouble(ExtractParameters(command, 1).ToString());
                 sleepTimer = new Stopwatch();
                 sleepTimer.Start();
+                StepTimeEstimateLbl.Text = String.Format("{0} s", sleepMs/1000.0);
+                stepEndTimeEstimate = DateTime.Now.AddMilliseconds(sleepMs);
                 return true;
             }
 
-            // assert
+            // assert?
             if (command.StartsWith("assert("))
             {
                 string[] parameters = ExtractParameters(command, 2).Split(',');
@@ -2728,6 +2753,11 @@ namespace AutoGrind
                     SetDoorClosedInputBtn.Text = "Set Door Closed Input = " + valueTrimmed;
                     DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
                     break;
+                case "robot_step_time_estimate_ms":
+                    double ms = Convert.ToDouble(valueTrimmed);
+                    stepEndTimeEstimate = stepStartedTime.AddMilliseconds(ms);
+                    StepTimeEstimateLbl.Text = string.Format("{0} s", ms/1000.0);
+                    break;
                 case "robot_door_closed":
                     switch (valueTrimmed)
                     {
@@ -2753,11 +2783,11 @@ namespace AutoGrind
                 case "grind_touch_retract_mm":
                     SetTouchRetractBtn.Text = "Grind Touch Retract\n" + valueTrimmed + " mm";
                     break;
-                case "grind_force_dwell_mS":
-                    SetForceDwellBtn.Text = "Grind Force Dwell Time\n" + valueTrimmed + " mS";
+                case "grind_force_dwell_ms":
+                    SetForceDwellBtn.Text = "Grind Force Dwell Time\n" + valueTrimmed + " ms";
                     break;
-                case "grind_max_wait_mS":
-                    SetMaxWaitBtn.Text = "Grind Max Wait Time\n" + valueTrimmed + " mS";
+                case "grind_max_wait_ms":
+                    SetMaxWaitBtn.Text = "Grind Max Wait Time\n" + valueTrimmed + " ms";
                     break;
                 case "grind_blend_radius_mm":
                     SetGrindBlendRadiusBtn.Text = "Grind Blend Radius\n" + valueTrimmed + " mm";
@@ -3407,7 +3437,6 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
-
     }
     public static class RichTextBoxExtensions
     {
