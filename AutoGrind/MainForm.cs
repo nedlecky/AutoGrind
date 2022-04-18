@@ -268,6 +268,14 @@ namespace AutoGrind
         static int noSafetystatusResponseCount = 0;  // How many times in a row have we gotten no response to "safetystatus"
         static int noProgramstateResponseCount = 0;  // How many times in a row have we gotten no response to "programstate"
         static int inquiryResponseWaitTimeMs = 100;
+        private string TimeSpanFormat(TimeSpan elapsed)
+        {
+            int hrs = elapsed.Days * 24 + elapsed.Hours;
+            int mins = elapsed.Minutes;
+            int secs = elapsed.Seconds;
+            // Odd that ToString takes absolute value so we have to put in the "-" explicitly (if the estimate is too short!)
+            return ((elapsed < TimeSpan.Zero) ? "-" : "") + String.Format("{0:00} hr : {1:00} min : {2:00} sec", hrs, mins, secs);
+        }
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
@@ -278,14 +286,13 @@ namespace AutoGrind
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
             {
                 TimeSpan elapsed = now - runStartedTime;
-                RunElapsedTimeLbl.Text = elapsed.ToString(@"d\:hh\:mm\:ss");
+                RunElapsedTimeLbl.Text = TimeSpanFormat(elapsed);
 
                 TimeSpan stepElapsed = now - stepStartedTime;
-                StepElapsedTimeLbl.Text = stepElapsed.ToString(@"d\:hh\:mm\:ss");
+                StepElapsedTimeLbl.Text = TimeSpanFormat(stepElapsed);
 
                 TimeSpan timeRemaining = stepEndTimeEstimate - now;
-                // Odd that ToString takes absolute valuie so we have to put in the "-" explicitly (if the estimate is too short!)
-                StepTimeRemainingLbl.Text = ((timeRemaining < TimeSpan.Zero) ? "-" : "") + timeRemaining.ToString(@"mm\:ss");
+                StepTimeRemainingLbl.Text = TimeSpanFormat(timeRemaining);
             }
 
             // Ping the dashboard every few seconds
@@ -1751,7 +1758,7 @@ namespace AutoGrind
 
             // Default time estimate to complete step is 0
             stepEndTimeEstimate = stepStartedTime;
-            StepTimeEstimateLbl.Text = "0.000";
+            StepTimeEstimateLbl.Text = TimeSpanFormat(new TimeSpan());
 
             // Any variables to sub {varName}
             string origLine = line;
@@ -1822,7 +1829,9 @@ namespace AutoGrind
                 sleepMs = Convert.ToDouble(ExtractParameters(command, 1).ToString());
                 sleepTimer = new Stopwatch();
                 sleepTimer.Start();
-                StepTimeEstimateLbl.Text = String.Format("{0} s", sleepMs/1000.0);
+
+                TimeSpan ts = new TimeSpan(0,0,0,0,(int)sleepMs);
+                StepTimeEstimateLbl.Text = TimeSpanFormat(ts);
                 stepEndTimeEstimate = DateTime.Now.AddMilliseconds(sleepMs);
                 return true;
             }
@@ -2288,7 +2297,7 @@ namespace AutoGrind
             log.Info("Dashboard connection ready");
             Thread.Sleep(50);
             string response = robotDashboardClient.Receive();
-            if(response!="Connected: Universal Robots Dashboard Server")
+            if (response != "Connected: Universal Robots Dashboard Server")
             {
                 log.Error("Dashboard connection returned {0}", response);
 
@@ -2764,7 +2773,8 @@ namespace AutoGrind
                 case "robot_step_time_estimate_ms":
                     double ms = Convert.ToDouble(valueTrimmed);
                     stepEndTimeEstimate = stepStartedTime.AddMilliseconds(ms);
-                    StepTimeEstimateLbl.Text = string.Format("{0} s", ms/1000.0);
+                    TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)ms);
+                    StepTimeEstimateLbl.Text = TimeSpanFormat(ts);
                     break;
                 case "robot_door_closed":
                     switch (valueTrimmed)

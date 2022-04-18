@@ -25,6 +25,17 @@ global p_contact_center = p[0, 0, 0, 0, 0, 0]   # Computed where center of patte
 
 MATH_PI = 3.1415926535
 
+# Set global grind_n_cycles based on whether we really going to grind
+def n_cycle_setter(n_cycles):
+  if grind_contact_enable == 2:
+    global grind_n_cycles = n_cycles
+  else:
+    global grind_n_cycles = limiter(n_cycles, 0, 1)
+  end
+  socket_set_var("grind_n_cycles", grind_n_cycles)
+end
+
+# Set all speed and acceleration globals based on part geometry and whether we really going to grind
 def speed_setter(speed_mmps):
   if grind_contact_enable == 2:
     global grind_speed_mps = speed_mmps / 1000.0
@@ -135,8 +146,7 @@ def pattern_grind():
     global response = "grind_line"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
-    global grind_n_cycles = command[5]
-    socket_set_var("grind_n_cycles", grind_n_cycles)
+    n_cycle_setter(command[5])
     speed_setter(command[6])
     global grind_force_N = command[7]
     global grind_continue = command[8] > 0
@@ -147,8 +157,7 @@ def pattern_grind():
     global response = "grind_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
-    global grind_n_cycles = command[5]
-    socket_set_var("grind_n_cycles", grind_n_cycles)
+    n_cycle_setter(command[5])
     speed_setter(command[6])
     global grind_force_N = command[7]
     global grind_continue = command[8] > 0
@@ -161,8 +170,7 @@ def pattern_grind():
     global grind_dy_mm = command[4]
     global grind_n_xsteps = limiter(command[5], 1, 10)
     global grind_n_ysteps = limiter(command[6], 1, 10)
-    global grind_n_cycles = command[7]
-    socket_set_var("grind_n_cycles", grind_n_cycles)
+    n_cycle_setter(command[7])
     speed_setter(command[8])
     global grind_force_N = command[9]
     global grind_continue = command[10] > 0
@@ -172,8 +180,7 @@ def pattern_grind():
   elif command[2] == 40:
     global response = "grind_circle"
     global grind_circle1_diam_mm = command[3]
-    global grind_n_cycles = command[4]
-    socket_set_var("grind_n_cycles", grind_n_cycles)
+    n_cycle_setter(command[4])
     speed_setter(command[5])
     global grind_force_N = command[6]
     global grind_continue = command[7] > 0
@@ -185,8 +192,7 @@ def pattern_grind():
     global grind_circle1_diam_mm = command[3]
     global grind_circle2_diam_mm = command[4]
     global grind_n_spirals = command[5]
-    global grind_n_cycles = command[6]
-    socket_set_var("grind_n_cycles", grind_n_cycles)
+    n_cycle_setter(command[6])
     speed_setter(command[7])
     global grind_force_N = command[8]
     global grind_continue = command[9] > 0
