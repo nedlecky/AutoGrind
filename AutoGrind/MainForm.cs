@@ -284,7 +284,8 @@ namespace AutoGrind
                 StepElapsedTimeLbl.Text = stepElapsed.ToString(@"d\:hh\:mm\:ss");
 
                 TimeSpan timeRemaining = stepEndTimeEstimate - now;
-                StepTimeRemainingLbl.Text = timeRemaining.ToString(@"mm\:ss");
+                // Odd that ToString takes absolute valuie so we have to put in the "-" explicitly (if the estimate is too short!)
+                StepTimeRemainingLbl.Text = ((timeRemaining < TimeSpan.Zero) ? "-" : "") + timeRemaining.ToString(@"mm\:ss");
             }
 
             // Ping the dashboard every few seconds
@@ -541,7 +542,7 @@ namespace AutoGrind
                     RecipeRTB.Enabled = true;
                     break;
                 case RunState.READY:
-                    RunStateLbl.Text = "READY";
+                    RunStateLbl.Text = "STOPPED";
                     RunStateLbl.BackColor = Color.Red;
 
                     ExitBtn.Enabled = true;
@@ -2279,14 +2280,20 @@ namespace AutoGrind
             };
             if (robotDashboardClient.Connect(RobotIpTxt.Text, "29999") > 0)
             {
-                log.Error("Robot dashboard client initialization failure");
+                log.Error("Dashboard client initialization failure");
                 RobotConnectBtn.BackColor = Color.Red;
                 RobotConnectBtn.Text = "Dashboard ERROR";
                 return;
             }
-            log.Info("Robot dashboard connection ready");
+            log.Info("Dashboard connection ready");
+            Thread.Sleep(50);
             string response = robotDashboardClient.Receive();
-            log.Info("DASH connection returns {0}", response);
+            if(response!="Connected: Universal Robots Dashboard Server")
+            {
+                log.Error("Dashboard connection returned {0}", response);
+
+                // This would be unexpected but you might still be OK!
+            }
             RobotConnectBtn.BackColor = Color.Green;
             RobotConnectBtn.Text = "Dashboard OK";
 
@@ -2732,6 +2739,7 @@ namespace AutoGrind
                     GrindNCyclesLbl.Text = valueTrimmed;
                     break;
                 case "grind_cycle":
+                    if (valueTrimmed == "0") valueTrimmed = "";  // Leave blank instead of showing 0!
                     GrindCycleLbl.Text = valueTrimmed;
                     break;
                 case "robot_linear_speed_mmps":
@@ -2905,7 +2913,7 @@ namespace AutoGrind
             Match m = directAssignmentRegex.Match(assignment);
             if (m.Success)
             {
-                log.Info("DirectAssignment {0}={1}", m.Groups["name"].Value, m.Groups["value"].Value);
+                log.Trace("DirectAssignment {0}={1}", m.Groups["name"].Value, m.Groups["value"].Value);
                 wasSuccessful = WriteVariable(m.Groups["name"].Value, m.Groups["value"].Value, isSystem);
             }
             else
@@ -2913,7 +2921,7 @@ namespace AutoGrind
                 m = plusMinusEqualsRegex.Match(assignment);
                 if (m.Success)
                 {
-                    log.Info("PlusMinusEqualsAssignment {0}{1}{2}", m.Groups["name"].Value, m.Groups["operator"].Value, m.Groups["value"].Value);
+                    log.Trace("PlusMinusEqualsAssignment {0}{1}{2}", m.Groups["name"].Value, m.Groups["operator"].Value, m.Groups["value"].Value);
                     string v = ReadVariable(m.Groups["name"].Value);
                     if (v != null)
                     {
@@ -2928,7 +2936,7 @@ namespace AutoGrind
                     m = plusPlusMinusMinusRegex.Match(assignment);
                     if (m.Success)
                     {
-                        log.Info("IncrAssignment {0}{1}", m.Groups["name"].Value, m.Groups["operator"].Value);
+                        log.Trace("IncrAssignment {0}{1}", m.Groups["name"].Value, m.Groups["operator"].Value);
                         string v = ReadVariable(m.Groups["name"].Value);
                         if (v != null)
                         {

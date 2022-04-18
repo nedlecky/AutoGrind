@@ -168,6 +168,7 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "AutoGrind Information";
             this.Load += new System.EventHandler(this.SplashForm_Load);
+            this.Click += new System.EventHandler(this.SplashForm_Click);
             ((System.ComponentModel.ISupportInitialize)(this.DeveloperLogoPic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.DistributorLogoPic)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.CustomerLogoPic)).EndInit();
