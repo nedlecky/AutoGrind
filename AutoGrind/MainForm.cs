@@ -74,12 +74,12 @@ namespace AutoGrind
             string executable = Application.ExecutablePath;
             string filename = Path.GetFileName(executable);
             string directory = Path.GetDirectoryName(executable);
-            string caption = companyName + " " + appName + " Rev " + productVersion;
+            string caption = appName + " Rev " + productVersion;
 #if DEBUG
-            caption += " RUNNING IN DEBUG MODE";
+            caption += " DEBUGGING";
 #endif
             this.Text = caption;
-
+            VersionLbl.Text = caption;
             // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
 
@@ -123,7 +123,7 @@ namespace AutoGrind
         // Function key shortcut handling (primarily for development testing assistance)
         private void MainForm_KeyDown(object sender, KeyEventArgs e)
         {
-            log.Info("MainForm_KeyDown: {0}", e.KeyData);
+            //log.Trace("MainForm_KeyDown: {0}", e.KeyData);
             switch (e.KeyData)
             {
                 case Keys.F5:
@@ -273,27 +273,30 @@ namespace AutoGrind
             int hrs = elapsed.Days * 24 + elapsed.Hours;
             int mins = elapsed.Minutes;
             int secs = elapsed.Seconds;
+            int msecs = elapsed.Milliseconds;
             // Odd that ToString takes absolute value so we have to put in the "-" explicitly (if the estimate is too short!)
-            return ((elapsed < TimeSpan.Zero) ? "-" : "") + String.Format("{0:00} hr : {1:00} min : {2:00} sec", hrs, mins, secs);
+            return ((elapsed < TimeSpan.Zero) ? "-" : "") + String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0);
+        }
+        private void RecomputeTimes()
+        {
+            DateTime now = DateTime.Now;
+            TimeSpan elapsed = now - runStartedTime;
+            RunElapsedTimeLbl.Text = TimeSpanFormat(elapsed);
+
+            TimeSpan stepElapsed = now - stepStartedTime;
+            StepElapsedTimeLbl.Text = TimeSpanFormat(stepElapsed);
+
+            TimeSpan timeRemaining = stepEndTimeEstimate - now;
+            StepTimeRemainingLbl.Text = TimeSpanFormat(timeRemaining);
         }
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
-            DateTime now = DateTime.Now;
-            timeLbl.Text = now.ToString();
+            timeLbl.Text = DateTime.Now.ToString();
 
             // Update elapsed time panel
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
-            {
-                TimeSpan elapsed = now - runStartedTime;
-                RunElapsedTimeLbl.Text = TimeSpanFormat(elapsed);
-
-                TimeSpan stepElapsed = now - stepStartedTime;
-                StepElapsedTimeLbl.Text = TimeSpanFormat(stepElapsed);
-
-                TimeSpan timeRemaining = stepEndTimeEstimate - now;
-                StepTimeRemainingLbl.Text = TimeSpanFormat(timeRemaining);
-            }
+                RecomputeTimes();
 
             // Ping the dashboard every few seconds
             if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
@@ -1830,7 +1833,7 @@ namespace AutoGrind
                 sleepTimer = new Stopwatch();
                 sleepTimer.Start();
 
-                TimeSpan ts = new TimeSpan(0,0,0,0,(int)sleepMs);
+                TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)sleepMs);
                 StepTimeEstimateLbl.Text = TimeSpanFormat(ts);
                 stepEndTimeEstimate = DateTime.Now.AddMilliseconds(sleepMs);
                 return true;
@@ -2131,6 +2134,15 @@ namespace AutoGrind
         int logFilter = 0;
         Stopwatch sleepTimer = null;
         double sleepMs = 0;
+        private void ReportStepTimeStats()
+        {
+            if (stepEndTimeEstimate != stepStartedTime)
+            {
+                // Redo this at the very end- normally is only called at 1Hz by HeartbeatTmr
+                RecomputeTimes();
+                log.Info("EXEC Estimated={0} Actual={1}", StepTimeEstimateLbl.Text, StepElapsedTimeLbl.Text);
+            }
+        }
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             //log.Info("ExecTmr(...) lineCurrentlyExecuting={0}", lineCurrentlyExecuting);
@@ -2187,6 +2199,9 @@ namespace AutoGrind
                     {
                         log.Info("EXEC Reached end of file");
 
+                        ReportStepTimeStats();
+
+
                         // Make sure we're retracted
                         ExecuteLine(-1, "grind_retract()");
 
@@ -2196,6 +2211,7 @@ namespace AutoGrind
                     }
                     else
                     {
+                        ReportStepTimeStats();
                         string line = SetCurrentLine(lineCurrentlyExecuting + 1);
                         bool fContinue = ExecuteLine(lineCurrentlyExecuting, line);
                         if (isSingleStep)

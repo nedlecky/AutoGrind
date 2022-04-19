@@ -1,13 +1,13 @@
 # Spiral Speed Test
 # All should be ~10S
-# PASSED 4/12/2022
+# PASSED 4/19/2022
 
 # 40mm diam is 125mm circum
 # 30mm diam is 94mm circum
 speed40 = 12.5
 speed30 = 9.4
-jump(cylinder)
 
+flat:
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)
 grind_spiral(40,35,2,1,{speed40},10,0)
@@ -28,13 +28,13 @@ grind_spiral(40,35,2,1,{speed40},10,0)
 sphere:
 movelinear(demo_sphere)
 set_part_geometry(SPHERE,81.9)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(SPHERE,200)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(SPHERE,500)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(SPHERE,800)
-grind_circle(40,1,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 set_part_geometry(SPHERE,1100)
-grind_circle(40,2,{speed40},10,0)
+grind_spiral(40,35,2,1,{speed40},10,0)
 

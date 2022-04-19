@@ -8,7 +8,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("AutoGrind")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("Olympus Controls")]
+[assembly: AssemblyCompany("Lecky Engineering LLC")]
 [assembly: AssemblyProduct("AutoGrind")]
 [assembly: AssemblyCopyright("Copyright © 2022")]
 [assembly: AssemblyTrademark("")]
@@ -29,8 +29,5 @@ using System.Runtime.InteropServices;
 //      Build Number
 //      Revision
 //
-// You can specify all the values or you can default the Build and Revision Numbers
-// by using the '*' as shown below:
-// [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("2022.04.18.1")]
-[assembly: AssemblyFileVersion("2022.04.18.1")]
+[assembly: AssemblyVersion("2022.04.19.1")]
+[assembly: AssemblyFileVersion("2022.04.19.1")]

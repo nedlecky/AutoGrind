@@ -408,7 +408,7 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
   dry_rad = dy_m / radius_m
 
   # Grind time estimate
-  time_ms = sqrt(dx_mm * dx_mm + dy_mm * dy_mm) * n_cycles / grind_speed_mps
+  time_ms = sqrt(dx_mm * dx_mm + dy_mm * dy_mm) * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
@@ -454,7 +454,7 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   speed_factor = 0.5 / robot_part_geometry[1]  # 0.5 / diam_m is the speedup needed on rotational moves
 
   # Grind time estimate
-  time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_speed_mps
+  time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
@@ -499,7 +499,7 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   dry_rad = dy_m / part_radius_m
 
   # Grind time estimate
-  time_ms = (dx_mm * n_ysteps + dy_mm * n_xsteps) * n_cycles / grind_speed_mps
+  time_ms = (dx_mm * n_ysteps + dy_mm * n_xsteps) * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
@@ -535,7 +535,7 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   part_diam_m = robot_part_geometry[1]
 
   # Grind time estimate
-  time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps
+  time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
 
@@ -572,8 +572,9 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   circle2_diam_m = circle2_diam_mm / 1000.0
   part_diam_m = robot_part_geometry[1]
 
-  # Grind time estimate based on avergae diam
-  time_ms = MATH_PI * (circle1_diam_mm + circle2_diam_mm) / 2 * n_cycles / grind_speed_mps
+  # Grind time estimate based on average diam
+  avg_diam_mm = (circle1_diam_mm + circle2_diam_mm) / 2.0
+  time_ms = MATH_PI * avg_diam_mm * n_spirals * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True, [p[-circle1_diam_m / 2.0, 0, 0, 0, 0, 0], p[-circle1_diam_m / 2.0, 0, 0, 0, 0, 0], p[0, 0, 0, -circle1_diam_m / part_diam_m, 0, 0]]):

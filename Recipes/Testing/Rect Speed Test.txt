@@ -1,6 +1,6 @@
 # Rect Speed Test
 # All should alternate 3s, 2s per side
-# PASSED 4/18/2022
+# PASSED 4/19/2022
 
 speed = 20
 cmd=grind_rect(60,40,1,{speed},10,0)
