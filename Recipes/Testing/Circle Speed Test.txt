@@ -7,6 +7,7 @@
 speed40 = 12.5
 speed30 = 9.4
 
+restart:
 movelinear(demo_flat)
 set_part_geometry(FLAT,0)
 grind_circle(40,1,{speed40},10,0)
@@ -36,4 +37,6 @@ set_part_geometry(SPHERE,800)
 grind_circle(40,1,{speed40},10,0)
 set_part_geometry(SPHERE,1100)
 grind_circle(40,1,{speed40},10,0)
+
+jump(restart)
 

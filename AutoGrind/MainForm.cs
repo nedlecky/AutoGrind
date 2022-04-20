@@ -383,6 +383,11 @@ namespace AutoGrind
                             noProgramstateResponseCount = 0;
                             EnsureStopped();
                         }
+                        else if (robotmodeResponse.StartsWith("PAUSED"))
+                        {
+                            noProgramstateResponseCount = 0;
+                            EnsureNotRunning();
+                        }
                         else if (robotmodeResponse.StartsWith("PLAYING"))
                         {
                             noProgramstateResponseCount = 0;

@@ -171,41 +171,57 @@ namespace AutoGrind
             fSendBusy = false;
             return 0;
         }
+
+        int addingAt = 0;
+        private Queue<string> inputQueue = new Queue<string>();
         public string Receive()
         {
-            if (stream != null)
+            if (stream == null) return "";
+            if (!IsConnected())
             {
-                if (!IsConnected())
-                {
-                    log.Error("Lost UR connection");
-                    Disconnect();
-                    Connect(myIp, myPort);
-                    return "";
-                }
+                log.Error("Lost UR connection");
+                Disconnect();
+                Connect(myIp, myPort);
+                return "";
+            }
 
-                int length = 0;
-                while (stream.DataAvailable) inputBuffer[length++] = (byte)stream.ReadByte();
-
-                if (length > 0)
+            // Read any available characters and \n delimit them as strings into the queue
+            // If a string is started but has no \n, it will be completed and queued in a later call!
+            int totalChars = 0;
+            while (stream.DataAvailable)
+            {
+                int c = stream.ReadByte();
+                totalChars++;
+                if (c == 10)
                 {
-                    string input = Encoding.UTF8.GetString(inputBuffer, 0, length);
-                    string[] inputLines = input.Split('\n');
-                    int lineNo = 1;
-                    foreach (string line in inputLines)
-                    {
-                        string cleanLine = line.Trim('\n');
-                        if (cleanLine.Length > 0)
-                        {
-                            if(inputLines.Length>1)
-                                log.Debug("UR<== {0} Line {1} of {2}", cleanLine, lineNo,inputLines.Length-1);
-                            else
-                                log.Debug("UR<== {0}", cleanLine);
-                            ReceiveCallback?.Invoke(cleanLine); // This is the newer C# "Invoke if not null" syntax
-                        }
-                        lineNo++;
-                    }
-                    return input;
+                    inputQueue.Enqueue(Encoding.UTF8.GetString(inputBuffer, 0, addingAt));
+                    addingAt = 0;
                 }
+                else
+                    inputBuffer[addingAt++] = (byte)c;
+            }
+            // This can be used to see how frequently incomplete lines are recived... about once an hour in normal testing
+            if (addingAt > 0)
+                log.Debug("UR<== incomplete line received (will get rest later) totalChars={0} addingAt={1} [{2}]", totalChars,addingAt, Encoding.UTF8.GetString(inputBuffer, 0, addingAt-1));
+
+            // No execute any completed lines that have been received
+            int lineNo = 1;
+            int nLines = inputQueue.Count;
+            while (inputQueue.Count > 0)
+            {
+                string line = inputQueue.Dequeue();
+                if (line.Length > 0)
+                {
+                    if (nLines > 1)
+                        log.Debug("UR<== {0} Line {1} of {2}", line, lineNo, nLines);
+                    else
+                        log.Debug("UR<== {0}", line);
+                    if (ReceiveCallback == null)
+                        return line;
+                    else
+                        ReceiveCallback?.Invoke(line);
+                }
+                lineNo++;
             }
             return "";
         }
