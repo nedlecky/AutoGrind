@@ -929,30 +929,32 @@ namespace AutoGrind
         {
             Close();
         }
-
-        private void ClearAllLogRtbBtn_Click(object sender, EventArgs e)
+        private void AllLogRTB_DoubleClick(object sender, EventArgs e)
         {
             AllLogRTB.Clear();
         }
 
-        private void ClearExecLogRtbBtn_Click(object sender, EventArgs e)
+        private void ExecLogRTB_DoubleClick(object sender, EventArgs e)
         {
             ExecLogRTB.Clear();
         }
 
-
-        private void ClearUrLogRtbBtn_Click(object sender, EventArgs e)
+        private void UrLogRTB_DoubleClick(object sender, EventArgs e)
         {
             UrLogRTB.Clear();
+        }
+
+        private void UrDashboardLogRTB_DoubleClick(object sender, EventArgs e)
+        {
             UrDashboardLogRTB.Clear();
         }
 
-        private void ClearErrorLogRtbBtn_Click(object sender, EventArgs e)
+        private void ErrorLogRTB_DoubleClick(object sender, EventArgs e)
         {
             ErrorLogRTB.Clear();
         }
 
-        private void InfoBtn_Click(object sender, EventArgs e)
+        private void AboutBtn_Click(object sender, EventArgs e)
         {
             SplashForm splashForm = new SplashForm()
             {
@@ -3476,6 +3478,7 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
+
     }
     public static class RichTextBoxExtensions
     {
