@@ -25,7 +25,15 @@ namespace AutoGrind
 
         private void LoadDirectory(string path)
         {
-            string[] subDirectoryList = Directory.GetDirectories(path);
+            string[] subDirectoryList;
+            try
+            {
+                subDirectoryList = Directory.GetDirectories(path);
+            }
+            catch
+            {
+                return;
+            }
 
             directoryList = new List<string>();
             DirectoryListBox.Items.Clear();

@@ -83,6 +83,20 @@ namespace AutoGrind
             // Startup logging system (which also displays messages)
             log = NLog.LogManager.GetCurrentClassLogger();
 
+            // Check screen dimensions.....
+            Rectangle r = Screen.FromControl(this).Bounds;
+            log.Info("Screen Dimensions: {0}x{1}", r.Width, r.Height);
+            if (r.Width < screenDesignWidth || r.Height < screenDesignHeight)
+            {
+                DialogResult result = ConfirmMessageBox(String.Format("Screen dimensions for this application must be at least {0} x {1}. Continue anyway?", screenDesignWidth, screenDesignHeight));
+                if (result != DialogResult.OK)
+                {
+                    forceClose = true;
+                    Close();
+                    return;
+                }
+            }
+
             LoadPersistent();
             OperatorModeBox.SelectedIndex = (int)operatorMode;
 
@@ -96,18 +110,6 @@ namespace AutoGrind
             log.Info(caption);
             log.Info("================================================================");
 
-            // Check screen dimensions.....
-            Rectangle r = Screen.FromControl(this).Bounds;
-            log.Info("Screen Dimensions: {0}x{1}", r.Width, r.Height);
-            if (r.Width < screenDesignWidth || r.Height < screenDesignHeight)
-            {
-                DialogResult result = ConfirmMessageBox(String.Format("Screen dimensions for this application must be at least {0} x {1}. Continue anyway?", screenDesignWidth, screenDesignHeight));
-                if (result != DialogResult.OK)
-                {
-                    forceClose = true;
-                    Close();
-                }
-            }
 
             // 1-second tick
             HeartbeatTmr.Interval = 1000;
@@ -1317,7 +1319,26 @@ namespace AutoGrind
             Height = screenDesignHeight;
 
             // From Setup Tab
-            AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\");
+            AutoGrindRoot = (string)AppNameKey.GetValue("AutoGrindRoot", "\\AutoGrind");
+            if (!Directory.Exists(AutoGrindRoot))
+            {
+                DialogResult result = ConfirmMessageBox(String.Format("Root Directory [{0}] does not exist. Create it?", AutoGrindRoot));
+                if (result == DialogResult.OK)
+                {
+                    System.IO.Directory.CreateDirectory(AutoGrindRoot);
+                }
+                else
+                {
+                    forceClose = true;
+                    Close();
+                    return;
+                }
+            }
+
+            // Make standard subdirectories (if they don't exist)
+            System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Logs"));
+            System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Recipes"));
+
             AutoGrindRootLbl.Text = AutoGrindRoot;
             RobotProgramTxt.Text = (string)AppNameKey.GetValue("RobotProgramTxt.Text", "AutoGrind/AutoGrind01.urp");
             RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
@@ -1984,7 +2005,7 @@ namespace AutoGrind
                 if (row == null)
                 {
                     log.Error("Unknown tool specified in EXEC: {0.000} {1}", lineNumber, command);
-                    PromptOperator("Illegal select_tool command: " + command);
+                    PromptOperator("Unrecognized select_tool command: " + command);
                     return true;
                 }
                 else
@@ -3157,10 +3178,15 @@ namespace AutoGrind
             try
             {
                 tools.ReadXml(filename);
-
             }
             catch
-            { }
+            {
+                    DialogResult result = ConfirmMessageBox("Could not load tools. Create some defaults?");
+                    if (result == DialogResult.OK)
+                    {
+                        CreateDefaultTools();
+                    }
+            }
 
             ToolsGrd.DataSource = tools;
             RefreshMountedToolBox();
@@ -3176,19 +3202,20 @@ namespace AutoGrind
             RefreshMountedToolBox();
         }
 
+        private void CreateDefaultTools()
+        {
+            ClearAndInitializeTools();
+            tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0", "none_mount", "none_home" });
+            tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
+            tools.Rows.Add(new object[] { "2F85long", 0, 0, 0.275, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
+            tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
+            tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
+            tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });
+        }
         private void ClearToolsBtn_Click(object sender, EventArgs e)
         {
             if (DialogResult.OK == ConfirmMessageBox("This will clear all tools. Proceed?"))
-            {
-
-                ClearAndInitializeTools();
-                tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0", "none_mount", "none_home" });
-                tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
-                tools.Rows.Add(new object[] { "2F85long", 0, 0, 0.275, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
-                tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
-                tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
-                tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });
-            }
+                CreateDefaultTools();
         }
 
 
