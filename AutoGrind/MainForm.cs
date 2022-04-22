@@ -301,6 +301,8 @@ namespace AutoGrind
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
                 RecomputeTimes();
 
+            SentRobotIndexLbl.Text = robotCommandServer?.nSentMessages.ToString();
+
             // Ping the dashboard every few seconds
             if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
                 if (robotDashboardClient.IsClientConnected)
@@ -2220,6 +2222,10 @@ namespace AutoGrind
                         log.Info("EXEC Waiting for robot_ready");
                     logFilter = 2;
                 }
+                else if(ReadVariable("robot_index") != robotCommandServer.nSentMessages.ToString())
+                {
+                    log.Error("Waiting for robot_index to catch up");
+                }
                 else
                 {
                     // Resets such that the above log messages will happen
@@ -2785,6 +2791,7 @@ namespace AutoGrind
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
+                    SentRobotIndexLbl.Text = robotCommandServer?.nSentMessages.ToString();
                     break;
                 case "robot_tool":
                     MountedToolBox.Text = valueTrimmed;
@@ -3243,8 +3250,6 @@ namespace AutoGrind
             ExecuteLine(-1, string.Format("set_door_closed_input({0})", DoorClosedInputTxt.Text));
 
         }
-
-
         private DataRow FindTool(string name)
         {
             foreach (DataRow row in tools.Rows)

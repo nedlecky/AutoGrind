@@ -23,6 +23,9 @@ namespace AutoGrind
         public int nGetStatusRequests = 0;
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
+
+        public int nSentMessages = 0;
+
         public Action<string> ReceiveCallback { get; set; }
         public bool IsClientConnected { get; set; } = false;
 
@@ -113,6 +116,7 @@ namespace AutoGrind
                         log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
 
+                        nSentMessages = 0;
                         Send("(10)");        // Query position
                     }
                     catch { }
@@ -163,6 +167,8 @@ namespace AutoGrind
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);
+                nSentMessages++;
+                log.Info("nSentMessages={0}", nSentMessages);   
             }
             catch
             {
@@ -200,9 +206,9 @@ namespace AutoGrind
                 else
                     inputBuffer[addingAt++] = (byte)c;
             }
-            // This can be used to see how frequently incomplete lines are recived... about once an hour in normal testing
+            // This can be used to see how frequently incomplete lines are received... about once an hour in normal testing
             if (addingAt > 0)
-                log.Debug("UR<== incomplete line received (will get rest later) totalChars={0} addingAt={1} [{2}]", totalChars,addingAt, Encoding.UTF8.GetString(inputBuffer, 0, addingAt-1));
+                log.Debug("UR<== incomplete line received (will get rest later) totalChars={0} addingAt={1} [{2}]", totalChars, addingAt, Encoding.UTF8.GetString(inputBuffer, 0, addingAt - 1));
 
             // No execute any completed lines that have been received
             int lineNo = 1;

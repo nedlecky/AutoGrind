@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
@@ -80,8 +80,8 @@
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.ExecLogRTB = new System.Windows.Forms.RichTextBox();
             this.groupBox5 = new System.Windows.Forms.GroupBox();
-            this.UrDashboardLogRTB = new System.Windows.Forms.RichTextBox();
             this.UrLogRTB = new System.Windows.Forms.RichTextBox();
+            this.UrDashboardLogRTB = new System.Windows.Forms.RichTextBox();
             this.groupBox6 = new System.Windows.Forms.GroupBox();
             this.ErrorLogRTB = new System.Windows.Forms.RichTextBox();
             this.groupBox4 = new System.Windows.Forms.GroupBox();
@@ -176,6 +176,7 @@
             this.ChangeRootDirectoryBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.LogPage = new System.Windows.Forms.TabPage();
+            this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.AboutBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.LogLevelCombo = new System.Windows.Forms.ComboBox();
@@ -184,7 +185,7 @@
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
-            this.groupBox7 = new System.Windows.Forms.GroupBox();
+            this.SentRobotIndexLbl = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -209,8 +210,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.LogPage.SuspendLayout();
-            this.groupBox3.SuspendLayout();
             this.groupBox7.SuspendLayout();
+            this.groupBox3.SuspendLayout();
             this.SuspendLayout();
             // 
             // CurrentLineLbl
@@ -603,14 +604,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -700,14 +701,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -800,19 +801,6 @@
             this.groupBox5.TabStop = false;
             this.groupBox5.Text = "Robot Commands and Responses";
             // 
-            // UrDashboardLogRTB
-            // 
-            this.UrDashboardLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.UrDashboardLogRTB.Location = new System.Drawing.Point(7, 27);
-            this.UrDashboardLogRTB.Margin = new System.Windows.Forms.Padding(2);
-            this.UrDashboardLogRTB.Name = "UrDashboardLogRTB";
-            this.UrDashboardLogRTB.ReadOnly = true;
-            this.UrDashboardLogRTB.Size = new System.Drawing.Size(1060, 268);
-            this.UrDashboardLogRTB.TabIndex = 1;
-            this.UrDashboardLogRTB.Text = "";
-            this.UrDashboardLogRTB.WordWrap = false;
-            this.UrDashboardLogRTB.DoubleClick += new System.EventHandler(this.UrDashboardLogRTB_DoubleClick);
-            // 
             // UrLogRTB
             // 
             this.UrLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -825,6 +813,19 @@
             this.UrLogRTB.Text = "";
             this.UrLogRTB.WordWrap = false;
             this.UrLogRTB.DoubleClick += new System.EventHandler(this.UrLogRTB_DoubleClick);
+            // 
+            // UrDashboardLogRTB
+            // 
+            this.UrDashboardLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UrDashboardLogRTB.Location = new System.Drawing.Point(7, 27);
+            this.UrDashboardLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.UrDashboardLogRTB.Name = "UrDashboardLogRTB";
+            this.UrDashboardLogRTB.ReadOnly = true;
+            this.UrDashboardLogRTB.Size = new System.Drawing.Size(1060, 268);
+            this.UrDashboardLogRTB.TabIndex = 1;
+            this.UrDashboardLogRTB.Text = "";
+            this.UrDashboardLogRTB.WordWrap = false;
+            this.UrDashboardLogRTB.DoubleClick += new System.EventHandler(this.UrDashboardLogRTB_DoubleClick);
             // 
             // groupBox6
             // 
@@ -1066,6 +1067,7 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.SentRobotIndexLbl);
             this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
             this.RunPage.Controls.Add(this.label17);
             this.RunPage.Controls.Add(this.StepTimeEstimateLbl);
@@ -1249,7 +1251,7 @@
             // 
             this.RobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotIndexLbl.Location = new System.Drawing.Point(1932, 533);
+            this.RobotIndexLbl.Location = new System.Drawing.Point(1932, 583);
             this.RobotIndexLbl.Name = "RobotIndexLbl";
             this.RobotIndexLbl.Size = new System.Drawing.Size(187, 52);
             this.RobotIndexLbl.TabIndex = 135;
@@ -1732,23 +1734,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1963,6 +1965,17 @@
             this.LogPage.Text = "Log";
             this.LogPage.UseVisualStyleBackColor = true;
             // 
+            // groupBox7
+            // 
+            this.groupBox7.Controls.Add(this.UrDashboardLogRTB);
+            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.groupBox7.Location = new System.Drawing.Point(1058, 577);
+            this.groupBox7.Name = "groupBox7";
+            this.groupBox7.Size = new System.Drawing.Size(1067, 309);
+            this.groupBox7.TabIndex = 2;
+            this.groupBox7.TabStop = false;
+            this.groupBox7.Text = "Robot Dashboard Server";
+            // 
             // AboutBtn
             // 
             this.AboutBtn.BackColor = System.Drawing.Color.Green;
@@ -2063,16 +2076,15 @@
             this.VersionLbl.Text = "VersionLbl";
             this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // groupBox7
+            // SentRobotIndexLbl
             // 
-            this.groupBox7.Controls.Add(this.UrDashboardLogRTB);
-            this.groupBox7.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.groupBox7.Location = new System.Drawing.Point(1058, 577);
-            this.groupBox7.Name = "groupBox7";
-            this.groupBox7.Size = new System.Drawing.Size(1067, 309);
-            this.groupBox7.TabIndex = 2;
-            this.groupBox7.TabStop = false;
-            this.groupBox7.Text = "Robot Dashboard Server";
+            this.SentRobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SentRobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 528);
+            this.SentRobotIndexLbl.Name = "SentRobotIndexLbl";
+            this.SentRobotIndexLbl.Size = new System.Drawing.Size(187, 52);
+            this.SentRobotIndexLbl.TabIndex = 149;
+            this.SentRobotIndexLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -2138,8 +2150,8 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.LogPage.ResumeLayout(false);
-            this.groupBox3.ResumeLayout(false);
             this.groupBox7.ResumeLayout(false);
+            this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2298,6 +2310,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label VersionLbl;
         private System.Windows.Forms.GroupBox groupBox7;
+        private System.Windows.Forms.Label SentRobotIndexLbl;
     }
 }
 
