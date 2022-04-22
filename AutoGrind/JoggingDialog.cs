@@ -60,27 +60,28 @@ namespace AutoGrind
         {
             return r * 180.0 / Math.PI;
         }
+        string lastJogCommand;
         private void Jog(double[] p)
         {
-            string command = "??";
+            lastJogCommand = "??";
             switch (CoordBox.Text)
             {
                 case "BASE":
-                    command = "(13";
+                    lastJogCommand = "(13";
                     break;
                 case "TOOL":
-                    command = "(14";
+                    lastJogCommand = "(14";
                     break;
                 case "PART":
-                    command = "(15";
+                    lastJogCommand = "(15";
                     break;
             }
 
             for (int i = 0; i < 6; i++)
-                command += "," + p[i].ToString();
-            command += ")";
-            log.Info("Jog Command: {0}", command);
-            robot.Send(command);
+                lastJogCommand += "," + p[i].ToString();
+            lastJogCommand += ")";
+            log.Info("Jog Command: {0}", lastJogCommand);
+            robot.Send(lastJogCommand);
         }
         private void XplusBtn_Click(object sender, EventArgs e)
         {
@@ -110,9 +111,9 @@ namespace AutoGrind
         }
         private void ZplusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
-            Jog(p);
+            //double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            //double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
+            //Jog(p);
         }
 
         private void ZminusBtn_Click(object sender, EventArgs e)
@@ -225,6 +226,33 @@ namespace AutoGrind
                 FreeDriveBtn.BackColor = Color.Blue;
                 ButtonEnable(false);
             }
+        }
+
+        static bool continueTask;
+        Task task = null;
+        private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            log.Info("Z+ Mouse Down");
+            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
+            Jog(p);
+
+            task = Task.Factory.StartNew(() =>
+            {
+                continueTask = true;
+                while (continueTask)
+                {
+                    System.Threading.Thread.Sleep(250);
+                    if (continueTask && mainForm.ReadVariable("robot_ready") == "True")
+                        robot.Send(lastJogCommand);
+                }
+            });
+        }
+
+        private void ZplusBtn_MouseUp(object sender, MouseEventArgs e)
+        {
+            log.Info("Z+ Mouse Up");
+            continueTask = false;
         }
     }
 }

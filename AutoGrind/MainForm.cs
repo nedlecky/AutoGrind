@@ -34,6 +34,7 @@ namespace AutoGrind
         TcpClientSupport robotDashboardClient = null;
         TcpClientSupport robotUrControlClient = null;
         MessageDialog waitingForOperatorMessageForm = null;
+        bool closeOperatorFormOnReady = false;
 
         static DataTable variables;
         static DataTable tools;
@@ -451,7 +452,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_linear_speed_mmps", "200")));
                         ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_linear_accel_mmpss", "500")));
                         ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
-                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "90")));
+                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "45")));
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
@@ -676,7 +677,7 @@ namespace AutoGrind
             ToolsGrd.ClearSelection();
             if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
-            //PartGeometryBox.Text = "FLAT";
+            PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
@@ -1625,7 +1626,7 @@ namespace AutoGrind
         /// Put up MessageForm dialog. Execution will pause until the operator handles the response.
         /// </summary>
         /// <param name="message">This is the message to be displayed</param>
-        private void PromptOperator(string message, string heading = "AutoGrind Prompt")
+        private void PromptOperator(string message, bool closeOnReady = false, string heading = "AutoGrind Prompt")
         {
             log.Info("Prompting Operator: heading={0} message={1}", heading, message);
             waitingForOperatorMessageForm = new MessageDialog()
@@ -1635,6 +1636,7 @@ namespace AutoGrind
                 OkText = "&Continue Execution",
                 CancelText = "&Abort"
             };
+            closeOperatorFormOnReady = closeOnReady;
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -2173,7 +2175,6 @@ namespace AutoGrind
         }
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
-            //log.Info("ExecTmr(...) lineCurrentlyExecuting={0}", lineCurrentlyExecuting);
             // Wait for any operator prompt to be cleared
             if (waitingForOperatorMessageForm != null)
             {
@@ -2692,7 +2693,7 @@ namespace AutoGrind
 
         readonly string variablesFilename = "Variables.xml";
 
-        private string ReadVariable(string name, string defaultValue = null)
+        public string ReadVariable(string name, string defaultValue = null)
         {
             foreach (DataRow row in variables.Rows)
             {
@@ -2775,6 +2776,12 @@ namespace AutoGrind
             {
                 case "robot_ready":
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    if(waitingForOperatorMessageForm!=null && closeOperatorFormOnReady && valueTrimmed=="True")
+                    {
+                        waitingForOperatorMessageForm.Close();
+                        waitingForOperatorMessageForm = null;
+                        closeOperatorFormOnReady = false;
+                    }
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
@@ -3181,11 +3188,11 @@ namespace AutoGrind
             }
             catch
             {
-                    DialogResult result = ConfirmMessageBox("Could not load tools. Create some defaults?");
-                    if (result == DialogResult.OK)
-                    {
-                        CreateDefaultTools();
-                    }
+                DialogResult result = ConfirmMessageBox("Could not load tools. Create some defaults?");
+                if (result == DialogResult.OK)
+                {
+                    CreateDefaultTools();
+                }
             }
 
             ToolsGrd.DataSource = tools;
@@ -3222,11 +3229,13 @@ namespace AutoGrind
         private void MoveToolMountBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolMountBtn.Text);
+            PromptOperator("Wait for robot motion complete",true);
         }
 
         private void MoveToolHomeBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolHomeBtn.Text);
+            PromptOperator("Wait for robot motion complete",true);
         }
 
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
@@ -3435,7 +3444,10 @@ namespace AutoGrind
             if (name == null)
                 ErrorMessageBox("Please select a target position in the table.");
             else
+            {
                 GotoPositionPose(name);
+                PromptOperator("Wait for robot linear move motion complete", true);
+            }
         }
 
         private void PositionMoveArmBtn_Click(object sender, EventArgs e)
@@ -3444,7 +3456,10 @@ namespace AutoGrind
             if (name == null)
                 ErrorMessageBox("Please select a target position in the table.");
             else
+            {
                 GotoPositionJoint(name);
+                PromptOperator("Wait for robot joint move motion complete", true);
+            }
         }
 
         private void AskSafetyStatusBtn_Click(object sender, EventArgs e)
