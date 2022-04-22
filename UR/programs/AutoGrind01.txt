@@ -9,7 +9,7 @@
      'socket_close()'
      'Wait: 0.25'
      socket_is_open≔ False 
-     command_index≔0
+     robot_index≔0
    Robot Program
      Loop socket_is_open ≟  False 
        Wait: 0.25
@@ -23,8 +23,7 @@
      command≔socket_read_ascii_float(12)
      If command[0]≥1
        socket_send_line("robot_ready=False")
-       command_index≔command_index+1
-       socket_set_var("robot_index", command_index)
+       robot_index≔robot_index+1
        lastCommand≔command
        Switch command[1]
          Case 10
@@ -61,6 +60,7 @@
            response≔"exiting"
          Default Case
            response≔"unknown command"
+       socket_set_var("robot_index", robot_index)
        socket_send_line("robot_response=" + response + "#robot_ready=True")
        If command[1]≟98
          Wait: 0.5
