@@ -988,7 +988,8 @@ def AutoGrind01():
     while (True):
       global halt_command = socket_read_ascii_float(1, timeout = 0.1)
       if halt_command[0] > 0 or not is_door_closed():
-        global robot_index = robot_index + 1  # Keeps us in sync with the counter in C#
+        # Same increment as in the PolyScope but this one bypasses the PolyScope!!
+        global robot_index = (robot_index + 1) % 100000 # Keeps us in sync with the counter in C#
         global halt_count = halt_count + 1
       end
       sync()
@@ -1862,8 +1863,8 @@ def AutoGrind01():
     if (command[0] >= 1):
       $ 24 "socket_send_line('robot_ready=False')"
       socket_send_line("robot_ready=False")
-      $ 25 "robot_index≔robot_index+1"
-      global robot_index=robot_index+1
+      $ 25 "robot_index≔(robot_index+1)%100000"
+      global robot_index=(robot_index+1)%100000
       $ 26 "lastCommand≔command"
       global lastCommand=command
       $ 27 "Switch command[1]"

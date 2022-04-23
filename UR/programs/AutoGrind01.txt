@@ -23,7 +23,7 @@
      command≔socket_read_ascii_float(12)
      If command[0]≥1
        socket_send_line("robot_ready=False")
-       robot_index≔robot_index+1
+       robot_index≔(robot_index+1)%100000
        lastCommand≔command
        Switch command[1]
          Case 10

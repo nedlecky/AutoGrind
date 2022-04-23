@@ -672,6 +672,7 @@ namespace AutoGrind
             StepBtn.BackColor = StepBtn.Enabled ? Color.Green : Color.Gray;
             StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
         }
+
         private void MountedToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             log.Info("Operator changing tool to " + MountedToolBox.Text);
@@ -862,6 +863,9 @@ namespace AutoGrind
 
                 }
             }
+
+            // Reenable other buttons and tabs as dictated by currect runState
+            SetState(runState, true);
         }
 
         private void RobotModeBtn_Click(object sender, EventArgs e)
@@ -1552,7 +1556,7 @@ namespace AutoGrind
 
             labels = new Dictionary<string, int>();
 
-            int lineNo = 0;
+            int lineNo = 1;
             foreach (string line in RecipeRTB.Lines)
             {
                 var label = IsLineALabel(line);
@@ -2014,6 +2018,7 @@ namespace AutoGrind
                 }
                 else
                 {
+                    // Kind of like a subroutine that calls all the pieces needed to effect a tool change
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
                     ExecuteLine(-1, String.Format("tool_off()"));
@@ -2028,8 +2033,9 @@ namespace AutoGrind
                     // Set Move buttons
                     MoveToolMountBtn.Text = row["MountPosition"].ToString();
                     MoveToolHomeBtn.Text = row["HomePosition"].ToString();
-
+                    //TODO this triggers  whole nother set!!!!!!
                     MountedToolBox.Text = (string)row["Name"];
+                    ExecuteLine(-1, String.Format("sleep(500)"));
                 }
                 return true;
             }
@@ -2145,8 +2151,8 @@ namespace AutoGrind
                 return true;
             }
 
-            log.Error("Unknown recipe line {0} EXEC: {1}", lineNumber, command);
-            PromptOperator("Unrecognized line in recipe:\n" + command);
+            log.Error("Cannot execute line {0} EXEC: {1}", lineNumber, command);
+            PromptOperator("Cannot execute line:\n" + command);
             return true;
         }
 
@@ -2222,7 +2228,7 @@ namespace AutoGrind
                         log.Info("EXEC Waiting for robot_ready");
                     logFilter = 2;
                 }
-                else if(ReadVariable("robot_index") != robotCommandServer.nSentMessages.ToString())
+                else if (ReadVariable("robot_index") != robotCommandServer.nSentMessages.ToString())
                 {
                     log.Error("Waiting for robot_index to catch up");
                 }
@@ -2782,7 +2788,7 @@ namespace AutoGrind
             {
                 case "robot_ready":
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
-                    if(waitingForOperatorMessageForm!=null && closeOperatorFormOnReady && valueTrimmed=="True")
+                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnReady && valueTrimmed == "True")
                     {
                         waitingForOperatorMessageForm.Close();
                         waitingForOperatorMessageForm = null;
@@ -2993,10 +2999,15 @@ namespace AutoGrind
                     string v = ReadVariable(m.Groups["name"].Value);
                     if (v != null)
                     {
-                        double x = Convert.ToDouble(v);
-                        double y = Convert.ToDouble(m.Groups["value"].Value);
-                        x = x + ((m.Groups["operator"].Value == "+=") ? y : -y);
-                        wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
+                        try
+                        {
+                            double x = Convert.ToDouble(v);
+                            double y = Convert.ToDouble(m.Groups["value"].Value);
+                            x = x + ((m.Groups["operator"].Value == "+=") ? y : -y);
+
+                            wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
+                        }
+                        catch { }
                     }
                 }
                 else
@@ -3008,9 +3019,13 @@ namespace AutoGrind
                         string v = ReadVariable(m.Groups["name"].Value);
                         if (v != null)
                         {
-                            double x = Convert.ToDouble(v);
-                            x = x + ((m.Groups["operator"].Value == "++") ? 1.0 : -1.0);
-                            wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
+                            try
+                            {
+                                double x = Convert.ToDouble(v);
+                                x = x + ((m.Groups["operator"].Value == "++") ? 1.0 : -1.0);
+                                wasSuccessful = WriteVariable(m.Groups["name"].Value, x.ToString());
+                            }
+                            catch { }
                         }
                     }
                 }
@@ -3236,13 +3251,13 @@ namespace AutoGrind
         private void MoveToolMountBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolMountBtn.Text);
-            PromptOperator("Wait for robot motion complete",true);
+            PromptOperator("Wait for robot motion complete", true);
         }
 
         private void MoveToolHomeBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolHomeBtn.Text);
-            PromptOperator("Wait for robot motion complete",true);
+            PromptOperator("Wait for robot motion complete", true);
         }
 
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)

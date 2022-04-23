@@ -1,0 +1,26 @@
+# comment 1
+redo:
+# comment 2
+
+
+# another idea
+#sleep(500)
+a=08
+ff:
+select_tool(2F85long)
+end
+select_tool(2F85)
+jump(ff)
+#movelinear(demo_cyl)
+#movelinear(demo_cyl)
+#movelinear(demo_cyl)
+select_tool(2F85)
+#movelinear(demo_flat)
+
+#grind_rect(20,20,1,5,10,1)
+#grind_rect(10,10,1,5,10,1)
+
+#sleep(4000)
+#comment 3
+
+jump(redo)
