@@ -462,7 +462,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
                         ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
-                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "0,1").Trim(new char[] { '[', ']' })));
+                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "3,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
