@@ -344,6 +344,8 @@ namespace AutoGrind
                                 log.Error("Too many sequential missed responses from robotmode");
                                 EnsureStopped();
                             }
+                            else
+                                log.Warn("Missed {0} responses from robotmode", noRobotmodeResponseCount);
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -372,6 +374,8 @@ namespace AutoGrind
                                 log.Error("Too many sequential missed responses from safetystatus");
                                 EnsureStopped();
                             }
+                            else
+                                log.Warn("Missed {0} responses from safetystatus", noSafetystatusResponseCount);
                             buttonText = "?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
@@ -427,6 +431,8 @@ namespace AutoGrind
                                 log.Error("Too many sequential missed responses from programstate");
                                 EnsureStopped();
                             }
+                            else
+                                log.Warn("Missed {0} responses from programstate", noProgramstateResponseCount);
                         }
                     ProgramStateBtn.Text = robotmodeResponse;
                     ProgramStateBtn.BackColor = color;
@@ -2247,7 +2253,7 @@ namespace AutoGrind
                 }
                 else if (ReadVariable("robot_index") != robotCommandServer.nSentMessages.ToString())
                 {
-                    log.Error("Waiting for robot_index to catch up");
+                    log.Debug("Waiting for robot_index to catch up");
                 }
                 else
                 {

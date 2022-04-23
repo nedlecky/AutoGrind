@@ -4,21 +4,31 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoGrind
 {
+
     public partial class JoggingDialog : Form
     {
+        public enum RegisterTouchFlags
+        {
+            TWF_NONE = 0x00000000,
+            TWF_FINETOUCH = 0x00000001, //Specifies that hWnd prefers noncoalesced touch input.
+            TWF_WANTPALM = 0x00000002 //Setting this flag disables palm rejection which reduces delays for getting WM_TOUCH messages.
+        }
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool RegisterTouchWindow(IntPtr hWnd, RegisterTouchFlags flags);
+
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         readonly TcpServerSupport robot;
         public bool ShouldSave { get; set; }
         private bool SaveButtonEnabled = false;
 
         MainForm mainForm;
-
         public JoggingDialog(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool _SaveButtonEnabled = false)
         {
             InitializeComponent();
@@ -44,12 +54,14 @@ namespace AutoGrind
             Close();
         }
 
-
+     
         private void JoggingForm_Load(object sender, EventArgs e)
         {
             DistanceBox.SelectedIndex = 2;
             AngleBox.SelectedIndex = 2;
             CoordBox.SelectedIndex = 0;
+
+            RegisterTouchWindow(ZplusBtn.Handle, RegisterTouchFlags.TWF_WANTPALM);
         }
 
         private double Deg2Rad(double d)

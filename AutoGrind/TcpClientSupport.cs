@@ -211,7 +211,7 @@ namespace AutoGrind
                     log.Info("{0} IR({1}) Retry succeeded = {2}. [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
                     return response;
                 }
-                log.Error("{0} IR({1}) Failed even with retry. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
+                log.Warn("{0} IR({1}) Retry failed. [{2} mS]", logPrefix, inquiry, timer.ElapsedMilliseconds);
                 return null;
             }
             timer.Stop();

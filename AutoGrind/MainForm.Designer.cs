@@ -806,7 +806,7 @@
             this.groupBox6.Size = new System.Drawing.Size(1754, 269);
             this.groupBox6.TabIndex = 84;
             this.groupBox6.TabStop = false;
-            this.groupBox6.Text = "Error Messages";
+            this.groupBox6.Text = "Errors and Warnings";
             // 
             // ErrorLogRTB
             // 
