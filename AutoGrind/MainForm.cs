@@ -448,7 +448,7 @@ namespace AutoGrind
                     {
                         log.Info("Changing robot connection to READY");
 
-                        // Send defaults speeds and accelerations
+                        // Send persistent values (or defaults) for speeds, accelerations, I/O, etc.
                         ExecuteLine(-1, "grind_contact_enable(0)");  // Set contact enabled = No Touch No Grind
                         ExecuteLine(-1, "grind_retract()");  // Ensure we're not on the part
                         ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_linear_speed_mmps", "200")));
@@ -673,14 +673,16 @@ namespace AutoGrind
             StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
         }
 
+        bool mountedToolBoxActionDisabled = false;
         private void MountedToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            log.Info("Operator changing tool to " + MountedToolBox.Text);
+            log.Info("MountedToolBox changed to " + MountedToolBox.Text + (mountedToolBoxActionDisabled ? " UPDATE DISABLED" : ""));
+            if (mountedToolBoxActionDisabled) return;
 
             ToolsGrd.ClearSelection();
             if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
-            PartGeometryBox.Text = "FLAT";
+            //PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
@@ -689,9 +691,11 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
         }
 
+        bool partGeometryBoxDisabled = false;
         private void PartGeometryBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            log.Info("Operator changing geometry to " + PartGeometryBox.Text);
+            log.Info("PartGeometryBox changed to " + PartGeometryBox.Text + (partGeometryBoxDisabled ? " UPDATE DISABLED" : ""));
+            if (partGeometryBoxDisabled) return;
             bool isFlat = PartGeometryBox.Text == "FLAT";
             if (isFlat)
             {
@@ -1376,7 +1380,14 @@ namespace AutoGrind
             LoadVariablesBtn_Click(null, null);
 
             // Load the User's Manual
-            LoadManualBtn_Click(null, null);
+            try
+            {
+                InstructionsRTB.LoadFile("RecipeCommands.rtf");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Could not load instruction sheet!");
+            }
 
             // Autoload file is the last loaded recipe
             recipeFileToAutoload = (string)AppNameKey.GetValue("RecipeFilenameLbl.Text", "");
@@ -2019,8 +2030,10 @@ namespace AutoGrind
                 else
                 {
                     // Kind of like a subroutine that calls all the pieces needed to effect a tool change
+                    // Just in case... make sure we disable current tool
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
+
                     ExecuteLine(-1, String.Format("tool_off()"));
                     ExecuteLine(-1, String.Format("coolant_off()"));
                     ExecuteLine(-1, String.Format("set_tool_on_outputs({0})", row["ToolOnOuts"]));
@@ -2030,12 +2043,17 @@ namespace AutoGrind
                     ExecuteLine(-1, String.Format("tool_off()"));
                     ExecuteLine(-1, String.Format("coolant_off()"));
                     WriteVariable("robot_tool", row["Name"].ToString());
-                    // Set Move buttons
+
+                    // Set Move buttons to go to tool change and home locations
                     MoveToolMountBtn.Text = row["MountPosition"].ToString();
                     MoveToolHomeBtn.Text = row["HomePosition"].ToString();
-                    //TODO this triggers  whole nother set!!!!!!
+
+                    // Update the UI selector but don't trigger another set of commands to the robot!
+                    mountedToolBoxActionDisabled = true;
                     MountedToolBox.Text = (string)row["Name"];
-                    ExecuteLine(-1, String.Format("sleep(500)"));
+                    mountedToolBoxActionDisabled = false;
+                    // Give the UI some time to process all of those command returns!!!
+                    Thread.Sleep(1000);
                 }
                 return true;
             }
@@ -2090,13 +2108,12 @@ namespace AutoGrind
                         return true;
                 }
 
-                // If we're about to change geometry shape, that will automatically UpdateGeometryToRobot()
-                // If we're only changing diameter, we need to call explicitly
-                // sets us, picks the new default diam, and send to robot!
-                if (PartGeometryBox.Text == paramList[0])
-                    UpdateGeometryToRobot();
-                else
-                    PartGeometryBox.Text = paramList[0];
+                // Update the UI control but don't have it trigger commands to robot, which is done explicitly below
+                partGeometryBoxDisabled = true;
+                PartGeometryBox.Text = paramList[0];
+                partGeometryBoxDisabled = false;
+
+                UpdateGeometryToRobot();
                 return true;
             }
 
@@ -2799,9 +2816,9 @@ namespace AutoGrind
                     RobotIndexLbl.Text = valueTrimmed;
                     SentRobotIndexLbl.Text = robotCommandServer?.nSentMessages.ToString();
                     break;
-                case "robot_tool":
-                    MountedToolBox.Text = valueTrimmed;
-                    break;
+                //case "robot_tool":
+                //    MountedToolBox.Text = valueTrimmed;
+                //    break;
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
@@ -3494,32 +3511,6 @@ namespace AutoGrind
 
         // ===================================================================
         // END POSITIONS SYSTEM
-        // ===================================================================
-
-        // ===================================================================
-        // START MANUAL SYSTEM
-        // ===================================================================
-
-        private void LoadManualBtn_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                InstructionsRTB.LoadFile("RecipeCommands.rtf");
-            }
-            catch (Exception ex)
-            {
-                log.Error(ex, "Could not load instruction sheet!");
-            }
-        }
-
-        private void SaveManualBtn_Click(object sender, EventArgs e)
-        {
-            InstructionsRTB.SaveFile("RecipeCommands.rtf");
-        }
-
-
-        // ===================================================================
-        // END MANUAL SYSTEM
         // ===================================================================
 
         private void CurrentLineLbl_TextChanged(object sender, EventArgs e)

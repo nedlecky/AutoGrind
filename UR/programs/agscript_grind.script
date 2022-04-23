@@ -51,7 +51,7 @@ def speed_setter(speed_mmps):
   global grind_rot_blend_radius_rad = grind_blend_radius_m
 
   # If part is cylinder or spherical, diameter will by >0
-  diam_m = robot_part_geometry[1]
+  diam_m = robot_part_geometry[1] / 1000.0
   if diam_m > 0.0:
     # These are 1/4 actual speeds but we need to command these to get movel to rotate correctly ???
     global grind_rot_speed_rps = grind_speed_mps * 0.5 / diam_m
@@ -405,7 +405,7 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
   # Unit conversion
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
-  radius_m = robot_part_geometry[1] / 2.0
+  radius_m = robot_part_geometry[1] / 2000.0
   drx_rad = dx_m / radius_m
   dry_rad = dy_m / radius_m
 
@@ -419,16 +419,17 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
 
   # Grind the pattern
   shape = robot_part_geometry[0]
+  diam_m = robot_part_geometry[1] / 1000.0
   if shape == 1:
     pattern_line_flat(p_contact_center, dx_m, dy_m, n_cycles)
   elif shape == 2:
     # Speed factor is 0.5/diam for pure rotational (all y) and 1.0 for pure translational (all x)
-    max_speed_factor = 0.5 / robot_part_geometry[1]
+    max_speed_factor = 0.5 / diam_m
     theta = atan2(abs(dy_mm), abs(dx_mm))
     speed_factor = 1.0 + (max_speed_factor-1.0) * abs(sin(theta))
     pattern_line_cylinder(p_contact_center, dx_m, dry_rad, speed_factor, n_cycles)
   elif shape == 3:
-    speed_factor = 0.5 / robot_part_geometry[1]
+    speed_factor = 0.5 / diam_m
     pattern_line_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
   end
 
@@ -450,10 +451,11 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   # Unit conversion
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
-  radius_m = robot_part_geometry[1] / 2.0
+  diam_m = robot_part_geometry[1] / 1000.0
+  radius_m = diam_m / 2.0
   drx_rad = dx_m / radius_m
   dry_rad = dy_m / radius_m
-  speed_factor = 0.5 / robot_part_geometry[1]  # 0.5 / diam_m is the speedup needed on rotational moves
+  speed_factor = 0.5 / diam_m  # 0.5 / diam_m is the speedup needed on rotational moves
 
   # Grind time estimate
   time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_speed_mps + 1500
@@ -496,7 +498,7 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   # Unit conversion
   dx_m = dx_mm / 1000.0
   dy_m = dy_mm / 1000.0
-  part_radius_m = robot_part_geometry[1] / 2.0
+  part_radius_m = robot_part_geometry[1] / 2000.0
   drx_rad = dy_m / part_radius_m
   dry_rad = dy_m / part_radius_m
 
@@ -534,7 +536,7 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
 
   # Unit conversion
   circle_diam_m = circle_diam_mm / 1000.0
-  part_diam_m = robot_part_geometry[1]
+  part_diam_m = robot_part_geometry[1] / 1000.0
 
   # Grind time estimate
   time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps + 1500
@@ -572,7 +574,7 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   # Unit conversion
   circle1_diam_m = circle1_diam_mm / 1000.0
   circle2_diam_m = circle2_diam_mm / 1000.0
-  part_diam_m = robot_part_geometry[1]
+  part_diam_m = robot_part_geometry[1] / 1000.0
 
   # Grind time estimate based on average diam
   avg_diam_mm = (circle1_diam_mm + circle2_diam_mm) / 2.0
@@ -1054,7 +1056,7 @@ def pattern_circle_cylinder(p_center, circle_diam_m, cylinder_radius_m, n_cycles
   # Local calculations
   n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
   circle_radius_m = circle_diam_m / 2.0
-  speed_factor = 0.5 / robot_part_geometry[1]
+  speed_factor = 0.5 / (robot_part_geometry[1] / 1000.0)
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
@@ -1147,7 +1149,7 @@ def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals,
   n_total_points = n_spirals * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
-  speed_factor = 0.5 / robot_part_geometry[1]
+  speed_factor = 0.5 / (robot_part_geometry[1] / 1000.0)
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):

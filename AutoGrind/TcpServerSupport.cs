@@ -169,7 +169,6 @@ namespace AutoGrind
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);
                 nSentMessages++;
                 nSentMessages %= 100000;
-                log.Info("nSentMessages={0}", nSentMessages);
             }
             catch
             {

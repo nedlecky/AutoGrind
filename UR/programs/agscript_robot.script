@@ -15,7 +15,7 @@ global robot_tcp = p[0, 0, 0.175, 0, 0, 0]
 global robot_tcp_part = robot_tcp
 global robot_payload_mass_kg = 1.0
 global robot_payload_cog_m = [0, 0, 0.50]
-# Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_m)
+# Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_mm)
 global robot_part_geometry = [0, 0]
 global robot_door_closed_input = [-1, -1]
 global robot_tool_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
@@ -72,24 +72,21 @@ def set_variable():
     socket_set_var("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
     global response = "set_joint_accel()"
   elif command[2] == 6:
-    # Set part_geometry to [shape, diameter_m] is shape>0. Always returns "robot_part_geometry=[current geometry]"
+    # Set part_geometry to [shape, diameter_mm] if shape==1,2,3. Always returns "robot_part_geometry=[current geometry]"
+    # Also updates robot_part_tcp using update_robot_tcp_part
     shape = command[3]
-    if shape > 0:
-      diameter_m = limiter(command[4], 50, 1100) / 1000.0
-      robot_part_geometry = [shape, diameter_m]
+    if shape == 1:
+      robot_part_geometry = [1,0]
+    elif shape == 2 or shape == 3:
+      diameter_mm = limiter(command[4], 50, 1100)
+      robot_part_geometry = [shape, diameter_mm]
     end
 
-    # set robot_tcp_part based on geometry
-    if shape == 1:  # Flat
-      robot_tcp_part = robot_tcp
-    else:  # Cylinder or Sphere
-      robot_tcp_part = pose_trans(robot_tcp, p[0, 0, robot_part_geometry[1] / 2.0, 0, 0, 0])
-    end
+    update_robot_tcp_part()
 
     socket_send_string("robot_part_geometry=")
     return_vector(robot_part_geometry, 2)
     socket_send_lf()
-    return_pose("robot_tcp_part", robot_tcp_part)
     global response = "set_part_geometry()"
   elif command[2] == 10:
     # Set door closed IO
@@ -167,11 +164,11 @@ def set_variable():
     # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
     if command[3] > -10:
       robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
-      robot_tcp_part = robot_tcp
       set_tcp(robot_tcp)
     end
     return_pose("robot_tcp", get_tcp_offset())
-    return_pose("robot_tcp_part", robot_tcp_part)
+    # Recompute robot_tcp_part based on current geometry
+    update_robot_tcp_part()
     global response = "set_tcp()"
   elif command[2] == 21:
     # set_payload if command[3] > 0. Always return robot_m and robot_cog
@@ -181,9 +178,6 @@ def set_variable():
       set_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
     socket_set_var("robot_payload_mass_kg", robot_payload_mass_kg)
-    #socket_send_string("robot_payload_mass_kg=")
-    #socket_send_string(robot_payload_mass_kg)
-    #socket_send_lf()
     socket_send_string("robot_payload_cog_m=")
     return_vector(robot_payload_cog_m, 3)
     socket_send_lf()
@@ -191,8 +185,20 @@ def set_variable():
   else:
     global response = "set_variable ERROR"
   end
-
 end
+
+# Compute appropriate robot_tcp for the part based on robot_tcp and robot_part_geometry
+# They're the same for flat parts, but the TCP is adjusted to the center of the cylinder or sphere
+def update_robot_tcp_part():
+  shape = robot_part_geometry[0]
+  if shape == 1:  # Flat
+    robot_tcp_part = robot_tcp
+  else:  # Cylinder or Sphere
+    robot_tcp_part = pose_trans(robot_tcp, p[0, 0, robot_part_geometry[1] / 2000.0, 0, 0, 0])
+  end
+  return_pose("robot_tcp_part", robot_tcp_part)
+end
+
 
 # Send get_tcp_offset() result to socket
 def return_tcp_offset():
@@ -334,16 +340,16 @@ global doorMonitorThread = run door_monitor_thread()
 # We can fire off any command here safely since no others will be seen until we exit
 #
 global no_command_count = 0
-global halt_grind  = False
+global halt_grind = False
 def no_command():
   global no_command_count = no_command_count + 1
 
   if halt_grind:
-    halt_grind=False
+    halt_grind = False
     # Simulate receiving a (40,0) (grind_retract)
-    command[0]=3
-    command[1]=40
-    command[2]=0
+    command[0] = 3
+    command[1] = 40
+    command[2] = 0
     pattern_grind()
   end
 end

@@ -74,8 +74,6 @@
             this.SaveVariablesBtn = new System.Windows.Forms.Button();
             this.VariablesGrd = new System.Windows.Forms.DataGridView();
             this.manualPage = new System.Windows.Forms.TabPage();
-            this.LoadManualBtn = new System.Windows.Forms.Button();
-            this.SaveManualBtn = new System.Windows.Forms.Button();
             this.InstructionsRTB = new System.Windows.Forms.RichTextBox();
             this.groupBox10 = new System.Windows.Forms.GroupBox();
             this.ExecLogRTB = new System.Windows.Forms.RichTextBox();
@@ -102,6 +100,7 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.SentRobotIndexLbl = new System.Windows.Forms.Label();
             this.StepTimeRemainingLbl = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.StepTimeEstimateLbl = new System.Windows.Forms.Label();
@@ -185,7 +184,6 @@
             this.RecipeFilenameOnlyLbl = new System.Windows.Forms.Label();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
-            this.SentRobotIndexLbl = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -719,8 +717,6 @@
             // 
             // manualPage
             // 
-            this.manualPage.Controls.Add(this.LoadManualBtn);
-            this.manualPage.Controls.Add(this.SaveManualBtn);
             this.manualPage.Controls.Add(this.InstructionsRTB);
             this.manualPage.Location = new System.Drawing.Point(4, 64);
             this.manualPage.Name = "manualPage";
@@ -729,32 +725,6 @@
             this.manualPage.Text = "Manual";
             this.manualPage.UseVisualStyleBackColor = true;
             // 
-            // LoadManualBtn
-            // 
-            this.LoadManualBtn.BackColor = System.Drawing.Color.Gray;
-            this.LoadManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadManualBtn.ForeColor = System.Drawing.Color.White;
-            this.LoadManualBtn.Location = new System.Drawing.Point(18, 922);
-            this.LoadManualBtn.Name = "LoadManualBtn";
-            this.LoadManualBtn.Size = new System.Drawing.Size(231, 108);
-            this.LoadManualBtn.TabIndex = 106;
-            this.LoadManualBtn.Text = "Reload";
-            this.LoadManualBtn.UseVisualStyleBackColor = false;
-            this.LoadManualBtn.Click += new System.EventHandler(this.LoadManualBtn_Click);
-            // 
-            // SaveManualBtn
-            // 
-            this.SaveManualBtn.BackColor = System.Drawing.Color.Gray;
-            this.SaveManualBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveManualBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveManualBtn.Location = new System.Drawing.Point(262, 922);
-            this.SaveManualBtn.Name = "SaveManualBtn";
-            this.SaveManualBtn.Size = new System.Drawing.Size(225, 108);
-            this.SaveManualBtn.TabIndex = 105;
-            this.SaveManualBtn.Text = "Save";
-            this.SaveManualBtn.UseVisualStyleBackColor = false;
-            this.SaveManualBtn.Click += new System.EventHandler(this.SaveManualBtn_Click);
-            // 
             // InstructionsRTB
             // 
             this.InstructionsRTB.Font = new System.Drawing.Font("Courier New", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -762,7 +732,7 @@
             this.InstructionsRTB.Margin = new System.Windows.Forms.Padding(2);
             this.InstructionsRTB.Name = "InstructionsRTB";
             this.InstructionsRTB.ScrollBars = System.Windows.Forms.RichTextBoxScrollBars.ForcedBoth;
-            this.InstructionsRTB.Size = new System.Drawing.Size(1276, 899);
+            this.InstructionsRTB.Size = new System.Drawing.Size(1276, 1013);
             this.InstructionsRTB.TabIndex = 104;
             this.InstructionsRTB.Text = "";
             // 
@@ -1109,6 +1079,16 @@
             this.RunPage.TabIndex = 0;
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
+            // 
+            // SentRobotIndexLbl
+            // 
+            this.SentRobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.SentRobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 528);
+            this.SentRobotIndexLbl.Name = "SentRobotIndexLbl";
+            this.SentRobotIndexLbl.Size = new System.Drawing.Size(187, 52);
+            this.SentRobotIndexLbl.TabIndex = 149;
+            this.SentRobotIndexLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // StepTimeRemainingLbl
             // 
@@ -2076,16 +2056,6 @@
             this.VersionLbl.Text = "VersionLbl";
             this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // SentRobotIndexLbl
-            // 
-            this.SentRobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SentRobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 528);
-            this.SentRobotIndexLbl.Name = "SentRobotIndexLbl";
-            this.SentRobotIndexLbl.Size = new System.Drawing.Size(187, 52);
-            this.SentRobotIndexLbl.TabIndex = 149;
-            this.SentRobotIndexLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2210,8 +2180,6 @@
         private System.Windows.Forms.Label RecipeFilenameLbl;
         private System.Windows.Forms.RichTextBox InstructionsRTB;
         private System.Windows.Forms.TabPage manualPage;
-        private System.Windows.Forms.Button LoadManualBtn;
-        private System.Windows.Forms.Button SaveManualBtn;
         private System.Windows.Forms.Button RobotModeBtn;
         private System.Windows.Forms.Button SafetyStatusBtn;
         private System.Windows.Forms.Button ProgramStateBtn;
