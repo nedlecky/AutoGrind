@@ -563,6 +563,11 @@ namespace AutoGrind
                     StepBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     StopBtn.Enabled = false;
+
+                    MountedToolBox.Enabled = true;
+                    PartGeometryBox.Enabled = true;
+                    DiameterLbl.Enabled = true;
+
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
                     RecipeRTB.Enabled = true;
@@ -591,6 +596,11 @@ namespace AutoGrind
                     StepBtn.Enabled = true;
                     PauseBtn.Enabled = false;
                     StopBtn.Enabled = false;
+
+                    MountedToolBox.Enabled = true;
+                    PartGeometryBox.Enabled = true;
+                    DiameterLbl.Enabled = true;
+
                     ExecTmr.Enabled = false;
                     CurrentLineLbl.Text = "";
                     RecipeRTB.Enabled = true;
@@ -620,6 +630,11 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     PauseBtn.Text = "Pause";
                     StopBtn.Enabled = true;
+
+                    MountedToolBox.Enabled = false;
+                    PartGeometryBox.Enabled = false;
+                    DiameterLbl.Enabled = false;
+
                     CurrentLineLbl.Text = "";
                     RecipeRTB.Enabled = false;
 
@@ -653,6 +668,11 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     PauseBtn.Text = "Continue";
                     StopBtn.Enabled = true;
+
+                    MountedToolBox.Enabled = false;
+                    PartGeometryBox.Enabled = false;
+                    DiameterLbl.Enabled = false;
+
                     RecipeRTB.Enabled = false;
 
                     ExecTmr.Enabled = false;
@@ -694,7 +714,7 @@ namespace AutoGrind
         private void UpdateGeometryToRobot()
         {
             if (robotCommandServer != null)
-                ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, PartGeometryBox.SelectedIndex == 0 ? "0" : DiameterLbl.Text));
+                ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, DiameterLbl.Text));
         }
 
         bool partGeometryBoxDisabled = false;
@@ -706,15 +726,15 @@ namespace AutoGrind
             if (isFlat)
             {
                 DiameterLbl.Text = "0.0";
-                DiameterLbl.Enabled = false;
-                DiameterDimLbl.Enabled = false;
+                DiameterLbl.Visible = false;
+                DiameterDimLbl.Visible = false;
             }
             else
             {
                 int index = PartGeometryBox.SelectedIndex;
                 DiameterLbl.Text = diameterDefaults[index];
-                DiameterLbl.Enabled = true;
-                DiameterDimLbl.Enabled = true;
+                DiameterLbl.Visible = true;
+                DiameterDimLbl.Visible = true;
             }
 
             UpdateGeometryToRobot();
@@ -2087,6 +2107,9 @@ namespace AutoGrind
                 switch (paramList[0])
                 {
                     case "FLAT":
+                        DiameterLbl.Text = "0.0";
+                        DiameterLbl.Visible = false;
+                        DiameterDimLbl.Visible = false;
                         break;
                     case "CYLINDER":
                         if (!ValidNumericString(paramList[1], 75, 1100))
@@ -2096,6 +2119,8 @@ namespace AutoGrind
                             return true;
                         }
                         DiameterLbl.Text = paramList[1];
+                        DiameterLbl.Visible = true;
+                        DiameterDimLbl.Visible = true;
                         diameterDefaults[1] = paramList[1];
                         break;
                     case "SPHERE":
@@ -2106,6 +2131,8 @@ namespace AutoGrind
                             return true;
                         }
                         DiameterLbl.Text = paramList[1];
+                        DiameterLbl.Visible = true;
+                        DiameterDimLbl.Visible = true;
                         diameterDefaults[2] = paramList[1];
                         break;
                     default:
