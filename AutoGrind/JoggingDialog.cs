@@ -79,21 +79,20 @@ namespace AutoGrind
             switch (CoordBox.Text)
             {
                 case "BASE":
-                    lastJogCommand = "(13";
+                    lastJogCommand = "13";
                     break;
                 case "TOOL":
-                    lastJogCommand = "(14";
+                    lastJogCommand = "14";
                     break;
                 case "PART":
-                    lastJogCommand = "(15";
+                    lastJogCommand = "15";
                     break;
             }
 
             for (int i = 0; i < 6; i++)
                 lastJogCommand += "," + p[i].ToString();
-            lastJogCommand += ")";
             log.Info("Jog Command: {0}", lastJogCommand);
-            robot.Send(lastJogCommand);
+            mainForm.RobotSend(lastJogCommand);
         }
         private void XplusBtn_Click(object sender, EventArgs e)
         {
@@ -179,21 +178,21 @@ namespace AutoGrind
 
         private void FlipRBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(16,3," + Deg2Rad(180).ToString() + ")");
+            mainForm.RobotSend("16,3," + Deg2Rad(180).ToString());
         }
 
         private void ZeroPBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(16,4,0)");
+            mainForm.RobotSend("16,4,0");
         }
 
         private void ZeroYBtn_Click(object sender, EventArgs e)
         {
-            robot.Send("(16,5,0)");
+            mainForm.RobotSend("16,5,0");
         }
         private void ZeroRpyBtn_Click(object sender, EventArgs e)
         {
-            robot.Send(string.Format("(18,{0},0,0)", Deg2Rad(180)));
+            mainForm.RobotSend(string.Format("18,{0},0,0", Deg2Rad(180)));
         }
 
         // Run through all the controls in the form and enable/disable buttons and comboboxes
@@ -225,7 +224,7 @@ namespace AutoGrind
         {
             if (FreeDriveBtn.Text.Contains("ON"))
             {
-                robot?.Send("(30,19,0)");
+                mainForm.RobotSend("30,19,0");
 
                 FreeDriveBtn.Text = "FreeDrive";
                 FreeDriveBtn.BackColor = Color.Green;
@@ -233,7 +232,7 @@ namespace AutoGrind
             }
             else
             {
-                robot?.Send("(30,19,1)");
+                mainForm.RobotSend("30,19,1");
                 FreeDriveBtn.Text = "FreeDrive\nON";
                 FreeDriveBtn.BackColor = Color.Blue;
                 ButtonEnable(false);
@@ -256,7 +255,7 @@ namespace AutoGrind
                 {
                     System.Threading.Thread.Sleep(250);
                     if (continueTask && mainForm.ReadVariable("robot_ready") == "True")
-                        robot.Send(lastJogCommand);
+                        mainForm.RobotSend(lastJogCommand);
                 }
             });
         }

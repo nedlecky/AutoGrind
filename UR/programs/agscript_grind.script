@@ -374,8 +374,6 @@ thread grind_abort_listener_thread():
   while (True):
     global halt_command = socket_read_ascii_float(1, timeout = 0.1)
     if halt_command[0] > 0 or not is_door_closed():
-      # Same increment as in the PolyScope but this one bypasses the PolyScope!!
-      global robot_index = (robot_index + 1) % 100000 # Keeps us in sync with the counter in C#
       global halt_count = halt_count + 1
     end
     sync()

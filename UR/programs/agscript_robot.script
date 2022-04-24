@@ -5,6 +5,8 @@
 
 
 global response = "unknown"
+global robot_index = 0
+global robot_checkvalue = 0
 
 global robot_linear_speed_mps = 0.2
 global robot_linear_accel_mpss = 0.4
@@ -28,6 +30,32 @@ global robot_freedrive_mode = 0
 set_tcp(robot_tcp)
 set_payload(robot_payload_mass_kg, robot_payload_cog_m)
 set_gravity([0.0, 0.0, 9.82])
+
+# command should be[nElements,index,checkval,param[0],param[1],...]
+# put index into robot_index
+# validate checkval
+# Remove both from command so we get command = [nElements-2, param[0], param[1],...]
+def command_validate():
+  # must be at least index, check, and 1 param
+  if command[0] < 3:
+    command[0] = 0
+    return False
+  end
+  global robot_index = command[1]
+  global robot_checkvalue = command[2]
+  if robot_checkvalue != 42:
+    command[0] = 0
+    return False
+  end
+
+  i = 3
+  while (i < command[0] + 1):
+    command[i-2] = command[i]
+    i = i + 1
+  end
+  command[0] = command[0] - 2
+  return True
+end
 
 # Set interface... allows validation and limits
 def set_variable():
@@ -76,7 +104,7 @@ def set_variable():
     # Also updates robot_part_tcp using update_robot_tcp_part
     shape = command[3]
     if shape == 1:
-      robot_part_geometry = [1,0]
+      robot_part_geometry = [1, 0]
     elif shape == 2 or shape == 3:
       diameter_mm = limiter(command[4], 50, 1100)
       robot_part_geometry = [shape, diameter_mm]

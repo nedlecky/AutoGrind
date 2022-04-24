@@ -21,9 +21,8 @@
          socket_is_open≔socket_open("192.168.0.121", 30000)
      response≔"Unknown command"
      command≔socket_read_ascii_float(12)
-     If command[0]≥1
+     If command_validate()
        socket_send_line("robot_ready=False")
-       robot_index≔(robot_index+1)%100000
        lastCommand≔command
        Switch command[1]
          Case 10

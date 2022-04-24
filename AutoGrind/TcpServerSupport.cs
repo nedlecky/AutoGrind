@@ -24,8 +24,6 @@ namespace AutoGrind
         public int nGetStatusResponses = 0;
         public int nBadCommLenErrors = 0;
 
-        public int nSentMessages = 0;
-
         public Action<string> ReceiveCallback { get; set; }
         public bool IsClientConnected { get; set; } = false;
 
@@ -115,9 +113,6 @@ namespace AutoGrind
                         stream = client.GetStream();
                         log.Info("ClientConnected(): UR Client connected");
                         IsClientConnected = true;
-
-                        nSentMessages = 0;
-                        Send("(10)");        // Query position
                     }
                     catch { }
                 }
@@ -167,8 +162,6 @@ namespace AutoGrind
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);
-                nSentMessages++;
-                nSentMessages %= 100000;
             }
             catch
             {

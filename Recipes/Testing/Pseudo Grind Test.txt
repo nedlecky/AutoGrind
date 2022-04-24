@@ -1,16 +1,21 @@
 # Pseudo Grind Test
 
+size=20
+count=4
+speed=10
+force=5
+
 redo:
 select_tool(2F85)
 movelinear(demo_flat)
 
 set_part_geometry(FLAT,0)
-grind_rect(20,20,1,5,10,0)
+grind_rect({size},{size},{count},{speed},{force},0)
 
 set_part_geometry(CYLINDER,800.1)
-grind_rect(20,20,1,5,10,0)
+grind_rect({size},{size},{count},{speed},{force},0)
 
 set_part_geometry(SPHERE,800.2)
-grind_rect(20,20,1,5,10,0)
+grind_rect({size},{size},{count},{speed},{force},0)
 
 jump(redo)

@@ -301,7 +301,7 @@ namespace AutoGrind
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
                 RecomputeTimes();
 
-            SentRobotIndexLbl.Text = robotCommandServer?.nSentMessages.ToString();
+            SentRobotIndexLbl.Text = robotSendIndex.ToString();
 
             // Ping the dashboard every few seconds
             if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
@@ -940,7 +940,7 @@ namespace AutoGrind
         {
             if (ProgramStateBtn.Text.StartsWith("PLAYING"))
             {
-                robotCommandServer?.Send("(99)");
+                RobotSend("99");
                 robotDashboardClient?.InquiryResponse("stop", 500);
                 RobotCommandStatusLbl.BackColor = Color.Red;
                 RobotCommandStatusLbl.Text = "OFF";
@@ -953,7 +953,7 @@ namespace AutoGrind
             {
                 robotDashboardClient?.InquiryResponse("play", 500);
                 // If we're starting back in the middle of something, this will abort it
-                robotCommandServer?.Send("(10)");
+                RobotSend("10");
             }
 
             pollDashboardStateNow = true;
@@ -1022,7 +1022,7 @@ namespace AutoGrind
                     int val = Convert.ToInt32(var);
                     val++;
                     val %= 3;
-                    robotCommandServer.Send(String.Format("(40,1,{0})", val));
+                    RobotSend(String.Format("40,1,{0}", val));
                 }
         }
 
@@ -1066,6 +1066,7 @@ namespace AutoGrind
             {
                 isSingleStep = false;
                 SetRecipeState(RecipeState.RUNNING);
+                RobotSend("10");
                 SetState(RunState.RUNNING);
             }
         }
@@ -1077,7 +1078,7 @@ namespace AutoGrind
             {
                 case RunState.RUNNING:
                     // Perform PAUSE function
-                    robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
+                    RobotSend("10");  // This will cancel any grind in progress
                     SetState(RunState.PAUSED);
                     break;
                 case RunState.PAUSED:
@@ -1091,6 +1092,7 @@ namespace AutoGrind
                     };
                     DialogResult result = messageForm.ShowDialog();
                     if (result == DialogResult.OK) lineCurrentlyExecuting--;
+                    RobotSend("10");
                     SetState(RunState.RUNNING);
                     break;
             }
@@ -1120,7 +1122,7 @@ namespace AutoGrind
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
-            robotCommandServer?.Send("(10)");  // This will cancel any grind in progress
+            RobotSend("10");  // This will cancel any grind in progress
 
             // Make sure we are off the part
             ExecuteLine(-1, "grind_retract()");
@@ -1553,15 +1555,6 @@ namespace AutoGrind
         {
             ChangeLogLevel(LogLevelCombo.Text);
         }
-        private void DashboardSendBtn_Click(object sender, EventArgs e)
-        {
-            robotDashboardClient?.InquiryResponse(DashboardMessageTxt.Text);
-        }
-        private void URControlSendBtn_Click(object sender, EventArgs e)
-        {
-            robotUrControlClient?.Send(URControlMessageTxt.Text);
-        }
-
 
         // ===================================================================
         // END SETUP
@@ -2161,8 +2154,8 @@ namespace AutoGrind
 
             // Handle all of the other robot commands (which just use sendrobot, some prefix params, and any other specified params)
             // Example:
-            // set_linear_speed(1.1) ==> robotCommandServer.Send("(30,1.1)")
-            // grind_rect(30,30,5,20,10) ==> robotCommandServer.Send("(40,20,30,30,5,20,10)")
+            // set_linear_speed(1.1) ==> RobotSend("30,1.1")
+            // grind_rect(30,30,5,20,10) ==> RobotSend("40,20,30,30,5,20,10")
             // etc.
 
             // Find the commandName from commandName(parameters)
@@ -2185,7 +2178,7 @@ namespace AutoGrind
                     {
                         if (parameters.Length > 0 || commandSpec.nParams <= 0)
                         {
-                            robotCommandServer?.Send("(" + commandSpec.prefix + parameters + ")");
+                            RobotSend(commandSpec.prefix + parameters);
                         }
                         else
                             PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
@@ -2278,7 +2271,7 @@ namespace AutoGrind
                         log.Info("EXEC Waiting for robot_ready");
                     logFilter = 2;
                 }
-                else if (ReadVariable("robot_index") != robotCommandServer.nSentMessages.ToString())
+                else if (ReadVariable("robot_index") != robotSendIndex.ToString())
                 {
                     log.Debug("Waiting for robot_index to catch up");
                 }
@@ -2368,7 +2361,7 @@ namespace AutoGrind
             {
                 if (robotCommandServer.IsConnected())
                 {
-                    robotCommandServer.Send("(98)");
+                    RobotSend("98");
                     robotCommandServer.Disconnect();
                 }
                 robotCommandServer = null;
@@ -2492,13 +2485,22 @@ namespace AutoGrind
             }
         }
 
-        private void RobotSendBtn_Click(object sender, EventArgs e)
+        int robotSendIndex = 100;
+        // Command is a 0-n element comma-separated list "x,y,z" of doubles
+        // We send (index,x,y,z)
+        public bool RobotSend(string command)
         {
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
                 {
-                    robotCommandServer.Send(RobotMessageTxt.Text);
+                    ++robotSendIndex;
+                    if (robotSendIndex > 999) robotSendIndex = 100;
+                    int checkValue = 42;
+                    string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
+                    robotCommandServer.Send(sendMessage);
+                    return true;
                 }
+            return false;
         }
         private void SetLinearSpeedBtn_Click(object sender, EventArgs e)
         {
@@ -2847,7 +2849,7 @@ namespace AutoGrind
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
-                    SentRobotIndexLbl.Text = robotCommandServer?.nSentMessages.ToString();
+                    SentRobotIndexLbl.Text = robotSendIndex.ToString();
                     break;
                 //case "robot_tool":
                 //    MountedToolBox.Text = valueTrimmed;
@@ -3458,7 +3460,7 @@ namespace AutoGrind
                 if (robotReady)
                 {
                     copyPositionAtWrite = varName;
-                    robotCommandServer?.Send("(25)");
+                    RobotSend("25");
                 }
 
             }
@@ -3471,9 +3473,9 @@ namespace AutoGrind
                 string q = ReadPositionJoint(varName);
                 if (q != null)
                 {
-                    string msg = "(21," + ExtractScalars(q) + ')';
+                    string msg = "21," + ExtractScalars(q);
                     log.Trace("Sending {0}", msg);
-                    robotCommandServer?.Send(msg);
+                    RobotSend(msg);
                     return true;
                 }
             }
@@ -3487,9 +3489,9 @@ namespace AutoGrind
                 string q = ReadPositionPose(varName);
                 if (q != null)
                 {
-                    string msg = "(22," + ExtractScalars(q) + ')';
+                    string msg = "22," + ExtractScalars(q);
                     log.Trace("Sending {0}", msg);
-                    robotCommandServer?.Send(msg);
+                    RobotSend(msg);
                     return true;
                 }
             }

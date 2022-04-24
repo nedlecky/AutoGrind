@@ -142,13 +142,6 @@
             this.SetForceDwellBtn = new System.Windows.Forms.Button();
             this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
             this.SetTouchRetractBtn = new System.Windows.Forms.Button();
-            this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.URControlMessageTxt = new System.Windows.Forms.TextBox();
-            this.URControlSendBtn = new System.Windows.Forms.Button();
-            this.DashboardMessageTxt = new System.Windows.Forms.TextBox();
-            this.DashboardSendBtn = new System.Windows.Forms.Button();
-            this.RobotSendBtn = new System.Windows.Forms.Button();
-            this.RobotMessageTxt = new System.Windows.Forms.TextBox();
             this.groupBox8 = new System.Windows.Forms.GroupBox();
             this.JointMoveMountBtn = new System.Windows.Forms.Button();
             this.JointMoveHomeBtn = new System.Windows.Forms.Button();
@@ -203,7 +196,6 @@
             this.DefaultMoveSetupGrp.SuspendLayout();
             this.SetupPage.SuspendLayout();
             this.groupBox11.SuspendLayout();
-            this.groupBox2.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
             this.groupBox1.SuspendLayout();
@@ -1430,7 +1422,6 @@
             this.SetupPage.Controls.Add(this.label8);
             this.SetupPage.Controls.Add(this.label7);
             this.SetupPage.Controls.Add(this.groupBox11);
-            this.SetupPage.Controls.Add(this.groupBox2);
             this.SetupPage.Controls.Add(this.groupBox8);
             this.SetupPage.Controls.Add(this.DefaultConfigBtn);
             this.SetupPage.Controls.Add(this.LoadConfigBtn);
@@ -1565,80 +1556,6 @@
             this.SetTouchRetractBtn.Text = "Set Touch Retract";
             this.SetTouchRetractBtn.UseVisualStyleBackColor = false;
             this.SetTouchRetractBtn.Click += new System.EventHandler(this.SetTouchRetractBtn_Click);
-            // 
-            // groupBox2
-            // 
-            this.groupBox2.Controls.Add(this.URControlMessageTxt);
-            this.groupBox2.Controls.Add(this.URControlSendBtn);
-            this.groupBox2.Controls.Add(this.DashboardMessageTxt);
-            this.groupBox2.Controls.Add(this.DashboardSendBtn);
-            this.groupBox2.Controls.Add(this.RobotSendBtn);
-            this.groupBox2.Controls.Add(this.RobotMessageTxt);
-            this.groupBox2.Location = new System.Drawing.Point(1695, 492);
-            this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(432, 435);
-            this.groupBox2.TabIndex = 110;
-            this.groupBox2.TabStop = false;
-            this.groupBox2.Text = "Robot Testing";
-            // 
-            // URControlMessageTxt
-            // 
-            this.URControlMessageTxt.Location = new System.Drawing.Point(213, 330);
-            this.URControlMessageTxt.Name = "URControlMessageTxt";
-            this.URControlMessageTxt.Size = new System.Drawing.Size(209, 44);
-            this.URControlMessageTxt.TabIndex = 90;
-            this.URControlMessageTxt.Text = "global t1 = 13";
-            // 
-            // URControlSendBtn
-            // 
-            this.URControlSendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.URControlSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.URControlSendBtn.Location = new System.Drawing.Point(17, 301);
-            this.URControlSendBtn.Name = "URControlSendBtn";
-            this.URControlSendBtn.Size = new System.Drawing.Size(190, 117);
-            this.URControlSendBtn.TabIndex = 89;
-            this.URControlSendBtn.Text = "Send URControl";
-            this.URControlSendBtn.UseVisualStyleBackColor = false;
-            this.URControlSendBtn.Click += new System.EventHandler(this.URControlSendBtn_Click);
-            // 
-            // DashboardMessageTxt
-            // 
-            this.DashboardMessageTxt.Location = new System.Drawing.Point(213, 196);
-            this.DashboardMessageTxt.Name = "DashboardMessageTxt";
-            this.DashboardMessageTxt.Size = new System.Drawing.Size(209, 44);
-            this.DashboardMessageTxt.TabIndex = 88;
-            this.DashboardMessageTxt.Text = "programstate";
-            // 
-            // DashboardSendBtn
-            // 
-            this.DashboardSendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.DashboardSendBtn.ImageAlign = System.Drawing.ContentAlignment.BottomLeft;
-            this.DashboardSendBtn.Location = new System.Drawing.Point(17, 167);
-            this.DashboardSendBtn.Name = "DashboardSendBtn";
-            this.DashboardSendBtn.Size = new System.Drawing.Size(190, 117);
-            this.DashboardSendBtn.TabIndex = 87;
-            this.DashboardSendBtn.Text = "Send Dashboard";
-            this.DashboardSendBtn.UseVisualStyleBackColor = false;
-            this.DashboardSendBtn.Click += new System.EventHandler(this.DashboardSendBtn_Click);
-            // 
-            // RobotSendBtn
-            // 
-            this.RobotSendBtn.BackColor = System.Drawing.Color.Transparent;
-            this.RobotSendBtn.Location = new System.Drawing.Point(17, 55);
-            this.RobotSendBtn.Name = "RobotSendBtn";
-            this.RobotSendBtn.Size = new System.Drawing.Size(190, 103);
-            this.RobotSendBtn.TabIndex = 76;
-            this.RobotSendBtn.Text = "Send Command";
-            this.RobotSendBtn.UseVisualStyleBackColor = false;
-            this.RobotSendBtn.Click += new System.EventHandler(this.RobotSendBtn_Click);
-            // 
-            // RobotMessageTxt
-            // 
-            this.RobotMessageTxt.Location = new System.Drawing.Point(213, 85);
-            this.RobotMessageTxt.Name = "RobotMessageTxt";
-            this.RobotMessageTxt.Size = new System.Drawing.Size(207, 44);
-            this.RobotMessageTxt.TabIndex = 75;
-            this.RobotMessageTxt.Text = "(10)";
             // 
             // groupBox8
             // 
@@ -2112,8 +2029,6 @@
             this.DefaultMoveSetupGrp.ResumeLayout(false);
             this.SetupPage.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
-            this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
@@ -2239,11 +2154,6 @@
         private System.Windows.Forms.TextBox DoorClosedInputTxt;
         private System.Windows.Forms.Button SetDoorClosedInputBtn;
         private System.Windows.Forms.Label DoorClosedLbl;
-        private System.Windows.Forms.GroupBox groupBox2;
-        private System.Windows.Forms.TextBox DashboardMessageTxt;
-        private System.Windows.Forms.Button DashboardSendBtn;
-        private System.Windows.Forms.Button RobotSendBtn;
-        private System.Windows.Forms.TextBox RobotMessageTxt;
         private System.Windows.Forms.Label RobotIndexLbl;
         private System.Windows.Forms.CheckBox AllowRunningOfflineChk;
         private System.Windows.Forms.GroupBox groupBox11;
@@ -2259,8 +2169,6 @@
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox PositionTestButtonGrp;
         private System.Windows.Forms.Label RobotURControlStatusLbl;
-        private System.Windows.Forms.TextBox URControlMessageTxt;
-        private System.Windows.Forms.Button URControlSendBtn;
         private System.Windows.Forms.Label StepElapsedTimeLbl;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button SetMaxWaitBtn;
