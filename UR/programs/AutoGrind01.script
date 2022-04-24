@@ -32,15 +32,15 @@ def AutoGrind01():
   global Vertical_6_p=p[.138875969234, -.597730539026, .130475163479, .000006847317, .000017170136, .002581409666]
   global Vertical_6_q=[1.5792073011398315, -1.1477825206569214, 1.743450943623678, -2.1663156948485316, -1.570512596760885, 3.1478190422058105]
   def AG_50():
-    $ 74 "AG_50" "noBreak"
-    $ 75 "MoveL"
-    $ 76 "Vertical_3" "breakAfter"
+    $ 76 "AG_50" "noBreak"
+    $ 77 "MoveL"
+    $ 78 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 77 "Tilted_1" "breakAfter"
+    $ 79 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 78 "Vertical_4" "breakAfter"
+    $ 80 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 79 "Vertical_6" "breakAfter"
+    $ 81 "Vertical_6" "breakAfter"
     movel(Vertical_6_p, a=1.2, v=0.25)
   end
   $ 1 "BeforeStart"
@@ -183,23 +183,24 @@ def AutoGrind01():
   # Remove both from command so we get command = [nElements-2, param[0], param[1],...]
   def command_validate():
     # must be at least index, check, and 1 param
-    if command[0] < 4:
-      command[0]=0
-      return
+    if command[0] < 3:
+      command[0] = 0
+      return False
     end
     global robot_index = command[1]
     global robot_checkvalue = command[2]
-    if robot_checkvalue != 42:
-      command[0]=0
-      return
+    if robot_checkvalue != 1000 - robot_index:
+      command[0] = 0
+      return False
     end
   
     i = 3
-    while (i < command[0]):
+    while (i < command[0] + 1):
       command[i-2] = command[i]
       i = i + 1
     end
     command[0] = command[0] - 2
+    return True
   end
   
   # Set interface... allows validation and limits
@@ -1021,8 +1022,6 @@ def AutoGrind01():
     while (True):
       global halt_command = socket_read_ascii_float(1, timeout = 0.1)
       if halt_command[0] > 0 or not is_door_closed():
-        # Same increment as in the PolyScope but this one bypasses the PolyScope!!
-        global robot_index = (robot_index + 1) % 100000 # Keeps us in sync with the counter in C#
         global halt_count = halt_count + 1
       end
       sync()
@@ -1950,54 +1949,58 @@ def AutoGrind01():
         $ 49 "Case 30"
         $ 50 "set_variable()"
         set_variable()
+      elif (35 == switch_1):
+        $ 51 "Case 35"
+        $ 52 "set_grind_variable()"
+        set_grind_variable()
       elif (40 == switch_1):
-        $ 51 "Case 40"
-        $ 52 "pattern_grind()"
-        pattern_grind()
+        $ 53 "Case 40"
+        $ 54 "grind()"
+        grind()
       elif (50 == switch_1):
-        $ 53 "Case 50"
-        $ 54 "Call AG_50"
+        $ 55 "Case 50"
+        $ 56 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 55 "Case 98"
-        $ 56 "response≔'socket reset'"
+        $ 57 "Case 98"
+        $ 58 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 57 "Case 99"
-        $ 58 "response≔'exiting'"
+        $ 59 "Case 99"
+        $ 60 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 59 "Default Case"
-        $ 60 "response≔'unknown command'"
+        $ 61 "Default Case"
+        $ 62 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 61 "socket_set_var('robot_index', robot_index)"
+      $ 63 "socket_set_var('robot_index', robot_index)"
       socket_set_var("robot_index", robot_index)
-      $ 62 "socket_send_line('robot_response=' + response + '#robot_ready=True')"
+      $ 64 "socket_send_line('robot_response=' + response + '#robot_ready=True')"
       socket_send_line("robot_response=" + response + "#robot_ready=True")
-      $ 63 "If command[1]≟98"
+      $ 65 "If command[1]≟98"
       if (command[1] == 98):
-        $ 64 "Wait: 0.5"
+        $ 66 "Wait: 0.5"
         sleep(0.5)
-        $ 65 "socket_close()"
+        $ 67 "socket_close()"
         socket_close()
-        $ 66 "socket_is_open≔ False "
+        $ 68 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 67 "If command[1]≟99"
+      $ 69 "If command[1]≟99"
       if (command[1] == 99):
-        $ 68 "Wait: 0.5"
+        $ 70 "Wait: 0.5"
         sleep(0.5)
-        $ 69 "socket_close()"
+        $ 71 "socket_close()"
         socket_close()
-        $ 70 "socket_is_open≔ False "
+        $ 72 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 71 "Halt"
+        $ 73 "Halt"
         halt
       end
     else:
-      $ 72 "Else" "noBreak"
-      $ 73 "no_command()"
+      $ 74 "Else" "noBreak"
+      $ 75 "no_command()"
       no_command()
     end
   end

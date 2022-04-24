@@ -41,11 +41,21 @@ def command_validate():
     command[0] = 0
     return False
   end
+  
+  # Now make sure checksum matches what we expect
   global robot_index = command[1]
-  global robot_checkvalue = command[2]
-  if robot_checkvalue != 42:
+  global robot_checksum = command[2]
+  if robot_checksum != 1000 - robot_index:
     command[0] = 0
     return False
+  end
+
+  # Now if we are not getting a grind command (40) make sure we're are off the part!
+  if command[3] != 40:
+    # Using set_grind_process_state which assumes robot_tcp_part!
+    set_tcp(robot_tcp_part)
+    set_grind_process_state(False)   # This is a nop unless we're stilll grinding!
+    set_tcp(robot_tcp)
   end
 
   i = 3
@@ -374,11 +384,11 @@ def no_command():
 
   if halt_grind:
     halt_grind = False
-    # Simulate receiving a (40,0) (grind_retract)
-    command[0] = 3
-    command[1] = 40
+    # Simulate receiving a (35,0) (grind_retract)
+    command[0] = 2
+    command[1] = 35
     command[2] = 0
-    pattern_grind()
+    set_grind_variable()
   end
 end
 #

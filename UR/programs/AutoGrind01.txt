@@ -49,8 +49,10 @@
            return_both_positions()
          Case 30
            set_variable()
+         Case 35
+           set_grind_variable()
          Case 40
-           pattern_grind()
+           grind()
          Case 50
            Call AG_50
          Case 98

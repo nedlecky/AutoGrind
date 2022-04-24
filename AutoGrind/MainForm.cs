@@ -563,6 +563,7 @@ namespace AutoGrind
                     StepBtn.Enabled = false;
                     PauseBtn.Enabled = false;
                     StopBtn.Enabled = false;
+                    GrindContactEnabledBtn.Enabled = true;
 
                     MountedToolBox.Enabled = true;
                     PartGeometryBox.Enabled = true;
@@ -596,6 +597,7 @@ namespace AutoGrind
                     StepBtn.Enabled = true;
                     PauseBtn.Enabled = false;
                     StopBtn.Enabled = false;
+                    GrindContactEnabledBtn.Enabled = true;
 
                     MountedToolBox.Enabled = true;
                     PartGeometryBox.Enabled = true;
@@ -630,6 +632,7 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     PauseBtn.Text = "Pause";
                     StopBtn.Enabled = true;
+                    GrindContactEnabledBtn.Enabled = false;
 
                     MountedToolBox.Enabled = false;
                     PartGeometryBox.Enabled = false;
@@ -668,6 +671,7 @@ namespace AutoGrind
                     PauseBtn.Enabled = true;
                     PauseBtn.Text = "Continue";
                     StopBtn.Enabled = true;
+                    GrindContactEnabledBtn.Enabled = true;
 
                     MountedToolBox.Enabled = false;
                     PartGeometryBox.Enabled = false;
@@ -1022,7 +1026,7 @@ namespace AutoGrind
                     int val = Convert.ToInt32(var);
                     val++;
                     val %= 3;
-                    RobotSend(String.Format("40,1,{0}", val));
+                    RobotSend(String.Format("35,1,{0}", val));
                 }
         }
 
@@ -1776,20 +1780,21 @@ namespace AutoGrind
             {"freedrive",               new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
-            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,0" } },
-            {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="40,1," } },
-            {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="40,2," } },
-            {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="40,3," } },
-            {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="40,4," } },
-            {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="40,5," } },
-            {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="40,6," } },
-            {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="40,7," } },
+
+            {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="35,1," } },
+            {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="35,2," } },
+            {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="35,3," } },
+            {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="35,4," } },
+            {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="35,5," } },
+            {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="35,6," } },
+            {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="35,7," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
             {"grind_serpentine",        new CommandSpec(){nParams=8,  prefix="40,30," }  },
             {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,40," }  },
             {"grind_spiral",            new CommandSpec(){nParams=7,  prefix="40,50," }  },
+            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,99" } },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -2495,7 +2500,7 @@ namespace AutoGrind
                 {
                     ++robotSendIndex;
                     if (robotSendIndex > 999) robotSendIndex = 100;
-                    int checkValue = 42;
+                    int checkValue = 1000 - robotSendIndex;
                     string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
                     robotCommandServer.Send(sendMessage);
                     return true;

@@ -60,43 +60,12 @@ def speed_setter(speed_mmps):
   end
 end
 
-# Execute the desired pattern grind selected by command[2]...
-def pattern_grind():
+# Set grind variables
+def set_grind_variable():
   global grind_ready = False
   socket_send_line("grind_ready=False")
 
-  if grind_abort_listener_thread_handle > 0:
-    kill grind_abort_listener_thread_handle
-    grind_abort_listener_thread_handle = 0
-  end
-  grind_abort_listener_thread_handle = run grind_abort_listener_thread()
-
-  global grind_cycle = 0
-  socket_set_var("grind_cycle", grind_cycle)
-
-  # Defaults but any used should be set as needed below
-  global grind_dx_mm = 0
-  global grind_dy_mm = 0
-  global grind_n_cycles = 0
-  global grind_force_N = 10.0
-  global grind_continue = False
-  global grind_circle1_diam_mm = 0
-  global grind_circle2_diam_mm = 0
-  global grind_n_spirals = 0
-  global grind_n_xsteps = 1
-  global grind_n_ysteps = 1
-  global grind_xstep_mm = 0
-  global grind_ystep_mm = 0
-  speed_setter(20)
-
-  # Install tcp that puts tcp at center of part (noop for flat parts!)
-  set_tcp(robot_tcp_part)
-
-  # Variable Setting
-  if command[2] == 0:
-    global response = "grind retract"
-    set_grind_process_state(False)
-  elif command[2] == 1:
+  if command[2] == 1:
     global response = "set grind_contact_enable"
     if command[3] >= 0 and command[3] <= 2:
       global grind_contact_enable = command[3]
@@ -140,9 +109,48 @@ def pattern_grind():
       global grind_trial_speed_mmps = command[3]
     end
     socket_set_var("grind_trial_speed_mmps", grind_trial_speed_mmps)
+  else:
+    global response = "Unknown grind set variable command"
+  end
 
-    # LINEAR GRINDS
-  elif command[2] == 10:
+  global grind_ready = True
+  socket_send_line("grind_ready=True")
+end
+
+# Execute the desired grind operation command[2]...
+def grind():
+  global grind_ready = False
+  socket_send_line("grind_ready=False")
+
+  if grind_abort_listener_thread_handle > 0:
+    kill grind_abort_listener_thread_handle
+    grind_abort_listener_thread_handle = 0
+  end
+  grind_abort_listener_thread_handle = run grind_abort_listener_thread()
+
+  global grind_cycle = 0
+  socket_set_var("grind_cycle", grind_cycle)
+
+  # Defaults but any used should be set as needed below
+  global grind_dx_mm = 0
+  global grind_dy_mm = 0
+  global grind_n_cycles = 0
+  global grind_force_N = 10.0
+  global grind_continue = False
+  global grind_circle1_diam_mm = 0
+  global grind_circle2_diam_mm = 0
+  global grind_n_spirals = 0
+  global grind_n_xsteps = 1
+  global grind_n_ysteps = 1
+  global grind_xstep_mm = 0
+  global grind_ystep_mm = 0
+  speed_setter(20)
+
+  # Install tcp that puts tcp at center of part (noop for flat parts!)
+  set_tcp(robot_tcp_part)
+
+  # LINEAR GRINDS
+  if command[2] == 10:
     global response = "grind_line"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -197,6 +205,9 @@ def pattern_grind():
     global grind_force_N = command[8]
     global grind_continue = command[9] > 0
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_spirals, grind_n_cycles, grind_continue)
+  elif command[2] == 99:
+    global response = "grind retract"
+    set_grind_process_state(False)
   else:
     global response = "Unknown grind command"
   end
@@ -351,7 +362,6 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     contact_part(False, grind_contact_enable)
     coolant_flow(False, grind_contact_enable)
     tool_power(False, grind_contact_enable)
-    global aaa_p_operator_init = p_operator_init
     movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     grind_process_state = False
   end
