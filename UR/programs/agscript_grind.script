@@ -246,7 +246,7 @@ def contact_part(on = False, enable = 0):
     end
   else:  # Back off
     p1 = pose_trans(get_forward_kin(), p[0, 0, -0.010, 0, 0, 0])
-    movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps, r = 0.003)
+    movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   end
 
   return True
@@ -305,7 +305,8 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
   end
 
   if on:
-    sleep(0.02)
+    # Settle and zero the force/torque sensor
+    sleep(0.1)
     zero_ftsensor()
     # Force is in tool frame
     # Compliant in Tool Z
@@ -313,11 +314,11 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
     # 2: Force frame not transformed
     # Speed limits
     force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    # Now we sleep as directed to hopefully come into contact with the part!
     sleep(grind_force_dwell_ms / 1000.0)
   else:
-    sleep(0.02)
     end_force_mode()
-    sleep(0.02)
+    sleep(0.1)
   end
 
   return None
@@ -360,17 +361,11 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     apply_force(True, grind_contact_enable, grind_touch_speed_mmps)
     grind_process_state = True
   elif not on and grind_process_state:
-    global aa_debug = 1
     apply_force(False, grind_contact_enable, 0)
-    global aa_debug = 2
     contact_part(False, grind_contact_enable)
-    global aa_debug = 3
     coolant_flow(False, grind_contact_enable)
-    global aa_debug = 4
     tool_power(False, grind_contact_enable)
-    global aa_debug = 5
     movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
-    global aa_debug = 6
     grind_process_state = False
   end
 
@@ -448,7 +443,6 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
     speed_factor = 0.5 / diam_m
     pattern_line_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
   end
-  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
@@ -489,7 +483,6 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   elif shape == 3:
     pattern_rect_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
   end
-  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
@@ -533,7 +526,6 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   elif shape == 3:
     pattern_serpentine_sphere(p_contact_center, drx_rad, dry_rad, n_xsteps, n_ysteps, n_cycles)
   end
-  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
@@ -569,7 +561,6 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   elif shape == 3:
     pattern_circle_sphere(p_contact_center, circle_diam_m, part_diam_m, n_cycles)
   end
-  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
@@ -606,7 +597,6 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   elif shape == 3:
     pattern_spiral_sphere(p_contact_center, circle1_diam_m, circle2_diam_m, n_spirals, part_diam_m, n_cycles)
   end
-  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
@@ -644,6 +634,7 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
     end
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a cylindrical line dx_mm,drx_rad centered on p_center. Repeat n_cycles times.
@@ -670,6 +661,7 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a spherical line drx_rad,dry_rad centered on p_center. Repeat n_cycles times.
@@ -696,6 +688,7 @@ def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 
@@ -738,6 +731,7 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     end
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a cylindrical rect dx_mm,drx_rad centered on p_center. Repeat n_cycles times.
@@ -775,6 +769,7 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     end
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a spherical rect drx_rad,dry_rad centered on p_center. Repeat n_cycles times.
@@ -812,6 +807,7 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 
@@ -884,6 +880,7 @@ def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
       move_count = 0
     end
   end
+  stopl(20)
 end
 
 # Move along a cylindrical serpentine dx_m,drx_rad in n_xsteps,n_rxsteps centered on p_center. Repeat n_cycles times.
@@ -951,6 +948,7 @@ def pattern_serpentine_cylinder(p_center, dx_m, drx_rad, n_xsteps, n_rxsteps, n_
       move_count = 0
     end
   end
+  stopl(20)
 end
 
 # Move along a sperical serpentine drx_rad,dry_rad in n_rxsteps,n_rysteps centered on p_center. Repeat n_cycles times.
@@ -1018,6 +1016,7 @@ def pattern_serpentine_sphere(p_center, drx_rad, dry_rad, n_rxsteps, n_rysteps, 
       move_count = 0
     end
   end
+  stopl(20)
 end
 
 
@@ -1060,6 +1059,7 @@ def pattern_circle_flat(p_center, circle_diam_m, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a cylindrical circle circle_diam_m on a cylinder_diam_m object starting at the current tool position. Repeat n_cycles times.
@@ -1082,13 +1082,14 @@ def pattern_circle_cylinder(p_center, circle_diam_m, cylinder_radius_m, n_cycles
 
       p1 = pose_trans(p_center, p[x, 0, 0, rx, 0, 0])
       # Speed_factor needs to be applied when running radially, and needs to be 1.0 when running laterally. This smooths it all the way around!
-      this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
-      movel(p1, a = grind_accel_mpss * this_speed_factor, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m * this_speed_factor)
+      global this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
+      movel(p1, a = grind_accel_mpss * this_speed_factor, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m)
       i = i + 1
     end
 
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 # Move along a spherical circle circle_diam_m on a sphere_diam_m object starting at the current tool position. Repeat n_cycles times.
@@ -1116,6 +1117,7 @@ def pattern_circle_sphere(p_center, circle_diam_m, sphere_diam_m, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  stopl(20)
 end
 
 
@@ -1152,6 +1154,7 @@ def pattern_spiral_flat(p_center, circle1_diam_m, circle2_diam_m, n_spirals, n_c
     circle1_radius_m = circle2_radius_m
     circle2_radius_m = old_circle1_radius_m
   end
+  stopl(20)
 end
 
 def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals, cylinder_radius_m, n_cycles):
@@ -1178,8 +1181,8 @@ def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals,
       p1 = pose_trans(p_center, p[x, 0, 0, rx, 0, 0])
 
       # Speed_factor needs to be applied when running radially, and needs to be 1.0 when running laterally. This smooths it all the way around!
-      this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
-      movel(p1, a = grind_accel_mpss * this_speed_factor, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m * this_speed_factor)
+      global this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
+      movel(p1, a = grind_accel_mpss * this_speed_factor, v = grind_speed_mps * this_speed_factor, r = grind_blend_radius_m)
       i = i + 1
     end
 
@@ -1189,6 +1192,7 @@ def pattern_spiral_cylinder(p_center, circle1_diam_m, circle2_diam_m, n_spirals,
     circle1_radius_m = circle2_radius_m
     circle2_radius_m = old_circle1_radius_m
   end
+  stopl(20)
 end
 
 def pattern_spiral_sphere(p_center, circle1_diam_m, circle2_diam_m, n_spirals, sphere_diam_m, n_cycles):
@@ -1224,4 +1228,5 @@ def pattern_spiral_sphere(p_center, circle1_diam_m, circle2_diam_m, n_spirals, s
     circle1_radius_m = circle2_radius_m
     circle2_radius_m = old_circle1_radius_m
   end
+  stopl(20)
 end

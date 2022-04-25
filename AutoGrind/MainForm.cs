@@ -77,7 +77,7 @@ namespace AutoGrind
             string directory = Path.GetDirectoryName(executable);
             string caption = appName + " Rev " + productVersion;
 #if DEBUG
-            caption += " DEBUGGING";
+            caption += " DEBUG";
 #endif
             this.Text = caption;
             VersionLbl.Text = caption;
@@ -604,7 +604,7 @@ namespace AutoGrind
                     DiameterLbl.Enabled = true;
 
                     ExecTmr.Enabled = false;
-                    CurrentLineLbl.Text = "";
+                    //CurrentLineLbl.Text = "";
                     RecipeRTB.Enabled = true;
                     break;
                 case RunState.RUNNING:
@@ -1846,8 +1846,8 @@ namespace AutoGrind
             if (line != origLine)
                 log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
 
-            // Line gets shown on screen with variables substututed
-            CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineCurrentlyExecuting, line);
+            // Line gets shown on screen with variables substututed (unless we're making system calls)
+            if(lineNumber>0) CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineNumber, line);
 
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -3560,7 +3560,7 @@ namespace AutoGrind
 
         private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
         {
-            RecipeFilenameOnlyLbl.Text = Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
+            RecipeFilenameOnlyLbl.Text = "Recipe:\n" + Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
         }
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)
