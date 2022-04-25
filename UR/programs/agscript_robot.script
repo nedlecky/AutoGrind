@@ -385,6 +385,8 @@ def no_command():
   if halt_grind:
     halt_grind = False
     # Simulate receiving a (35,0) (grind_retract)
+    stopl(1.0)
+    sleep(0.020)
     command[0] = 2
     command[1] = 35
     command[2] = 0

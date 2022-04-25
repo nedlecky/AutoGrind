@@ -315,7 +315,9 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
     force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
     sleep(grind_force_dwell_ms / 1000.0)
   else:
+    sleep(0.02)
     end_force_mode()
+    sleep(0.02)
   end
 
   return None
@@ -358,11 +360,17 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     apply_force(True, grind_contact_enable, grind_touch_speed_mmps)
     grind_process_state = True
   elif not on and grind_process_state:
+    global aa_debug = 1
     apply_force(False, grind_contact_enable, 0)
+    global aa_debug = 2
     contact_part(False, grind_contact_enable)
+    global aa_debug = 3
     coolant_flow(False, grind_contact_enable)
+    global aa_debug = 4
     tool_power(False, grind_contact_enable)
+    global aa_debug = 5
     movel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    global aa_debug = 6
     grind_process_state = False
   end
 
@@ -440,11 +448,10 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
     speed_factor = 0.5 / diam_m
     pattern_line_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
   end
+  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
-  else:
-    stopl(1.0)
   end
   return True
 end
@@ -482,11 +489,10 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   elif shape == 3:
     pattern_rect_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
   end
+  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
-  else:
-    stopl(1.0)
   end
   return True
 end
@@ -527,11 +533,10 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   elif shape == 3:
     pattern_serpentine_sphere(p_contact_center, drx_rad, dry_rad, n_xsteps, n_ysteps, n_cycles)
   end
+  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
-  else:
-    stopl(1.0)
   end
   return True
 end
@@ -564,11 +569,10 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   elif shape == 3:
     pattern_circle_sphere(p_contact_center, circle_diam_m, part_diam_m, n_cycles)
   end
+  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
-  else:
-    stopl(1.0)
   end
   return True
 end
@@ -602,11 +606,10 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_spirals, n_cycles, stay_in_
   elif shape == 3:
     pattern_spiral_sphere(p_contact_center, circle1_diam_m, circle2_diam_m, n_spirals, part_diam_m, n_cycles)
   end
+  stopl(1.0)
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
-  else:
-    stopl(1.0)
   end
   return True
 end
@@ -623,14 +626,11 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
   p0 = pose_trans(p_center, p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
   p1 = pose_trans(p_center, p[dx_m / 2.0, dy_m / 2.0, 0, 0, 0, 0])
   t_move = sqrt(dx_m * dx_m + dy_m * dy_m) / grind_speed_mps
-  pdest = p0
+  pdest = p1
 
   global grind_cycle = 0
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
-    end
 
     # Alternate directions for multiple cycles
     if pdest == p0:
@@ -639,6 +639,9 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
       pdest = p0
     end
 
+    if ok_to_proceed():
+      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
+    end
     grind_cycle = grind_cycle + 1
   end
 end
@@ -649,20 +652,20 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
   p0 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
   p1 = pose_trans(p_center, p[dx_m / 2.0, 0, 0, drx_rad / 2.0, 0, 0])
   t_move = sqrt(pow(dx_m / grind_speed_mps, 2) + pow(drx_rad / grind_rot_speed_rps / 4, 2))
-  pdest = p0
+  pdest = p1
 
   global grind_cycle = 0
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m * speed_factor, t_move = t_move)
-    end
-
     # Alternate directions for multiple cycles
     if pdest == p0:
       pdest = p1
     else:
       pdest = p0
+    end
+
+    if ok_to_proceed():
+      movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m * speed_factor, t_move = t_move)
     end
 
     grind_cycle = grind_cycle + 1
@@ -674,20 +677,21 @@ end
 def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
   p0 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
   p1 = pose_trans(p_center, p[0, 0, 0, drx_rad / 2.0, dry_rad / 2.0, 0])
-  pdest = p0
+  pdest = p1
   t_move = sqrt(drx_rad * drx_rad + dry_rad * dry_rad) / grind_rot_speed_rps / 4
 
   global grind_cycle = 0
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move)
-    end
+
     # Alternate directions for multiple cycles
     if pdest == p0:
       pdest = p1
     else:
       pdest = p0
+    end
+
+    if ok_to_proceed():
     end
 
     grind_cycle = grind_cycle + 1
