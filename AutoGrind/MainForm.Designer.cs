@@ -1328,7 +1328,7 @@
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
-            this.GrindNCyclesLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GrindNCyclesLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // GrindCycleLbl
             // 
@@ -1338,7 +1338,7 @@
             this.GrindCycleLbl.Name = "GrindCycleLbl";
             this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
             this.GrindCycleLbl.TabIndex = 126;
-            this.GrindCycleLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.GrindCycleLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // CurrentLineLblCopy
             // 

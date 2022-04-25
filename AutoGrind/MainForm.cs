@@ -273,13 +273,14 @@ namespace AutoGrind
         static int inquiryResponseWaitTimeMs = 100;
         private string TimeSpanFormat(TimeSpan elapsed)
         {
-            int hrs = elapsed.Days * 24 + elapsed.Hours;
-            int mins = elapsed.Minutes;
-            int secs = elapsed.Seconds;
-            int msecs = elapsed.Milliseconds;
+            int hrs = Math.Abs(elapsed.Days * 24 + elapsed.Hours);
+            int mins = Math.Abs(elapsed.Minutes);
+            int secs = Math.Abs(elapsed.Seconds);
+            int msecs = Math.Abs(elapsed.Milliseconds);
             // Odd that ToString takes absolute value so we have to put in the "-" explicitly (if the estimate is too short!)
-            return ((elapsed < TimeSpan.Zero) ? "-" : "") + String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0);
+            return String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0) + ((elapsed < TimeSpan.Zero && secs > 2) ? " OVER" : "");
         }
+
         private void RecomputeTimes()
         {
             DateTime now = DateTime.Now;
@@ -1791,7 +1792,7 @@ namespace AutoGrind
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
-            {"grind_serpentine",        new CommandSpec(){nParams=8,  prefix="40,30," }  },
+            {"grind_serp",              new CommandSpec(){nParams=8,  prefix="40,30," }  },
             {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,40," }  },
             {"grind_spiral",            new CommandSpec(){nParams=7,  prefix="40,50," }  },
             {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,99" } },
@@ -1847,7 +1848,7 @@ namespace AutoGrind
                 log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
 
             // Line gets shown on screen with variables substututed (unless we're making system calls)
-            if(lineNumber>0) CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineNumber, line);
+            if (lineNumber > 0) CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineNumber, line);
 
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -2869,7 +2870,7 @@ namespace AutoGrind
                     GrindNCyclesLbl.Text = valueTrimmed;
                     break;
                 case "grind_cycle":
-                    if (valueTrimmed == "0") valueTrimmed = "";  // Leave blank instead of showing 0!
+                    if (valueTrimmed == "0") valueTrimmed = "-";  // Gets set to 0 initially, will go to 1 when 1st actual cycle starts
                     GrindCycleLbl.Text = valueTrimmed;
                     break;
                 case "robot_linear_speed_mmps":
@@ -3560,7 +3561,7 @@ namespace AutoGrind
 
         private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
         {
-            RecipeFilenameOnlyLbl.Text = "Recipe:\n" + Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
+            RecipeFilenameOnlyLbl.Text = "RECIPE LOADED\n" + Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
         }
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)
