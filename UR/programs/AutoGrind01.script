@@ -614,7 +614,7 @@ def AutoGrind01():
       local stepsToRetract = tool_contact(direction = targetTcpDirection)
       if (stepsToRetract > 0):
         kill move_thread_han
-        stopl(1.0)
+        stopl(20)
         local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
         local contactPose = get_forward_kin(backTrackMovement)
         local posDir = [targetTcpDirection[0], targetTcpDirection[1], targetTcpDirection[2]]
@@ -1082,7 +1082,7 @@ def AutoGrind01():
     if not stay_in_contact or not ok_to_proceed():
       set_grind_process_state(False)
     else:
-      stopl(1.0)
+      stopl(20)
     end
     return True
   end
@@ -1124,7 +1124,7 @@ def AutoGrind01():
     if not stay_in_contact or not ok_to_proceed():
       set_grind_process_state(False)
     else:
-      stopl(1.0)
+      stopl(20)
     end
     return True
   end
@@ -1169,7 +1169,7 @@ def AutoGrind01():
     if not stay_in_contact or not ok_to_proceed():
       set_grind_process_state(False)
     else:
-      stopl(1.0)
+      stopl(20)
     end
     return True
   end
@@ -1206,7 +1206,7 @@ def AutoGrind01():
     if not stay_in_contact or not ok_to_proceed():
       set_grind_process_state(False)
     else:
-      stopl(1.0)
+      stopl(20)
     end
     return True
   end
@@ -1244,7 +1244,7 @@ def AutoGrind01():
     if not stay_in_contact or not ok_to_proceed():
       set_grind_process_state(False)
     else:
-      stopl(1.0)
+      stopl(20)
     end
     return True
   end

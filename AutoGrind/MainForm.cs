@@ -277,8 +277,7 @@ namespace AutoGrind
             int mins = Math.Abs(elapsed.Minutes);
             int secs = Math.Abs(elapsed.Seconds);
             int msecs = Math.Abs(elapsed.Milliseconds);
-            // Odd that ToString takes absolute value so we have to put in the "-" explicitly (if the estimate is too short!)
-            return String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0) + ((elapsed < TimeSpan.Zero && secs > 2) ? " OVER" : "");
+            return String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0) + ((elapsed < TimeSpan.Zero && secs > 1) ? " OVER" : "");
         }
 
         private void RecomputeTimes()
@@ -1833,9 +1832,8 @@ namespace AutoGrind
 
             // Default time estimate to complete step is 0
             stepEndTimeEstimate = stepStartedTime;
-            StepTimeEstimateLbl.Text = TimeSpanFormat(new TimeSpan());
 
-            // Any variables to sub {varName}
+            // Any variables to substitute {varName}
             string origLine = line;
             line = Regex.Replace(line, @"\{([^}]*)\}", m => ReadVariable(m.Groups[1].Value, "var_not_found"));
             /* {            # Bracket, means "starts with a '{' character"
@@ -1847,8 +1845,12 @@ namespace AutoGrind
             if (line != origLine)
                 log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
 
-            // Line gets shown on screen with variables substututed (unless we're making system calls)
-            if (lineNumber > 0) CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineNumber, line);
+            // Line gets shown on screen with variables substututed and time estimate (unless we're making system calls)
+            if (lineNumber > 0)
+            {
+                CurrentLineLbl.Text = String.Format("{0:000}: {1}", lineNumber, line);
+                StepTimeEstimateLbl.Text = TimeSpanFormat(new TimeSpan());
+            }
 
 
             // 1) Ignore comments: drop anything from # onward in the line
@@ -1901,11 +1903,16 @@ namespace AutoGrind
             if (command.StartsWith("sleep("))
             {
                 LogInterpret("sleep", lineNumber, command);
-                sleepMs = Convert.ToDouble(ExtractParameters(command, 1).ToString());
+                double sleepSeconds = Convert.ToDouble(ExtractParameters(command, 1).ToString());
+                sleepMs = sleepSeconds * 1000.0;
                 sleepTimer = new Stopwatch();
                 sleepTimer.Start();
 
-                TimeSpan ts = new TimeSpan(0, 0, 0, 0, (int)sleepMs);
+                double sec = Math.Truncate(sleepSeconds);
+                double msec = (sleepSeconds - sec) * 1000.0;
+                log.Info("Looks like {0} sec  {1} msec", sec, msec);
+
+                TimeSpan ts = new TimeSpan(0, 0, 0, (int)sec, (int)msec);
                 StepTimeEstimateLbl.Text = TimeSpanFormat(ts);
                 stepEndTimeEstimate = DateTime.Now.AddMilliseconds(sleepMs);
                 return true;
@@ -3561,7 +3568,7 @@ namespace AutoGrind
 
         private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
         {
-            RecipeFilenameOnlyLbl.Text = "RECIPE LOADED\n" + Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
+            RecipeFilenameOnlyLbl.Text = Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
         }
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)

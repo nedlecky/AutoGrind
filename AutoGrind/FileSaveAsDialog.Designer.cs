@@ -95,6 +95,7 @@
             this.FileNameTxt.Name = "FileNameTxt";
             this.FileNameTxt.Size = new System.Drawing.Size(757, 44);
             this.FileNameTxt.TabIndex = 86;
+            this.FileNameTxt.Enter += new System.EventHandler(this.FileNameTxt_Enter);
             // 
             // DirectoryNameLbl
             // 

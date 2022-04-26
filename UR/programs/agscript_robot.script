@@ -1,6 +1,6 @@
 # AutoGrind Robot Functions
 # File: agscript_robot.script
-# Version 2022.04 A
+# Version 2022.04.25.1
 # Programmer: Ned Lecky
 
 
@@ -385,7 +385,7 @@ def no_command():
   if halt_grind:
     halt_grind = False
     # Simulate receiving a (35,0) (grind_retract)
-    stopl(1.0)
+    stopl(20)
     sleep(0.020)
     command[0] = 2
     command[1] = 35
@@ -480,7 +480,7 @@ def touchoff(approach_speed_mmps, retract_mm):
     local stepsToRetract = tool_contact(direction = targetTcpDirection)
     if (stepsToRetract > 0):
       kill move_thread_han
-      stopl(1.0)
+      stopl(20)
       local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
       local contactPose = get_forward_kin(backTrackMovement)
       local posDir = [targetTcpDirection[0], targetTcpDirection[1], targetTcpDirection[2]]

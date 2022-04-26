@@ -1,22 +1,117 @@
-# comment 1
-redo:
-# comment 2
+# Pseudo Grind Test
+# Test all the patterns on all the geometries
+# Can be run on a flat table area to test force control
 
+size1=40
+size2=10
+count=3
+speed=5
+force=10
 
-# another idea
-sleep(500)
-
-select_tool(2F85long)
-movelinear(demo_cyl)
-movelinear(demo_cyl)
-movelinear(demo_cyl)
 select_tool(2F85)
+cycleCount=0
+
+redo:
 movelinear(demo_flat)
 
-grind_rect(20,20,1,5,10,1)
-grind_rect(10,10,1,5,10,1)
+set_part_geometry(FLAT,0)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
 
-sleep(4000)
-#comment 3
+set_part_geometry(CYLINDER,400.1)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
 
+set_part_geometry(CYLINDER,600.1)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(CYLINDER,800.1)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(CYLINDER,1000.1)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(SPHERE,400.2)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(SPHERE,600.2)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(SPHERE,800.2)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+set_part_geometry(SPHERE,1000.2)
+grind_line({size1},{size2},{count},{speed},{force},1)
+grind_line(-{size2},{size1},{count},{speed},{force},1)
+grind_rect({size1},{size2},{count},{speed},{force},1)
+grind_rect({size2},{size1},{count},{speed},{force},1)
+grind_serp({size1},{size1},1,3,{count},{speed},{force},1)
+grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
+grind_circle({size1},{count},{speed},{force},1)
+grind_circle({size2},{count},{speed},{force},1)
+grind_spiral({size1},{size2},3,{count},{speed},{force},1)
+
+cycleCount++
 jump(redo)

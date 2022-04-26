@@ -92,7 +92,7 @@ namespace AutoGrind
 
         private void SaveBtn_Click(object sender, EventArgs e)
         {
-            // If nothing selected, try to interpret as a typein?
+            // If nothing selected, try to interpret as a type-in?
             if (FileListBox.SelectedIndex < 0)
             {
                 string filename = Path.Combine(DirectoryNameLbl.Text, FileNameTxt.Text);
@@ -119,6 +119,12 @@ namespace AutoGrind
         {
             // Need double click to pop up
             LoadDirectory(directoryList[DirectoryListBox.SelectedIndex]);
+        }
+
+        private void FileNameTxt_Enter(object sender, EventArgs e)
+        {
+            log.Debug("FileNameTxt_Enter(null,null)");
+            FileListBox.SelectedItem = null;
         }
     }
 }

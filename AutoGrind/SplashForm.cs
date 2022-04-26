@@ -22,6 +22,9 @@ namespace AutoGrind
         {
             InitializeComponent();
         }
+        // App screen design sizes (Zebra L10 Tablet)
+        const int screenDesignWidth = 2160;
+        const int screenDesignHeight = 1440;
 
         private void SplashForm_Load(object sender, EventArgs e)
         {
@@ -41,8 +44,8 @@ namespace AutoGrind
             
             if (AutoClose)
             {
-                Left = 50;
-                Top = 150;
+                Left = (screenDesignWidth - Width)/2;
+                Top = (screenDesignHeight - Height)/2;
                 CloseBtn.Visible = false;
                 CloseTmr.Interval = 5000;
                 CloseTmr.Enabled = true;
