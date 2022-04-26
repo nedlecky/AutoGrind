@@ -1,0 +1,10 @@
+# Crash Restart Test
+
+again:
+
+movelinear(2F85_home)
+sleep(1)
+movelinear(demo_flat)
+sleep(1)
+
+jump(again)
