@@ -1,6 +1,7 @@
 # Pseudo Grind Test
 # Test all the patterns on all the geometries
 # Can be run on a flat table area to test force control
+# Ran no errors 10.5 hours 4-25-2022
 
 size1=40
 size2=10
@@ -16,6 +17,7 @@ movelinear(demo_flat)
 
 set_part_geometry(FLAT,0)
 grind_line({size1},{size2},{count},{speed},{force},1)
+sleep(5)
 grind_line(-{size2},{size1},{count},{speed},{force},1)
 grind_rect({size1},{size2},{count},{speed},{force},1)
 grind_rect({size2},{size1},{count},{speed},{force},1)

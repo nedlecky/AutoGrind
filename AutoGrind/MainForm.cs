@@ -576,6 +576,7 @@ namespace AutoGrind
                 case RunState.READY:
                     RunStateLbl.Text = "STOPPED";
                     RunStateLbl.BackColor = Color.Red;
+                    sleepTimer = null; // Cancels any pending sleep(...)
 
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
@@ -610,6 +611,7 @@ namespace AutoGrind
                 case RunState.RUNNING:
                     RunStateLbl.Text = "RUNNING";
                     RunStateLbl.BackColor = Color.Green;
+                    sleepTimer = null; // Cancels any pending sleep(...)
 
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;

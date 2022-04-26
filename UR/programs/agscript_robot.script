@@ -322,6 +322,28 @@ def movel_ag(p):
   global response = "movel_ag()"
 end
 
+# ####################################################################################
+# Interrupting Motion
+# Motion and force_mode and part contact muct all end if any of 3 things happen
+#  1) Door is opened
+#  2) We're in contact with the part and grinding, but no grind command comes within some time (default 1.5s)
+#  3) We receive an abort message from the host
+#
+# How is it implemented?
+#
+# 1) door_monitor_thread (below) is ALWAYS running. Fires every time_door_check_rate_s (0.25s)
+#    - Whenever it sees the state of the door change, it sends SET robot_door_closed state to host
+#    - It monitors if we're still in contact wth the part butr not grinding (grind_process_state and grind_ready)
+#      - If that goes beyond grind_max_wait_ms it sets halt_grind=True
+# 2) no_command function (below). Called by PolScript everyu time it's waiting for a command and doesn't get one with a second
+#    - If halt_grind is set (by door monitor thread above)
+#      - stopl and simulate receiving a grind_retract
+#      - THIS FORCES THE force_off and motion commands to come from the primary thread, as they must
+# 3) listener_thread started by grind()
+#    - This runs only while a grind is in progress
+#    - It listens for commands from the host since PolyScope is blocked
+#    - Any command received increments halt_count which makes ok_to_proceed() false
+#    - That is checked in all the grinding programs and forces them to finish up and get off the part in an orderly fashion
 
 # ####################################################################################
 # START AUTOMATED DOOR MONITORING THREAD
@@ -382,15 +404,15 @@ global halt_grind = False
 def no_command():
   global no_command_count = no_command_count + 1
 
-  if halt_grind:
+  if grind_process_state and grind_ready and halt_grind:
     halt_grind = False
-    # Simulate receiving a (35,0) (grind_retract)
+    # Simulate receiving a (40,99) (grind_retract)
     stopl(20)
     sleep(0.020)
     command[0] = 2
-    command[1] = 35
-    command[2] = 0
-    set_grind_variable()
+    command[1] = 40
+    command[2] = 99
+    grind()
   end
 end
 #

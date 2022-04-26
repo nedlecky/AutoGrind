@@ -213,9 +213,10 @@ def grind():
   end
 
   # Restore tool-only tcp
-  if not grind_continue:
-    set_tcp(robot_tcp)
-  end
+  # TODO This is fine now, right? No need to leave in place on grind continuation
+  #if not grind_continue:
+  set_tcp(robot_tcp)
+  #end
 
   if grind_abort_listener_thread_handle > 0:
     kill grind_abort_listener_thread_handle
@@ -621,8 +622,8 @@ def pattern_complete(p1):
   movel(p0, a = grind_accel_mpss, v = grind_speed_mps)
   pattern_complete_idx = 2
 
-  sleep(0.05)
-  movel(p1, a = grind_accel_mpss, v = grind_speed_mps)
+  #sleep(0.05)
+  #movel(p1, a = grind_accel_mpss, v = grind_speed_mps)
   pattern_complete_idx = 3
 
   p0a = get_target_tcp_pose()

@@ -189,7 +189,7 @@ namespace AutoGrind
             string response = Receive();
             if (response != null)
             {
-                log.Error("{0} Already had a response waiting: {1}", logPrefix, response);
+                log.Warn("{0} Already had a response waiting: {1}", logPrefix, response);
             }
 
             Stopwatch timer = new Stopwatch();
