@@ -2,7 +2,7 @@
 # All should alternate 3s, 2s per side
 # PASSED 4/19/2022
 
-speed = 20
+speed = 5
 cmd=grind_rect(60,40,1,{speed},10,0)
 
 flat:

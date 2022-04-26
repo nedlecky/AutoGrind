@@ -468,6 +468,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
                         ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
+                        ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "3,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
@@ -1790,6 +1791,7 @@ namespace AutoGrind
             {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="35,5," } },
             {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="35,6," } },
             {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="35,7," } },
+            {"grind_accel",             new CommandSpec(){nParams=1,  prefix="35,8," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -2700,6 +2702,24 @@ namespace AutoGrind
             }
         }
 
+        private void SetGrindAccelBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_accel_mmpss"),
+                Label = "Grind ACCELERATION, mm/s^2",
+                NumberOfDecimals = 1,
+                MinAllowed = 10,
+                MaxAllowed = 500
+            };
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_accel({0})", form.Value));
+            }
+        }
+
+
 
         /// <summary>
         /// Currently expect 0 or more #-separated name=value sequences
@@ -2943,6 +2963,9 @@ namespace AutoGrind
                     break;
                 case "grind_trial_speed_mmps":
                     SetTrialSpeedBtn.Text = "Grind Trial Speed\n" + valueTrimmed + " mm/s";
+                    break;
+                case "grind_accel_mmpss":
+                    SetGrindAccelBtn.Text = "Grind Acceleration\n" + valueTrimmed + " mm/s^2";
                     break;
                 case "grind_contact_enable":
                     switch (valueTrimmed)
