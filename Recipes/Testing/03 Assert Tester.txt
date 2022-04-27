@@ -1,0 +1,21 @@
+# 03 Assert Tester
+# Last passed 4/28/2022
+
+clear
+assert(a,1) # should fail no var
+
+a=2
+assert(a,asd) # should fail bad syntax
+
+a++
+assert(a,2) # should fail not equal 
+
+assert(a,3) # should pass
+
+b=123
+assert(a,{b}) # should fail
+
+a={b}
+assert(a,123)
+assert(a,{b}) # should pass
+

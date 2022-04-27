@@ -32,7 +32,7 @@
     <Name>demo_flat</Name>
     <Joints>[1.49617,-1.2963,2.11734,-2.39148,-1.57008,3.08211]</Joints>
     <Pose>p[0.0974071,-0.490654,0.00988549,-3.14128,0.0224655,0.000322027]</Pose>
-    <IsSystem>false</IsSystem>
+    <IsSystem>true</IsSystem>
   </Positions>
   <Positions>
     <Name>demo_cyl</Name>
@@ -116,6 +116,18 @@
     <Name>start</Name>
     <Joints>[1.09478,-1.45283,1.99349,-2.11148,-1.56995,2.66593]</Joints>
     <Pose>p[-0.103858,-0.493274,0.108146,3.14144,3.14903e-05,-5.37444e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>p1</Name>
+    <Joints>[1.51584,-1.00263,1.41673,-1.98226,-1.5707,3.22432]</Joints>
+    <Pose>p[0.0960106,-0.693237,0.0882814,-3.13166,0.215842,-0.000571657]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name />
+    <Joints>[1.51586,-1.00269,1.41671,-1.9822,-1.57068,3.2243]</Joints>
+    <Pose>p[0.0960339,-0.693233,0.0883273,-3.13169,0.215768,-0.000609655]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
 </NewDataSet>

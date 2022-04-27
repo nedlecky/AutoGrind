@@ -1,0 +1,38 @@
+# 13 Circle Speed Test
+# All should be ~10S
+# FAILING seem too slow 4/27/2022
+
+# At trial grind speed of 20mm/s
+# 10s ==> 200m circum ==> 63.7mm diam
+cmd=grind_circle(63.7,1,20,10,0)
+
+move_linear(demo_flat)
+set_part_geometry(FLAT,0)
+{cmd}
+
+cylinder:
+move_linear(demo_cyl)
+set_part_geometry(CYLINDER,77.9)
+{cmd}
+set_part_geometry(CYLINDER,200)
+{cmd}
+set_part_geometry(CYLINDER,500)
+{cmd}
+set_part_geometry(CYLINDER,800)
+{cmd}
+set_part_geometry(CYLINDER,1100)
+{cmd}
+
+sphere:
+move_linear(demo_sphere)
+set_part_geometry(SPHERE,81.9)
+{cmd}
+set_part_geometry(SPHERE,200)
+{cmd}
+set_part_geometry(SPHERE,500)
+{cmd}
+set_part_geometry(SPHERE,800)
+{cmd}
+set_part_geometry(SPHERE,1100)
+{cmd}
+

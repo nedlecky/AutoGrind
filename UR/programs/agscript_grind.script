@@ -699,7 +699,10 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
     end
 
     if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m, t_move = t_move)
+      # Chugging
+      #movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m, t_move = t_move)
+      # Better?
+      movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m * speed_factor, t_move = t_move)
     end
 
     grind_cycle = grind_cycle + 1
@@ -727,7 +730,7 @@ def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
 
     if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
+      movel_int(pdest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move)
     end
 
     grind_cycle = grind_cycle + 1

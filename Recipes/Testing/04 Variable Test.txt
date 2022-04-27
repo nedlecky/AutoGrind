@@ -1,0 +1,32 @@
+# 04 Variable Test
+# Last passed: 4/27/2022
+
+clear
+
+abc=13
+assert(abc,13)
+abc= 12
+assert(abc,12)
+abc =b
+assert(abc, b)
+
+xx=10
+xx++
+assert(xx,11)
+xx--
+assert(xx,10)
+xx+=3
+assert(xx,13)
+xx-=6
+assert(xx,7)
+xx+=-3
+assert(xx,4)
+xx-=-7
+assert(xx,11)
+xx -= -5
+assert(xx,16)
+xx += -3
+assert(xx,13)
+
+xx=abc
+xx++  # should fail

@@ -1,0 +1,32 @@
+# 01 Comments and Jumps
+# Last passed: 4/29/2022
+
+label1:
+a=1
+
+label2:
+a=2
+
+jump(xyz) # should fail
+
+jump(zzz)
+a=3
+
+zzz:
+# Another comment
+
+assert(a,2)
+a--
+assert(a,1)
+a+=3
+assert(a,4)
+
+b=0
+loop:
+a--
+b++
+jump_gt_zero(a,loop)
+assert(b,4)
+
+jump_gt_zero(aa,loop)  # should fail
+jump_gt_zero(a,looop)  # should fail

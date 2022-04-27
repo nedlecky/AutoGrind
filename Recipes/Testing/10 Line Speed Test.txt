@@ -1,8 +1,15 @@
 # 10 Line Speed Test
 # All should take 2S
-# Last FAILED chugging on CYL 80 lines
+# Last passed 4/27/2022
 
 speed = 20
+
+flat:
+move_linear(demo_flat)
+set_part_geometry(FLAT,0)
+grind_line(40,0,1,{speed},10,0)
+grind_line(0,40,1,{speed},10,0)
+grind_line(28.3,28.3,1,{speed},10,0)
 
 cylinder:
 move_linear(demo_cyl)

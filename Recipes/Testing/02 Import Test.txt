@@ -1,0 +1,7 @@
+# Import Test
+# Last passed 4/27/2022
+
+import(globals_standard.txt)
+import(xyz) # should fail
+import()  # should fail
+clear()

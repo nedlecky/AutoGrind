@@ -1,0 +1,19 @@
+# 05 Move Test
+# BE CAREFUL: Robot will move and positions are expected to be OK
+# Last passed 4/27/2022
+
+select_tool(2F85)
+move_linear(demo_flat)
+move_linear(demo_flatt) # should fail
+
+move_joint(demo_cyl)
+move_joint(demo_cyll) # should fail
+
+save_position(p1)
+save_position() # should fail
+
+move_tool_home()
+move_tool_mount()
+
+move_linear(p1)
+

@@ -1,0 +1,10 @@
+# 07 Sleep Test
+# Last passed 4/27/2022
+
+prompt(Hit Enter then I should be back in 2 seconds!)
+
+sleep(2)
+
+prompt(How was that? Next we'll try 5.5 and exit!)
+
+sleep(5.5)

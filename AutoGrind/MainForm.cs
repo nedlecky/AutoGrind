@@ -609,7 +609,7 @@ namespace AutoGrind
                     RunStateLbl.Text = "STOPPED";
                     RunStateLbl.BackColor = Color.Red;
                     sleepTimer = null; // Cancels any pending sleep(...)
-                    
+
                     // Robot Communication Control
                     RobotConnectBtn.Enabled = true;
                     RobotModeBtn.Enabled = true;
@@ -1733,7 +1733,7 @@ namespace AutoGrind
         /// </summary>
         /// <param name="s">input string</param>
         /// <returns>Characters enclosed in (...) or ""</returns>
-        string ExtractParameters(string s, int nParams = -1)
+        string ExtractParameters(string s, int nParams = -1, bool cutSpaces = true)
         {
             try
             {
@@ -1748,6 +1748,11 @@ namespace AutoGrind
                    \)           # Ends with a ')' character  */
                 log.Trace("EXEC params=\"{0}\"", parameters);
 
+                // Drop spaces if requested!
+                if (cutSpaces)
+                    parameters = Regex.Replace(parameters, @"\s+", "");
+
+
                 // If nParams is specified (> -1), verify we have the right number!
                 if (nParams > -1)
                 {
@@ -1756,14 +1761,12 @@ namespace AutoGrind
                         if (parameters.Length != 0)
                         {
                             log.Trace("EXEC sees params={0} where none are expected", parameters);
-                            return "";
-
+                            return s;  // Nothing expected, we'll return what was there hoping to trigger a failure!
                         }
                     }
                     else
                     {
                         int commaCount = parameters.Count(f => (f == ','));
-                        log.Trace("EXEC sees {0} commas", commaCount);
                         if (commaCount != nParams - 1)
                             return "";
                     }
@@ -1876,7 +1879,7 @@ namespace AutoGrind
 
         private void ExecError(string message)
         {
-            log.Error(message);
+            log.Error("EXEC " + message);
             PromptOperator("ERROR:\n" + message);
         }
 
@@ -1979,21 +1982,18 @@ namespace AutoGrind
                 string[] parameters = ExtractParameters(command, 2).Split(',');
                 if (parameters.Length != 2)
                 {
-                    log.Error("Unknown assert command Line {0} Exec: {1}", lineNumber, command);
-                    PromptOperator("Unrecognized assert command: " + command);
+                    ExecError(String.Format("Unknown assert command Line {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 string value = ReadVariable(parameters[0], null);
                 if (value == null)
                 {
-                    log.Error("Unknown variable specified in assert Line {0} Exec: {1}", lineNumber, command);
-                    PromptOperator("Unknown variable in assert: " + command);
+                    ExecError(String.Format("Unknown variable in assert command Line {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 if (value != parameters[1])
                 {
-                    log.Error("Assertion failure in  Line {0} Exec: {1}", lineNumber, command);
-                    PromptOperator(string.Format("Assertion failed: {0}\n{1} is {2}", command, parameters[0], value));
+                    ExecError(String.Format("Assert FAILS Line {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 return true;
@@ -2006,14 +2006,13 @@ namespace AutoGrind
 
                 if (labels.TryGetValue(labelName, out int jumpLine))
                 {
-                    log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", lineNumber, command, jumpLine);
+                    log.Info("EXEC {0:0000}: [JUMP] {1} --> {2:0000}", lineNumber, origLine, jumpLine);
                     SetCurrentLine(jumpLine);
                     return true;
                 }
                 else
                 {
-                    log.Error("Unknown Label specified in jump Line {0} Exec: {1}", lineNumber, command);
-                    PromptOperator("Illegal Jump Command: " + command);
+                    ExecError(String.Format("Unknown label specified in jump Line {0}: {1}", lineNumber, origLine));
                     return true;
                 }
             }
@@ -2024,7 +2023,7 @@ namespace AutoGrind
                 string[] parameters = ExtractParameters(command).Split(',');
                 if (parameters.Length != 2)
                 {
-                    PromptOperator("Expected jump_gt_zero(variable,label):\nNot " + command);
+                    ExecError("Expected jump_gt_zero(variable,label):\nNot " + command);
                     return true;
                 }
                 else
@@ -2034,7 +2033,7 @@ namespace AutoGrind
 
                     if (!labels.TryGetValue(labelName, out int jumpLine))
                     {
-                        PromptOperator("Expected jump_gt_zero(variable,label):\nLabel not found: " + labelName);
+                        ExecError(String.Format("Expected jump_gt_zero(variable,label): {0} Label not found: {1}", origLine, labelName));
                         return true;
                     }
                     else
@@ -2042,7 +2041,7 @@ namespace AutoGrind
                         string value = ReadVariable(variableName);
                         if (value == null)
                         {
-                            PromptOperator("Expected jump_gt_zero(variable,label):\nVariable not found: " + variableName);
+                            ExecError(String.Format("Expected jump_gt_zero(variable,label): {0} Variable not found: {1}", origLine, variableName));
                             return true;
                         }
                         else
@@ -2052,14 +2051,14 @@ namespace AutoGrind
                                 double val = Convert.ToDouble(value);
                                 if (val > 0.0)
                                 {
-                                    log.Info("EXEC {0:0000}: [JUMPGTZERO] {1} --> {2:0000}", lineNumber, command, jumpLine);
+                                    log.Info("EXEC {0:0000}: [JUMPGTZERO] {1} --> {2:0000}", lineNumber, origLine, jumpLine);
                                     SetCurrentLine(jumpLine);
                                 }
                                 return true;
                             }
                             catch
                             {
-                                PromptOperator(String.Format("Could not convert jump_not_zero variable: {0} = {1}\nFrom: {2}", variableName, value, command));
+                                ExecError(String.Format("Could not convert jump_not_zero variable: {0} = {1} From: {2}", variableName, value, command));
                                 return true;
                             }
                         }
@@ -2075,10 +2074,7 @@ namespace AutoGrind
                 LogInterpret("move_joint", lineNumber, command);
 
                 if (!GotoPositionJoint(positionName))
-                {
-                    log.Error("Move failed in move_joint Line {0} EXEC: {1}", lineNumber, command);
-                    PromptOperator("Move failed: " + command);
-                }
+                    ExecError(string.Format("Joint move failed line {0}: {1}", lineNumber, origLine));
                 return true;
             }
 
@@ -2086,13 +2082,10 @@ namespace AutoGrind
             if (command.StartsWith("move_linear("))
             {
                 string positionName = ExtractParameters(command);
-                LogInterpret("move_linear", lineNumber, command);
+                LogInterpret("move_linear", lineNumber, origLine);
 
                 if (!GotoPositionPose(positionName))
-                {
-                    log.Error("Move failed in move_linear Line {0} EXEC: {1}", lineNumber, command);
-                    PromptOperator("Move failed: " + command);
-                }
+                    ExecError(string.Format("Linear move failed line {0}: {1}", lineNumber, origLine));
                 return true;
             }
 
@@ -2100,7 +2093,12 @@ namespace AutoGrind
             if (command.StartsWith("save_position("))
             {
                 string positionName = ExtractParameters(command);
-                LogInterpret("saveposition", lineNumber, command);
+                LogInterpret("saveposition", lineNumber, origLine);
+                if (positionName.Length < 1)
+                {
+                    ExecError(string.Format("No position name specified line {0}: {1}", lineNumber, origLine));
+                    return true;
+                }
                 copyPositionAtWrite = positionName;
                 RobotSend("25");
                 return true;
@@ -2128,14 +2126,14 @@ namespace AutoGrind
             // end
             if (command == "end()" || command == "end")
             {
-                LogInterpret("end", lineNumber, command);
+                LogInterpret("end", lineNumber, origLine);
                 return false;
             }
 
             // select_tool  (Assumes operator has already installed it somehow!!)
             if (command.StartsWith("select_tool("))
             {
-                LogInterpret("select_tool", lineNumber, command);
+                LogInterpret("select_tool", lineNumber, origLine);
                 DataRow row = FindTool(ExtractParameters(command, 1));
                 if (row == null)
                 {
@@ -2177,7 +2175,7 @@ namespace AutoGrind
             // set_part_geometry
             if (command.StartsWith("set_part_geometry("))
             {
-                LogInterpret("set_part_geometry", lineNumber, command);
+                LogInterpret("set_part_geometry", lineNumber, origLine);
 
                 string parameters = ExtractParameters(command, 2);
                 if (parameters.Length == 0)
@@ -2243,9 +2241,9 @@ namespace AutoGrind
             // prompt
             if (command.StartsWith("prompt("))
             {
-                LogInterpret("prompt", lineNumber, command);
+                LogInterpret("prompt", lineNumber, origLine);
                 // This just displays the dialog. ExecTmr will wait for it to close
-                PromptOperator(ExtractParameters(command));
+                PromptOperator(ExtractParameters(command, -1, false));
                 return true;
             }
 
@@ -2263,22 +2261,20 @@ namespace AutoGrind
                 string commandInRecipe = command.Substring(0, openParenIndex);
                 if (robotAlias.TryGetValue(commandInRecipe, out CommandSpec commandSpec))
                 {
-                    LogInterpret(commandInRecipe, lineNumber, command);
+                    LogInterpret(commandInRecipe, lineNumber, origLine);
                     string parameters = ExtractParameters(command, commandSpec.nParams);
                     // Must be all numeric: Really, all (nnn,nnn,nnn)
                     if (!Regex.IsMatch(parameters, @"^[()+-.,0-9]*$"))
-                    {
-                        log.Error("Illegal parameters for EXEC: {0.000} {1}", lineNumber, command);
-                        PromptOperator("Illegal command:\n" + command);
-                    }
+                        ExecError(string.Format("Illegal parameters line {0}: {1}", lineNumber, origLine));
                     else
                     {
-                        if (parameters.Length > 0 || commandSpec.nParams <= 0)
-                        {
+                        if (commandSpec.nParams > 0 && parameters.Length > 0 ||      // Got some parameters and must have been the right number
+                           (commandSpec.nParams == 0 && parameters.Length == 0) ||   // Expected 0 parameters and got nothing
+                           (commandSpec.nParams == -1 && parameters.Length > 0)      // Willing to accept whatever you have (as long as there's something!)
+                           )
                             RobotSend(commandSpec.prefix + parameters);
-                        }
                         else
-                            PromptOperator(string.Format("Line {0}: Wrong number of operands.\nExpected {1}\n{2}", lineCurrentlyExecuting, commandSpec.nParams, command));
+                            ExecError(string.Format("Line {0}: Wrong number of operands. Expected {1} {2}", lineCurrentlyExecuting, commandSpec.nParams, origLine));
                     }
                     return true;
                 }
@@ -2287,11 +2283,11 @@ namespace AutoGrind
             // Matched nothing above... could be an assignment operator =, -=, +=, ++, --
             if (UpdateVariable(command))
             {
-                LogInterpret("assign", lineNumber, command);
+                LogInterpret("assign", lineNumber, origLine);
                 return true;
             }
 
-            ExecError(string.Format("Cannot EXEC line {0}: {1}", lineNumber, command));
+            ExecError(string.Format("Cannot interpret line {0}: {1}", lineNumber, origLine));
             return true;
         }
 
@@ -2439,7 +2435,7 @@ namespace AutoGrind
         private void CloseCommandServer()
         {
             // Stop us if we're running!
-            if (runState == RunState.RUNNING || runState==RunState.PAUSED)
+            if (runState == RunState.RUNNING || runState == RunState.PAUSED)
             {
                 SetState(RunState.READY);
             }
@@ -3185,10 +3181,6 @@ namespace AutoGrind
                         }
                     }
                 }
-            }
-            if (!wasSuccessful)
-            {
-                log.Error("Illegal assignment statement: {0}", assignment);
             }
             return wasSuccessful;
         }
