@@ -53,7 +53,7 @@ def speed_setter(speed_mmps):
   # If part is cylinder or spherical, diameter will be >0
   diam_m = robot_part_geometry[1] / 1000.0
   if diam_m > 0.0:
-    # These are 1/4 actual speeds but we need to command these to get movel to rotate correctly ???
+    # These are 1/4 the theoretical rotational speeds but we need to set them like this to get the correct speed- why??????
     global grind_rot_speed_rps = grind_speed_mps * 0.5 / diam_m
     global grind_rot_accel_rpss = grind_accel_mpss * 0.5 / diam_m
     global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m #TRYING THIS AGAIN * 0.5 / diam_m Cannot scale blend_radius down! Leave as-is
