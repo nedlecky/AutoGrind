@@ -32,7 +32,6 @@ namespace AutoGrind
         private static NLog.Logger log;
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
-        TcpClientSupport robotUrControlClient = null;
         MessageDialog waitingForOperatorMessageForm = null;
         bool closeOperatorFormOnReady = false;
 
@@ -193,7 +192,7 @@ namespace AutoGrind
             RobotDisconnect();
             MessageTmr_Tick(null, null);
             forceClose = true;
-            SaveConfigBtn_Click(null, null);
+            SavePersistent();
             NLog.LogManager.Shutdown(); // Flush and close down internal threads and timers
             this.Close();
         }
@@ -292,6 +291,15 @@ namespace AutoGrind
             TimeSpan timeRemaining = stepEndTimeEstimate - now;
             StepTimeRemainingLbl.Text = TimeSpanFormat(timeRemaining);
         }
+
+        enum ProgramState
+        {
+            UNKNOWN,
+            STOPPED,
+            PAUSED,
+            PLAYING
+        };
+
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
@@ -305,7 +313,12 @@ namespace AutoGrind
 
             // Ping the dashboard every few seconds
             if (robotDashboardClient != null && ((nDashboard++ % 2) == 0 || pollDashboardStateNow))
-                if (robotDashboardClient.IsClientConnected)
+                if (!robotDashboardClient.IsClientConnected)
+                {
+                    RobotConnectBtn.Text = "Dashboard ERROR";
+                    RobotConnectBtn.BackColor = Color.Red;
+                }
+                else
                 {
                     pollDashboardStateNow = false;
                     // Poll and interpret robotmode
@@ -346,7 +359,7 @@ namespace AutoGrind
                             }
                             else
                                 log.Warn("Missed {0} responses from robotmode", noRobotmodeResponseCount);
-                            buttonText = "?? " + robotmodeResponse;
+                            buttonText = "Robotmode: ?? " + robotmodeResponse;
                             color = Color.Red;
                             break;
                     }
@@ -354,10 +367,10 @@ namespace AutoGrind
                     RobotModeBtn.BackColor = color;
 
                     // Poll and interpret safetystatus
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("safetystatus", inquiryResponseWaitTimeMs);
+                    string safetystatusResponse = robotDashboardClient.InquiryResponse("safetystatus", inquiryResponseWaitTimeMs);
                     color = Color.Red;
-                    buttonText = robotmodeResponse;
-                    switch (robotmodeResponse)
+                    buttonText = safetystatusResponse;
+                    switch (safetystatusResponse)
                     {
                         case "Safetystatus: NORMAL":
                             noSafetystatusResponseCount = 0;
@@ -376,7 +389,7 @@ namespace AutoGrind
                             }
                             else
                                 log.Warn("Missed {0} responses from safetystatus", noSafetystatusResponseCount);
-                            buttonText = "?? " + robotmodeResponse;
+                            buttonText = "Safetystatus: ?? " + safetystatusResponse;
                             color = Color.Red;
                             break;
                     }
@@ -384,21 +397,31 @@ namespace AutoGrind
                     SafetyStatusBtn.BackColor = color;
 
                     // Poll and interpret programstate
-                    robotmodeResponse = robotDashboardClient.InquiryResponse("programstate", inquiryResponseWaitTimeMs);
+                    ProgramState programState = ProgramState.UNKNOWN;
+                    string programstateResponse = robotDashboardClient.InquiryResponse("programstate", inquiryResponseWaitTimeMs);
                     color = Color.Red;
-                    if (robotmodeResponse != null)
-                        if (robotmodeResponse.StartsWith("STOPPED"))
-                        {
+                    buttonText = programstateResponse;
+                    if (programstateResponse != null)
+                    {
+                        if (programstateResponse.StartsWith("STOPPED"))
+                            programState = ProgramState.STOPPED;
+                        else if (programstateResponse.StartsWith("PAUSED"))
+                            programState = ProgramState.PAUSED;
+                        else if (programstateResponse.StartsWith("PLAYING"))
+                            programState = ProgramState.PLAYING;
+                    }
+
+                    switch (programState)
+                    {
+                        case ProgramState.STOPPED:
                             noProgramstateResponseCount = 0;
                             EnsureStopped();
-                        }
-                        else if (robotmodeResponse.StartsWith("PAUSED"))
-                        {
+                            break;
+                        case ProgramState.PAUSED:
                             noProgramstateResponseCount = 0;
                             EnsureNotRunning();
-                        }
-                        else if (robotmodeResponse.StartsWith("PLAYING"))
-                        {
+                            break;
+                        case ProgramState.PLAYING:
                             noProgramstateResponseCount = 0;
                             color = Color.Green;
                             if (robotCommandServer == null)
@@ -422,9 +445,8 @@ namespace AutoGrind
                                     RobotCommandStatusLbl.Text = "Command Waiting";
                                 }
                             }
-                        }
-                        else
-                        {
+                            break;
+                        default:
                             // Unknown response from programstate
                             if (++noProgramstateResponseCount > 3)
                             {
@@ -433,8 +455,11 @@ namespace AutoGrind
                             }
                             else
                                 log.Warn("Missed {0} responses from programstate", noProgramstateResponseCount);
-                        }
-                    ProgramStateBtn.Text = robotmodeResponse;
+                            buttonText = "Programstate: ?? " + programstateResponse;
+                            color = Color.Red;
+                            break;
+                    }
+                    ProgramStateBtn.Text = buttonText;
                     ProgramStateBtn.BackColor = color;
                 }
 
@@ -543,6 +568,12 @@ namespace AutoGrind
                     RunStateLbl.Text = "IDLE";
                     RunStateLbl.BackColor = Color.Gray;
 
+                    // Robot Communication Control
+                    RobotConnectBtn.Enabled = true;
+                    RobotModeBtn.Enabled = true;
+                    SafetyStatusBtn.Enabled = true;
+                    ProgramStateBtn.Enabled = true;
+
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
@@ -578,6 +609,12 @@ namespace AutoGrind
                     RunStateLbl.Text = "STOPPED";
                     RunStateLbl.BackColor = Color.Red;
                     sleepTimer = null; // Cancels any pending sleep(...)
+                    
+                    // Robot Communication Control
+                    RobotConnectBtn.Enabled = true;
+                    RobotModeBtn.Enabled = true;
+                    SafetyStatusBtn.Enabled = true;
+                    ProgramStateBtn.Enabled = true;
 
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
@@ -613,6 +650,12 @@ namespace AutoGrind
                     RunStateLbl.Text = "RUNNING";
                     RunStateLbl.BackColor = Color.Green;
                     sleepTimer = null; // Cancels any pending sleep(...)
+
+                    // Robot Communication Control
+                    RobotConnectBtn.Enabled = false;
+                    RobotModeBtn.Enabled = false;
+                    SafetyStatusBtn.Enabled = false;
+                    ProgramStateBtn.Enabled = false;
 
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
@@ -652,6 +695,12 @@ namespace AutoGrind
                 case RunState.PAUSED:
                     RunStateLbl.Text = "PAUSED";
                     RunStateLbl.BackColor = Color.DarkOrange;
+
+                    // Robot Communication Control
+                    RobotConnectBtn.Enabled = true;
+                    RobotModeBtn.Enabled = true;
+                    SafetyStatusBtn.Enabled = true;
+                    ProgramStateBtn.Enabled = true;
 
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
@@ -844,10 +893,9 @@ namespace AutoGrind
 
             const int RunPage = 0;
             const int ProgramPage = 1;
-            const int MovePage = 2;
-            const int SetupPage = 3;
-            const int LogPage = 4;
-            if (MainTab.TabPages[1] != null)
+            const int SetupPage = 2;
+            const int LogPage = 3;
+            if (MainTab.TabPages[1] != null)  // Helps during program load before instantiation!
             {
                 log.Info("Setting Operator Mode {0}", operatorMode);
                 switch (operatorMode)
@@ -855,7 +903,6 @@ namespace AutoGrind
                     case OperatorMode.OPERATOR:
                         MainTab.TabPages[RunPage].Enabled = true;
                         MainTab.TabPages[ProgramPage].Enabled = false;
-                        MainTab.TabPages[MovePage].Enabled = false;
                         MainTab.TabPages[SetupPage].Enabled = false;
                         MainTab.TabPages[LogPage].Enabled = true;
                         MainTab.SelectedIndex = 0;
@@ -863,7 +910,6 @@ namespace AutoGrind
                     case OperatorMode.EDITOR:
                         MainTab.TabPages[RunPage].Enabled = true;
                         MainTab.TabPages[ProgramPage].Enabled = true;
-                        MainTab.TabPages[MovePage].Enabled = true;
                         MainTab.TabPages[SetupPage].Enabled = false;
                         MainTab.TabPages[LogPage].Enabled = true;
                         MainTab.SelectedIndex = 1;
@@ -871,7 +917,6 @@ namespace AutoGrind
                     case OperatorMode.ENGINEERING:
                         MainTab.TabPages[RunPage].Enabled = true;
                         MainTab.TabPages[ProgramPage].Enabled = true;
-                        MainTab.TabPages[MovePage].Enabled = true;
                         MainTab.TabPages[SetupPage].Enabled = true;
                         MainTab.TabPages[LogPage].Enabled = true;
                         break;
@@ -1343,9 +1388,16 @@ namespace AutoGrind
         private void DefaultConfigBtn_Click(object sender, EventArgs e)
         {
             log.Info("DefaultConfigBtn_Click(...)");
-            AutoGrindRoot = "\\";
+            if (DialogResult.OK != ConfirmMessageBox("This will reset the General Configuration settings. Proceed?"))
+                return;
+
+            AutoGrindRoot = "C:\\AutoGrind";
             AutoGrindRootLbl.Text = AutoGrindRoot;
-            RobotIpTxt.Text = "192.168.25.1:30000";
+            AutoGrindRootLbl.Text = "AutoGrind/AutoGrind01.urp";
+            ServerIpTxt.Text = "192.168.0.252";
+            RobotIpTxt.Text = "192.168.0.2";
+            UtcTimeChk.Checked = false;
+            AllowRunningOfflineChk.Checked = false;
         }
         private string recipeFileToAutoload = "";
         void LoadPersistent()
@@ -1476,7 +1528,6 @@ namespace AutoGrind
             // Save currently loaded recipe
             AppNameKey.SetValue("RecipeFilenameLbl.Text", RecipeFilenameLbl.Text);
 
-
             // Save current part geometry tool
             AppNameKey.SetValue("PartGeometryBox.Text", PartGeometryBox.Text);
             for (int i = 0; i < 3; i++)
@@ -1487,12 +1538,6 @@ namespace AutoGrind
         {
             log.Info("LoadConfigBtn_Click(...)");
             LoadPersistent();
-        }
-
-        private void SaveConfigBtn_Click(object sender, EventArgs e)
-        {
-            log.Info("SaveConfigBtn_Click(...)");
-            SavePersistent();
         }
 
         private void ChangeRootDirectoryBtn_Click(object sender, EventArgs e)
@@ -2357,23 +2402,14 @@ namespace AutoGrind
             SafetyStatusBtn.BackColor = Color.Red;
             ProgramStateBtn.BackColor = Color.Red;
         }
-        private void CloseRealtimeClient()
-        {
-            // Disconnect client from RTDE
-            if (robotUrControlClient != null)
-            {
-                if (robotUrControlClient.IsClientConnected)
-                {
-                    robotDashboardClient.Disconnect();
-                }
-                robotUrControlClient = null;
-            }
-            RobotURControlStatusLbl.BackColor = Color.Red;
-            RobotURControlStatusLbl.Text = "OFF";
-        }
         private void CloseCommandServer()
         {
-            // Close command server
+            // Stop us if we're running!
+            if (runState == RunState.RUNNING || runState==RunState.PAUSED)
+            {
+                SetState(RunState.READY);
+            }
+
             if (robotCommandServer != null)
             {
                 if (robotCommandServer.IsConnected())
@@ -2389,7 +2425,6 @@ namespace AutoGrind
         private void RobotDisconnect()
         {
             CloseCommandServer();
-            CloseRealtimeClient();
             CloseDashboardClient();
         }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
@@ -2423,32 +2458,12 @@ namespace AutoGrind
             RobotConnectBtn.BackColor = Color.Green;
             RobotConnectBtn.Text = "Dashboard OK";
 
-            // Connect to URControl port
-            robotUrControlClient = new TcpClientSupport("DASHRT")
-            {
-                ReceiveCallback = RealtimeCallback
-            };
-            if (robotUrControlClient.Connect(RobotIpTxt.Text, "30001") > 0)
-            {
-                log.Error("Robot URControl client initialization failure");
-                RobotURControlStatusLbl.BackColor = Color.Red;
-                RobotURControlStatusLbl.Text = "URControl OFF";
-                return;
-            }
-            log.Info("Robot realtime connection ready");
-            response = robotUrControlClient.Receive();
-            log.Info("RTDE connection returns {0}", response);
-            RobotURControlStatusLbl.BackColor = Color.Green;
-            RobotURControlStatusLbl.Text = "URControl Connected";
-
-
             // Start querying the bot
             RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
             RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
             robotDashboardClient.InquiryResponse("stop");
 
             pollDashboardStateNow = true;
-
 
             string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
             string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
@@ -2602,6 +2617,18 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("set_joint_accel({0})", form.Value));
             }
         }
+        private void SetMoveDefaultsBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("SetMoveDefaultsBtn_Click(...)");
+            if (DialogResult.OK != ConfirmMessageBox("This will reset the Default Motion Parameters. Proceed?"))
+                return;
+
+            ExecuteLine(-1, String.Format("set_linear_speed({0})", 200));
+            ExecuteLine(-1, String.Format("set_linear_accel({0})", 500));
+            ExecuteLine(-1, String.Format("set_blend_radius({0})", 3));
+            ExecuteLine(-1, String.Format("set_joint_speed({0})", 45));
+            ExecuteLine(-1, String.Format("set_joint_accel({0})", 180));
+        }
 
         private void SetTouchSpeedBtn_Click(object sender, EventArgs e)
         {
@@ -2718,6 +2745,20 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_accel({0})", form.Value));
             }
         }
+        private void SetGrindDefaultsBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("SetGrindDefaultsBtn_Click(...)");
+            if (DialogResult.OK != ConfirmMessageBox("This will reset the Grinding Motion Parameters. Proceed?"))
+                return;
+
+            ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
+            ExecuteLine(-1, String.Format("grind_accel({0})", 100));
+            ExecuteLine(-1, String.Format("grind_blend_radius({0})", 1));
+            ExecuteLine(-1, String.Format("grind_touch_speed({0})", 10));
+            ExecuteLine(-1, String.Format("grind_touch_retract({0})", 3));
+            ExecuteLine(-1, String.Format("grind_force_dwell({0})", 500));
+            ExecuteLine(-1, String.Format("grind_max_wait({0})", 1500));
+        }
 
 
 
@@ -2759,18 +2800,9 @@ namespace AutoGrind
         {
             log.Info("DASH<== {0}", message);
         }
-        void RealtimeCallback(string message)
-        {
-            if (true)//nRealtimeMessages++ % 100 == 0)
-                log.Info("DASHRT<== {0}", message.Length > 80 ? message.Substring(0, 80) : message);
-        }
 
         private void MessageTmr_Tick(object sender, EventArgs e)
         {
-            if (robotUrControlClient != null)
-                if (robotUrControlClient.IsClientConnected)
-                    robotUrControlClient.Receive();
-
             if (robotCommandServer != null)
                 if (robotCommandServer.IsConnected())
                 {

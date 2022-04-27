@@ -29,12 +29,11 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
-            this.JogBtn = new System.Windows.Forms.Button();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
             this.StopBtn = new System.Windows.Forms.Button();
@@ -57,6 +56,7 @@
             this.GrindContactEnabledBtn = new System.Windows.Forms.Button();
             this.MonitorTab = new System.Windows.Forms.TabControl();
             this.positionsPage = new System.Windows.Forms.TabPage();
+            this.JogBtn = new System.Windows.Forms.Button();
             this.PositionTestButtonGrp = new System.Windows.Forms.GroupBox();
             this.LoadPositionsBtn = new System.Windows.Forms.Button();
             this.ClearPositionsBtn = new System.Windows.Forms.Button();
@@ -91,15 +91,14 @@
             this.RobotModeBtn = new System.Windows.Forms.Button();
             this.SafetyStatusBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
-            this.SetJointAccelBtn = new System.Windows.Forms.Button();
-            this.SetJointSpeedBtn = new System.Windows.Forms.Button();
-            this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
-            this.SetLinearAccelBtn = new System.Windows.Forms.Button();
-            this.SetBlendRadiusBtn = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
+            this.RobotModelLbl = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.SentRobotIndexLbl = new System.Windows.Forms.Label();
             this.StepTimeRemainingLbl = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
@@ -107,7 +106,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.StepElapsedTimeLbl = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
-            this.RobotURControlStatusLbl = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.MoveToolMountBtn = new System.Windows.Forms.Button();
@@ -128,14 +126,15 @@
             this.label10 = new System.Windows.Forms.Label();
             this.RunStateLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
-            this.MovePage = new System.Windows.Forms.TabPage();
-            this.DefaultMoveSetupGrp = new System.Windows.Forms.GroupBox();
             this.SetupPage = new System.Windows.Forms.TabPage();
-            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
-            this.RobotModelLbl = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
+            this.DefaultMoveSetupGrp = new System.Windows.Forms.GroupBox();
+            this.SetLinearAccelBtn = new System.Windows.Forms.Button();
+            this.SetBlendRadiusBtn = new System.Windows.Forms.Button();
+            this.SetJointSpeedBtn = new System.Windows.Forms.Button();
+            this.SetJointAccelBtn = new System.Windows.Forms.Button();
+            this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.SetGrindAccelBtn = new System.Windows.Forms.Button();
             this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
             this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
             this.SetMaxWaitBtn = new System.Windows.Forms.Button();
@@ -154,7 +153,6 @@
             this.ClearToolsBtn = new System.Windows.Forms.Button();
             this.DefaultConfigBtn = new System.Windows.Forms.Button();
             this.LoadConfigBtn = new System.Windows.Forms.Button();
-            this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AllowRunningOfflineChk = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
@@ -178,7 +176,8 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.SetGrindAccelBtn = new System.Windows.Forms.Button();
+            this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
+            this.SetMoveDefaultsBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -194,9 +193,8 @@
             this.MainTab.SuspendLayout();
             this.RunPage.SuspendLayout();
             this.ProgramPage.SuspendLayout();
-            this.MovePage.SuspendLayout();
-            this.DefaultMoveSetupGrp.SuspendLayout();
             this.SetupPage.SuspendLayout();
+            this.DefaultMoveSetupGrp.SuspendLayout();
             this.groupBox11.SuspendLayout();
             this.groupBox8.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
@@ -215,20 +213,6 @@
             this.CurrentLineLbl.Size = new System.Drawing.Size(788, 44);
             this.CurrentLineLbl.TabIndex = 79;
             this.CurrentLineLbl.TextChanged += new System.EventHandler(this.CurrentLineLbl_TextChanged);
-            // 
-            // JogBtn
-            // 
-            this.JogBtn.BackColor = System.Drawing.Color.Green;
-            this.JogBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.JogBtn.ForeColor = System.Drawing.Color.White;
-            this.JogBtn.Location = new System.Drawing.Point(771, 186);
-            this.JogBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.JogBtn.Name = "JogBtn";
-            this.JogBtn.Size = new System.Drawing.Size(545, 256);
-            this.JogBtn.TabIndex = 73;
-            this.JogBtn.Text = "Jog Robot";
-            this.JogBtn.UseVisualStyleBackColor = false;
-            this.JogBtn.Click += new System.EventHandler(this.JogBtn_Click);
             // 
             // RecipeRTB
             // 
@@ -412,7 +396,7 @@
             this.RobotCommandStatusLbl.ForeColor = System.Drawing.Color.White;
             this.RobotCommandStatusLbl.Location = new System.Drawing.Point(1932, 11);
             this.RobotCommandStatusLbl.Name = "RobotCommandStatusLbl";
-            this.RobotCommandStatusLbl.Size = new System.Drawing.Size(187, 103);
+            this.RobotCommandStatusLbl.Size = new System.Drawing.Size(187, 125);
             this.RobotCommandStatusLbl.TabIndex = 78;
             this.RobotCommandStatusLbl.Text = "Command Status";
             this.RobotCommandStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -423,7 +407,7 @@
             this.GrindReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.GrindReadyLbl.Location = new System.Drawing.Point(1932, 261);
+            this.GrindReadyLbl.Location = new System.Drawing.Point(1932, 279);
             this.GrindReadyLbl.Name = "GrindReadyLbl";
             this.GrindReadyLbl.Size = new System.Drawing.Size(187, 125);
             this.GrindReadyLbl.TabIndex = 88;
@@ -436,9 +420,9 @@
             this.RobotReadyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotReadyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotReadyLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotReadyLbl.Location = new System.Drawing.Point(1932, 122);
+            this.RobotReadyLbl.Location = new System.Drawing.Point(1932, 145);
             this.RobotReadyLbl.Name = "RobotReadyLbl";
-            this.RobotReadyLbl.Size = new System.Drawing.Size(187, 129);
+            this.RobotReadyLbl.Size = new System.Drawing.Size(187, 125);
             this.RobotReadyLbl.TabIndex = 89;
             this.RobotReadyLbl.Text = "Robot Ready";
             this.RobotReadyLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -473,6 +457,7 @@
             // 
             // positionsPage
             // 
+            this.positionsPage.Controls.Add(this.JogBtn);
             this.positionsPage.Controls.Add(this.PositionTestButtonGrp);
             this.positionsPage.Controls.Add(this.PositionMoveArmBtn);
             this.positionsPage.Controls.Add(this.PositionMovePoseBtn);
@@ -484,6 +469,19 @@
             this.positionsPage.TabIndex = 2;
             this.positionsPage.Text = "Positions";
             this.positionsPage.UseVisualStyleBackColor = true;
+            // 
+            // JogBtn
+            // 
+            this.JogBtn.BackColor = System.Drawing.Color.Green;
+            this.JogBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.JogBtn.ForeColor = System.Drawing.Color.White;
+            this.JogBtn.Location = new System.Drawing.Point(1039, 10);
+            this.JogBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.JogBtn.Name = "JogBtn";
+            this.JogBtn.Size = new System.Drawing.Size(248, 181);
+            this.JogBtn.TabIndex = 100;
+            this.JogBtn.Text = "Jog Only";
+            this.JogBtn.UseVisualStyleBackColor = false;
             // 
             // PositionTestButtonGrp
             // 
@@ -555,7 +553,7 @@
             this.PositionMoveArmBtn.BackColor = System.Drawing.Color.Green;
             this.PositionMoveArmBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PositionMoveArmBtn.ForeColor = System.Drawing.Color.White;
-            this.PositionMoveArmBtn.Location = new System.Drawing.Point(364, 10);
+            this.PositionMoveArmBtn.Location = new System.Drawing.Point(340, 10);
             this.PositionMoveArmBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PositionMoveArmBtn.Name = "PositionMoveArmBtn";
             this.PositionMoveArmBtn.Size = new System.Drawing.Size(347, 181);
@@ -583,7 +581,7 @@
             this.PositionSetBtn.BackColor = System.Drawing.Color.Green;
             this.PositionSetBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.PositionSetBtn.ForeColor = System.Drawing.Color.White;
-            this.PositionSetBtn.Location = new System.Drawing.Point(964, 10);
+            this.PositionSetBtn.Location = new System.Drawing.Point(700, 10);
             this.PositionSetBtn.Margin = new System.Windows.Forms.Padding(2);
             this.PositionSetBtn.Name = "PositionSetBtn";
             this.PositionSetBtn.Size = new System.Drawing.Size(323, 181);
@@ -596,14 +594,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -693,14 +691,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -844,7 +842,7 @@
             this.ExitBtn.BackColor = System.Drawing.Color.Gray;
             this.ExitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExitBtn.ForeColor = System.Drawing.Color.White;
-            this.ExitBtn.Location = new System.Drawing.Point(1079, 11);
+            this.ExitBtn.Location = new System.Drawing.Point(1083, 11);
             this.ExitBtn.Margin = new System.Windows.Forms.Padding(2);
             this.ExitBtn.Name = "ExitBtn";
             this.ExitBtn.Size = new System.Drawing.Size(125, 95);
@@ -898,9 +896,9 @@
             this.RobotModeBtn.BackColor = System.Drawing.Color.Gray;
             this.RobotModeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.RobotModeBtn.ForeColor = System.Drawing.Color.White;
-            this.RobotModeBtn.Location = new System.Drawing.Point(1637, 235);
+            this.RobotModeBtn.Location = new System.Drawing.Point(1637, 145);
             this.RobotModeBtn.Name = "RobotModeBtn";
-            this.RobotModeBtn.Size = new System.Drawing.Size(275, 129);
+            this.RobotModeBtn.Size = new System.Drawing.Size(275, 125);
             this.RobotModeBtn.TabIndex = 106;
             this.RobotModeBtn.Text = "Robot Mode";
             this.RobotModeBtn.UseVisualStyleBackColor = false;
@@ -911,9 +909,9 @@
             this.SafetyStatusBtn.BackColor = System.Drawing.Color.Gray;
             this.SafetyStatusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SafetyStatusBtn.ForeColor = System.Drawing.Color.White;
-            this.SafetyStatusBtn.Location = new System.Drawing.Point(1637, 371);
+            this.SafetyStatusBtn.Location = new System.Drawing.Point(1637, 279);
             this.SafetyStatusBtn.Name = "SafetyStatusBtn";
-            this.SafetyStatusBtn.Size = new System.Drawing.Size(275, 128);
+            this.SafetyStatusBtn.Size = new System.Drawing.Size(275, 125);
             this.SafetyStatusBtn.TabIndex = 107;
             this.SafetyStatusBtn.Text = "Safety Status";
             this.SafetyStatusBtn.UseVisualStyleBackColor = false;
@@ -924,68 +922,13 @@
             this.ProgramStateBtn.BackColor = System.Drawing.Color.Gray;
             this.ProgramStateBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ProgramStateBtn.ForeColor = System.Drawing.Color.White;
-            this.ProgramStateBtn.Location = new System.Drawing.Point(1637, 506);
+            this.ProgramStateBtn.Location = new System.Drawing.Point(1637, 413);
             this.ProgramStateBtn.Name = "ProgramStateBtn";
-            this.ProgramStateBtn.Size = new System.Drawing.Size(275, 129);
+            this.ProgramStateBtn.Size = new System.Drawing.Size(275, 125);
             this.ProgramStateBtn.TabIndex = 108;
             this.ProgramStateBtn.Text = "Program State";
             this.ProgramStateBtn.UseVisualStyleBackColor = false;
             this.ProgramStateBtn.Click += new System.EventHandler(this.ProgramStateBtn_Click);
-            // 
-            // SetJointAccelBtn
-            // 
-            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetJointAccelBtn.Location = new System.Drawing.Point(336, 270);
-            this.SetJointAccelBtn.Name = "SetJointAccelBtn";
-            this.SetJointAccelBtn.Size = new System.Drawing.Size(286, 130);
-            this.SetJointAccelBtn.TabIndex = 113;
-            this.SetJointAccelBtn.Text = "Set Joint Accel";
-            this.SetJointAccelBtn.UseVisualStyleBackColor = false;
-            this.SetJointAccelBtn.Click += new System.EventHandler(this.SetJointAccelBtn_Click);
-            // 
-            // SetJointSpeedBtn
-            // 
-            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetJointSpeedBtn.Location = new System.Drawing.Point(49, 270);
-            this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
-            this.SetJointSpeedBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetJointSpeedBtn.TabIndex = 112;
-            this.SetJointSpeedBtn.Text = "Set Joint Speed";
-            this.SetJointSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetJointSpeedBtn.Click += new System.EventHandler(this.SetJointSpeedBtn_Click);
-            // 
-            // SetLinearSpeedBtn
-            // 
-            this.SetLinearSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(49, 59);
-            this.SetLinearSpeedBtn.Name = "SetLinearSpeedBtn";
-            this.SetLinearSpeedBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetLinearSpeedBtn.TabIndex = 109;
-            this.SetLinearSpeedBtn.Text = "Set Linear Speed";
-            this.SetLinearSpeedBtn.UseVisualStyleBackColor = false;
-            this.SetLinearSpeedBtn.Click += new System.EventHandler(this.SetLinearSpeedBtn_Click);
-            // 
-            // SetLinearAccelBtn
-            // 
-            this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetLinearAccelBtn.Location = new System.Drawing.Point(336, 59);
-            this.SetLinearAccelBtn.Name = "SetLinearAccelBtn";
-            this.SetLinearAccelBtn.Size = new System.Drawing.Size(286, 130);
-            this.SetLinearAccelBtn.TabIndex = 110;
-            this.SetLinearAccelBtn.Text = "Set Linear Accel";
-            this.SetLinearAccelBtn.UseVisualStyleBackColor = false;
-            this.SetLinearAccelBtn.Click += new System.EventHandler(this.SetLinearAccelBtn_Click);
-            // 
-            // SetBlendRadiusBtn
-            // 
-            this.SetBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetBlendRadiusBtn.Location = new System.Drawing.Point(656, 161);
-            this.SetBlendRadiusBtn.Name = "SetBlendRadiusBtn";
-            this.SetBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetBlendRadiusBtn.TabIndex = 111;
-            this.SetBlendRadiusBtn.Text = "Set Blend Radius";
-            this.SetBlendRadiusBtn.UseVisualStyleBackColor = false;
-            this.SetBlendRadiusBtn.Click += new System.EventHandler(this.SetBlendRadiusBtn_Click);
             // 
             // label5
             // 
@@ -1015,7 +958,6 @@
             this.MainTab.Appearance = System.Windows.Forms.TabAppearance.Buttons;
             this.MainTab.Controls.Add(this.RunPage);
             this.MainTab.Controls.Add(this.ProgramPage);
-            this.MainTab.Controls.Add(this.MovePage);
             this.MainTab.Controls.Add(this.SetupPage);
             this.MainTab.Controls.Add(this.LogPage);
             this.MainTab.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1031,6 +973,10 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.RobotSerialNumberLbl);
+            this.RunPage.Controls.Add(this.RobotModelLbl);
+            this.RunPage.Controls.Add(this.label8);
+            this.RunPage.Controls.Add(this.label7);
             this.RunPage.Controls.Add(this.SentRobotIndexLbl);
             this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
             this.RunPage.Controls.Add(this.label17);
@@ -1038,7 +984,6 @@
             this.RunPage.Controls.Add(this.label13);
             this.RunPage.Controls.Add(this.StepElapsedTimeLbl);
             this.RunPage.Controls.Add(this.label16);
-            this.RunPage.Controls.Add(this.RobotURControlStatusLbl);
             this.RunPage.Controls.Add(this.label15);
             this.RunPage.Controls.Add(this.label11);
             this.RunPage.Controls.Add(this.MoveToolMountBtn);
@@ -1074,11 +1019,53 @@
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
             // 
+            // RobotSerialNumberLbl
+            // 
+            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(1849, 758);
+            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
+            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 61);
+            this.RobotSerialNumberLbl.TabIndex = 151;
+            this.RobotSerialNumberLbl.Text = "Serial Number";
+            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // RobotModelLbl
+            // 
+            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotModelLbl.Location = new System.Drawing.Point(1949, 691);
+            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotModelLbl.Name = "RobotModelLbl";
+            this.RobotModelLbl.Size = new System.Drawing.Size(157, 61);
+            this.RobotModelLbl.TabIndex = 150;
+            this.RobotModelLbl.Text = "Model";
+            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label8
+            // 
+            this.label8.Location = new System.Drawing.Point(1764, 758);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(81, 61);
+            this.label8.TabIndex = 153;
+            this.label8.Text = "S/N";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // label7
+            // 
+            this.label7.Location = new System.Drawing.Point(1742, 692);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(210, 61);
+            this.label7.TabIndex = 152;
+            this.label7.Text = "Robot Model";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // SentRobotIndexLbl
             // 
             this.SentRobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.SentRobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 528);
+            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 557);
             this.SentRobotIndexLbl.Name = "SentRobotIndexLbl";
             this.SentRobotIndexLbl.Size = new System.Drawing.Size(187, 52);
             this.SentRobotIndexLbl.TabIndex = 149;
@@ -1147,19 +1134,6 @@
             this.label16.Text = "Time in This Step";
             this.label16.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // RobotURControlStatusLbl
-            // 
-            this.RobotURControlStatusLbl.BackColor = System.Drawing.Color.Gray;
-            this.RobotURControlStatusLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotURControlStatusLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotURControlStatusLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotURControlStatusLbl.Location = new System.Drawing.Point(1637, 122);
-            this.RobotURControlStatusLbl.Name = "RobotURControlStatusLbl";
-            this.RobotURControlStatusLbl.Size = new System.Drawing.Size(275, 103);
-            this.RobotURControlStatusLbl.TabIndex = 142;
-            this.RobotURControlStatusLbl.Text = "URControl Status";
-            this.RobotURControlStatusLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // label15
             // 
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -1214,7 +1188,7 @@
             this.GrindProcessStateLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindProcessStateLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindProcessStateLbl.ForeColor = System.Drawing.Color.White;
-            this.GrindProcessStateLbl.Location = new System.Drawing.Point(1932, 395);
+            this.GrindProcessStateLbl.Location = new System.Drawing.Point(1932, 413);
             this.GrindProcessStateLbl.Name = "GrindProcessStateLbl";
             this.GrindProcessStateLbl.Size = new System.Drawing.Size(187, 125);
             this.GrindProcessStateLbl.TabIndex = 136;
@@ -1225,7 +1199,7 @@
             // 
             this.RobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotIndexLbl.Location = new System.Drawing.Point(1932, 583);
+            this.RobotIndexLbl.Location = new System.Drawing.Point(1932, 612);
             this.RobotIndexLbl.Name = "RobotIndexLbl";
             this.RobotIndexLbl.Size = new System.Drawing.Size(187, 52);
             this.RobotIndexLbl.TabIndex = 135;
@@ -1258,7 +1232,7 @@
             this.RobotConnectBtn.ForeColor = System.Drawing.Color.White;
             this.RobotConnectBtn.Location = new System.Drawing.Point(1637, 11);
             this.RobotConnectBtn.Name = "RobotConnectBtn";
-            this.RobotConnectBtn.Size = new System.Drawing.Size(275, 103);
+            this.RobotConnectBtn.Size = new System.Drawing.Size(275, 125);
             this.RobotConnectBtn.TabIndex = 73;
             this.RobotConnectBtn.Text = "OFF";
             this.RobotConnectBtn.UseVisualStyleBackColor = false;
@@ -1390,44 +1364,12 @@
             this.ProgramPage.Text = "Program";
             this.ProgramPage.UseVisualStyleBackColor = true;
             // 
-            // MovePage
-            // 
-            this.MovePage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.MovePage.Controls.Add(this.DefaultMoveSetupGrp);
-            this.MovePage.Controls.Add(this.JogBtn);
-            this.MovePage.Location = new System.Drawing.Point(4, 100);
-            this.MovePage.Name = "MovePage";
-            this.MovePage.Size = new System.Drawing.Size(2132, 1168);
-            this.MovePage.TabIndex = 3;
-            this.MovePage.Text = "Move";
-            this.MovePage.UseVisualStyleBackColor = true;
-            // 
-            // DefaultMoveSetupGrp
-            // 
-            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearAccelBtn);
-            this.DefaultMoveSetupGrp.Controls.Add(this.SetBlendRadiusBtn);
-            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointSpeedBtn);
-            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointAccelBtn);
-            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearSpeedBtn);
-            this.DefaultMoveSetupGrp.Location = new System.Drawing.Point(581, 583);
-            this.DefaultMoveSetupGrp.Name = "DefaultMoveSetupGrp";
-            this.DefaultMoveSetupGrp.Size = new System.Drawing.Size(927, 498);
-            this.DefaultMoveSetupGrp.TabIndex = 115;
-            this.DefaultMoveSetupGrp.TabStop = false;
-            this.DefaultMoveSetupGrp.Text = "Default (non-Grind) Moves";
-            // 
             // SetupPage
             // 
             this.SetupPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.SetupPage.Controls.Add(this.RobotSerialNumberLbl);
-            this.SetupPage.Controls.Add(this.RobotModelLbl);
-            this.SetupPage.Controls.Add(this.label8);
-            this.SetupPage.Controls.Add(this.label7);
+            this.SetupPage.Controls.Add(this.DefaultMoveSetupGrp);
             this.SetupPage.Controls.Add(this.groupBox11);
             this.SetupPage.Controls.Add(this.groupBox8);
-            this.SetupPage.Controls.Add(this.DefaultConfigBtn);
-            this.SetupPage.Controls.Add(this.LoadConfigBtn);
-            this.SetupPage.Controls.Add(this.SaveConfigBtn);
             this.SetupPage.Controls.Add(this.groupBox1);
             this.SetupPage.Location = new System.Drawing.Point(4, 100);
             this.SetupPage.Name = "SetupPage";
@@ -1436,50 +1378,79 @@
             this.SetupPage.Text = "Setup";
             this.SetupPage.UseVisualStyleBackColor = true;
             // 
-            // RobotSerialNumberLbl
+            // DefaultMoveSetupGrp
             // 
-            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(1852, 584);
-            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
-            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 61);
-            this.RobotSerialNumberLbl.TabIndex = 123;
-            this.RobotSerialNumberLbl.Text = "Serial Number";
-            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetMoveDefaultsBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearAccelBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetBlendRadiusBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointSpeedBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetJointAccelBtn);
+            this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearSpeedBtn);
+            this.DefaultMoveSetupGrp.Location = new System.Drawing.Point(1188, 492);
+            this.DefaultMoveSetupGrp.Name = "DefaultMoveSetupGrp";
+            this.DefaultMoveSetupGrp.Size = new System.Drawing.Size(927, 345);
+            this.DefaultMoveSetupGrp.TabIndex = 118;
+            this.DefaultMoveSetupGrp.TabStop = false;
+            this.DefaultMoveSetupGrp.Text = "Default (non-Grinding) Motion Parameters";
             // 
-            // RobotModelLbl
+            // SetLinearAccelBtn
             // 
-            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotModelLbl.Location = new System.Drawing.Point(1952, 507);
-            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotModelLbl.Name = "RobotModelLbl";
-            this.RobotModelLbl.Size = new System.Drawing.Size(157, 61);
-            this.RobotModelLbl.TabIndex = 122;
-            this.RobotModelLbl.Text = "Model";
-            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetLinearAccelBtn.Location = new System.Drawing.Point(342, 59);
+            this.SetLinearAccelBtn.Name = "SetLinearAccelBtn";
+            this.SetLinearAccelBtn.Size = new System.Drawing.Size(286, 130);
+            this.SetLinearAccelBtn.TabIndex = 110;
+            this.SetLinearAccelBtn.Text = "Set Linear Accel";
+            this.SetLinearAccelBtn.UseVisualStyleBackColor = false;
+            this.SetLinearAccelBtn.Click += new System.EventHandler(this.SetLinearAccelBtn_Click);
             // 
-            // label8
+            // SetBlendRadiusBtn
             // 
-            this.label8.Location = new System.Drawing.Point(1767, 584);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(81, 61);
-            this.label8.TabIndex = 125;
-            this.label8.Text = "S/N";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SetBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetBlendRadiusBtn.Location = new System.Drawing.Point(678, 62);
+            this.SetBlendRadiusBtn.Name = "SetBlendRadiusBtn";
+            this.SetBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetBlendRadiusBtn.TabIndex = 111;
+            this.SetBlendRadiusBtn.Text = "Set Blend Radius";
+            this.SetBlendRadiusBtn.UseVisualStyleBackColor = false;
+            this.SetBlendRadiusBtn.Click += new System.EventHandler(this.SetBlendRadiusBtn_Click);
             // 
-            // label7
+            // SetJointSpeedBtn
             // 
-            this.label7.Location = new System.Drawing.Point(1745, 508);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(210, 61);
-            this.label7.TabIndex = 124;
-            this.label7.Text = "Robot Model";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointSpeedBtn.Location = new System.Drawing.Point(49, 209);
+            this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
+            this.SetJointSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetJointSpeedBtn.TabIndex = 112;
+            this.SetJointSpeedBtn.Text = "Set Joint Speed";
+            this.SetJointSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetJointSpeedBtn.Click += new System.EventHandler(this.SetJointSpeedBtn_Click);
+            // 
+            // SetJointAccelBtn
+            // 
+            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointAccelBtn.Location = new System.Drawing.Point(342, 208);
+            this.SetJointAccelBtn.Name = "SetJointAccelBtn";
+            this.SetJointAccelBtn.Size = new System.Drawing.Size(286, 130);
+            this.SetJointAccelBtn.TabIndex = 113;
+            this.SetJointAccelBtn.Text = "Set Joint Accel";
+            this.SetJointAccelBtn.UseVisualStyleBackColor = false;
+            this.SetJointAccelBtn.Click += new System.EventHandler(this.SetJointAccelBtn_Click);
+            // 
+            // SetLinearSpeedBtn
+            // 
+            this.SetLinearSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(49, 59);
+            this.SetLinearSpeedBtn.Name = "SetLinearSpeedBtn";
+            this.SetLinearSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetLinearSpeedBtn.TabIndex = 109;
+            this.SetLinearSpeedBtn.Text = "Set Linear Speed";
+            this.SetLinearSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetLinearSpeedBtn.Click += new System.EventHandler(this.SetLinearSpeedBtn_Click);
             // 
             // groupBox11
             // 
+            this.groupBox11.Controls.Add(this.SetGrindDefaultsBtn);
             this.groupBox11.Controls.Add(this.SetGrindAccelBtn);
             this.groupBox11.Controls.Add(this.SetTrialSpeedBtn);
             this.groupBox11.Controls.Add(this.SetGrindBlendRadiusBtn);
@@ -1489,15 +1460,26 @@
             this.groupBox11.Controls.Add(this.SetTouchRetractBtn);
             this.groupBox11.Location = new System.Drawing.Point(3, 836);
             this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(1923, 234);
+            this.groupBox11.Size = new System.Drawing.Size(2106, 234);
             this.groupBox11.TabIndex = 117;
             this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Grind Move Control";
+            this.groupBox11.Text = "Grinding Motion Parameters";
+            // 
+            // SetGrindAccelBtn
+            // 
+            this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 56);
+            this.SetGrindAccelBtn.Name = "SetGrindAccelBtn";
+            this.SetGrindAccelBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetGrindAccelBtn.TabIndex = 120;
+            this.SetGrindAccelBtn.Text = "Set Acceleration";
+            this.SetGrindAccelBtn.UseVisualStyleBackColor = false;
+            this.SetGrindAccelBtn.Click += new System.EventHandler(this.SetGrindAccelBtn_Click);
             // 
             // SetTrialSpeedBtn
             // 
             this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(1391, 71);
+            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 56);
             this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
             this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTrialSpeedBtn.TabIndex = 119;
@@ -1508,7 +1490,7 @@
             // SetGrindBlendRadiusBtn
             // 
             this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(1115, 71);
+            this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 56);
             this.SetGrindBlendRadiusBtn.Name = "SetGrindBlendRadiusBtn";
             this.SetGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
             this.SetGrindBlendRadiusBtn.TabIndex = 118;
@@ -1519,7 +1501,7 @@
             // SetMaxWaitBtn
             // 
             this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetMaxWaitBtn.Location = new System.Drawing.Point(839, 71);
+            this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 56);
             this.SetMaxWaitBtn.Name = "SetMaxWaitBtn";
             this.SetMaxWaitBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxWaitBtn.TabIndex = 117;
@@ -1530,7 +1512,7 @@
             // SetForceDwellBtn
             // 
             this.SetForceDwellBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetForceDwellBtn.Location = new System.Drawing.Point(563, 71);
+            this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 56);
             this.SetForceDwellBtn.Name = "SetForceDwellBtn";
             this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
             this.SetForceDwellBtn.TabIndex = 116;
@@ -1541,7 +1523,7 @@
             // SetTouchSpeedBtn
             // 
             this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(11, 71);
+            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 56);
             this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
             this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchSpeedBtn.TabIndex = 115;
@@ -1552,7 +1534,7 @@
             // SetTouchRetractBtn
             // 
             this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetTouchRetractBtn.Location = new System.Drawing.Point(287, 71);
+            this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 56);
             this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
             this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchRetractBtn.TabIndex = 114;
@@ -1634,23 +1616,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle24;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1693,7 +1675,7 @@
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(1182, 1085);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(944, 174);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(217, 72);
             this.DefaultConfigBtn.TabIndex = 99;
@@ -1704,7 +1686,7 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(664, 1085);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(944, 252);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(217, 72);
             this.LoadConfigBtn.TabIndex = 98;
@@ -1712,22 +1694,13 @@
             this.LoadConfigBtn.UseVisualStyleBackColor = true;
             this.LoadConfigBtn.Click += new System.EventHandler(this.LoadConfigBtn_Click);
             // 
-            // SaveConfigBtn
-            // 
-            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveConfigBtn.Location = new System.Drawing.Point(923, 1085);
-            this.SaveConfigBtn.Name = "SaveConfigBtn";
-            this.SaveConfigBtn.Size = new System.Drawing.Size(217, 72);
-            this.SaveConfigBtn.TabIndex = 97;
-            this.SaveConfigBtn.Text = "Save";
-            this.SaveConfigBtn.UseVisualStyleBackColor = true;
-            this.SaveConfigBtn.Click += new System.EventHandler(this.SaveConfigBtn_Click);
-            // 
             // groupBox1
             // 
             this.groupBox1.Controls.Add(this.AllowRunningOfflineChk);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.RobotProgramTxt);
+            this.groupBox1.Controls.Add(this.LoadConfigBtn);
+            this.groupBox1.Controls.Add(this.DefaultConfigBtn);
             this.groupBox1.Controls.Add(this.ServerIpTxt);
             this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.UtcTimeChk);
@@ -1740,10 +1713,10 @@
             this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(1687, 339);
+            this.groupBox1.Size = new System.Drawing.Size(1166, 345);
             this.groupBox1.TabIndex = 96;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "GeneralConfig";
+            this.groupBox1.Text = "General Configuration";
             // 
             // AllowRunningOfflineChk
             // 
@@ -1771,7 +1744,7 @@
             // 
             this.RobotProgramTxt.Location = new System.Drawing.Point(397, 113);
             this.RobotProgramTxt.Name = "RobotProgramTxt";
-            this.RobotProgramTxt.Size = new System.Drawing.Size(1201, 44);
+            this.RobotProgramTxt.Size = new System.Drawing.Size(606, 44);
             this.RobotProgramTxt.TabIndex = 87;
             // 
             // ServerIpTxt
@@ -1824,13 +1797,13 @@
             this.AutoGrindRootLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.AutoGrindRootLbl.Location = new System.Drawing.Point(397, 57);
             this.AutoGrindRootLbl.Name = "AutoGrindRootLbl";
-            this.AutoGrindRootLbl.Size = new System.Drawing.Size(1201, 46);
+            this.AutoGrindRootLbl.Size = new System.Drawing.Size(606, 46);
             this.AutoGrindRootLbl.TabIndex = 69;
             this.AutoGrindRootLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // ChangeRootDirectoryBtn
             // 
-            this.ChangeRootDirectoryBtn.Location = new System.Drawing.Point(1604, 57);
+            this.ChangeRootDirectoryBtn.Location = new System.Drawing.Point(1009, 57);
             this.ChangeRootDirectoryBtn.Name = "ChangeRootDirectoryBtn";
             this.ChangeRootDirectoryBtn.Size = new System.Drawing.Size(60, 46);
             this.ChangeRootDirectoryBtn.TabIndex = 70;
@@ -1945,7 +1918,7 @@
             // 
             this.RecipeFilenameOnlyLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RecipeFilenameOnlyLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RecipeFilenameOnlyLbl.Location = new System.Drawing.Point(559, 40);
+            this.RecipeFilenameOnlyLbl.Location = new System.Drawing.Point(484, 40);
             this.RecipeFilenameOnlyLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RecipeFilenameOnlyLbl.Name = "RecipeFilenameOnlyLbl";
             this.RecipeFilenameOnlyLbl.Size = new System.Drawing.Size(507, 66);
@@ -1980,23 +1953,34 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label9.Location = new System.Drawing.Point(685, 1);
+            this.label9.Location = new System.Drawing.Point(610, 1);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(248, 39);
             this.label9.TabIndex = 150;
             this.label9.Text = "Recipe Loaded";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // SetGrindAccelBtn
+            // SetGrindDefaultsBtn
             // 
-            this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetGrindAccelBtn.Location = new System.Drawing.Point(1661, 71);
-            this.SetGrindAccelBtn.Name = "SetGrindAccelBtn";
-            this.SetGrindAccelBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetGrindAccelBtn.TabIndex = 120;
-            this.SetGrindAccelBtn.Text = "Set Acceleration";
-            this.SetGrindAccelBtn.UseVisualStyleBackColor = false;
-            this.SetGrindAccelBtn.Click += new System.EventHandler(this.SetGrindAccelBtn_Click);
+            this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1900, 56);
+            this.SetGrindDefaultsBtn.Name = "SetGrindDefaultsBtn";
+            this.SetGrindDefaultsBtn.Size = new System.Drawing.Size(171, 130);
+            this.SetGrindDefaultsBtn.TabIndex = 121;
+            this.SetGrindDefaultsBtn.Text = "Restore Defaults";
+            this.SetGrindDefaultsBtn.UseVisualStyleBackColor = false;
+            this.SetGrindDefaultsBtn.Click += new System.EventHandler(this.SetGrindDefaultsBtn_Click);
+            // 
+            // SetMoveDefaultsBtn
+            // 
+            this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(715, 208);
+            this.SetMoveDefaultsBtn.Name = "SetMoveDefaultsBtn";
+            this.SetMoveDefaultsBtn.Size = new System.Drawing.Size(171, 130);
+            this.SetMoveDefaultsBtn.TabIndex = 122;
+            this.SetMoveDefaultsBtn.Text = "Restore Defaults";
+            this.SetMoveDefaultsBtn.UseVisualStyleBackColor = false;
+            this.SetMoveDefaultsBtn.Click += new System.EventHandler(this.SetMoveDefaultsBtn_Click);
             // 
             // MainForm
             // 
@@ -2051,9 +2035,8 @@
             this.RunPage.ResumeLayout(false);
             this.RunPage.PerformLayout();
             this.ProgramPage.ResumeLayout(false);
-            this.MovePage.ResumeLayout(false);
-            this.DefaultMoveSetupGrp.ResumeLayout(false);
             this.SetupPage.ResumeLayout(false);
+            this.DefaultMoveSetupGrp.ResumeLayout(false);
             this.groupBox11.ResumeLayout(false);
             this.groupBox8.ResumeLayout(false);
             this.groupBox8.PerformLayout();
@@ -2082,7 +2065,6 @@
         private System.Windows.Forms.Button PauseBtn;
         private System.Windows.Forms.Button StartBtn;
         private System.Windows.Forms.RichTextBox RecipeRTB;
-        private System.Windows.Forms.Button JogBtn;
         private System.Windows.Forms.Timer ExecTmr;
         private System.Windows.Forms.Timer MessageTmr;
         private System.Windows.Forms.Label RobotCommandStatusLbl;
@@ -2124,11 +2106,6 @@
         private System.Windows.Forms.Button RobotModeBtn;
         private System.Windows.Forms.Button SafetyStatusBtn;
         private System.Windows.Forms.Button ProgramStateBtn;
-        private System.Windows.Forms.Button SetJointAccelBtn;
-        private System.Windows.Forms.Button SetJointSpeedBtn;
-        private System.Windows.Forms.Button SetLinearSpeedBtn;
-        private System.Windows.Forms.Button SetLinearAccelBtn;
-        private System.Windows.Forms.Button SetBlendRadiusBtn;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.Label DiameterDimLbl;
         private System.Windows.Forms.TabControl MainTab;
@@ -2143,7 +2120,6 @@
         private System.Windows.Forms.Button ClearToolsBtn;
         private System.Windows.Forms.Button DefaultConfigBtn;
         private System.Windows.Forms.Button LoadConfigBtn;
-        private System.Windows.Forms.Button SaveConfigBtn;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox RobotProgramTxt;
@@ -2155,7 +2131,6 @@
         private System.Windows.Forms.Label AutoGrindRootLbl;
         private System.Windows.Forms.Button ChangeRootDirectoryBtn;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.TabPage MovePage;
         private System.Windows.Forms.TabPage LogPage;
         private System.Windows.Forms.Button RobotConnectBtn;
         private System.Windows.Forms.Label RecipeFilenameOnlyLbl;
@@ -2169,7 +2144,6 @@
         private System.Windows.Forms.Label CurrentLineLblCopy;
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.RichTextBox RecipeRTBCopy;
-        private System.Windows.Forms.GroupBox DefaultMoveSetupGrp;
         private System.Windows.Forms.Button JogRunBtn;
         private System.Windows.Forms.Label RunStartedTimeLbl;
         private System.Windows.Forms.Label label14;
@@ -2194,7 +2168,6 @@
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label15;
         private System.Windows.Forms.GroupBox PositionTestButtonGrp;
-        private System.Windows.Forms.Label RobotURControlStatusLbl;
         private System.Windows.Forms.Label StepElapsedTimeLbl;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button SetMaxWaitBtn;
@@ -2206,15 +2179,24 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label StepTimeRemainingLbl;
         private System.Windows.Forms.Label label17;
-        private System.Windows.Forms.Label RobotSerialNumberLbl;
-        private System.Windows.Forms.Label RobotModelLbl;
-        private System.Windows.Forms.Label label8;
-        private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label VersionLbl;
         private System.Windows.Forms.GroupBox groupBox7;
         private System.Windows.Forms.Label SentRobotIndexLbl;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button SetGrindAccelBtn;
+        private System.Windows.Forms.Label RobotSerialNumberLbl;
+        private System.Windows.Forms.Label RobotModelLbl;
+        private System.Windows.Forms.Label label8;
+        private System.Windows.Forms.Label label7;
+        private System.Windows.Forms.GroupBox DefaultMoveSetupGrp;
+        private System.Windows.Forms.Button SetLinearAccelBtn;
+        private System.Windows.Forms.Button SetBlendRadiusBtn;
+        private System.Windows.Forms.Button SetJointSpeedBtn;
+        private System.Windows.Forms.Button SetJointAccelBtn;
+        private System.Windows.Forms.Button SetLinearSpeedBtn;
+        private System.Windows.Forms.Button JogBtn;
+        private System.Windows.Forms.Button SetMoveDefaultsBtn;
+        private System.Windows.Forms.Button SetGrindDefaultsBtn;
     }
 }
 
