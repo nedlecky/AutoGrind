@@ -21,7 +21,6 @@ namespace AutoGrind
         byte[] inputBuffer = new byte[inputBufferLen];
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-        public Action<string, string> receiveCallback { get; set; }
         public Action<string> ReceiveCallback { get; set; }
 
         public bool IsClientConnected { get; set; } = false;
