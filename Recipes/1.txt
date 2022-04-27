@@ -1,14 +1,1 @@
-redo:
-sleep(2)
-
-grind_retract()
-tool_on()
-coolant_on()
-
-sleep(2)
-
-grind_retract()
-tool_off()
-coolant_off()
-
-jump(redo)
+saveposition(a2)

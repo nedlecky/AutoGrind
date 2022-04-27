@@ -764,7 +764,6 @@ namespace AutoGrind
             ToolsGrd.ClearSelection();
             if (robotCommandServer != null)
                 ExecuteLine(-1, String.Format("select_tool({0})", MountedToolBox.Text));
-            //PartGeometryBox.Text = "FLAT";
         }
 
         private void UpdateGeometryToRobot()
@@ -1803,11 +1802,11 @@ namespace AutoGrind
             public string prefix;
         };
 
-        // These recipe commands will be converted to sendrobot(prefix,[nParams additional parameters])
+        // These recipe commands will be converted to send_robot(prefix,[nParams additional parameters])
         readonly Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // The main "send anything" command
-            {"sendrobot",               new CommandSpec(){nParams=-1, prefix="" } },
+            {"send_robot",              new CommandSpec(){nParams=-1, prefix="" } },
 
             // SETTINGS
             {"set_linear_speed",        new CommandSpec(){nParams=1,  prefix="30,1," } },
@@ -1825,7 +1824,7 @@ namespace AutoGrind
             {"tool_off",                new CommandSpec(){nParams=0,  prefix="30,16" } },
             {"coolant_on",              new CommandSpec(){nParams=0,  prefix="30,17" } },
             {"coolant_off",             new CommandSpec(){nParams=0,  prefix="30,18" } },
-            {"freedrive",               new CommandSpec(){nParams=1,  prefix="30,19," } },
+            {"free_drive",              new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
 
@@ -1874,6 +1873,13 @@ namespace AutoGrind
             }
 
         }
+
+        private void ExecError(string message)
+        {
+            log.Error(message);
+            PromptOperator("ERROR:\n" + message);
+        }
+
         private bool ExecuteLine(int lineNumber, string line)
         {
             // Step is starting now
@@ -1940,10 +1946,10 @@ namespace AutoGrind
                 if (file.Length > 1)
                 {
                     if (!ImportFile(file))
-                        PromptOperator(string.Format("File import error: {0}", command));
+                        ExecError(string.Format("File import error: {0} file would not import", command));
                 }
                 else
-                    PromptOperator(String.Format("Invalid import command: {0}", command));
+                    ExecError(String.Format("Invalid import command: {0}", command));
 
                 return true;
             }
@@ -2063,32 +2069,61 @@ namespace AutoGrind
             }
 
             // movejoint
-            if (command.StartsWith("movejoint("))
+            if (command.StartsWith("move_joint("))
             {
                 string positionName = ExtractParameters(command);
-                LogInterpret("movejoint", lineNumber, command);
+                LogInterpret("move_joint", lineNumber, command);
 
                 if (!GotoPositionJoint(positionName))
                 {
-                    log.Error("Move failed in movejoint Line {0} EXEC: {1}", lineNumber, command);
+                    log.Error("Move failed in move_joint Line {0} EXEC: {1}", lineNumber, command);
                     PromptOperator("Move failed: " + command);
                 }
                 return true;
             }
 
-            // movelinear
-            if (command.StartsWith("movelinear("))
+            // move_linear
+            if (command.StartsWith("move_linear("))
             {
                 string positionName = ExtractParameters(command);
-                LogInterpret("movelinear", lineNumber, command);
+                LogInterpret("move_linear", lineNumber, command);
 
                 if (!GotoPositionPose(positionName))
                 {
-                    log.Error("Move failed in movelinear Line {0} EXEC: {1}", lineNumber, command);
+                    log.Error("Move failed in move_linear Line {0} EXEC: {1}", lineNumber, command);
                     PromptOperator("Move failed: " + command);
                 }
                 return true;
             }
+
+            // save_position
+            if (command.StartsWith("save_position("))
+            {
+                string positionName = ExtractParameters(command);
+                LogInterpret("saveposition", lineNumber, command);
+                copyPositionAtWrite = positionName;
+                RobotSend("25");
+                return true;
+            }
+
+            // move_tool_home
+            if (command.StartsWith("move_tool_home()"))
+            {
+                string homePosition = MountedToolBox.Text + "_home";
+                if (!GotoPositionPose(homePosition))
+                    ExecError(string.Format("Cannot move to home {0} line {1}: {2}", homePosition, lineNumber, command));
+                return true;
+            }
+
+            // move_tool_mount
+            if (command.StartsWith("move_tool_mount()"))
+            {
+                string mountPosition = MountedToolBox.Text + "_mount";
+                if (!GotoPositionJoint(mountPosition))
+                    ExecError(string.Format("Cannot move to mount {0} line {1}: {2}", mountPosition, lineNumber, command));
+                return true;
+            }
+
 
             // end
             if (command == "end()" || command == "end")
@@ -2214,7 +2249,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // Handle all of the other robot commands (which just use sendrobot, some prefix params, and any other specified params)
+            // Handle all of the other robot commands (which just use send_robot, some prefix params, and any other specified params)
             // Example:
             // set_linear_speed(1.1) ==> RobotSend("30,1.1")
             // grind_rect(30,30,5,20,10) ==> RobotSend("40,20,30,30,5,20,10")
@@ -2256,8 +2291,7 @@ namespace AutoGrind
                 return true;
             }
 
-            log.Error("Cannot execute line {0} EXEC: {1}", lineNumber, command);
-            PromptOperator("Cannot execute line:\n" + command);
+            ExecError(string.Format("Cannot EXEC line {0}: {1}", lineNumber, command));
             return true;
         }
 
@@ -3636,7 +3670,6 @@ namespace AutoGrind
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }
-
     }
     public static class RichTextBoxExtensions
     {

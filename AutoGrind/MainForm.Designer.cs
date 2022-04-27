@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle21 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle22 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle23 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle24 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
@@ -128,12 +128,14 @@
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.DefaultMoveSetupGrp = new System.Windows.Forms.GroupBox();
+            this.SetMoveDefaultsBtn = new System.Windows.Forms.Button();
             this.SetLinearAccelBtn = new System.Windows.Forms.Button();
             this.SetBlendRadiusBtn = new System.Windows.Forms.Button();
             this.SetJointSpeedBtn = new System.Windows.Forms.Button();
             this.SetJointAccelBtn = new System.Windows.Forms.Button();
             this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
             this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
             this.SetGrindAccelBtn = new System.Windows.Forms.Button();
             this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
             this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
@@ -151,12 +153,12 @@
             this.LoadToolsBtn = new System.Windows.Forms.Button();
             this.SaveToolsBtn = new System.Windows.Forms.Button();
             this.ClearToolsBtn = new System.Windows.Forms.Button();
-            this.DefaultConfigBtn = new System.Windows.Forms.Button();
-            this.LoadConfigBtn = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.AllowRunningOfflineChk = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.RobotProgramTxt = new System.Windows.Forms.TextBox();
+            this.LoadConfigBtn = new System.Windows.Forms.Button();
+            this.DefaultConfigBtn = new System.Windows.Forms.Button();
             this.ServerIpTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
             this.UtcTimeChk = new System.Windows.Forms.CheckBox();
@@ -176,8 +178,6 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
-            this.SetMoveDefaultsBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -482,6 +482,7 @@
             this.JogBtn.TabIndex = 100;
             this.JogBtn.Text = "Jog Only";
             this.JogBtn.UseVisualStyleBackColor = false;
+            this.JogBtn.Click += new System.EventHandler(this.JogBtn_Click);
             // 
             // PositionTestButtonGrp
             // 
@@ -594,14 +595,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle21.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle21.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle21.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle21.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle21.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle21.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle21.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle21;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -691,14 +692,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle22.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle22.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle22.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle22.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle22.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle22.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle22.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle22;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1393,6 +1394,17 @@
             this.DefaultMoveSetupGrp.TabStop = false;
             this.DefaultMoveSetupGrp.Text = "Default (non-Grinding) Motion Parameters";
             // 
+            // SetMoveDefaultsBtn
+            // 
+            this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(715, 208);
+            this.SetMoveDefaultsBtn.Name = "SetMoveDefaultsBtn";
+            this.SetMoveDefaultsBtn.Size = new System.Drawing.Size(171, 130);
+            this.SetMoveDefaultsBtn.TabIndex = 122;
+            this.SetMoveDefaultsBtn.Text = "Restore Defaults";
+            this.SetMoveDefaultsBtn.UseVisualStyleBackColor = false;
+            this.SetMoveDefaultsBtn.Click += new System.EventHandler(this.SetMoveDefaultsBtn_Click);
+            // 
             // SetLinearAccelBtn
             // 
             this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Transparent;
@@ -1464,6 +1476,17 @@
             this.groupBox11.TabIndex = 117;
             this.groupBox11.TabStop = false;
             this.groupBox11.Text = "Grinding Motion Parameters";
+            // 
+            // SetGrindDefaultsBtn
+            // 
+            this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1900, 56);
+            this.SetGrindDefaultsBtn.Name = "SetGrindDefaultsBtn";
+            this.SetGrindDefaultsBtn.Size = new System.Drawing.Size(171, 130);
+            this.SetGrindDefaultsBtn.TabIndex = 121;
+            this.SetGrindDefaultsBtn.Text = "Restore Defaults";
+            this.SetGrindDefaultsBtn.UseVisualStyleBackColor = false;
+            this.SetGrindDefaultsBtn.Click += new System.EventHandler(this.SetGrindDefaultsBtn_Click);
             // 
             // SetGrindAccelBtn
             // 
@@ -1616,23 +1639,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle23.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle23.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle23.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle23.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle23.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle23.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle23.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle23;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle24.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle24.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle24.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle24.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle24.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle24.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle24.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle24;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1671,28 +1694,6 @@
             this.ClearToolsBtn.Text = "Clear";
             this.ClearToolsBtn.UseVisualStyleBackColor = true;
             this.ClearToolsBtn.Click += new System.EventHandler(this.ClearToolsBtn_Click);
-            // 
-            // DefaultConfigBtn
-            // 
-            this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(944, 174);
-            this.DefaultConfigBtn.Name = "DefaultConfigBtn";
-            this.DefaultConfigBtn.Size = new System.Drawing.Size(217, 72);
-            this.DefaultConfigBtn.TabIndex = 99;
-            this.DefaultConfigBtn.Text = "Set Default";
-            this.DefaultConfigBtn.UseVisualStyleBackColor = true;
-            this.DefaultConfigBtn.Click += new System.EventHandler(this.DefaultConfigBtn_Click);
-            // 
-            // LoadConfigBtn
-            // 
-            this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(944, 252);
-            this.LoadConfigBtn.Name = "LoadConfigBtn";
-            this.LoadConfigBtn.Size = new System.Drawing.Size(217, 72);
-            this.LoadConfigBtn.TabIndex = 98;
-            this.LoadConfigBtn.Text = "Reload";
-            this.LoadConfigBtn.UseVisualStyleBackColor = true;
-            this.LoadConfigBtn.Click += new System.EventHandler(this.LoadConfigBtn_Click);
             // 
             // groupBox1
             // 
@@ -1746,6 +1747,28 @@
             this.RobotProgramTxt.Name = "RobotProgramTxt";
             this.RobotProgramTxt.Size = new System.Drawing.Size(606, 44);
             this.RobotProgramTxt.TabIndex = 87;
+            // 
+            // LoadConfigBtn
+            // 
+            this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadConfigBtn.Location = new System.Drawing.Point(944, 252);
+            this.LoadConfigBtn.Name = "LoadConfigBtn";
+            this.LoadConfigBtn.Size = new System.Drawing.Size(217, 72);
+            this.LoadConfigBtn.TabIndex = 98;
+            this.LoadConfigBtn.Text = "Reload";
+            this.LoadConfigBtn.UseVisualStyleBackColor = true;
+            this.LoadConfigBtn.Click += new System.EventHandler(this.LoadConfigBtn_Click);
+            // 
+            // DefaultConfigBtn
+            // 
+            this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(944, 174);
+            this.DefaultConfigBtn.Name = "DefaultConfigBtn";
+            this.DefaultConfigBtn.Size = new System.Drawing.Size(217, 72);
+            this.DefaultConfigBtn.TabIndex = 99;
+            this.DefaultConfigBtn.Text = "Set Default";
+            this.DefaultConfigBtn.UseVisualStyleBackColor = true;
+            this.DefaultConfigBtn.Click += new System.EventHandler(this.DefaultConfigBtn_Click);
             // 
             // ServerIpTxt
             // 
@@ -1959,28 +1982,6 @@
             this.label9.TabIndex = 150;
             this.label9.Text = "Recipe Loaded";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // SetGrindDefaultsBtn
-            // 
-            this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1900, 56);
-            this.SetGrindDefaultsBtn.Name = "SetGrindDefaultsBtn";
-            this.SetGrindDefaultsBtn.Size = new System.Drawing.Size(171, 130);
-            this.SetGrindDefaultsBtn.TabIndex = 121;
-            this.SetGrindDefaultsBtn.Text = "Restore Defaults";
-            this.SetGrindDefaultsBtn.UseVisualStyleBackColor = false;
-            this.SetGrindDefaultsBtn.Click += new System.EventHandler(this.SetGrindDefaultsBtn_Click);
-            // 
-            // SetMoveDefaultsBtn
-            // 
-            this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(715, 208);
-            this.SetMoveDefaultsBtn.Name = "SetMoveDefaultsBtn";
-            this.SetMoveDefaultsBtn.Size = new System.Drawing.Size(171, 130);
-            this.SetMoveDefaultsBtn.TabIndex = 122;
-            this.SetMoveDefaultsBtn.Text = "Restore Defaults";
-            this.SetMoveDefaultsBtn.UseVisualStyleBackColor = false;
-            this.SetMoveDefaultsBtn.Click += new System.EventHandler(this.SetMoveDefaultsBtn_Click);
             // 
             // MainForm
             // 

@@ -35,6 +35,7 @@ namespace AutoGrind
             CancelBtn.Text = CancelText;
 
             result = DialogResult.None;
+            OkBtn.Select();
         }
 
         private void OkBtn_Click(object sender, EventArgs e)

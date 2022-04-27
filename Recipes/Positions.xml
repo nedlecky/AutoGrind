@@ -94,4 +94,28 @@
     <Pose>p[0.000291254,-0.558692,0.161265,-3.14157,-1.06128e-05,2.74448e-05]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>a</Name>
+    <Joints>[1.49617,-1.29628,2.11737,-2.3915,-1.57013,3.08211]</Joints>
+    <Pose>p[0.0973949,-0.490643,0.0098676,-3.14125,0.0224652,0.000394316]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>a2</Name>
+    <Joints>[1.49618,-1.29628,2.11738,-2.39146,-1.57009,3.08209]</Joints>
+    <Pose>p[0.0974118,-0.490626,0.00985979,-3.14121,0.0224271,0.000333287]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>safety</Name>
+    <Joints>[1.43338,-2.18267,1.99383,-1.39712,-1.57009,3.01549]</Joints>
+    <Pose>p[0.0986763,-0.261007,0.311268,3.12634,-0.0187955,-0.00288862]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>start</Name>
+    <Joints>[1.09478,-1.45283,1.99349,-2.11148,-1.56995,2.66593]</Joints>
+    <Pose>p[-0.103858,-0.493274,0.108146,3.14144,3.14903e-05,-5.37444e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>
