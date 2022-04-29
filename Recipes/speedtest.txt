@@ -1,9 +1,0 @@
-robotsend (30,0.2)
-robotsend (31,0.2)
-toolchange 400
-home
-
-robotsend (30,1.5)
-robotsend (31,1.0)
-toolchange 400
-home

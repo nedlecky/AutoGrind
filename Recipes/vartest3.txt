@@ -1,6 +1,0 @@
-# vartest3.agr
-
-clear()
-import(globals_standard.agr)
-x4 = 3
-p3 = p[1,2,3,4,5,6]

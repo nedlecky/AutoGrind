@@ -4,4 +4,9 @@
 import(globals_standard.txt)
 import(xyz) # should fail
 import()  # should fail
+
+# add some assertions here from globals_standard.txt!
+
+
+
 clear()

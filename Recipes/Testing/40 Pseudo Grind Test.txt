@@ -1,6 +1,7 @@
 # Pseudo Grind Test
 # Test all the patterns on all the geometries
 # Can be run on a flat table area to test force control
+# Ran no errors 10.5 hours 4-25-2022
 
 size1=40
 size2=10
@@ -12,8 +13,7 @@ select_tool(2F85)
 cycleCount=0
 
 redo:
-movelinear(demo_flat)
-jump(error)
+move_linear(demo_flat)
 
 set_part_geometry(FLAT,0)
 grind_line({size1},{size2},{count},{speed},{force},1)
@@ -26,7 +26,6 @@ grind_circle({size1},{count},{speed},{force},1)
 grind_circle({size2},{count},{speed},{force},1)
 grind_spiral({size1},{size2},3,{count},{speed},{force},1)
 
-error:
 set_part_geometry(CYLINDER,400.1)
 grind_line({size1},{size2},{count},{speed},{force},1)
 grind_line(-{size2},{size1},{count},{speed},{force},1)
@@ -37,7 +36,7 @@ grind_serp({size1},{size1},3,1,{count},{speed},{force},1)
 grind_circle({size1},{count},{speed},{force},1)
 grind_circle({size2},{count},{speed},{force},1)
 grind_spiral({size1},{size2},3,{count},{speed},{force},1)
-jump(error)
+
 set_part_geometry(CYLINDER,600.1)
 grind_line({size1},{size2},{count},{speed},{force},1)
 grind_line(-{size2},{size1},{count},{speed},{force},1)

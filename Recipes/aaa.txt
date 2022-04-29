@@ -1,8 +1,0 @@
-movelinear(demo_cyl)
-speed = 2
-sleep(10020)
-
-grind_rect(20,20,4,{speed},10,1)
-grind_rect(10,10,4,{speed},10,1)
-
-sleep(4000)

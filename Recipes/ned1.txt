@@ -1,5 +1,0 @@
-# Test program
-movelinear(demo_flat)
-
-grind_rect(40,40,1,40,10,1)
-sleep(4000)

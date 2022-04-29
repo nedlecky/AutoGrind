@@ -1,3 +1,0 @@
-movelinear(demo_cyl)
-grind_rect(20,20,1,20,10,1)
-sleep(4000)

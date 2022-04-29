@@ -2,6 +2,15 @@
 # BE CAREFUL: Robot will move and positions are expected to be OK
 # Last passed 4/27/2022
 
+# Standard set_speeds with asserts to check correctness
+set_.....
+assert(.....)
+
+)
+# Grind set_speeds with asserts to check correctness
+set_.....
+assert(.....)
+
 select_tool(2F85)
 move_linear(demo_flat)
 move_linear(demo_flatt) # should fail

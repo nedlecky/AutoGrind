@@ -1,7 +1,0 @@
-# Test
-
-sendrobot(10)
-speed(1.1)
-accel(1.2)
-
-grind_contact_enabled(0)

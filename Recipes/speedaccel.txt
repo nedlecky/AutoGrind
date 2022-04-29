@@ -1,5 +1,0 @@
-speed 0.5
-accel 0.4
-prompt pause
-speed 1.5
-accel 1.4

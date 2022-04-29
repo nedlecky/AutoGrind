@@ -30,3 +30,13 @@ assert(xx,13)
 
 xx=abc
 xx++  # should fail
+
+prompt(Shall we continue? x2 is abc? x2={x2})
+p1 = [1,2,3,4,5,6]
+p2 = p[1,2,3,4,5]
+speed1 = 2.1
+Jeff1 = fred 
+
+assert(x2,abc) # should pass
+clear()
+assert(x2,abc) # should fail
