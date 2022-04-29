@@ -2365,12 +2365,15 @@ namespace AutoGrind
                 }
                 else if (ReadVariable("robot_index") != robotSendIndex.ToString())
                 {
-                    log.Debug("Waiting for robot_index to catch up");
+                    // Only log this one time!
+                    if (logFilter != 3)
+                        log.Info("Waiting for robot_index to catch up");
+                    logFilter = 3;
                 }
                 else
                 {
                     // Resets such that the above log messages will happen
-                    logFilter = 3;
+                    logFilter = 4;
                     if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
