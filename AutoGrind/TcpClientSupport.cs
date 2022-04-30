@@ -137,7 +137,7 @@ namespace AutoGrind
                 return 1;
             }
 
-            log.Debug("{0}==> {1}", logPrefix, request);
+            log.Trace("{0}==> {1}", logPrefix, request);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(request + "\r"), 0, request.Length + 1);
