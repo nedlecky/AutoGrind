@@ -215,7 +215,7 @@ namespace AutoGrind
             }
             timer.Stop();
 
-            log.Debug("{0} {1}={2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
+            log.Trace("{0} {1}={2} [{3} mS]", logPrefix, inquiry, response, timer.ElapsedMilliseconds);
             return response;
         }
     }
