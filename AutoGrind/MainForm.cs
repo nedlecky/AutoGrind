@@ -269,7 +269,7 @@ namespace AutoGrind
         static int noRobotmodeResponseCount = 0;     // How many times in a row have we gotten no response to "robotmode"
         static int noSafetystatusResponseCount = 0;  // How many times in a row have we gotten no response to "safetystatus"
         static int noProgramstateResponseCount = 0;  // How many times in a row have we gotten no response to "programstate"
-        static int inquiryResponseWaitTimeMs = 200;  // How long to wait for a response?
+        static int inquiryResponseWaitTimeMs = 400;  // How long to wait for a response?
         private string TimeSpanFormat(TimeSpan elapsed)
         {
             int hrs = Math.Abs(elapsed.Days * 24 + elapsed.Hours);
