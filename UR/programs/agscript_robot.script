@@ -43,9 +43,9 @@ def command_validate():
   end
   
   # Now make sure checksum matches what we expect
-  global robot_index = command[1]
-  global robot_checksum = command[2]
-  if robot_checksum != 1000 - robot_index:
+  global test_index = command[1]
+  global test_checksum = command[2]
+  if test_checksum != 1000 - test_index:
     command[0] = 0
     return False
   end
@@ -54,16 +54,22 @@ def command_validate():
   if command[3] != 40:
     # Using set_grind_process_state which assumes robot_tcp_part!
     set_tcp(robot_tcp_part)
-    set_grind_process_state(False)   # This is a nop unless we're stilll grinding!
+    set_grind_process_state(False)   # This is a nop unless we're still grinding!
     set_tcp(robot_tcp)
   end
 
+  # Slide the robot commands and parameters back in command[] to remove the index and checksum
   i = 3
   while (i < command[0] + 1):
     command[i-2] = command[i]
     i = i + 1
   end
-  command[0] = command[0] - 2
+  command[0] = command[0] - 2    # 2 feweer elements in the array now!
+
+  global robot_index = test_index
+  global robot_starting = test_index
+  socket_set_var("robot_starting", robot_starting)
+
   return True
 end
 

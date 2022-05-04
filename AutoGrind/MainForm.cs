@@ -2950,8 +2950,11 @@ namespace AutoGrind
             switch (nameTrimmed)
             {
                 case "robot_ready":
-                    // Getting ready to abamndon this?
+                    // Getting ready to abandon this?
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    break;
+                case "robot_starting":
+                    log.Debug("robot starting {0}", valueTrimmed);
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
