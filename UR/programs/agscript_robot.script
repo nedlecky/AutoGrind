@@ -50,11 +50,11 @@ def command_validate():
     return False
   end
 
-  # Now if we are not getting a grind command (40) make sure we're are off the part!
-  if command[3] != 40:
+  # Now if we are still in the grind state and we are not getting a grind command (40) make sure we're are off the part!
+  if grind_process_state and command[3] != 40:
     # Using set_grind_process_state which assumes robot_tcp_part!
     set_tcp(robot_tcp_part)
-    set_grind_process_state(False)   # This is a nop unless we're still grinding!
+    set_grind_process_state(False)
     set_tcp(robot_tcp)
   end
 
