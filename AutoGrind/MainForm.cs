@@ -1798,7 +1798,7 @@ namespace AutoGrind
             }
         }
 
-        // Specifies number of expected parameters and prefix in SendRobot for each function
+        // Specifies number of expected parameters and prefix in RobotSend for each function
         public struct CommandSpec
         {
             public int nParams;
@@ -2568,6 +2568,9 @@ namespace AutoGrind
                 {
                     ++robotSendIndex;
                     if (robotSendIndex > 999) robotSendIndex = 100;
+                    SentRobotIndexLbl.Text = robotSendIndex.ToString();
+                    RobotIndexLbl.BackColor = Color.Red;
+
                     int checkValue = 1000 - robotSendIndex;
                     string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
                     robotCommandServer.Send(sendMessage);
@@ -2952,17 +2955,19 @@ namespace AutoGrind
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
-                    SentRobotIndexLbl.Text = robotSendIndex.ToString();
-                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && valueTrimmed == SentRobotIndexLbl.Text)
+
+                    // Color us green if we're caught up!
+                    if (SentRobotIndexLbl.Text == RobotIndexLbl.Text)
+                        RobotIndexLbl.BackColor = Color.Green;
+
+                    // Close operator "wait for robot" form if we're caught up
+                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && SentRobotIndexLbl.Text == RobotIndexLbl.Text)
                     {
                         waitingForOperatorMessageForm.Close();
                         waitingForOperatorMessageForm = null;
                         closeOperatorFormOnIndex = false;
                     }
                     break;
-                //case "robot_tool":
-                //    MountedToolBox.Text = valueTrimmed;
-                //    break;
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
