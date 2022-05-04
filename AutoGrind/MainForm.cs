@@ -2356,6 +2356,8 @@ namespace AutoGrind
             }
             else
             {
+                /* robot_ready can happen in the midst of several commands running in sequence so it is ambiguous
+                 * Also, it will often still be true right after sending a command since the UR won't have set it low (and c# seen it low) yet
                 if (ReadVariable("robot_ready") != "True")
                 {
                     // Only log this one time!
@@ -2363,7 +2365,8 @@ namespace AutoGrind
                         log.Info("EXEC Waiting for robot_ready");
                     logFilter = 2;
                 }
-                else if (ReadVariable("robot_index") != robotSendIndex.ToString())
+                else*/
+                if (ReadVariable("robot_index") != robotSendIndex.ToString())
                 {
                     // Only log this one time!
                     if (logFilter != 3)
