@@ -254,7 +254,7 @@ namespace AutoGrind
                 while (continueTask)
                 {
                     System.Threading.Thread.Sleep(250);
-                    if (continueTask && mainForm.ReadVariable("robot_ready") == "True")
+                    if (continueTask && mainForm.RobotIndexCaughtUp())
                         mainForm.RobotSend(lastJogCommand);
                 }
             });

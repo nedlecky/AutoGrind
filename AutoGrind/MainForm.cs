@@ -33,7 +33,7 @@ namespace AutoGrind
         TcpServerSupport robotCommandServer = null;
         TcpClientSupport robotDashboardClient = null;
         MessageDialog waitingForOperatorMessageForm = null;
-        bool closeOperatorFormOnReady = false;
+        bool closeOperatorFormOnIndex = false;
 
         static DataTable variables;
         static DataTable tools;
@@ -1723,7 +1723,7 @@ namespace AutoGrind
                 OkText = "&Continue Execution",
                 CancelText = "&Abort"
             };
-            closeOperatorFormOnReady = closeOnReady;
+            closeOperatorFormOnIndex = closeOnReady;
             waitingForOperatorMessageForm.ShowDialog();
         }
 
@@ -2316,6 +2316,11 @@ namespace AutoGrind
                 log.Info("EXEC Estimated={0} Actual={1}", StepTimeEstimateLbl.Text, StepElapsedTimeLbl.Text);
             }
         }
+        public bool RobotIndexCaughtUp()
+        {
+            return ReadVariable("robot_index") == robotSendIndex.ToString();
+        }
+
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             // Wait for any operator prompt to be cleared
@@ -2366,7 +2371,7 @@ namespace AutoGrind
                     logFilter = 2;
                 }
                 else*/
-                if (ReadVariable("robot_index") != robotSendIndex.ToString())
+                if (!RobotIndexCaughtUp())
                 {
                     // Only log this one time!
                     if (logFilter != 3)
@@ -2942,17 +2947,18 @@ namespace AutoGrind
             switch (nameTrimmed)
             {
                 case "robot_ready":
+                    // Getting ready to abamndon this?
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
-                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnReady && valueTrimmed == "True")
-                    {
-                        waitingForOperatorMessageForm.Close();
-                        waitingForOperatorMessageForm = null;
-                        closeOperatorFormOnReady = false;
-                    }
                     break;
                 case "robot_index":
                     RobotIndexLbl.Text = valueTrimmed;
                     SentRobotIndexLbl.Text = robotSendIndex.ToString();
+                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && valueTrimmed == SentRobotIndexLbl.Text)
+                    {
+                        waitingForOperatorMessageForm.Close();
+                        waitingForOperatorMessageForm = null;
+                        closeOperatorFormOnIndex = false;
+                    }
                     break;
                 //case "robot_tool":
                 //    MountedToolBox.Text = valueTrimmed;
