@@ -7,7 +7,7 @@ global grind_abort_listener_thread_handle = 0
 global pattern_grind_thread_handle = 0
 
 global halt_count = 0
-global halt_command = [0, 0]
+global halt_command = [0, 0, 0, 0]
 
 global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
@@ -393,10 +393,10 @@ end
 # Thread to listen for abort messages while grinding
 #
 thread grind_abort_listener_thread():
-  global halt_command = [0, 0]
+  global halt_command = [0, 0, 0, 0]
   global halt_count = 0
   while (halt_count == 0):
-    global thread_command = socket_read_ascii_float(1, timeout = 0.1)
+    global halt_command = socket_read_ascii_float(3, timeout = 0.1)
 
     # If door is open, that adds a halkt count (anything >0 will stop us!)
     if not is_door_closed():
@@ -404,18 +404,19 @@ thread grind_abort_listener_thread():
     end
 
     # If we've received(index,checksum,command,...) that adds a halt count (as long as checksum matches)
-    if thread_command[0] > 2:
-      global test_index = thread_command[1]
-      global test_checksum = thread_command[2]
-      if test_checksum == 1000 - test_index:
+    if halt_command[0] > 2:
+      global test_index = halt_command[1]
+      global test_checksum = halt_command[2]
+      global test_command = halt_command[3]
+      if test_checksum == 1000 - test_index and test_command = 10:
         global halt_count = halt_count + 1
 
         # Send an acknowledgement!
+        # MAYBE OK?   I think we can't do these from this thread without messing up the socket!
         global robot_index = test_index
         global robot_starting = test_index
-        # I think we can't do these from this thread without messing up the socket!
-        #socket_set_var("robot_starting", robot_starting)
-        #socket_set_var("robot_index", robot_index)
+        socket_set_var("robot_starting", robot_starting)
+        socket_set_var("robot_index", robot_index)
       end
     end
     sync()
