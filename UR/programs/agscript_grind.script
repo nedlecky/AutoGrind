@@ -413,8 +413,9 @@ thread grind_abort_listener_thread():
         # Send an acknowledgement!
         global robot_index = test_index
         global robot_starting = test_index
-        socket_set_var("robot_starting", robot_starting)
-        socket_set_var("robot_index", robot_index)
+        # I think we can't do these from this thread without messing up the socket!
+        #socket_set_var("robot_starting", robot_starting)
+        #socket_set_var("robot_index", robot_index)
       end
     end
     sync()
