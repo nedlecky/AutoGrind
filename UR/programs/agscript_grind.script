@@ -397,8 +397,25 @@ thread grind_abort_listener_thread():
   global halt_count = 0
   while (halt_count == 0):
     global halt_command = socket_read_ascii_float(1, timeout = 0.1)
-    if halt_command[0] > 0 or not is_door_closed():
+
+    # If door is open, that adds a halkt count (anything >0 will stop us!)
+    if not is_door_closed():
       global halt_count = halt_count + 1
+    end
+
+    # If we've received(index,checksum,command,...) that adds a halt count (as long as checksum matches)
+    if halt_command[0] > 2:
+      global test_index = command[1]
+      global test_checksum = command[2]
+      if test_checksum == 1000 - test_index:
+        global halt_count = halt_count + 1
+
+        # Send an acknowledgement!
+        global robot_index = test_index
+        global robot_starting = test_index
+        socket_set_var("robot_starting", robot_starting)
+        socket_set_var("robot_index", robot_index)
+      end
     end
     sync()
   end
