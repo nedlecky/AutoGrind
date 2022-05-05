@@ -408,7 +408,7 @@ thread grind_abort_listener_thread():
       global test_index = halt_command[1]
       global test_checksum = halt_command[2]
       global test_command = halt_command[3]
-      if test_checksum == 1000 - test_index and test_command = 10:
+      if test_checksum == 1000 - test_index and test_command == 10:
         global halt_count = halt_count + 1
 
         # Send an acknowledgement!
