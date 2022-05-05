@@ -66,7 +66,10 @@ def command_validate():
   end
   command[0] = command[0] - 2    # 2 feweer elements in the array now!
 
+  # robot_index signals command completion- won't be sent back to host until command is complete
   global robot_index = test_index
+
+  # This one signifies we're starting a new command!
   global robot_starting = test_index
   socket_set_var("robot_starting", robot_starting)
 

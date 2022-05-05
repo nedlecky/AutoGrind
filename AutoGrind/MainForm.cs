@@ -2375,7 +2375,7 @@ namespace AutoGrind
                 {
                     // Only log this one time!
                     if (logFilter != 3)
-                        log.Info("Waiting for robot_index to catch up");
+                        log.Info("Waiting for robot operation complete");
                     logFilter = 3;
                 }
                 else
