@@ -2954,10 +2954,13 @@ namespace AutoGrind
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
                     break;
                 case "robot_starting":
-                    log.Debug("robot starting {0}", valueTrimmed);
+                    // This gets sent to us by command_validate on the UR. It means command valueTrimmed is going to start executing
+                    log.Debug("UR<== STARTING {0}", valueTrimmed);
                     break;
                 case "robot_index":
+                    // This gets sent to us by PolyScope on the UR after command valueTrimmed has finished executing
                     RobotIndexLbl.Text = valueTrimmed;
+                    log.Debug("UR<== COMPLETED {0}", valueTrimmed);
 
                     // Color us green if we're caught up!
                     if (SentRobotIndexLbl.Text == RobotIndexLbl.Text)
