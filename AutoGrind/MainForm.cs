@@ -1155,6 +1155,7 @@ namespace AutoGrind
             switch (runState)
             {
                 case RunState.READY:
+                    // This is like hitting "Start" except we also set isSingleStep so we'll halt after line 1
                     if (PrepareToRun())
                     {
                         isSingleStep = true;
@@ -1163,6 +1164,17 @@ namespace AutoGrind
                     }
                     break;
                 case RunState.PAUSED:
+                    // Perform STEP function
+                    MessageDialog messageForm = new MessageDialog()
+                    {
+                        Title = "System Question",
+                        Label = "Repeat highlighted line or move on to next?",
+                        OkText = "&Repeat",
+                        CancelText = "&Move On"
+                    };
+                    DialogResult result = messageForm.ShowDialog();
+                    if (result == DialogResult.OK) lineCurrentlyExecuting--;
+                    RobotSend("10");
                     isSingleStep = true;
                     SetState(RunState.RUNNING);
                     break;
