@@ -408,15 +408,13 @@ thread grind_abort_listener_thread():
       global test_index = halt_command[1]
       global test_checksum = halt_command[2]
       global test_command = halt_command[3]
+      # Currently expecting halt is command 10 but I think this should be a 97 or comething like that
       if test_checksum == 1000 - test_index and test_command == 10:
         global halt_count = halt_count + 1
 
-        # Send an acknowledgement!
-        # MAYBE OK?   I think we can't do these from this thread without messing up the socket!
-        global robot_index = test_index
-        global robot_starting = test_index
-        socket_set_var("robot_starting", robot_starting)
-        socket_set_var("robot_index", robot_index)
+        # Send an start/finish acknowledgement just for this command!
+        socket_set_var("robot_starting", test_index)
+        socket_set_var("robot_index", test_index)
       end
     end
     sync()
