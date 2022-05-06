@@ -2955,12 +2955,12 @@ namespace AutoGrind
                     break;
                 case "robot_starting":
                     // This gets sent to us by command_validate on the UR. It means command valueTrimmed is going to start executing
-                    log.Info("UR<== {0} STARTING", valueTrimmed);
+                    log.Info("UR<== EXEC {0} STARTING", valueTrimmed);
                     break;
                 case "robot_index":
                     // This gets sent to us by PolyScope on the UR after command valueTrimmed has finished executing
                     RobotIndexLbl.Text = valueTrimmed;
-                    log.Info("UR<== {0} COMPLETED", valueTrimmed);
+                    log.Info("UR<== EXEC {0} COMPLETED", valueTrimmed);
 
                     // Color us green if we're caught up!
                     if (SentRobotIndexLbl.Text == RobotIndexLbl.Text)
