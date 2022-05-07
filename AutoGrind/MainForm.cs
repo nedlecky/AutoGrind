@@ -466,10 +466,17 @@ namespace AutoGrind
                 case "Robotmode: RUNNING":
                     color = Color.Green;
                     break;
-                case "Robotmode: IDLE":
+                case "Robotmode: CONFIRM_SAFETY":
                     EnsureStopped();
                     color = Color.Blue;
                     break;
+                case "Robotmode: IDLE":
+                    EnsureNotRunning();
+                    color = Color.Blue;
+                    break;
+                case "Robotmode: NO_CONTROLLER":
+                case "Robotmode: DISCONNECTED":
+                case "Robotmode: BACKDRIVE":
                 case "Robotmode: POWER_OFF":
                     EnsureStopped();
                     color = Color.Red;
@@ -503,7 +510,18 @@ namespace AutoGrind
                 case "Safetystatus: NORMAL":
                     color = Color.Green;
                     break;
+                case "Safetystatus: REDUCED":
+                    color = Color.Yellow;
+                    break;
                 case "Safetystatus: PROTECTIVE_STOP":
+                case "Safetystatus: RECOVERY":
+                case "Safetystatus: SAFEGUARD_STOP":
+                case "Safetystatus: SYSTEM_EMERGENCY_STOP":
+                case "Safetystatus: ROBOT_EMERGENCY_STOP":
+                case "Safetystatus: VIOLATION":
+                case "Safetystatus: FAULT":
+                case "Safetystatus: AUTOMATIC_MODE_SAFEGUARD_STOP":
+                case "Safetystatus: SYSTEM_THREE_POSITION_ENABLING_STOP":
                     EnsureNotRunning();
                     color = Color.Red;
                     break;
@@ -1028,6 +1046,7 @@ namespace AutoGrind
                     break;
                 default:
                     log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
+                    ErrorMessageBox(String.Format("Unsure how to recover from {0}", RobotModeBtn.Text));
                     break;
             }
 
@@ -1041,10 +1060,17 @@ namespace AutoGrind
                     robotDashboardClient?.Send("power off");
                     break;
                 case "Safetystatus: PROTECTIVE_STOP":
-                    robotDashboardClient?.Send("unlock protective stop");
+                    robotDashboardClient?.InquiryResponse("unlock protective stop",200);
+                    robotDashboardClient?.InquiryResponse("close safety popup", 200);
+
+                    break;
+                case "Safetystatus: ROBOT_EMERGENCY_STOP":
+                    ErrorMessageBox("Release Robot E-Stop");
+                    robotDashboardClient?.InquiryResponse("close safety popup", 200);
                     break;
                 default:
-                    log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
+                    log.Error("Unknown safety status button state! {0}", SafetyStatusBtn.Text);
+                    ErrorMessageBox(String.Format("Unsure how to recover from {0}", SafetyStatusBtn.Text));
                     break;
             }
         }
