@@ -261,15 +261,9 @@ namespace AutoGrind
         }
 
         static bool robotReady = false;
-        static int nDashboard = 0;
-        static bool pollDashboardStateNow = false;
         static DateTime runStartedTime;   // When did the user hit run?
         static DateTime stepStartedTime;  // When did the current recipe line start executing?
         static DateTime stepEndTimeEstimate;  // When do we think it will end?
-        static int noRobotmodeResponseCount = 0;     // How many times in a row have we gotten no response to "robotmode"
-        static int noSafetystatusResponseCount = 0;  // How many times in a row have we gotten no response to "safetystatus"
-        static int noProgramstateResponseCount = 0;  // How many times in a row have we gotten no response to "programstate"
-        static int inquiryResponseWaitTimeMs = 400;  // How long to wait for a response?
         private string TimeSpanFormat(TimeSpan elapsed)
         {
             int hrs = Math.Abs(elapsed.Days * 24 + elapsed.Hours);
@@ -323,45 +317,73 @@ namespace AutoGrind
                 else
                 {
                     // Any responses received?
-                    string response = robotDashboardClient.Receive();
-                    log.Info("DASH received {0}", response);
+                    string dashResponse = robotDashboardClient.Receive();
+                    log.Trace("DASH received {0}", dashResponse);
 
-                    if (response != null)
+                    if (dashResponse != null)
                     {
-                        if (response.StartsWith("Robotmode: "))
+                        string[] responses = dashResponse.Split('\n');
+                        foreach (string response in responses)
                         {
-                            nUnansweredRobotmodeRequests = 0;
-                            HandleRobotmodeResponse(response);
-                        }
-                        else if (response.StartsWith("Safetystatus: "))
-                        {
-                            nUnansweredSafetystatusRequests = 0;
-                            HandleSafetystatusResponse(response);
-                        }
-                        else
-                        {
-                            ProgramState programState = IsProgramstateResponse(response);
-                            if (programState != ProgramState.UNKNOWN)
+                            log.Trace("DASH parsing {0}", response);
+                            if (response.StartsWith("Robotmode: "))
                             {
-                                nUnansweredProgramstateRequests = 0;
-                                HandleProgramstateResponse(programState, response);
+                                nUnansweredRobotmodeRequests = 0;
+                                HandleRobotmodeResponse(response);
+                            }
+                            else if (response.StartsWith("Safetystatus: "))
+                            {
+                                nUnansweredSafetystatusRequests = 0;
+                                HandleSafetystatusResponse(response);
+                            }
+                            else
+                            {
+                                ProgramState programState = IsProgramstateResponse(response);
+                                if (programState != ProgramState.UNKNOWN)
+                                {
+                                    nUnansweredProgramstateRequests = 0;
+                                    HandleProgramstateResponse(programState, response);
+                                }
                             }
                         }
                     }
 
-                    log.Info("DASH nUnansweredRobotmodeRequests={0}", nUnansweredRobotmodeRequests);
-                    log.Info("DASH nUnansweredSafetystatusRequests={0}", nUnansweredSafetystatusRequests);
-                    log.Info("DASH nUnansweredProgramstateRequests={0}", nUnansweredProgramstateRequests);
-
-                    if (pollDashboardStateNow)
+                    // Check for unanswered requests
+                    if (nUnansweredRobotmodeRequests > 2)
                     {
-                        pollDashboardStateNow = false;
+                        log.Error("Too many sequential missed responses from robotmode");
+                        EnsureStopped();
                     }
+                    else if (nUnansweredRobotmodeRequests > 0)
+                        log.Warn("Missed {0} responses from robotmode", nUnansweredRobotmodeRequests);
+
+                    if (nUnansweredSafetystatusRequests > 2)
+                    {
+                        log.Error("Too many sequential missed responses from safetystatus");
+                        EnsureStopped();
+                    }
+                    else if (nUnansweredSafetystatusRequests > 0)
+                        log.Warn("Missed {0} responses from safetystatus", nUnansweredSafetystatusRequests);
+
+                    if (nUnansweredProgramstateRequests > 2)
+                    {
+                        log.Error("Too many sequential missed responses from programstate");
+                        EnsureStopped();
+                    }
+                    else if (nUnansweredProgramstateRequests > 0)
+                        log.Warn("Missed {0} responses from programstate", nUnansweredProgramstateRequests);
+
+
                     switch (dashboardCycle++)
                     {
                         case 0:
                             robotDashboardClient.Send("robotmode");
+                            robotDashboardClient.Send("safetystatus");
+                            robotDashboardClient.Send("programstate");
                             nUnansweredRobotmodeRequests++;
+                            nUnansweredSafetystatusRequests++;
+                            nUnansweredProgramstateRequests++;
+                            dashboardCycle = 0;
                             break;
                         case 1:
                             robotDashboardClient.Send("safetystatus");
@@ -442,37 +464,27 @@ namespace AutoGrind
             switch (robotmodeResponse)
             {
                 case "Robotmode: RUNNING":
-                    noRobotmodeResponseCount = 0;
                     color = Color.Green;
                     break;
                 case "Robotmode: IDLE":
-                    noRobotmodeResponseCount = 0;
                     EnsureStopped();
                     color = Color.Blue;
                     break;
                 case "Robotmode: POWER_OFF":
-                    noRobotmodeResponseCount = 0;
                     EnsureStopped();
                     color = Color.Red;
                     break;
                 case "Robotmode: POWER_ON":
-                    noRobotmodeResponseCount = 0;
                     EnsureStopped();
                     color = Color.Blue;
                     break;
                 case "Robotmode: BOOTING":
-                    noRobotmodeResponseCount = 0;
                     EnsureStopped();
                     color = Color.Coral;
                     break;
                 default:
-                    if (++noRobotmodeResponseCount > 3)
-                    {
-                        log.Error("Too many sequential missed responses from robotmode");
-                        EnsureStopped();
-                    }
-                    else
-                        log.Warn("Missed {0} responses from robotmode", noRobotmodeResponseCount);
+                    log.Error("Unknown response to robotmode: {0}", robotmodeResponse);
+                    EnsureStopped();
                     buttonText = "Robotmode: ?? " + robotmodeResponse;
                     color = Color.Red;
                     break;
@@ -489,22 +501,15 @@ namespace AutoGrind
             switch (safetystatusResponse)
             {
                 case "Safetystatus: NORMAL":
-                    noSafetystatusResponseCount = 0;
                     color = Color.Green;
                     break;
                 case "Safetystatus: PROTECTIVE_STOP":
-                    noSafetystatusResponseCount = 0;
                     EnsureNotRunning();
                     color = Color.Red;
                     break;
                 default:
-                    if (++noSafetystatusResponseCount > 3)
-                    {
-                        log.Error("Too many sequential missed responses from safetystatus");
-                        EnsureStopped();
-                    }
-                    else
-                        log.Warn("Missed {0} responses from safetystatus", noSafetystatusResponseCount);
+                    log.Error("Unknown response to safetystatus: {0}", safetystatusResponse);
+                    EnsureStopped();
                     buttonText = "Safetystatus: ?? " + safetystatusResponse;
                     color = Color.Red;
                     break;
@@ -513,7 +518,7 @@ namespace AutoGrind
             SafetyStatusBtn.BackColor = color;
         }
 
-        // Is the supplied stirng a valid response to Dashboard programstate command?
+        // Is the supplied string a valid response to Dashboard programstate command?
         ProgramState IsProgramstateResponse(string message)
         {
             ProgramState programState = ProgramState.UNKNOWN;
@@ -538,15 +543,12 @@ namespace AutoGrind
             switch (programState)
             {
                 case ProgramState.STOPPED:
-                    noProgramstateResponseCount = 0;
                     EnsureStopped();
                     break;
                 case ProgramState.PAUSED:
-                    noProgramstateResponseCount = 0;
                     EnsureNotRunning();
                     break;
                 case ProgramState.PLAYING:
-                    noProgramstateResponseCount = 0;
                     color = Color.Green;
                     if (robotCommandServer == null)
                     {
@@ -571,14 +573,8 @@ namespace AutoGrind
                     }
                     break;
                 default:
-                    // Unknown response from programstate
-                    if (++noProgramstateResponseCount > 3)
-                    {
-                        log.Error("Too many sequential missed responses from programstate");
-                        EnsureStopped();
-                    }
-                    else
-                        log.Warn("Missed {0} responses from programstate", noProgramstateResponseCount);
+                    log.Error("Unknown response to programstate: {0}", programstateResponse);
+                    EnsureStopped();
                     buttonText = "Programstate: ?? " + programstateResponse;
                     color = Color.Red;
                     break;
@@ -1034,7 +1030,6 @@ namespace AutoGrind
                     log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
                     break;
             }
-            pollDashboardStateNow = true;
 
         }
 
@@ -1052,7 +1047,6 @@ namespace AutoGrind
                     log.Error("Unknown robot mode button state! {0}", RobotModeBtn.Text);
                     break;
             }
-            pollDashboardStateNow = true;
         }
 
         private void ProgramStateBtn_Click(object sender, EventArgs e)
@@ -1074,8 +1068,6 @@ namespace AutoGrind
                 // If we're starting back in the middle of something, this will abort it
                 RobotSend("10");
             }
-
-            pollDashboardStateNow = true;
         }
 
         private void KeyboardBtn_Click(object sender, EventArgs e)
@@ -2398,9 +2390,9 @@ namespace AutoGrind
         }
         public bool RobotIndexCaughtUp()
         {
-            return ReadVariable("robot_index") == robotSendIndex.ToString();
+            return ReadVariable("robot_completed") == robotSendIndex.ToString();
         }
-
+        int stress = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             // Wait for any operator prompt to be cleared
@@ -2584,8 +2576,6 @@ namespace AutoGrind
             RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
             robotDashboardClient.InquiryResponse("stop");
 
-            pollDashboardStateNow = true;
-
             string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
             string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
             if (isInRemoteControlResponse == null)
@@ -2648,8 +2638,8 @@ namespace AutoGrind
                 {
                     ++robotSendIndex;
                     if (robotSendIndex > 999) robotSendIndex = 100;
-                    SentRobotIndexLbl.Text = robotSendIndex.ToString();
-                    RobotIndexLbl.BackColor = Color.Red;
+                    RobotSentLbl.Text = robotSendIndex.ToString();
+                    RobotCompletedLbl.BackColor = Color.Red;
 
                     int checkValue = 1000 - robotSendIndex;
                     string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
@@ -3037,17 +3027,17 @@ namespace AutoGrind
                     // This gets sent to us by command_validate on the UR. It means command valueTrimmed is going to start executing
                     log.Info("UR<== EXEC {0} STARTING", valueTrimmed);
                     break;
-                case "robot_index":
+                case "robot_completed":
                     // This gets sent to us by PolyScope on the UR after command valueTrimmed has finished executing
-                    RobotIndexLbl.Text = valueTrimmed;
+                    RobotCompletedLbl.Text = valueTrimmed;
                     log.Info("UR<== EXEC {0} COMPLETED", valueTrimmed);
 
                     // Color us green if we're caught up!
-                    if (SentRobotIndexLbl.Text == RobotIndexLbl.Text)
-                        RobotIndexLbl.BackColor = Color.Green;
+                    if (RobotSentLbl.Text == RobotCompletedLbl.Text)
+                        RobotCompletedLbl.BackColor = Color.Green;
 
                     // Close operator "wait for robot" form if we're caught up
-                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && SentRobotIndexLbl.Text == RobotIndexLbl.Text)
+                    if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && RobotSentLbl.Text == RobotCompletedLbl.Text)
                     {
                         waitingForOperatorMessageForm.Close();
                         waitingForOperatorMessageForm = null;

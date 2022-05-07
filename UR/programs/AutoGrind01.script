@@ -32,15 +32,15 @@ def AutoGrind01():
   global Vertical_6_p=p[.138875969234, -.597730539026, .130475163479, .000006847317, .000017170136, .002581409666]
   global Vertical_6_q=[1.5792073011398315, -1.1477825206569214, 1.743450943623678, -2.1663156948485316, -1.570512596760885, 3.1478190422058105]
   def AG_50():
-    $ 74 "AG_50" "noBreak"
-    $ 75 "MoveL"
-    $ 76 "Vertical_3" "breakAfter"
+    $ 73 "AG_50" "noBreak"
+    $ 74 "MoveL"
+    $ 75 "Vertical_3" "breakAfter"
     movel(Vertical_3_p, a=1.2, v=0.25)
-    $ 77 "Tilted_1" "breakAfter"
+    $ 76 "Tilted_1" "breakAfter"
     movel(Tilted_1_p, a=1.2, v=0.25)
-    $ 78 "Vertical_4" "breakAfter"
+    $ 77 "Vertical_4" "breakAfter"
     movel(Vertical_4_p, a=1.2, v=0.25)
-    $ 79 "Vertical_6" "breakAfter"
+    $ 78 "Vertical_6" "breakAfter"
     movel(Vertical_6_p, a=1.2, v=0.25)
   end
   $ 1 "BeforeStart"
@@ -212,14 +212,24 @@ def AutoGrind01():
     end
     command[0] = command[0] - 2    # 2 feweer elements in the array now!
   
-    # robot_index signals command completion- won't be sent back to host until command is complete
     global robot_index = test_index
+    return True
+  end
+  
+  # Call this when starting command execution
+  def command_start():
+    global last_comand = command
   
     # This one signifies we're starting a new command!
-    global robot_starting = test_index
+    global robot_starting = robot_index
     socket_set_var("robot_starting", robot_starting)
+    socket_send_line("robot_ready=False")
+  end
   
-    return True
+  # Call this when a command is complete
+  def command_finish():
+    socket_send_line("robot_response=" + response + "#robot_ready=True")
+    socket_set_var("robot_index",robot_index)
   end
   
   # Set interface... allows validation and limits
@@ -1999,137 +2009,135 @@ def AutoGrind01():
   movej(currentTcpPose, a=1.3962634015954636, v=1.0471975511965976)
   $ 10 "socket_is_open≔ False "
   global socket_is_open=  False  
-  $ 11 "robot_index≔0"
-  global robot_index=0
   while (True):
-    $ 12 "Robot Program"
-    $ 13 "Loop socket_is_open ≟  False "
+    $ 11 "Robot Program"
+    $ 12 "Loop socket_is_open ≟  False "
     while (socket_is_open  ==    False  ):
-      $ 14 "Wait: 0.25"
+      $ 13 "Wait: 0.25"
       sleep(0.25)
-      $ 15 "socket_close()"
+      $ 14 "socket_close()"
       socket_close()
-      $ 16 "socket_is_open≔socket_open('192.168.0.252', 30000)"
+      $ 15 "socket_is_open≔socket_open('192.168.0.252', 30000)"
       global socket_is_open=socket_open("192.168.0.252", 30000)
-      $ 17 "If not socket_is_open"
+      $ 16 "If not socket_is_open"
       if (not socket_is_open):
-        $ 18 "socket_is_open≔socket_open('192.168.0.253', 30000)"
+        $ 17 "socket_is_open≔socket_open('192.168.0.253', 30000)"
         global socket_is_open=socket_open("192.168.0.253", 30000)
       end
-      $ 19 "If not socket_is_open"
+      $ 18 "If not socket_is_open"
       if (not socket_is_open):
-        $ 20 "socket_is_open≔socket_open('192.168.0.121', 30000)"
+        $ 19 "socket_is_open≔socket_open('192.168.0.121', 30000)"
         global socket_is_open=socket_open("192.168.0.121", 30000)
       end
     end
-    $ 21 "response≔'Unknown command'"
+    $ 20 "response≔'Unknown command'"
     global response="Unknown command"
-    $ 22 "command≔socket_read_ascii_float(12)"
+    $ 21 "command≔socket_read_ascii_float(12)"
     global command=socket_read_ascii_float(12)
-    $ 23 "If command_validate()"
+    $ 22 "If command_validate()"
     if (command_validate()):
-      $ 24 "command_start()"
+      $ 23 "command_start()"
       command_start()
-      $ 25 "Switch command[1]"
+      $ 24 "Switch command[1]"
       switch_1 = command[1]
-      $ 26 "Case 10"
+      $ 25 "Case 10"
       if (10 == switch_1):
-        $ 27 "return_actual_tcp_pose()"
+        $ 26 "return_actual_tcp_pose()"
         return_actual_tcp_pose()
       elif (12 == switch_1):
-        $ 28 "Case 12"
-        $ 29 "return_tcp_offset()"
+        $ 27 "Case 12"
+        $ 28 "return_tcp_offset()"
         return_tcp_offset()
       elif (13 == switch_1):
-        $ 30 "Case 13"
-        $ 31 "movel_relative_base(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 29 "Case 13"
+        $ 30 "movel_relative_base(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
         movel_relative_base(p[command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (14 == switch_1):
-        $ 32 "Case 14"
-        $ 33 "movel_relative_tcp(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 31 "Case 14"
+        $ 32 "movel_relative_tcp(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
         movel_relative_tcp(p[command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (15 == switch_1):
-        $ 34 "Case 15"
-        $ 35 "movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 33 "Case 15"
+        $ 34 "movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
         movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (16 == switch_1):
-        $ 36 "Case 16"
-        $ 37 "movel_one_only(command[2],command[3])"
+        $ 35 "Case 16"
+        $ 36 "movel_one_only(command[2],command[3])"
         movel_one_only(command[2],command[3])
       elif (18 == switch_1):
-        $ 38 "Case 18"
-        $ 39 "movel_rot_only(command[2],command[3],command[4])"
+        $ 37 "Case 18"
+        $ 38 "movel_rot_only(command[2],command[3],command[4])"
         movel_rot_only(command[2],command[3],command[4])
       elif (20 == switch_1):
-        $ 40 "Case 20"
-        $ 41 "return_get_actual_joint_positions()"
+        $ 39 "Case 20"
+        $ 40 "return_get_actual_joint_positions()"
         return_get_actual_joint_positions()
       elif (21 == switch_1):
-        $ 42 "Case 21"
-        $ 43 "movej_ag([command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 41 "Case 21"
+        $ 42 "movej_ag([command[2], command[3], command[4], command[5], command[6], command[7]])"
         movej_ag([command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (22 == switch_1):
-        $ 44 "Case 22"
-        $ 45 "movel_ag(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
+        $ 43 "Case 22"
+        $ 44 "movel_ag(p[command[2], command[3], command[4], command[5], command[6], command[7]])"
         movel_ag(p[command[2], command[3], command[4], command[5], command[6], command[7]])
       elif (25 == switch_1):
-        $ 46 "Case 25"
-        $ 47 "return_both_positions()"
+        $ 45 "Case 25"
+        $ 46 "return_both_positions()"
         return_both_positions()
       elif (30 == switch_1):
-        $ 48 "Case 30"
-        $ 49 "set_variable()"
+        $ 47 "Case 30"
+        $ 48 "set_variable()"
         set_variable()
       elif (35 == switch_1):
-        $ 50 "Case 35"
-        $ 51 "set_grind_variable()"
+        $ 49 "Case 35"
+        $ 50 "set_grind_variable()"
         set_grind_variable()
       elif (40 == switch_1):
-        $ 52 "Case 40"
-        $ 53 "grind()"
+        $ 51 "Case 40"
+        $ 52 "grind()"
         grind()
       elif (50 == switch_1):
-        $ 54 "Case 50"
-        $ 55 "Call AG_50"
+        $ 53 "Case 50"
+        $ 54 "Call AG_50"
         AG_50()
       elif (98 == switch_1):
-        $ 56 "Case 98"
-        $ 57 "response≔'socket reset'"
+        $ 55 "Case 98"
+        $ 56 "response≔'socket reset'"
         global response="socket reset"
       elif (99 == switch_1):
-        $ 58 "Case 99"
-        $ 59 "response≔'exiting'"
+        $ 57 "Case 99"
+        $ 58 "response≔'exiting'"
         global response="exiting"
       else:
-        $ 60 "Default Case"
-        $ 61 "response≔'unknown command'"
+        $ 59 "Default Case"
+        $ 60 "response≔'unknown command'"
         global response="unknown command"
       end
-      $ 62 "command_finish()"
+      $ 61 "command_finish()"
       command_finish()
-      $ 63 "If command[1]≟98"
+      $ 62 "If command[1]≟98"
       if (command[1] == 98):
-        $ 64 "Wait: 0.5"
+        $ 63 "Wait: 0.5"
         sleep(0.5)
-        $ 65 "socket_close()"
+        $ 64 "socket_close()"
         socket_close()
-        $ 66 "socket_is_open≔ False "
+        $ 65 "socket_is_open≔ False "
         global socket_is_open=  False  
       end
-      $ 67 "If command[1]≟99"
+      $ 66 "If command[1]≟99"
       if (command[1] == 99):
-        $ 68 "Wait: 0.5"
+        $ 67 "Wait: 0.5"
         sleep(0.5)
-        $ 69 "socket_close()"
+        $ 68 "socket_close()"
         socket_close()
-        $ 70 "socket_is_open≔ False "
+        $ 69 "socket_is_open≔ False "
         global socket_is_open=  False  
-        $ 71 "Halt"
+        $ 70 "Halt"
         halt
       end
     else:
-      $ 72 "Else" "noBreak"
-      $ 73 "no_command()"
+      $ 71 "Else" "noBreak"
+      $ 72 "no_command()"
       no_command()
     end
   end

@@ -9,7 +9,6 @@
      'socket_close()'
      'Wait: 0.25'
      socket_is_open≔ False 
-     robot_index≔0
    Robot Program
      Loop socket_is_open ≟  False 
        Wait: 0.25

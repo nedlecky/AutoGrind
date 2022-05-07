@@ -99,7 +99,7 @@
             this.RobotModelLbl = new System.Windows.Forms.Label();
             this.label8 = new System.Windows.Forms.Label();
             this.label7 = new System.Windows.Forms.Label();
-            this.SentRobotIndexLbl = new System.Windows.Forms.Label();
+            this.RobotSentLbl = new System.Windows.Forms.Label();
             this.StepTimeRemainingLbl = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.StepTimeEstimateLbl = new System.Windows.Forms.Label();
@@ -111,7 +111,7 @@
             this.MoveToolMountBtn = new System.Windows.Forms.Button();
             this.MoveToolHomeBtn = new System.Windows.Forms.Button();
             this.GrindProcessStateLbl = new System.Windows.Forms.Label();
-            this.RobotIndexLbl = new System.Windows.Forms.Label();
+            this.RobotCompletedLbl = new System.Windows.Forms.Label();
             this.RunStartedTimeLbl = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.RobotConnectBtn = new System.Windows.Forms.Button();
@@ -978,7 +978,7 @@
             this.RunPage.Controls.Add(this.RobotModelLbl);
             this.RunPage.Controls.Add(this.label8);
             this.RunPage.Controls.Add(this.label7);
-            this.RunPage.Controls.Add(this.SentRobotIndexLbl);
+            this.RunPage.Controls.Add(this.RobotSentLbl);
             this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
             this.RunPage.Controls.Add(this.label17);
             this.RunPage.Controls.Add(this.StepTimeEstimateLbl);
@@ -990,7 +990,7 @@
             this.RunPage.Controls.Add(this.MoveToolMountBtn);
             this.RunPage.Controls.Add(this.MoveToolHomeBtn);
             this.RunPage.Controls.Add(this.GrindProcessStateLbl);
-            this.RunPage.Controls.Add(this.RobotIndexLbl);
+            this.RunPage.Controls.Add(this.RobotCompletedLbl);
             this.RunPage.Controls.Add(this.RunStartedTimeLbl);
             this.RunPage.Controls.Add(this.label14);
             this.RunPage.Controls.Add(this.RobotConnectBtn);
@@ -1062,17 +1062,17 @@
             this.label7.Text = "Robot Model";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // SentRobotIndexLbl
+            // RobotSentLbl
             // 
-            this.SentRobotIndexLbl.BackColor = System.Drawing.Color.Green;
-            this.SentRobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.SentRobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SentRobotIndexLbl.ForeColor = System.Drawing.Color.White;
-            this.SentRobotIndexLbl.Location = new System.Drawing.Point(1932, 149);
-            this.SentRobotIndexLbl.Name = "SentRobotIndexLbl";
-            this.SentRobotIndexLbl.Size = new System.Drawing.Size(187, 52);
-            this.SentRobotIndexLbl.TabIndex = 149;
-            this.SentRobotIndexLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.RobotSentLbl.BackColor = System.Drawing.Color.Green;
+            this.RobotSentLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSentLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotSentLbl.ForeColor = System.Drawing.Color.White;
+            this.RobotSentLbl.Location = new System.Drawing.Point(1932, 149);
+            this.RobotSentLbl.Name = "RobotSentLbl";
+            this.RobotSentLbl.Size = new System.Drawing.Size(187, 52);
+            this.RobotSentLbl.TabIndex = 149;
+            this.RobotSentLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // StepTimeRemainingLbl
             // 
@@ -1198,17 +1198,17 @@
             this.GrindProcessStateLbl.Text = "Grind Process Safe";
             this.GrindProcessStateLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // RobotIndexLbl
+            // RobotCompletedLbl
             // 
-            this.RobotIndexLbl.BackColor = System.Drawing.Color.Gray;
-            this.RobotIndexLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotIndexLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotIndexLbl.ForeColor = System.Drawing.Color.White;
-            this.RobotIndexLbl.Location = new System.Drawing.Point(1932, 204);
-            this.RobotIndexLbl.Name = "RobotIndexLbl";
-            this.RobotIndexLbl.Size = new System.Drawing.Size(187, 52);
-            this.RobotIndexLbl.TabIndex = 135;
-            this.RobotIndexLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.RobotCompletedLbl.BackColor = System.Drawing.Color.Gray;
+            this.RobotCompletedLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotCompletedLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotCompletedLbl.ForeColor = System.Drawing.Color.White;
+            this.RobotCompletedLbl.Location = new System.Drawing.Point(1932, 204);
+            this.RobotCompletedLbl.Name = "RobotCompletedLbl";
+            this.RobotCompletedLbl.Size = new System.Drawing.Size(187, 52);
+            this.RobotCompletedLbl.TabIndex = 135;
+            this.RobotCompletedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RunStartedTimeLbl
             // 
@@ -2159,7 +2159,7 @@
         private System.Windows.Forms.TextBox DoorClosedInputTxt;
         private System.Windows.Forms.Button SetDoorClosedInputBtn;
         private System.Windows.Forms.Label DoorClosedLbl;
-        private System.Windows.Forms.Label RobotIndexLbl;
+        private System.Windows.Forms.Label RobotCompletedLbl;
         private System.Windows.Forms.CheckBox AllowRunningOfflineChk;
         private System.Windows.Forms.GroupBox groupBox11;
         private System.Windows.Forms.Button SetForceDwellBtn;
@@ -2186,7 +2186,7 @@
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Label VersionLbl;
         private System.Windows.Forms.GroupBox groupBox7;
-        private System.Windows.Forms.Label SentRobotIndexLbl;
+        private System.Windows.Forms.Label RobotSentLbl;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Button SetGrindAccelBtn;
         private System.Windows.Forms.Label RobotSerialNumberLbl;

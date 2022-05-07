@@ -83,7 +83,8 @@ end
 # Call this when a command is complete
 def command_finish():
   socket_send_line("robot_response=" + response + "#robot_ready=True")
-  socket_set_var("robot_index",robot_index)
+  global robot_completed = robot_index
+  socket_set_var("robot_completed",robot_completed)
 end
 
 # Set interface... allows validation and limits

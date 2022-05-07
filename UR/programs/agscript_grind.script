@@ -414,7 +414,7 @@ thread grind_abort_listener_thread():
 
         # Send an start/finish acknowledgement just for this command!
         socket_set_var("robot_starting", test_index)
-        socket_set_var("robot_index", test_index)
+        socket_set_var("robot_completed", test_index)
       end
     end
     sync()
