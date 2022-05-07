@@ -22,8 +22,7 @@
      response≔"Unknown command"
      command≔socket_read_ascii_float(12)
      If command_validate()
-       socket_send_line("robot_ready=False")
-       lastCommand≔command
+       command_start()
        Switch command[1]
          Case 10
            return_actual_tcp_pose()
@@ -61,8 +60,7 @@
            response≔"exiting"
          Default Case
            response≔"unknown command"
-       socket_set_var("robot_index", robot_index)
-       socket_send_line("robot_response=" + response + "#robot_ready=True")
+       command_finish()
        If command[1]≟98
          Wait: 0.5
          socket_close()

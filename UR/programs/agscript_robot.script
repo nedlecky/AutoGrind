@@ -66,14 +66,24 @@ def command_validate():
   end
   command[0] = command[0] - 2    # 2 feweer elements in the array now!
 
-  # robot_index signals command completion- won't be sent back to host until command is complete
   global robot_index = test_index
+  return True
+end
+
+# Call this when starting command execution
+def command_start():
+  global last_comand = command
 
   # This one signifies we're starting a new command!
-  global robot_starting = test_index
+  global robot_starting = robot_index
   socket_set_var("robot_starting", robot_starting)
+  socket_send_line("robot_ready=False")
+end
 
-  return True
+# Call this when a command is complete
+def command_finish():
+  socket_send_line("robot_response=" + response + "#robot_ready=True")
+  socket_set_var("robot_index",robot_index)
 end
 
 # Set interface... allows validation and limits
