@@ -179,6 +179,7 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
+            this.StressChk = new System.Windows.Forms.CheckBox();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1858,6 +1859,7 @@
             // LogPage
             // 
             this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.LogPage.Controls.Add(this.StressChk);
             this.LogPage.Controls.Add(this.StressBtn);
             this.LogPage.Controls.Add(this.groupBox7);
             this.LogPage.Controls.Add(this.groupBox6);
@@ -1878,9 +1880,9 @@
             this.StressBtn.BackColor = System.Drawing.Color.Green;
             this.StressBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StressBtn.ForeColor = System.Drawing.Color.White;
-            this.StressBtn.Location = new System.Drawing.Point(1775, 914);
+            this.StressBtn.Location = new System.Drawing.Point(1775, 898);
             this.StressBtn.Name = "StressBtn";
-            this.StressBtn.Size = new System.Drawing.Size(111, 110);
+            this.StressBtn.Size = new System.Drawing.Size(141, 88);
             this.StressBtn.TabIndex = 92;
             this.StressBtn.Text = "Stress";
             this.StressBtn.UseVisualStyleBackColor = false;
@@ -1902,9 +1904,9 @@
             this.AboutBtn.BackColor = System.Drawing.Color.Green;
             this.AboutBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AboutBtn.ForeColor = System.Drawing.Color.White;
-            this.AboutBtn.Location = new System.Drawing.Point(1892, 914);
+            this.AboutBtn.Location = new System.Drawing.Point(1978, 898);
             this.AboutBtn.Name = "AboutBtn";
-            this.AboutBtn.Size = new System.Drawing.Size(214, 110);
+            this.AboutBtn.Size = new System.Drawing.Size(142, 116);
             this.AboutBtn.TabIndex = 81;
             this.AboutBtn.Text = "About";
             this.AboutBtn.UseVisualStyleBackColor = false;
@@ -2008,6 +2010,16 @@
             this.label9.Text = "Recipe Loaded";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
+            // StressChk
+            // 
+            this.StressChk.AutoSize = true;
+            this.StressChk.Location = new System.Drawing.Point(1775, 992);
+            this.StressChk.Name = "StressChk";
+            this.StressChk.Size = new System.Drawing.Size(205, 41);
+            this.StressChk.TabIndex = 93;
+            this.StressChk.Text = "Stress Logs";
+            this.StressChk.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2070,6 +2082,7 @@
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.LogPage.ResumeLayout(false);
+            this.LogPage.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -2224,6 +2237,7 @@
         private System.Windows.Forms.Button SetMoveDefaultsBtn;
         private System.Windows.Forms.Button SetGrindDefaultsBtn;
         private System.Windows.Forms.Button StressBtn;
+        private System.Windows.Forms.CheckBox StressChk;
     }
 }
 

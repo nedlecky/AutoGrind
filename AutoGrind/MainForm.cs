@@ -298,10 +298,24 @@ namespace AutoGrind
         int nUnansweredRobotmodeRequests = 0;
         int nUnansweredSafetystatusRequests = 0;
         int nUnansweredProgramstateRequests = 0;
+
+        int iii = 0;
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
             timeLbl.Text = DateTime.Now.ToString();
+
+            // Logger stress test
+            if (StressChk.Checked)
+            {
+                iii++;
+                log.Info("{0} Hey this is plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Info("{0} for the DASH plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Info("{0} for the EXEC plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Info("{0} for the UR==> plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Warn("{0} WARN plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Error("{0} ERROR plenty of long lines of text et caetera for you to look at and wonder about", iii);
+            }
 
             // Update elapsed time panel
             if (runState == RunState.RUNNING || runState == RunState.PAUSED)
