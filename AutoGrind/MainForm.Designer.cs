@@ -168,6 +168,7 @@
             this.ChangeRootDirectoryBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.LogPage = new System.Windows.Forms.TabPage();
+            this.StressBtn = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.AboutBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -745,6 +746,7 @@
             this.ExecLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ExecLogRTB.Location = new System.Drawing.Point(7, 27);
             this.ExecLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.ExecLogRTB.MaxLength = 1000000;
             this.ExecLogRTB.Name = "ExecLogRTB";
             this.ExecLogRTB.ReadOnly = true;
             this.ExecLogRTB.Size = new System.Drawing.Size(1055, 542);
@@ -769,6 +771,7 @@
             this.UrLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UrLogRTB.Location = new System.Drawing.Point(5, 27);
             this.UrLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.UrLogRTB.MaxLength = 1000000;
             this.UrLogRTB.Name = "UrLogRTB";
             this.UrLogRTB.ReadOnly = true;
             this.UrLogRTB.Size = new System.Drawing.Size(1041, 268);
@@ -782,6 +785,7 @@
             this.UrDashboardLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.UrDashboardLogRTB.Location = new System.Drawing.Point(7, 27);
             this.UrDashboardLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.UrDashboardLogRTB.MaxLength = 1000000;
             this.UrDashboardLogRTB.Name = "UrDashboardLogRTB";
             this.UrDashboardLogRTB.ReadOnly = true;
             this.UrDashboardLogRTB.Size = new System.Drawing.Size(1060, 268);
@@ -806,6 +810,7 @@
             this.ErrorLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ErrorLogRTB.Location = new System.Drawing.Point(5, 27);
             this.ErrorLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.ErrorLogRTB.MaxLength = 1000000;
             this.ErrorLogRTB.Name = "ErrorLogRTB";
             this.ErrorLogRTB.ReadOnly = true;
             this.ErrorLogRTB.Size = new System.Drawing.Size(1731, 231);
@@ -830,6 +835,7 @@
             this.AllLogRTB.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AllLogRTB.Location = new System.Drawing.Point(5, 27);
             this.AllLogRTB.Margin = new System.Windows.Forms.Padding(2);
+            this.AllLogRTB.MaxLength = 1000000;
             this.AllLogRTB.Name = "AllLogRTB";
             this.AllLogRTB.ReadOnly = true;
             this.AllLogRTB.Size = new System.Drawing.Size(1041, 542);
@@ -1852,6 +1858,7 @@
             // LogPage
             // 
             this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.LogPage.Controls.Add(this.StressBtn);
             this.LogPage.Controls.Add(this.groupBox7);
             this.LogPage.Controls.Add(this.groupBox6);
             this.LogPage.Controls.Add(this.AboutBtn);
@@ -1865,6 +1872,19 @@
             this.LogPage.TabIndex = 5;
             this.LogPage.Text = "Log";
             this.LogPage.UseVisualStyleBackColor = true;
+            // 
+            // StressBtn
+            // 
+            this.StressBtn.BackColor = System.Drawing.Color.Green;
+            this.StressBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StressBtn.ForeColor = System.Drawing.Color.White;
+            this.StressBtn.Location = new System.Drawing.Point(1775, 914);
+            this.StressBtn.Name = "StressBtn";
+            this.StressBtn.Size = new System.Drawing.Size(111, 110);
+            this.StressBtn.TabIndex = 92;
+            this.StressBtn.Text = "Stress";
+            this.StressBtn.UseVisualStyleBackColor = false;
+            this.StressBtn.Click += new System.EventHandler(this.StressBtn_Click);
             // 
             // groupBox7
             // 
@@ -2203,6 +2223,7 @@
         private System.Windows.Forms.Button JogBtn;
         private System.Windows.Forms.Button SetMoveDefaultsBtn;
         private System.Windows.Forms.Button SetGrindDefaultsBtn;
+        private System.Windows.Forms.Button StressBtn;
     }
 }
 

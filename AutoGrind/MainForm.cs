@@ -1053,7 +1053,7 @@ namespace AutoGrind
                     robotDashboardClient?.Send("power off");
                     break;
                 case "Safetystatus: PROTECTIVE_STOP":
-                    robotDashboardClient?.InquiryResponse("unlock protective stop",200);
+                    robotDashboardClient?.InquiryResponse("unlock protective stop", 200);
                     robotDashboardClient?.InquiryResponse("close safety popup", 200);
 
                     break;
@@ -3763,6 +3763,25 @@ namespace AutoGrind
                 SetRecipeState(RecipeState.MODIFIED);
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
+        }
+
+        private void StressBtn_Click(object sender, EventArgs e)
+        {
+            Task taskA = new Task(() =>
+            {
+                for (int i = 1; i <= 87; i++)
+                {
+                    log.Info("{0} Hey this is plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Info("{0} for the DASH plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Info("{0} for the EXEC plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Info("{0} for the UR==> plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Warn("{0} WARN plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Error("{0} ERROR plenty of long lines of text et caetera for you to look at and wonder about", i);
+                }
+            });
+
+            // Start the task.
+            taskA.Start();
         }
     }
     public static class RichTextBoxExtensions

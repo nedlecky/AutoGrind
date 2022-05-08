@@ -654,8 +654,8 @@ global pattern_complete_idx = -1
 def pattern_complete():
   pattern_complete_idx = 1
 
-  # Todo: testing this t see if staying on part has less wandering between grinds
-  stopl(2.0)
+  # Todo: testing this to see if staying on part has less wandering between grinds
+  #stopl(2.0)  # This is causing blend radius failures when we stay on the part
   pattern_complete_idx = 2
 
   p0 = get_actual_tcp_pose()

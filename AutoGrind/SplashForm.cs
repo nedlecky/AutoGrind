@@ -36,7 +36,7 @@ namespace AutoGrind
             string directory = Path.GetDirectoryName(executable);
             string caption = "Product: " + appName + " Rev " + productVersion;
 #if DEBUG
-            caption += "\nRUNNING IN DEBUG MODE";
+            caption += "\n RUNNING IN DEBUG MODE";
 #endif
             Text = caption;
 

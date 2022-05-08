@@ -455,13 +455,14 @@ def command_finish():
   # ####################################################################################
 
   ######################################################################################
-  # Movel_int  Segmented movel
+  # movel_int  Segmented (interruptable) movel
   #
   global grind_distance_m = 0
   def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, t_move = 1):
     p0 = get_target_tcp_pose()
-    # Chugging on CYL 80 lines and rects
-    #global grind_n_segments = limiter(ceil(t_move * 4.0), 1, 1000)
+    # Chugging on CYL 80 lines and rects at 4Hz
+    # global grind_n_segments = limiter(ceil(t_move * 4.0), 1, 1000)
+    # Serpentine wobbles at 10Hz??
     global grind_n_segments = limiter(ceil(t_move * 10.0), 1, 1000)
 
     i = 1
@@ -473,7 +474,7 @@ def command_finish():
     return None
   end
   #
-  # Movel_int  Interruptable movel
+  # Movel_int  Segmented (interruptable) movel
   ######################################################################################
 
 
