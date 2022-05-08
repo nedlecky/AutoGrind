@@ -166,6 +166,7 @@
     <Compile Include="TcpServerSupport.cs" />
     <EmbeddedResource Include="DirectorySelectDialog.resx">
       <DependentUpon>DirectorySelectDialog.cs</DependentUpon>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="FileOpenDialog.resx">
       <DependentUpon>FileOpenDialog.cs</DependentUpon>

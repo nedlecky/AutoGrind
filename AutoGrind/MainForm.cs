@@ -1210,7 +1210,7 @@ namespace AutoGrind
             {
                 isSingleStep = false;
                 SetRecipeState(RecipeState.RUNNING);
-                RobotSend("10");
+                RobotSend("10");  // This makes sure we're synced!
                 SetState(RunState.RUNNING);
             }
         }
@@ -1503,6 +1503,17 @@ namespace AutoGrind
             UtcTimeChk.Checked = false;
             AllowRunningOfflineChk.Checked = false;
         }
+        private void LoadConfigBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("LoadConfigBtn_Click(...)");
+            LoadPersistent();
+        }
+        private void SaveConfigBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("SaveConfigBtn_Click(...)");
+            SavePersistent();
+        }
+
         private string recipeFileToAutoload = "";
         void LoadPersistent()
         {
@@ -1636,12 +1647,6 @@ namespace AutoGrind
             AppNameKey.SetValue("PartGeometryBox.Text", PartGeometryBox.Text);
             for (int i = 0; i < 3; i++)
                 AppNameKey.SetValue(String.Format("Diameter[{0}].Text", i), diameterDefaults[i]);
-        }
-
-        private void LoadConfigBtn_Click(object sender, EventArgs e)
-        {
-            log.Info("LoadConfigBtn_Click(...)");
-            LoadPersistent();
         }
 
         private void ChangeRootDirectoryBtn_Click(object sender, EventArgs e)
@@ -2212,21 +2217,16 @@ namespace AutoGrind
             // move_tool_home
             if (command.StartsWith("move_tool_home()"))
             {
-                string homePosition = MountedToolBox.Text + "_home";
-                if (!GotoPositionPose(homePosition))
-                    ExecError(string.Format("Cannot move to home {0} line {1}: {2}", homePosition, lineNumber, command));
+                MoveToolHomeBtn_Click(null, null);
                 return true;
             }
 
             // move_tool_mount
             if (command.StartsWith("move_tool_mount()"))
             {
-                string mountPosition = MountedToolBox.Text + "_mount";
-                if (!GotoPositionJoint(mountPosition))
-                    ExecError(string.Format("Cannot move to mount {0} line {1}: {2}", mountPosition, lineNumber, command));
+                MoveToolMountBtn_Click(null, null);
                 return true;
             }
-
 
             // end
             if (command == "end()" || command == "end")

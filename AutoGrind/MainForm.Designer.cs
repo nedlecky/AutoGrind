@@ -168,6 +168,7 @@
             this.ChangeRootDirectoryBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.LogPage = new System.Windows.Forms.TabPage();
+            this.StressChk = new System.Windows.Forms.CheckBox();
             this.StressBtn = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.AboutBtn = new System.Windows.Forms.Button();
@@ -179,7 +180,7 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.StressChk = new System.Windows.Forms.CheckBox();
+            this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1709,6 +1710,7 @@
             // 
             // groupBox1
             // 
+            this.groupBox1.Controls.Add(this.SaveConfigBtn);
             this.groupBox1.Controls.Add(this.AllowRunningOfflineChk);
             this.groupBox1.Controls.Add(this.label4);
             this.groupBox1.Controls.Add(this.RobotProgramTxt);
@@ -1735,7 +1737,7 @@
             // 
             this.AllowRunningOfflineChk.Appearance = System.Windows.Forms.Appearance.Button;
             this.AllowRunningOfflineChk.AutoSize = true;
-            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(569, 281);
+            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(641, 171);
             this.AllowRunningOfflineChk.Name = "AllowRunningOfflineChk";
             this.AllowRunningOfflineChk.Size = new System.Drawing.Size(333, 47);
             this.AllowRunningOfflineChk.TabIndex = 89;
@@ -1763,9 +1765,9 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(944, 252);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(641, 242);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
-            this.LoadConfigBtn.Size = new System.Drawing.Size(217, 72);
+            this.LoadConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.LoadConfigBtn.TabIndex = 98;
             this.LoadConfigBtn.Text = "Reload";
             this.LoadConfigBtn.UseVisualStyleBackColor = true;
@@ -1774,11 +1776,11 @@
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(944, 174);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(974, 242);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
-            this.DefaultConfigBtn.Size = new System.Drawing.Size(217, 72);
+            this.DefaultConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.DefaultConfigBtn.TabIndex = 99;
-            this.DefaultConfigBtn.Text = "Set Default";
+            this.DefaultConfigBtn.Text = "Restore Defaults";
             this.DefaultConfigBtn.UseVisualStyleBackColor = true;
             this.DefaultConfigBtn.Click += new System.EventHandler(this.DefaultConfigBtn_Click);
             // 
@@ -1874,6 +1876,16 @@
             this.LogPage.TabIndex = 5;
             this.LogPage.Text = "Log";
             this.LogPage.UseVisualStyleBackColor = true;
+            // 
+            // StressChk
+            // 
+            this.StressChk.AutoSize = true;
+            this.StressChk.Location = new System.Drawing.Point(1775, 992);
+            this.StressChk.Name = "StressChk";
+            this.StressChk.Size = new System.Drawing.Size(205, 41);
+            this.StressChk.TabIndex = 93;
+            this.StressChk.Text = "Stress Logs";
+            this.StressChk.UseVisualStyleBackColor = true;
             // 
             // StressBtn
             // 
@@ -2010,15 +2022,16 @@
             this.label9.Text = "Recipe Loaded";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // StressChk
+            // SaveConfigBtn
             // 
-            this.StressChk.AutoSize = true;
-            this.StressChk.Location = new System.Drawing.Point(1775, 992);
-            this.StressChk.Name = "StressChk";
-            this.StressChk.Size = new System.Drawing.Size(205, 41);
-            this.StressChk.TabIndex = 93;
-            this.StressChk.Text = "Stress Logs";
-            this.StressChk.UseVisualStyleBackColor = true;
+            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveConfigBtn.Location = new System.Drawing.Point(809, 242);
+            this.SaveConfigBtn.Name = "SaveConfigBtn";
+            this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
+            this.SaveConfigBtn.TabIndex = 100;
+            this.SaveConfigBtn.Text = "Save";
+            this.SaveConfigBtn.UseVisualStyleBackColor = true;
+            this.SaveConfigBtn.Click += new System.EventHandler(this.SaveConfigBtn_Click);
             // 
             // MainForm
             // 
@@ -2238,6 +2251,7 @@
         private System.Windows.Forms.Button SetGrindDefaultsBtn;
         private System.Windows.Forms.Button StressBtn;
         private System.Windows.Forms.CheckBox StressChk;
+        private System.Windows.Forms.Button SaveConfigBtn;
     }
 }
 
