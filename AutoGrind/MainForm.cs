@@ -2455,7 +2455,7 @@ namespace AutoGrind
                 if (!RobotIndexCaughtUp())
                 {
                     // Only log this one time!
-                    if (logFilter != 3)
+                    if (logFilter != 2)
                         log.Info("Waiting for robot operation complete");
                     logFilter = 2;
                 }
