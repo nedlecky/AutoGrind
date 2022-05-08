@@ -428,7 +428,8 @@ def no_command():
     halt_grind = False
     # Simulate receiving a (40,99) (grind_retract)
     stopl(20)
-    sleep(0.020)
+    # Hypothesis: this was a race and a new command comes in here... which we destroy below!
+    #sleep(0.020)
     command[0] = 2
     command[1] = 40
     command[2] = 99

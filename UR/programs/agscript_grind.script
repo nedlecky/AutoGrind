@@ -155,8 +155,8 @@ def grind():
   # Install tcp that puts tcp at center of part (noop for flat parts!)
   set_tcp(robot_tcp_part)
 
-  # LINEAR GRINDS
   if command[2] == 10:
+    # LINEAR GRINDS
     global response = "grind_line"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -166,8 +166,8 @@ def grind():
     global grind_continue = command[8] > 0
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
-    # RECTANGULAR GRINDS
   elif command[2] == 20:
+    # RECTANGULAR GRINDS
     global response = "grind_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -177,8 +177,8 @@ def grind():
     global grind_continue = command[8] > 0
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
-    # SERPENTINE GRINDS
   elif command[2] == 30:
+    # SERPENTINE GRINDS
     global response = "grind_serpentine"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -190,8 +190,8 @@ def grind():
     global grind_continue = command[10] > 0
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
-    # CIRCULAR GRINDS
   elif command[2] == 40:
+    # CIRCULAR GRINDS
     global response = "grind_circle"
     global grind_circle1_diam_mm = command[3]
     n_cycle_setter(command[4])
@@ -200,8 +200,8 @@ def grind():
     global grind_continue = command[7] > 0
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
 
-    # SPIRAL GRINDS
   elif command[2] == 50:
+    # SPIRAL GRINDS
     global response = "grind_spiral"
     global grind_circle1_diam_mm = command[3]
     global grind_circle2_diam_mm = command[4]
@@ -211,10 +211,14 @@ def grind():
     global grind_force_N = command[8]
     global grind_continue = command[9] > 0
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_spirals, grind_n_cycles, grind_continue)
+
   elif command[2] == 99:
-    global response = "grind retract"
+    # Retract Command
+    global response = "grind_retract"
     set_grind_process_state(False)
+
   else:
+    # Illegal grind command
     global response = "Unknown grind command"
   end
 
@@ -678,7 +682,7 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
   t_move = sqrt(dx_m * dx_m + dy_m * dy_m) / grind_speed_mps
   pdest = p1
 
-  global grind_cycle = 0
+  global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
@@ -705,7 +709,7 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
   t_move = sqrt(pow(dx_m / grind_speed_mps, 2) + pow(drx_rad / grind_rot_speed_rps / 4, 2))
   pdest = p1
 
-  global grind_cycle = 0
+  global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
     # Alternate directions for multiple cycles
@@ -735,7 +739,7 @@ def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
   pdest = p1
   t_move = sqrt(drx_rad * drx_rad + dry_rad * dry_rad) / grind_rot_speed_rps / 4
 
-  global grind_cycle = 0
+  global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
