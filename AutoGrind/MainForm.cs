@@ -379,17 +379,10 @@ namespace AutoGrind
                         case 0:
                             robotDashboardClient.Send("robotmode");
                             robotDashboardClient.Send("safetystatus");
-                            robotDashboardClient.Send("programstate");
                             nUnansweredRobotmodeRequests++;
                             nUnansweredSafetystatusRequests++;
-                            nUnansweredProgramstateRequests++;
-                            dashboardCycle = 0;
                             break;
                         case 1:
-                            robotDashboardClient.Send("safetystatus");
-                            nUnansweredSafetystatusRequests++;
-                            break;
-                        case 2:
                             robotDashboardClient.Send("programstate");
                             nUnansweredProgramstateRequests++;
                             dashboardCycle = 0;
@@ -2459,27 +2452,17 @@ namespace AutoGrind
             }
             else
             {
-                /* robot_ready can happen in the midst of several commands running in sequence so it is ambiguous
-                 * Also, it will often still be true right after sending a command since the UR won't have set it low (and c# seen it low) yet
-                if (ReadVariable("robot_ready") != "True")
-                {
-                    // Only log this one time!
-                    if (logFilter != 2)
-                        log.Info("EXEC Waiting for robot_ready");
-                    logFilter = 2;
-                }
-                else*/
                 if (!RobotIndexCaughtUp())
                 {
                     // Only log this one time!
                     if (logFilter != 3)
                         log.Info("Waiting for robot operation complete");
-                    logFilter = 3;
+                    logFilter = 2;
                 }
                 else
                 {
                     // Resets such that the above log messages will happen
-                    logFilter = 4;
+                    logFilter = 3;
                     if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
