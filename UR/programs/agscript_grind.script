@@ -223,10 +223,7 @@ def grind():
   end
 
   # Restore tool-only tcp
-  # TODO This is fine now, right? No need to leave in place on grind continuation
-  #if not grind_continue:
   set_tcp(robot_tcp)
-  #end
 
   if grind_abort_listener_thread_handle > 0:
     kill grind_abort_listener_thread_handle
@@ -657,17 +654,21 @@ global pattern_complete_idx = -1
 def pattern_complete():
   pattern_complete_idx = 1
 
+  # Todo: testing this t see if staying on part has less wandering between grinds
+  stopl(2.0)
+  pattern_complete_idx = 2
+
   p0 = get_actual_tcp_pose()
   movel(p0, a = grind_accel_mpss, v = grind_speed_mps)
-  pattern_complete_idx = 2
+  pattern_complete_idx = 3
 
   p0a = get_target_tcp_pose()
   global pattern_complete_dist1 = pose_dist(p0a, p0)
-  pattern_complete_idx = 3
+  pattern_complete_idx = 4
 
   p0b = get_actual_tcp_pose()
   global pattern_complete_dist3 = pose_dist(p0b, p0)
-  pattern_complete_idx = 4
+  pattern_complete_idx = 5
 end
 
 ######################################################################################

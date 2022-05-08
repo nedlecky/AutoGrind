@@ -420,8 +420,8 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "180")));
                         ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
-                        ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_mS", "500")));
-                        ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_mS", "1500")));
+                        ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_ms", "500")));
+                        ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_ms", "1500")));
                         ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
@@ -2790,7 +2790,7 @@ namespace AutoGrind
         {
             SetValueForm form = new SetValueForm()
             {
-                Value = ReadVariable("grind_force_dwell_mS"),
+                Value = ReadVariable("grind_force_dwell_ms"),
                 Label = "Grind FORCE DWELL TIME, mS",
                 NumberOfDecimals = 0,
                 MinAllowed = 0,
@@ -2807,7 +2807,7 @@ namespace AutoGrind
         {
             SetValueForm form = new SetValueForm()
             {
-                Value = ReadVariable("grind_max_wait_mS"),
+                Value = ReadVariable("grind_max_wait_ms"),
                 Label = "Grind MAX WAIT TIME, mS",
                 NumberOfDecimals = 0,
                 MinAllowed = 0,

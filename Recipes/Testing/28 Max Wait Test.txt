@@ -1,0 +1,28 @@
+# 28 Max Wait Test
+# Stays on part but too much delay between them will trigger retracts
+# Last Pass 5/8/2022
+
+# Don't stay in contact
+grind_rect(5,5,1,20,10,0)
+grind_rect(5,5,1,20,10,0)
+grind_rect(5,5,1,20,10,0)
+
+# Now stay in contact
+grind_rect(5,5,1,20,10,1)
+grind_rect(5,5,1,20,10,1)
+grind_rect(5,5,1,20,10,1)
+grind_retract()
+
+delays:
+# Now trip limits so we reset in between
+delay = 2
+
+grind_rect(5,5,1,20,10,1)
+sleep({delay})
+
+grind_rect(5,5,1,20,10,1)
+sleep({delay})
+
+grind_rect(5,5,1,20,10,1)
+sleep({delay})
+sleep(2)
