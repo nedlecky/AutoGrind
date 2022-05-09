@@ -71,7 +71,8 @@ namespace AutoGrind
         private void DirectoryListBox_DoubleClick(object sender, EventArgs e)
         {
             // Need double click to pop up
-            LoadDirectory(directoryList[DirectoryListBox.SelectedIndex]);
+            if (DirectoryListBox.SelectedIndex >= 0)
+                LoadDirectory(directoryList[DirectoryListBox.SelectedIndex]);
         }
 
         private void FileOpenForm_Load(object sender, EventArgs e)

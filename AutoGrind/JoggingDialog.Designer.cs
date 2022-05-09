@@ -391,7 +391,7 @@
             this.CoordBox.BackColor = System.Drawing.Color.Green;
             this.CoordBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.CoordBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.CoordBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CoordBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CoordBox.ForeColor = System.Drawing.Color.White;
             this.CoordBox.FormattingEnabled = true;
             this.CoordBox.Items.AddRange(new object[] {
@@ -400,7 +400,7 @@
             "PART"});
             this.CoordBox.Location = new System.Drawing.Point(1028, 320);
             this.CoordBox.Name = "CoordBox";
-            this.CoordBox.Size = new System.Drawing.Size(312, 63);
+            this.CoordBox.Size = new System.Drawing.Size(312, 81);
             this.CoordBox.TabIndex = 83;
             this.CoordBox.SelectedIndexChanged += new System.EventHandler(this.CoordBox_SelectedIndexChanged);
             // 
@@ -409,7 +409,7 @@
             this.XyJogDistanceBox.BackColor = System.Drawing.Color.Green;
             this.XyJogDistanceBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.XyJogDistanceBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.XyJogDistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.XyJogDistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.XyJogDistanceBox.ForeColor = System.Drawing.Color.White;
             this.XyJogDistanceBox.FormattingEnabled = true;
             this.XyJogDistanceBox.Items.AddRange(new object[] {
@@ -421,7 +421,7 @@
             "100"});
             this.XyJogDistanceBox.Location = new System.Drawing.Point(531, 320);
             this.XyJogDistanceBox.Name = "XyJogDistanceBox";
-            this.XyJogDistanceBox.Size = new System.Drawing.Size(217, 63);
+            this.XyJogDistanceBox.Size = new System.Drawing.Size(217, 81);
             this.XyJogDistanceBox.TabIndex = 84;
             // 
             // AngleBox
@@ -429,7 +429,7 @@
             this.AngleBox.BackColor = System.Drawing.Color.Green;
             this.AngleBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.AngleBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.AngleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AngleBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AngleBox.ForeColor = System.Drawing.Color.White;
             this.AngleBox.FormattingEnabled = true;
             this.AngleBox.Items.AddRange(new object[] {
@@ -442,7 +442,7 @@
             "45.0"});
             this.AngleBox.Location = new System.Drawing.Point(531, 808);
             this.AngleBox.Name = "AngleBox";
-            this.AngleBox.Size = new System.Drawing.Size(217, 63);
+            this.AngleBox.Size = new System.Drawing.Size(217, 81);
             this.AngleBox.TabIndex = 85;
             // 
             // label3
@@ -472,7 +472,7 @@
             this.ZJogDistanceBox.BackColor = System.Drawing.Color.Green;
             this.ZJogDistanceBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.ZJogDistanceBox.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.ZJogDistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ZJogDistanceBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 48F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.ZJogDistanceBox.ForeColor = System.Drawing.Color.White;
             this.ZJogDistanceBox.FormattingEnabled = true;
             this.ZJogDistanceBox.Items.AddRange(new object[] {
@@ -482,7 +482,7 @@
             "20"});
             this.ZJogDistanceBox.Location = new System.Drawing.Point(531, 79);
             this.ZJogDistanceBox.Name = "ZJogDistanceBox";
-            this.ZJogDistanceBox.Size = new System.Drawing.Size(217, 63);
+            this.ZJogDistanceBox.Size = new System.Drawing.Size(217, 81);
             this.ZJogDistanceBox.TabIndex = 89;
             // 
             // label4
