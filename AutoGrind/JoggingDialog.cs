@@ -210,73 +210,126 @@ namespace AutoGrind
             log.Info("Jog Command: {0}", lastJogCommand);
             mainForm.RobotSend(lastJogCommand);
         }
-        private void XplusBtn_Click(object sender, EventArgs e)
+
+
+        static bool continueTask;
+        Task task = null;
+        private void Repeater()
+        {
+            task = Task.Factory.StartNew(() =>
+            {
+                continueTask = true;
+                while (continueTask)
+                {
+                    System.Threading.Thread.Sleep(250);
+                    if (continueTask && mainForm.RobotCompletedCaughtUp())
+                    {
+                        mainForm.RobotSend(lastJogCommand);
+                    }
+                }
+            });
+        }
+        private void BtnMouseUp(object sender, MouseEventArgs e)
+        {
+            log.Info("MouseUp");
+            continueTask = false;
+        }
+
+        private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            log.Info("ZplusBtn_MouseDown");
+            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
+            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
+            Jog(p);
+            Repeater();
+        }
+
+        private void ZminusBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            log.Info("ZminusBtn_MouseDown");
+            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
+            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
+            Jog(p);
+            Repeater();
+        }
+
+        private void XplusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { distance / 1000.0, 0, 0, 0, 0, 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void XminusBtn_Click(object sender, EventArgs e)
+        private void XminusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { -distance / 1000.0, 0, 0, 0, 0, 0 };
             Jog(p);
+            Repeater();
         }
-        private void YplusBtn_Click(object sender, EventArgs e)
+        private void YplusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, distance / 1000.0, 0, 0, 0, 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void YminusBtn_Click(object sender, EventArgs e)
+        private void YminusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, -distance / 1000.0, 0, 0, 0, 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void RxPlusBtn_Click(object sender, EventArgs e)
+        private void RxPlusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, Deg2Rad(angle), 0, 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void RxMinusBtn_Click(object sender, EventArgs e)
+        private void RxMinusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, -Deg2Rad(angle), 0, 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void RyPlusBtn_Click(object sender, EventArgs e)
+        private void RyPlusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, 0, Deg2Rad(angle), 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void RyMinusBtn_Click(object sender, EventArgs e)
+        private void RyMinusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, 0, -Deg2Rad(angle), 0 };
             Jog(p);
+            Repeater();
         }
 
-        private void RzPlusBtn_Click(object sender, EventArgs e)
+        private void RzPlusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, 0, 0, Deg2Rad(angle) };
             Jog(p);
+            Repeater();
         }
 
-        private void RzMinusBtn_Click(object sender, EventArgs e)
+        private void RzMinusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double angle = Convert.ToDouble(AngleBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, 0, 0, 0, -Deg2Rad(angle) };
             Jog(p);
+            Repeater();
         }
 
         private void FlipRBtn_Click(object sender, EventArgs e)
@@ -356,75 +409,5 @@ namespace AutoGrind
             }
         }
 
-        static bool continueTask;
-        Task task = null;
-        private void Repeater()
-        {
-            task = Task.Factory.StartNew(() =>
-            {
-                continueTask = true;
-                while (continueTask)
-                {
-                    System.Threading.Thread.Sleep(250);
-                    if (continueTask && mainForm.RobotCompletedCaughtUp())
-                    {
-                        mainForm.RobotSend(lastJogCommand);
-                    }
-                }
-            });
-        }
-        private void BtnMouseUp(object sender, MouseEventArgs e)
-        {
-            log.Info("MouseUp");
-            continueTask = false;
-        }
-
-        private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
-        {
-            log.Info("ZplusBtn_MouseDown");
-            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
-            Jog(p);
-            Repeater();
-        }
-
-        private void ZminusBtn_MouseDown(object sender, MouseEventArgs e)
-        {
-            log.Info("ZminusBtn_MouseDown");
-            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
-            Jog(p);
-            Repeater();
-        }
-
-        private void ZplusBtn_MouseEnter(object sender, EventArgs e)
-        {
-            log.Info("ZplusBtn_MouseEnter");
-
-        }
-
-        private void ZplusBtn_Click(object sender, EventArgs e)
-        {
-            log.Info("ZplusBtn_Click");
-
-        }
-
-        private void ZplusBtn_MouseHover(object sender, EventArgs e)
-        {
-            log.Info("ZplusBtn_MouseHover");
-
-        }
-
-        private void ZplusBtn_MouseLeave(object sender, EventArgs e)
-        {
-            log.Info("ZplusBtn_MouseLeave");
-
-        }
-
-        private void ZplusBtn_MouseMove(object sender, MouseEventArgs e)
-        {
-            log.Info("ZplusBtn_MouseMove");
-
-        }
     }
 }

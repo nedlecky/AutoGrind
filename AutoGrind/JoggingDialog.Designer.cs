@@ -72,7 +72,8 @@
             this.YminusBtn.TabIndex = 3;
             this.YminusBtn.Text = "Y -";
             this.YminusBtn.UseVisualStyleBackColor = false;
-            this.YminusBtn.Click += new System.EventHandler(this.YminusBtn_Click);
+            this.YminusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.YminusBtn_MouseDown);
+            this.YminusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // ZminusBtn
             // 
@@ -101,12 +102,7 @@
             this.ZplusBtn.TabIndex = 1;
             this.ZplusBtn.Text = "Z +";
             this.ZplusBtn.UseVisualStyleBackColor = false;
-            this.ZplusBtn.Click += new System.EventHandler(this.ZplusBtn_Click);
             this.ZplusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ZplusBtn_MouseDown);
-            this.ZplusBtn.MouseEnter += new System.EventHandler(this.ZplusBtn_MouseEnter);
-            this.ZplusBtn.MouseLeave += new System.EventHandler(this.ZplusBtn_MouseLeave);
-            this.ZplusBtn.MouseHover += new System.EventHandler(this.ZplusBtn_MouseHover);
-            this.ZplusBtn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ZplusBtn_MouseMove);
             this.ZplusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // ExitBtn
@@ -135,7 +131,8 @@
             this.YplusBtn.TabIndex = 5;
             this.YplusBtn.Text = "Y +";
             this.YplusBtn.UseVisualStyleBackColor = false;
-            this.YplusBtn.Click += new System.EventHandler(this.YplusBtn_Click);
+            this.YplusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.YplusBtn_MouseDown);
+            this.YplusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // XminusBtn
             // 
@@ -149,7 +146,8 @@
             this.XminusBtn.TabIndex = 6;
             this.XminusBtn.Text = "X -";
             this.XminusBtn.UseVisualStyleBackColor = false;
-            this.XminusBtn.Click += new System.EventHandler(this.XminusBtn_Click);
+            this.XminusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.XminusBtn_MouseDown);
+            this.XminusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // XplusBtn
             // 
@@ -163,7 +161,8 @@
             this.XplusBtn.TabIndex = 7;
             this.XplusBtn.Text = "X +";
             this.XplusBtn.UseVisualStyleBackColor = false;
-            this.XplusBtn.Click += new System.EventHandler(this.XplusBtn_Click);
+            this.XplusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.XplusBtn_MouseDown);
+            this.XplusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RxPlusBtn
             // 
@@ -177,7 +176,8 @@
             this.RxPlusBtn.TabIndex = 8;
             this.RxPlusBtn.Text = "RX +";
             this.RxPlusBtn.UseVisualStyleBackColor = false;
-            this.RxPlusBtn.Click += new System.EventHandler(this.RxPlusBtn_Click);
+            this.RxPlusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RxPlusBtn_MouseDown);
+            this.RxPlusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RxMinusBtn
             // 
@@ -191,7 +191,8 @@
             this.RxMinusBtn.TabIndex = 9;
             this.RxMinusBtn.Text = "RX -";
             this.RxMinusBtn.UseVisualStyleBackColor = false;
-            this.RxMinusBtn.Click += new System.EventHandler(this.RxMinusBtn_Click);
+            this.RxMinusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RxMinusBtn_MouseDown);
+            this.RxMinusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RyPlusBtn
             // 
@@ -205,7 +206,8 @@
             this.RyPlusBtn.TabIndex = 10;
             this.RyPlusBtn.Text = "RY +";
             this.RyPlusBtn.UseVisualStyleBackColor = false;
-            this.RyPlusBtn.Click += new System.EventHandler(this.RyPlusBtn_Click);
+            this.RyPlusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RyPlusBtn_MouseDown);
+            this.RyPlusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RyMinusBtn
             // 
@@ -219,7 +221,8 @@
             this.RyMinusBtn.TabIndex = 11;
             this.RyMinusBtn.Text = "RY -";
             this.RyMinusBtn.UseVisualStyleBackColor = false;
-            this.RyMinusBtn.Click += new System.EventHandler(this.RyMinusBtn_Click);
+            this.RyMinusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RyMinusBtn_MouseDown);
+            this.RyMinusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RzMinusBtn
             // 
@@ -233,7 +236,8 @@
             this.RzMinusBtn.TabIndex = 12;
             this.RzMinusBtn.Text = "RZ -";
             this.RzMinusBtn.UseVisualStyleBackColor = false;
-            this.RzMinusBtn.Click += new System.EventHandler(this.RzMinusBtn_Click);
+            this.RzMinusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RzMinusBtn_MouseDown);
+            this.RzMinusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // RzPlusBtn
             // 
@@ -247,7 +251,8 @@
             this.RzPlusBtn.TabIndex = 13;
             this.RzPlusBtn.Text = "RZ +";
             this.RzPlusBtn.UseVisualStyleBackColor = false;
-            this.RzPlusBtn.Click += new System.EventHandler(this.RzPlusBtn_Click);
+            this.RzPlusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.RzPlusBtn_MouseDown);
+            this.RzPlusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // label1
             // 
