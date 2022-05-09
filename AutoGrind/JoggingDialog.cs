@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -24,23 +25,20 @@ namespace AutoGrind
         static extern bool RegisterTouchWindow(IntPtr hWnd, RegisterTouchFlags flags);
 
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        readonly TcpServerSupport robot;
-        public bool ShouldSave { get; set; }
-        private bool SaveButtonEnabled = false;
+        //readonly TcpServerSupport robot;
+
+        public string Prompt { get; set; } = "General Jogging";
+        public string Part { get; set; } = "UnknownPart";
+        public string Tool { get; set; } = "UnknownTool";
+
+        public bool ShouldSave { get; set; } = false;
 
         MainForm mainForm;
-        public JoggingDialog(TcpServerSupport _robot, MainForm _mainForm, string purpose = "General Jogging", string tool = "UnknownTool", string part = "UnknownPart", bool _SaveButtonEnabled = false)
+        public JoggingDialog(TcpServerSupport _robot, MainForm _mainForm)
         {
             InitializeComponent();
-            PurposeLbl.Text = purpose;
-            ToolLbl.Text = "Tool: " + tool;
-            PartLbl.Text = "Part: " + part;
-            robot = _robot;
+            //robot = _robot;
             mainForm = _mainForm;
-            ShouldSave = false;
-            SaveButtonEnabled = _SaveButtonEnabled;
-            SaveBtn.Enabled = SaveButtonEnabled;
-            SaveBtn.BackColor = SaveButtonEnabled ? Color.Green : Color.Gray;
         }
 
         private void ExitBtn_Click(object sender, EventArgs e)
@@ -54,14 +52,133 @@ namespace AutoGrind
             Close();
         }
 
-     
+
+        Button[] buttons;
+
         private void JoggingForm_Load(object sender, EventArgs e)
         {
-            DistanceBox.SelectedIndex = 2;
-            AngleBox.SelectedIndex = 2;
-            CoordBox.SelectedIndex = 0;
+            buttons = new Button[]
+            {
+                XplusBtn,
+                XminusBtn,
+                YplusBtn,
+                YminusBtn,
+                ZplusBtn,
+                ZminusBtn,
+                RxPlusBtn,
+                RxMinusBtn,
+                RyPlusBtn,
+                RyMinusBtn,
+                RzPlusBtn,
+                RzMinusBtn,
+
+                ToolVerticalBtn,
+                RxVerticalBtn,
+                RyZeroBtn,
+                RzZeroBtn
+            };
+
+            PurposeLbl.Text = Prompt;
+            ToolLbl.Text = "Tool: " + Tool;
+            PartLbl.Text = "Part: " + Part;
+            SaveBtn.Enabled = ShouldSave;
+            SaveBtn.BackColor = ShouldSave ? Color.Green : Color.Gray;
+
+            LoadJogPersistent();
 
             RegisterTouchWindow(ZplusBtn.Handle, RegisterTouchFlags.TWF_WANTPALM);
+        }
+        private void JoggingDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SaveJogPersistent();
+        }
+        void SaveJogPersistent()
+        {
+            log.Debug("SaveJogPersistent()");
+
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind_jog");
+
+            AppNameKey.SetValue("XyJogDistanceBox.SelectedIndex", XyJogDistanceBox.SelectedIndex);
+            AppNameKey.SetValue("ZJogDistanceBox.SelectedIndex", ZJogDistanceBox.SelectedIndex);
+            AppNameKey.SetValue("AngleBox.SelectedIndex", AngleBox.SelectedIndex);
+            AppNameKey.SetValue("CoordBox.SelectedIndex", CoordBox.SelectedIndex);
+        }
+        void LoadJogPersistent()
+        {
+            // Pull setup info from registry.... these are overwritten on exit or with various config save operations
+            // Note default values are specified here as well
+            log.Debug("LoadJogPersistent()");
+
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind_jog");
+
+            XyJogDistanceBox.SelectedIndex = (int)AppNameKey.GetValue("XyJogDistanceBox.SelectedIndex", 2);
+            ZJogDistanceBox.SelectedIndex = (int)AppNameKey.GetValue("ZJogDistanceBox.SelectedIndex", 1);
+            AngleBox.SelectedIndex = (int)AppNameKey.GetValue("AngleBox.SelectedIndex", 2);
+            CoordBox.SelectedIndex = (int)AppNameKey.GetValue("CoordBox.SelectedIndex", 0);
+        }
+
+        private void ColorAllButtons()
+        {
+            foreach (Button b in buttons)
+                b.BackColor = b.Enabled ? Color.Green : Color.Gray;
+        }
+        private void EnableAllButtons(bool f)
+        {
+            foreach (Button b in buttons)
+                b.Enabled = f;
+        }
+
+        // Enable/Hide buttons based on type of jog
+        private void RestrictButtons()
+        {
+            switch (CoordBox.Text)
+            {
+                case "BASE":
+                case "TOOL":
+                    EnableAllButtons(true);
+                    ColorAllButtons();
+                    break;
+                case "PART":
+                    log.Info("PART: {0}", Part);
+                    if (Part.StartsWith("SPHERE"))
+                    {
+                        EnableAllButtons(false);
+                        ZplusBtn.Enabled = true;
+                        ZminusBtn.Enabled = true;
+                        RxPlusBtn.Enabled = true;
+                        RxMinusBtn.Enabled = true;
+                        RyPlusBtn.Enabled = true;
+                        RyMinusBtn.Enabled = true;
+                        //RxVerticalBtn.Enabled = true;
+                        //RyZeroBtn.Enabled = true;
+                        ColorAllButtons();
+                    }
+                    else if (Part.StartsWith("CYLINDER"))
+                    {
+                        EnableAllButtons(false);
+                        XplusBtn.Enabled = true;
+                        XminusBtn.Enabled = true;
+                        ZplusBtn.Enabled = true;
+                        ZminusBtn.Enabled = true;
+                        RxPlusBtn.Enabled = true;
+                        RxMinusBtn.Enabled = true;
+                        //RxVerticalBtn.Enabled = true;
+                        ColorAllButtons();
+                    }
+                    else // FLAT
+                    {
+                        EnableAllButtons(true);
+                        ColorAllButtons();
+                    }
+                    break;
+            }
+        }
+
+        private void CoordBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            RestrictButtons();
         }
 
         private double Deg2Rad(double d)
@@ -96,27 +213,27 @@ namespace AutoGrind
         }
         private void XplusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { distance / 1000.0, 0, 0, 0, 0, 0 };
             Jog(p);
         }
 
         private void XminusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { -distance / 1000.0, 0, 0, 0, 0, 0 };
             Jog(p);
         }
         private void YplusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, distance / 1000.0, 0, 0, 0, 0 };
             Jog(p);
         }
 
         private void YminusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
+            double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, -distance / 1000.0, 0, 0, 0, 0 };
             Jog(p);
         }
@@ -129,9 +246,9 @@ namespace AutoGrind
 
         private void ZminusBtn_Click(object sender, EventArgs e)
         {
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
-            Jog(p);
+            //double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
+            //double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
+            //Jog(p);
         }
 
         private void RxPlusBtn_Click(object sender, EventArgs e)
@@ -207,7 +324,7 @@ namespace AutoGrind
                     if (c == SaveBtn)
                     {
                         if (enable)
-                            c.Enabled = SaveButtonEnabled;
+                            c.Enabled = ShouldSave;
                         else
                             c.Enabled = false;
                     }
@@ -220,6 +337,12 @@ namespace AutoGrind
             }
 
         }
+
+        [DllImport("user32.dll")]
+        public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
+
+        private const int WM_SETREDRAW = 11;
+
         private void FreeDriveBtn_Click(object sender, EventArgs e)
         {
             if (FreeDriveBtn.Text.Contains("ON"))
@@ -228,42 +351,64 @@ namespace AutoGrind
 
                 FreeDriveBtn.Text = "FreeDrive";
                 FreeDriveBtn.BackColor = Color.Green;
+
+                SendMessage(Handle, WM_SETREDRAW, false, 0);
                 ButtonEnable(true);
+                RestrictButtons();
+                SendMessage(Handle, WM_SETREDRAW, true, 0);
+                Refresh();
             }
             else
             {
                 mainForm.RobotSend("30,19,1");
                 FreeDriveBtn.Text = "FreeDrive\nON";
                 FreeDriveBtn.BackColor = Color.Blue;
+                SendMessage(Handle, WM_SETREDRAW, false, 0);
                 ButtonEnable(false);
+                SendMessage(Handle, WM_SETREDRAW, true, 0);
+                Refresh();
             }
         }
 
         static bool continueTask;
         Task task = null;
-        private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
+        private void Repeater()
         {
-            log.Info("Z+ Mouse Down");
-            double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
-            Jog(p);
-
             task = Task.Factory.StartNew(() =>
             {
                 continueTask = true;
                 while (continueTask)
                 {
                     System.Threading.Thread.Sleep(250);
-                    if (continueTask && mainForm.RobotIndexCaughtUp())
+                    if (continueTask && mainForm.RobotCompletedCaughtUp())
+                    {
                         mainForm.RobotSend(lastJogCommand);
+                    }
                 }
             });
         }
-
-        private void ZplusBtn_MouseUp(object sender, MouseEventArgs e)
+        private void BtnMouseUp(object sender, MouseEventArgs e)
         {
-            log.Info("Z+ Mouse Up");
+            log.Info("MouseUp");
             continueTask = false;
+        }
+
+        private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            log.Info("Z+ Mouse Down");
+            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
+            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
+            Jog(p);
+            Repeater();
+        }
+
+        private void ZminusBtn_MouseDown(object sender, MouseEventArgs e)
+        {
+            log.Info("Z- Mouse Down");
+            double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
+            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
+            Jog(p);
+            Repeater();
         }
     }
 }

@@ -234,5 +234,8 @@
     <None Include="Graphics\O-C Logo.png" />
     <None Include="Graphics\TQ Logo.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="AutoGrindIcon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

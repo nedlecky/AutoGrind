@@ -678,7 +678,10 @@ namespace AutoGrind
                     SaveRecipeBtn.Enabled = RecipeWasModified();
                     SaveAsRecipeBtn.Enabled = true;
 
+                    ToolSetupGrp.Enabled = true;
+                    GeneralConfigGrp.Enabled = true;
                     DefaultMoveSetupGrp.Enabled = true;
+                    GrindingMoveSetupGrp.Enabled = true;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = false;
@@ -719,7 +722,10 @@ namespace AutoGrind
                     SaveRecipeBtn.Enabled = RecipeWasModified();
                     SaveAsRecipeBtn.Enabled = true;
 
+                    ToolSetupGrp.Enabled = true;
+                    GeneralConfigGrp.Enabled = true;
                     DefaultMoveSetupGrp.Enabled = true;
+                    GrindingMoveSetupGrp.Enabled = true;
 
                     StartBtn.Enabled = true;
                     StepBtn.Enabled = true;
@@ -760,7 +766,10 @@ namespace AutoGrind
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
 
+                    ToolSetupGrp.Enabled = false;
+                    GeneralConfigGrp.Enabled = false;
                     DefaultMoveSetupGrp.Enabled = false;
+                    GrindingMoveSetupGrp.Enabled = false;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = false;
@@ -805,7 +814,10 @@ namespace AutoGrind
                     SaveRecipeBtn.Enabled = false;
                     SaveAsRecipeBtn.Enabled = false;
 
-                    DefaultMoveSetupGrp.Enabled = false;
+                    ToolSetupGrp.Enabled = true;
+                    GeneralConfigGrp.Enabled = false;
+                    DefaultMoveSetupGrp.Enabled = true;
+                    GrindingMoveSetupGrp.Enabled = true;
 
                     StartBtn.Enabled = false;
                     StepBtn.Enabled = true;
@@ -1674,7 +1686,12 @@ namespace AutoGrind
             if (partName != "FLAT")
                 partName += " " + DiameterLbl.Text + " mm DIA";
 
-            JoggingDialog form = new JoggingDialog(robotCommandServer, this, "Jog to Defect", ReadVariable("robot_tool"), partName);
+            JoggingDialog form = new JoggingDialog(robotCommandServer, this)
+            {
+                Prompt = "Jog to Defect",
+                Tool = ReadVariable("robot_tool"),
+                Part = partName
+            };
 
             form.ShowDialog(this);
         }
@@ -2421,11 +2438,10 @@ namespace AutoGrind
                 log.Info("EXEC Estimated={0} Actual={1}", StepTimeEstimateLbl.Text, StepElapsedTimeLbl.Text);
             }
         }
-        public bool RobotIndexCaughtUp()
+        public bool RobotCompletedCaughtUp()
         {
             return ReadVariable("robot_completed") == robotSendIndex.ToString();
         }
-        int stress = 0;
         private void ExecTmr_Tick(object sender, EventArgs e)
         {
             // Wait for any operator prompt to be cleared
@@ -2466,7 +2482,7 @@ namespace AutoGrind
             }
             else
             {
-                if (!RobotIndexCaughtUp())
+                if (!RobotCompletedCaughtUp())
                 {
                     // Only log this one time!
                     if (logFilter != 2)
@@ -2661,8 +2677,12 @@ namespace AutoGrind
                 {
                     ++robotSendIndex;
                     if (robotSendIndex > 999) robotSendIndex = 100;
-                    RobotSentLbl.Text = robotSendIndex.ToString();
-                    RobotCompletedLbl.BackColor = Color.Red;
+                    try  // This fails if the jog thread is calling it!
+                    {
+                        RobotSentLbl.Text = robotSendIndex.ToString();
+                        RobotCompletedLbl.BackColor = Color.Red;
+                    }
+                    catch { }
 
                     int checkValue = 1000 - robotSendIndex;
                     string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
@@ -3661,7 +3681,13 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingDialog form = new JoggingDialog(robotCommandServer, this, prompt, ReadVariable("robot_tool"), "Teaching Position Only", true);
+            JoggingDialog form = new JoggingDialog(robotCommandServer, this)
+            {
+                Prompt = prompt,
+                Tool = ReadVariable("robot_tool"),
+                Part = "Teaching Position Only",
+                ShouldSave = true
+            };
 
             form.ShowDialog(this);
 

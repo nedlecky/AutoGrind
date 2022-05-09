@@ -134,7 +134,7 @@
             this.SetJointSpeedBtn = new System.Windows.Forms.Button();
             this.SetJointAccelBtn = new System.Windows.Forms.Button();
             this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
-            this.groupBox11 = new System.Windows.Forms.GroupBox();
+            this.GrindingMoveSetupGrp = new System.Windows.Forms.GroupBox();
             this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
             this.SetGrindAccelBtn = new System.Windows.Forms.Button();
             this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
@@ -143,7 +143,7 @@
             this.SetForceDwellBtn = new System.Windows.Forms.Button();
             this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
             this.SetTouchRetractBtn = new System.Windows.Forms.Button();
-            this.groupBox8 = new System.Windows.Forms.GroupBox();
+            this.ToolSetupGrp = new System.Windows.Forms.GroupBox();
             this.JointMoveMountBtn = new System.Windows.Forms.Button();
             this.JointMoveHomeBtn = new System.Windows.Forms.Button();
             this.DoorClosedInputTxt = new System.Windows.Forms.TextBox();
@@ -153,7 +153,8 @@
             this.LoadToolsBtn = new System.Windows.Forms.Button();
             this.SaveToolsBtn = new System.Windows.Forms.Button();
             this.ClearToolsBtn = new System.Windows.Forms.Button();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.GeneralConfigGrp = new System.Windows.Forms.GroupBox();
+            this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.AllowRunningOfflineChk = new System.Windows.Forms.CheckBox();
             this.label4 = new System.Windows.Forms.Label();
             this.RobotProgramTxt = new System.Windows.Forms.TextBox();
@@ -180,7 +181,6 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
-            this.SaveConfigBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -198,10 +198,10 @@
             this.ProgramPage.SuspendLayout();
             this.SetupPage.SuspendLayout();
             this.DefaultMoveSetupGrp.SuspendLayout();
-            this.groupBox11.SuspendLayout();
-            this.groupBox8.SuspendLayout();
+            this.GrindingMoveSetupGrp.SuspendLayout();
+            this.ToolSetupGrp.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).BeginInit();
-            this.groupBox1.SuspendLayout();
+            this.GeneralConfigGrp.SuspendLayout();
             this.LogPage.SuspendLayout();
             this.groupBox7.SuspendLayout();
             this.groupBox3.SuspendLayout();
@@ -1382,9 +1382,9 @@
             // 
             this.SetupPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.SetupPage.Controls.Add(this.DefaultMoveSetupGrp);
-            this.SetupPage.Controls.Add(this.groupBox11);
-            this.SetupPage.Controls.Add(this.groupBox8);
-            this.SetupPage.Controls.Add(this.groupBox1);
+            this.SetupPage.Controls.Add(this.GrindingMoveSetupGrp);
+            this.SetupPage.Controls.Add(this.ToolSetupGrp);
+            this.SetupPage.Controls.Add(this.GeneralConfigGrp);
             this.SetupPage.Location = new System.Drawing.Point(4, 100);
             this.SetupPage.Name = "SetupPage";
             this.SetupPage.Size = new System.Drawing.Size(2132, 1168);
@@ -1473,22 +1473,22 @@
             this.SetLinearSpeedBtn.UseVisualStyleBackColor = false;
             this.SetLinearSpeedBtn.Click += new System.EventHandler(this.SetLinearSpeedBtn_Click);
             // 
-            // groupBox11
+            // GrindingMoveSetupGrp
             // 
-            this.groupBox11.Controls.Add(this.SetGrindDefaultsBtn);
-            this.groupBox11.Controls.Add(this.SetGrindAccelBtn);
-            this.groupBox11.Controls.Add(this.SetTrialSpeedBtn);
-            this.groupBox11.Controls.Add(this.SetGrindBlendRadiusBtn);
-            this.groupBox11.Controls.Add(this.SetMaxWaitBtn);
-            this.groupBox11.Controls.Add(this.SetForceDwellBtn);
-            this.groupBox11.Controls.Add(this.SetTouchSpeedBtn);
-            this.groupBox11.Controls.Add(this.SetTouchRetractBtn);
-            this.groupBox11.Location = new System.Drawing.Point(3, 836);
-            this.groupBox11.Name = "groupBox11";
-            this.groupBox11.Size = new System.Drawing.Size(2106, 234);
-            this.groupBox11.TabIndex = 117;
-            this.groupBox11.TabStop = false;
-            this.groupBox11.Text = "Grinding Motion Parameters";
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindDefaultsBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindAccelBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetTrialSpeedBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindBlendRadiusBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetMaxWaitBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetForceDwellBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchSpeedBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchRetractBtn);
+            this.GrindingMoveSetupGrp.Location = new System.Drawing.Point(3, 836);
+            this.GrindingMoveSetupGrp.Name = "GrindingMoveSetupGrp";
+            this.GrindingMoveSetupGrp.Size = new System.Drawing.Size(2106, 234);
+            this.GrindingMoveSetupGrp.TabIndex = 117;
+            this.GrindingMoveSetupGrp.TabStop = false;
+            this.GrindingMoveSetupGrp.Text = "Grinding Motion Parameters";
             // 
             // SetGrindDefaultsBtn
             // 
@@ -1578,23 +1578,23 @@
             this.SetTouchRetractBtn.UseVisualStyleBackColor = false;
             this.SetTouchRetractBtn.Click += new System.EventHandler(this.SetTouchRetractBtn_Click);
             // 
-            // groupBox8
+            // ToolSetupGrp
             // 
-            this.groupBox8.Controls.Add(this.JointMoveMountBtn);
-            this.groupBox8.Controls.Add(this.JointMoveHomeBtn);
-            this.groupBox8.Controls.Add(this.DoorClosedInputTxt);
-            this.groupBox8.Controls.Add(this.SetDoorClosedInputBtn);
-            this.groupBox8.Controls.Add(this.SelectToolBtn);
-            this.groupBox8.Controls.Add(this.ToolsGrd);
-            this.groupBox8.Controls.Add(this.LoadToolsBtn);
-            this.groupBox8.Controls.Add(this.SaveToolsBtn);
-            this.groupBox8.Controls.Add(this.ClearToolsBtn);
-            this.groupBox8.Location = new System.Drawing.Point(3, 3);
-            this.groupBox8.Name = "groupBox8";
-            this.groupBox8.Size = new System.Drawing.Size(2112, 475);
-            this.groupBox8.TabIndex = 101;
-            this.groupBox8.TabStop = false;
-            this.groupBox8.Text = "Tools";
+            this.ToolSetupGrp.Controls.Add(this.JointMoveMountBtn);
+            this.ToolSetupGrp.Controls.Add(this.JointMoveHomeBtn);
+            this.ToolSetupGrp.Controls.Add(this.DoorClosedInputTxt);
+            this.ToolSetupGrp.Controls.Add(this.SetDoorClosedInputBtn);
+            this.ToolSetupGrp.Controls.Add(this.SelectToolBtn);
+            this.ToolSetupGrp.Controls.Add(this.ToolsGrd);
+            this.ToolSetupGrp.Controls.Add(this.LoadToolsBtn);
+            this.ToolSetupGrp.Controls.Add(this.SaveToolsBtn);
+            this.ToolSetupGrp.Controls.Add(this.ClearToolsBtn);
+            this.ToolSetupGrp.Location = new System.Drawing.Point(3, 3);
+            this.ToolSetupGrp.Name = "ToolSetupGrp";
+            this.ToolSetupGrp.Size = new System.Drawing.Size(2112, 475);
+            this.ToolSetupGrp.TabIndex = 101;
+            this.ToolSetupGrp.TabStop = false;
+            this.ToolSetupGrp.Text = "Tools";
             // 
             // JointMoveMountBtn
             // 
@@ -1708,30 +1708,41 @@
             this.ClearToolsBtn.UseVisualStyleBackColor = true;
             this.ClearToolsBtn.Click += new System.EventHandler(this.ClearToolsBtn_Click);
             // 
-            // groupBox1
+            // GeneralConfigGrp
             // 
-            this.groupBox1.Controls.Add(this.SaveConfigBtn);
-            this.groupBox1.Controls.Add(this.AllowRunningOfflineChk);
-            this.groupBox1.Controls.Add(this.label4);
-            this.groupBox1.Controls.Add(this.RobotProgramTxt);
-            this.groupBox1.Controls.Add(this.LoadConfigBtn);
-            this.groupBox1.Controls.Add(this.DefaultConfigBtn);
-            this.groupBox1.Controls.Add(this.ServerIpTxt);
-            this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.UtcTimeChk);
-            this.groupBox1.Controls.Add(this.RobotIpTxt);
-            this.groupBox1.Controls.Add(this.label3);
-            this.groupBox1.Controls.Add(this.AutoGrindRootLbl);
-            this.groupBox1.Controls.Add(this.ChangeRootDirectoryBtn);
-            this.groupBox1.Controls.Add(this.label1);
-            this.groupBox1.Location = new System.Drawing.Point(3, 492);
-            this.groupBox1.Margin = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Padding = new System.Windows.Forms.Padding(2);
-            this.groupBox1.Size = new System.Drawing.Size(1166, 345);
-            this.groupBox1.TabIndex = 96;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "General Configuration";
+            this.GeneralConfigGrp.Controls.Add(this.SaveConfigBtn);
+            this.GeneralConfigGrp.Controls.Add(this.AllowRunningOfflineChk);
+            this.GeneralConfigGrp.Controls.Add(this.label4);
+            this.GeneralConfigGrp.Controls.Add(this.RobotProgramTxt);
+            this.GeneralConfigGrp.Controls.Add(this.LoadConfigBtn);
+            this.GeneralConfigGrp.Controls.Add(this.DefaultConfigBtn);
+            this.GeneralConfigGrp.Controls.Add(this.ServerIpTxt);
+            this.GeneralConfigGrp.Controls.Add(this.label2);
+            this.GeneralConfigGrp.Controls.Add(this.UtcTimeChk);
+            this.GeneralConfigGrp.Controls.Add(this.RobotIpTxt);
+            this.GeneralConfigGrp.Controls.Add(this.label3);
+            this.GeneralConfigGrp.Controls.Add(this.AutoGrindRootLbl);
+            this.GeneralConfigGrp.Controls.Add(this.ChangeRootDirectoryBtn);
+            this.GeneralConfigGrp.Controls.Add(this.label1);
+            this.GeneralConfigGrp.Location = new System.Drawing.Point(3, 492);
+            this.GeneralConfigGrp.Margin = new System.Windows.Forms.Padding(2);
+            this.GeneralConfigGrp.Name = "GeneralConfigGrp";
+            this.GeneralConfigGrp.Padding = new System.Windows.Forms.Padding(2);
+            this.GeneralConfigGrp.Size = new System.Drawing.Size(1166, 345);
+            this.GeneralConfigGrp.TabIndex = 96;
+            this.GeneralConfigGrp.TabStop = false;
+            this.GeneralConfigGrp.Text = "General Configuration";
+            // 
+            // SaveConfigBtn
+            // 
+            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveConfigBtn.Location = new System.Drawing.Point(809, 242);
+            this.SaveConfigBtn.Name = "SaveConfigBtn";
+            this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
+            this.SaveConfigBtn.TabIndex = 100;
+            this.SaveConfigBtn.Text = "Save";
+            this.SaveConfigBtn.UseVisualStyleBackColor = true;
+            this.SaveConfigBtn.Click += new System.EventHandler(this.SaveConfigBtn_Click);
             // 
             // AllowRunningOfflineChk
             // 
@@ -2022,17 +2033,6 @@
             this.label9.Text = "Recipe Loaded";
             this.label9.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // SaveConfigBtn
-            // 
-            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveConfigBtn.Location = new System.Drawing.Point(809, 242);
-            this.SaveConfigBtn.Name = "SaveConfigBtn";
-            this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
-            this.SaveConfigBtn.TabIndex = 100;
-            this.SaveConfigBtn.Text = "Save";
-            this.SaveConfigBtn.UseVisualStyleBackColor = true;
-            this.SaveConfigBtn.Click += new System.EventHandler(this.SaveConfigBtn_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2088,12 +2088,12 @@
             this.ProgramPage.ResumeLayout(false);
             this.SetupPage.ResumeLayout(false);
             this.DefaultMoveSetupGrp.ResumeLayout(false);
-            this.groupBox11.ResumeLayout(false);
-            this.groupBox8.ResumeLayout(false);
-            this.groupBox8.PerformLayout();
+            this.GrindingMoveSetupGrp.ResumeLayout(false);
+            this.ToolSetupGrp.ResumeLayout(false);
+            this.ToolSetupGrp.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.ToolsGrd)).EndInit();
-            this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
+            this.GeneralConfigGrp.ResumeLayout(false);
+            this.GeneralConfigGrp.PerformLayout();
             this.LogPage.ResumeLayout(false);
             this.LogPage.PerformLayout();
             this.groupBox7.ResumeLayout(false);
@@ -2164,7 +2164,7 @@
         private System.Windows.Forms.TabPage RunPage;
         private System.Windows.Forms.TabPage ProgramPage;
         private System.Windows.Forms.TabPage SetupPage;
-        private System.Windows.Forms.GroupBox groupBox8;
+        private System.Windows.Forms.GroupBox ToolSetupGrp;
         private System.Windows.Forms.Button SelectToolBtn;
         private System.Windows.Forms.DataGridView ToolsGrd;
         private System.Windows.Forms.Button LoadToolsBtn;
@@ -2172,7 +2172,7 @@
         private System.Windows.Forms.Button ClearToolsBtn;
         private System.Windows.Forms.Button DefaultConfigBtn;
         private System.Windows.Forms.Button LoadConfigBtn;
-        private System.Windows.Forms.GroupBox groupBox1;
+        private System.Windows.Forms.GroupBox GeneralConfigGrp;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox RobotProgramTxt;
         private System.Windows.Forms.TextBox ServerIpTxt;
@@ -2208,7 +2208,7 @@
         private System.Windows.Forms.Label DoorClosedLbl;
         private System.Windows.Forms.Label RobotCompletedLbl;
         private System.Windows.Forms.CheckBox AllowRunningOfflineChk;
-        private System.Windows.Forms.GroupBox groupBox11;
+        private System.Windows.Forms.GroupBox GrindingMoveSetupGrp;
         private System.Windows.Forms.Button SetForceDwellBtn;
         private System.Windows.Forms.Button SetTouchSpeedBtn;
         private System.Windows.Forms.Button SetTouchRetractBtn;
