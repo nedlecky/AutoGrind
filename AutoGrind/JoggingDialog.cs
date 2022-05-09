@@ -21,8 +21,8 @@ namespace AutoGrind
             TWF_FINETOUCH = 0x00000001, //Specifies that hWnd prefers noncoalesced touch input.
             TWF_WANTPALM = 0x00000002 //Setting this flag disables palm rejection which reduces delays for getting WM_TOUCH messages.
         }
-        [DllImport("user32.dll", SetLastError = true)]
-        static extern bool RegisterTouchWindow(IntPtr hWnd, RegisterTouchFlags flags);
+        //[DllImport("user32.dll", SetLastError = true)]
+        //static extern bool RegisterTouchWindow(IntPtr hWnd, RegisterTouchFlags flags);
 
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
         //readonly TcpServerSupport robot;
@@ -34,10 +34,9 @@ namespace AutoGrind
         public bool ShouldSave { get; set; } = false;
 
         MainForm mainForm;
-        public JoggingDialog(TcpServerSupport _robot, MainForm _mainForm)
+        public JoggingDialog(MainForm _mainForm)
         {
             InitializeComponent();
-            //robot = _robot;
             mainForm = _mainForm;
         }
 
@@ -86,7 +85,7 @@ namespace AutoGrind
 
             LoadJogPersistent();
 
-            RegisterTouchWindow(ZplusBtn.Handle, RegisterTouchFlags.TWF_WANTPALM);
+            //RegisterTouchWindow(ZplusBtn.Handle, RegisterTouchFlags.TWF_WANTPALM);
         }
         private void JoggingDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -237,19 +236,6 @@ namespace AutoGrind
             double[] p = new double[] { 0, -distance / 1000.0, 0, 0, 0, 0 };
             Jog(p);
         }
-        private void ZplusBtn_Click(object sender, EventArgs e)
-        {
-            //double distance = Convert.ToDouble(DistanceBox.SelectedItem.ToString());
-            //double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
-            //Jog(p);
-        }
-
-        private void ZminusBtn_Click(object sender, EventArgs e)
-        {
-            //double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
-            //double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
-            //Jog(p);
-        }
 
         private void RxPlusBtn_Click(object sender, EventArgs e)
         {
@@ -395,7 +381,7 @@ namespace AutoGrind
 
         private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
         {
-            log.Info("Z+ Mouse Down");
+            log.Info("ZplusBtn_MouseDown");
             double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
             Jog(p);
@@ -404,11 +390,41 @@ namespace AutoGrind
 
         private void ZminusBtn_MouseDown(object sender, MouseEventArgs e)
         {
-            log.Info("Z- Mouse Down");
+            log.Info("ZminusBtn_MouseDown");
             double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
             double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
             Jog(p);
             Repeater();
+        }
+
+        private void ZplusBtn_MouseEnter(object sender, EventArgs e)
+        {
+            log.Info("ZplusBtn_MouseEnter");
+
+        }
+
+        private void ZplusBtn_Click(object sender, EventArgs e)
+        {
+            log.Info("ZplusBtn_Click");
+
+        }
+
+        private void ZplusBtn_MouseHover(object sender, EventArgs e)
+        {
+            log.Info("ZplusBtn_MouseHover");
+
+        }
+
+        private void ZplusBtn_MouseLeave(object sender, EventArgs e)
+        {
+            log.Info("ZplusBtn_MouseLeave");
+
+        }
+
+        private void ZplusBtn_MouseMove(object sender, MouseEventArgs e)
+        {
+            log.Info("ZplusBtn_MouseMove");
+
         }
     }
 }

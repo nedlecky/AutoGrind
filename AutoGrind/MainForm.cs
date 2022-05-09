@@ -235,7 +235,7 @@ namespace AutoGrind
             {
                 if (RecipeWasModified())
                 {
-                    var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                    var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", LoadRecipeBtn.Text));
                     if (result == DialogResult.OK)
                         SaveRecipeBtn_Click(null, null);
                 }
@@ -1400,7 +1400,7 @@ namespace AutoGrind
             log.Info("NewRecipeBtn_Click(...)");
             if (RecipeWasModified())
             {
-                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", LoadRecipeBtn.Text));
                 if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -1418,7 +1418,7 @@ namespace AutoGrind
             log.Info("LoadRecipeBtn_Click(...)");
             if (RecipeWasModified())
             {
-                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", RecipeFilenameOnlyLbl.Text));
+                var result = ConfirmMessageBox(String.Format("Recipe [{0}] has changed.\nSave changes?", LoadRecipeBtn.Text));
                 if (result == DialogResult.OK)
                     SaveRecipeBtn_Click(null, null);
             }
@@ -1686,7 +1686,7 @@ namespace AutoGrind
             if (partName != "FLAT")
                 partName += " " + DiameterLbl.Text + " mm DIA";
 
-            JoggingDialog form = new JoggingDialog(robotCommandServer, this)
+            JoggingDialog form = new JoggingDialog(this)
             {
                 Prompt = "Jog to Defect",
                 Tool = ReadVariable("robot_tool"),
@@ -3681,7 +3681,7 @@ namespace AutoGrind
 
         private void RecordPosition(string prompt, string varName)
         {
-            JoggingDialog form = new JoggingDialog(robotCommandServer, this)
+            JoggingDialog form = new JoggingDialog(this)
             {
                 Prompt = prompt,
                 Tool = ReadVariable("robot_tool"),
@@ -3793,7 +3793,7 @@ namespace AutoGrind
 
         private void RecipeFilenameLbl_TextChanged(object sender, EventArgs e)
         {
-            RecipeFilenameOnlyLbl.Text = Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
+            LoadRecipeBtn.Text = Path.GetFileNameWithoutExtension(RecipeFilenameLbl.Text);
         }
 
         private void RecipeRTB_TextChanged(object sender, EventArgs e)

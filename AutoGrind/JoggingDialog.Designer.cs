@@ -86,7 +86,6 @@
             this.ZminusBtn.TabIndex = 2;
             this.ZminusBtn.Text = "Z -";
             this.ZminusBtn.UseVisualStyleBackColor = false;
-            this.ZminusBtn.Click += new System.EventHandler(this.ZminusBtn_Click);
             this.ZminusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ZminusBtn_MouseDown);
             this.ZminusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
@@ -104,6 +103,10 @@
             this.ZplusBtn.UseVisualStyleBackColor = false;
             this.ZplusBtn.Click += new System.EventHandler(this.ZplusBtn_Click);
             this.ZplusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ZplusBtn_MouseDown);
+            this.ZplusBtn.MouseEnter += new System.EventHandler(this.ZplusBtn_MouseEnter);
+            this.ZplusBtn.MouseLeave += new System.EventHandler(this.ZplusBtn_MouseLeave);
+            this.ZplusBtn.MouseHover += new System.EventHandler(this.ZplusBtn_MouseHover);
+            this.ZplusBtn.MouseMove += new System.Windows.Forms.MouseEventHandler(this.ZplusBtn_MouseMove);
             this.ZplusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 
             // ExitBtn
