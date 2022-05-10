@@ -7,16 +7,32 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGrind", "AutoGrind\Auto
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B9FB4B9-3D6E-4F53-B9E4-0E2EF99281AD}"
 EndProject
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "AutoGrindSetup", "AutoGrindSetup\AutoGrindSetup.wixproj", "{5B0CD6B1-E152-4656-83D7-80153612E9CB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
 		Release|x64 = Release|x64
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Debug|x64.ActiveCfg = Debug|x64
 		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Debug|x64.Build.0 = Debug|x64
+		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Debug|x86.Build.0 = Debug|Any CPU
 		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Release|x64.ActiveCfg = Release|x64
 		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Release|x64.Build.0 = Release|x64
+		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Release|x86.ActiveCfg = Release|Any CPU
+		{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}.Release|x86.Build.0 = Release|Any CPU
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Debug|x64.ActiveCfg = Debug|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Debug|x64.Build.0 = Debug|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Debug|x86.ActiveCfg = Debug|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Debug|x86.Build.0 = Debug|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Release|x64.ActiveCfg = Release|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Release|x64.Build.0 = Release|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Release|x86.ActiveCfg = Release|x86
+		{5B0CD6B1-E152-4656-83D7-80153612E9CB}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

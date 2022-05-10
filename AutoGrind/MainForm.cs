@@ -309,12 +309,12 @@ namespace AutoGrind
             if (StressChk.Checked)
             {
                 iii++;
-                log.Info("{0} Hey this is plenty of long lines of text et caetera for you to look at and wonder about", iii);
-                log.Info("{0} for the DASH plenty of long lines of text et caetera for you to look at and wonder about", iii);
-                log.Info("{0} for the EXEC plenty of long lines of text et caetera for you to look at and wonder about", iii);
-                log.Info("{0} for the UR==> plenty of long lines of text et caetera for you to look at and wonder about", iii);
-                log.Warn("{0} WARN plenty of long lines of text et caetera for you to look at and wonder about", iii);
-                log.Error("{0} ERROR plenty of long lines of text et caetera for you to look at and wonder about", iii);
+                log.Info("{0} Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
+                log.Info("{0} DASH Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
+                log.Info("{0} EXEC Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
+                log.Info("{0} UR==> Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
+                log.Info("{0} WARN Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
+                log.Info("{0} ERROR Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", iii);
             }
 
             // Update elapsed time panel
@@ -935,6 +935,10 @@ namespace AutoGrind
 
                 // Set Position Button
                 new ControlSpec(PositionSetBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
+
+                // Special test controls
+                new ControlSpec(StressBtn, ControlSetting.HIDDEN, ControlSetting.HIDDEN, ControlSetting.NORMAL),
+                new ControlSpec(StressChk, ControlSetting.HIDDEN, ControlSetting.HIDDEN, ControlSetting.NORMAL),
             };
 
         }
@@ -2028,7 +2032,7 @@ namespace AutoGrind
                    )        # Close the capturing group
                }            # Ends with a '}' character  */
             if (line != origLine)
-                log.Info("EXEC Variables replaced: \"{0}\" --> \"{1}\"", origLine, line);
+                log.Info("EXEC {0:0000}: \"{1}\" from \"{2}\"", lineNumber, line, origLine);
 
             // Line gets shown on screen with variables substututed and time estimate (unless we're making system calls)
             if (lineNumber > 0)
@@ -3811,12 +3815,12 @@ namespace AutoGrind
             {
                 for (int i = 1; i <= 87; i++)
                 {
-                    log.Info("{0} Hey this is plenty of long lines of text et caetera for you to look at and wonder about", i);
-                    log.Info("{0} for the DASH plenty of long lines of text et caetera for you to look at and wonder about", i);
-                    log.Info("{0} for the EXEC plenty of long lines of text et caetera for you to look at and wonder about", i);
-                    log.Info("{0} for the UR==> plenty of long lines of text et caetera for you to look at and wonder about", i);
-                    log.Warn("{0} WARN plenty of long lines of text et caetera for you to look at and wonder about", i);
-                    log.Error("{0} ERROR plenty of long lines of text et caetera for you to look at and wonder about", i);
+                    log.Info("{0} Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
+                    log.Info("{0} DASH Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
+                    log.Info("{0} EXEC Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
+                    log.Info("{0} UR==> Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
+                    log.Warn("{0} WARN Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
+                    log.Error("{0} ERROR Some extra long lines of text to stress the loggers and UI scrolling capability, not to mention the logfile", i);
                 }
             });
 
