@@ -1,5 +1,4 @@
 # 03 Assert Tester
-# Last passed 4/28/2022
 
 clear
 assert(a,1) # should fail no var

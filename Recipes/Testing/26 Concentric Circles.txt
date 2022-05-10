@@ -1,6 +1,18 @@
-# 3 Circles
+# 26 Concentric Circle Test
 
-grind_circle(30,3,20,10)
-grind_circle(20,3,20,10)
-grind_circle(10,3,20,10)
+# Old school
+grind_circle(30,2,0.9,10,1)
+grind_circle(20,2,0.9,10,1)
+grind_circle(10,2,0.9,10,0)
 
+
+# Do it with a loop
+size = 30
+count = 2
+speed = 0.9
+force = 10
+
+repeat:
+grind_circle({size},{count},{speed},{force},1)
+size -= 10
+jump_gt_zero(size,repeat)

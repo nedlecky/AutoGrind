@@ -1,15 +1,19 @@
 # 05 Move Test
 # BE CAREFUL: Robot will move and positions are expected to be OK
-# Last passed 4/27/2022
 
 # Standard set_speeds with asserts to check correctness
-set_.....
-assert(.....)
+old_speed = {robot_linear_speed_mmps}
+set_linear_speed(201)
+assert(robot_linear_speed_mmps,201)
+set_linear_speed({old_speed})
+assert(robot_linear_speed_mmps,{old_speed})
 
-)
 # Grind set_speeds with asserts to check correctness
-set_.....
-assert(.....)
+old_speed = {grind_trial_speed_mmps}
+grind_trial_speed(18)
+assert(grind_trial_speed_mmps,18)
+grind_trial_speed({old_speed})
+assert(grind_trial_speed_mmps,{old_speed})
 
 select_tool(2F85)
 move_linear(demo_flat)
@@ -20,6 +24,7 @@ move_joint(demo_cyll) # should fail
 
 save_position(p1)
 save_position() # should fail
+move_linear(p1)
 
 move_tool_home()
 move_tool_mount()

@@ -1,5 +1,4 @@
 # 07 Sleep Test
-# Last passed 4/27/2022
 
 prompt(Hit Enter then I should be back in 2 seconds!)
 

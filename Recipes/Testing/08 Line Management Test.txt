@@ -1,19 +1,21 @@
-# Line Management Test
+# 08 Line Management Test
+# BE CAREFUL: Robot will move and positions are expected to be OK
 
 # Line 3
-sleep(1000)
+sleep(1)
 
 diameter = 20
 speed = 20
 force = 10
 n_cycles = 2
+
+move_linear(demo_flat)
+
 n=0
-
-movelinear(demo_flat)
-
 repeat:
 grind_circle({diameter},{n_cycles},{speed},{force},0)
 
 n++
 prompt(Just completed cycle {n})
+
 jump(repeat)

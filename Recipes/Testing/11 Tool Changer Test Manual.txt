@@ -1,3 +1,6 @@
+# 11 Tool Changer Test Manual
+# BE CAREFUL: Robot will move and positions are expected to be OK
+
 # Test case assumed initial conditions
 select_tool(2F85)
 move_linear(demo_sphere)

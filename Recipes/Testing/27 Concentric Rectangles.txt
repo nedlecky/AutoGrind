@@ -1,6 +1,18 @@
-# 3 Rectangles
+# 27 Concentric Rectangles
 
-grind_rect(20,40,3,20,10,1)
-grind_rect(10,20,3,20,10,1)
-grind_rect(5,20,3,20,10,1)
+# Old school
+grind_rect(40,40,3,1,10,1)
+grind_rect(30,30,3,1,10,1)
+grind_rect(20,20,3,1,10,1)
+grind_rect(5,5,3,1,10,0)
 
+# Use a loop
+n=3
+size=40
+repeat:
+grind_rect({size},{size},3,1,10,1)
+size-=10
+n--
+jump_gt_zero(n,repeat)
+
+grind_rect(5,5,3,1,10,0)

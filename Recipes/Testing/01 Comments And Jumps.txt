@@ -1,5 +1,4 @@
 # 01 Comments and Jumps
-# Last passed: 4/29/2022
 
 label1:
 a=1

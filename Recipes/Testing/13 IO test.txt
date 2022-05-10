@@ -1,5 +1,10 @@
-set_door_closed_io(3,1)
-set_tool_on_io(2,2,4,3,8,9,0,1)
-set_tool_off_io(3,2,3,4,5,6,7,8)
-set_coolant_on_io(4,2,3,4,5,6,7,8)
-set_coolant_off_io(5,2,3,4,5,6,7,8)
+# 13 IO Test
+
+set_door_closed_input(3,1)
+set_tool_on_outputs(2,2,4,3,8,9,0,1)
+set_tool_off_outputs(3,2,3,4,5,6,7,8)
+set_coolant_on_outputs(4,2,3,4,5,6,7,8)
+set_coolant_off_outputs(5,2,3,4,5,6,7,8)
+
+prompt(About to select_tool=2F85 to reset)
+select_tool(2F85)

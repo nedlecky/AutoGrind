@@ -1,4 +1,4 @@
-# 13 Circle Speed Test
+# 24 Circle Speed Test
 # All should be ~10S
 # FAILING seem too slow 4/27/2022
 

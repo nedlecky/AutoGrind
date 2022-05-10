@@ -2198,7 +2198,7 @@ namespace AutoGrind
                 }
             }
 
-            // movejoint
+            // move_joint
             if (command.StartsWith("move_joint("))
             {
                 string positionName = ExtractParameters(command);
@@ -3031,8 +3031,8 @@ namespace AutoGrind
             string nameTrimmed = name.Trim();
             string valueTrimmed = value.Trim();
 
-            // Automatically consider and variables with name starting in robot_ to be system variables
-            if (nameTrimmed.StartsWith("robot_")) isSystem = true;
+            // Automatically consider and variables with name starting in robot_ or grind_to be system variables
+            if (nameTrimmed.StartsWith("robot_") || nameTrimmed.StartsWith("grind_")) isSystem = true;
 
             log.Trace("WriteVariable({0}, {1})", nameTrimmed, valueTrimmed);
             if (variables == null)

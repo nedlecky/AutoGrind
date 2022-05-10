@@ -1,5 +1,4 @@
 # 00 Syntax Tester
-# Last passed 4/27/2022
 
 clear
 a=5
@@ -13,4 +12,4 @@ prompt(But keep these spaces!)
 
 # lasd gasd sadkf
 
-garbage
+garbage should fail

@@ -1,6 +1,5 @@
-# 10 Line Speed Test
+# 21 Line Speed Test
 # All should take 2S
-# Last passed 4/27/2022
 
 speed = 20
 

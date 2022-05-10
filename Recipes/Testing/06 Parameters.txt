@@ -1,5 +1,4 @@
 # 06 Parameters
-# Last passed 4/27/2022
 
 # Make a copy of the original setting!
 orig_speed = {robot_linear_speed_mmps}
@@ -7,11 +6,11 @@ orig_speed = {robot_linear_speed_mmps}
 set_linear_speed(101)
 
 set_linear_speed(2,3)  # should fail
-set_linear_speed()  # should fail
+set_linear_speed()     # should fail
 set_linear_speed(abc)  # should fail
 
-grinf_retract(1) # should fail
-grind_retract(1) # should fail
+grinf_retract(1)   # should fail
+grind_retract(1)   # should fail
 grind_retract(1,2) # should fail
 grind_retract()
 

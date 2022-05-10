@@ -1,12 +1,11 @@
-# Import Test
-# Last passed 4/27/2022
-
-import(globals_standard.txt)
-import(xyz) # should fail
-import()  # should fail
-
-# add some assertions here from globals_standard.txt!
-
-
+# 02 Import Test
 
 clear()
+import(Testing/globals_standard.txt)  # should pass
+import(xyz) # should fail
+import()    # should fail
+
+assert(tool1,400grit)
+assert(diam2,7)
+assert(diam_demo,40) # should fail
+assert(diam_demo,41) # should pass

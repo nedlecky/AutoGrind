@@ -1,0 +1,18 @@
+# globals_standard.agr
+
+tool1 = 400grit
+tool2 = 600grit
+tool3 = 1200 grit
+
+diam1 = 5
+diam2 = 7
+diam3 = 12
+diam_demo = 41
+
+force1 = 20
+force2 = 25
+force3 = 27
+
+count1 = 4
+count2 = 6
+count3 = 8

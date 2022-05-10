@@ -1,5 +1,4 @@
 # Small Pattern Test
-# PASSED 4/11/2022
 
 movelinear(demo_flat)
 speed = 20

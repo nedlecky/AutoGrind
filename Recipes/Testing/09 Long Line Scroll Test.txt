@@ -1,4 +1,4 @@
-# Long Line Scroll Test
+# 09 Long Line Scroll Test
 
 a=4
 
@@ -7,7 +7,7 @@ redo:
 a++
 
 # Here we are
-# 1And why not a super long line so we can see what that does?
+# And why not a super long line so we can see what that does?
 
 a+=5
 
