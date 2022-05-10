@@ -221,7 +221,7 @@ namespace AutoGrind
                 continueTask = true;
                 while (continueTask)
                 {
-                    System.Threading.Thread.Sleep(250);
+                    System.Threading.Thread.Sleep(25);
                     if (continueTask && mainForm.RobotCompletedCaughtUp())
                     {
                         mainForm.RobotSend(lastJogCommand);
@@ -409,5 +409,9 @@ namespace AutoGrind
             }
         }
 
+        private void ZplusBtn_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
