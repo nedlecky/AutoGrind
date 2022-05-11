@@ -87,7 +87,7 @@
             this.ExitBtn = new System.Windows.Forms.Button();
             this.label6 = new System.Windows.Forms.Label();
             this.MountedToolBox = new System.Windows.Forms.ComboBox();
-            this.OperatorModeBox = new System.Windows.Forms.ComboBox();
+            this.UserModeBox = new System.Windows.Forms.ComboBox();
             this.RobotModeBtn = new System.Windows.Forms.Button();
             this.SafetyStatusBtn = new System.Windows.Forms.Button();
             this.ProgramStateBtn = new System.Windows.Forms.Button();
@@ -883,21 +883,21 @@
             this.MountedToolBox.TabIndex = 99;
             this.MountedToolBox.SelectedIndexChanged += new System.EventHandler(this.MountedToolBox_SelectedIndexChanged);
             // 
-            // OperatorModeBox
+            // UserModeBox
             // 
-            this.OperatorModeBox.BackColor = System.Drawing.SystemColors.Control;
-            this.OperatorModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.OperatorModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.OperatorModeBox.FormattingEnabled = true;
-            this.OperatorModeBox.Items.AddRange(new object[] {
+            this.UserModeBox.BackColor = System.Drawing.SystemColors.Control;
+            this.UserModeBox.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.UserModeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 26.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.UserModeBox.FormattingEnabled = true;
+            this.UserModeBox.Items.AddRange(new object[] {
             "OPERATOR",
             "EDITOR",
             "ENGINEERING"});
-            this.OperatorModeBox.Location = new System.Drawing.Point(1833, 38);
-            this.OperatorModeBox.Name = "OperatorModeBox";
-            this.OperatorModeBox.Size = new System.Drawing.Size(294, 47);
-            this.OperatorModeBox.TabIndex = 103;
-            this.OperatorModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
+            this.UserModeBox.Location = new System.Drawing.Point(1833, 38);
+            this.UserModeBox.Name = "UserModeBox";
+            this.UserModeBox.Size = new System.Drawing.Size(294, 47);
+            this.UserModeBox.TabIndex = 103;
+            this.UserModeBox.SelectedIndexChanged += new System.EventHandler(this.OperatorModeBox_SelectedIndexChanged);
             // 
             // RobotModeBtn
             // 
@@ -986,7 +986,7 @@
             this.RunPage.Controls.Add(this.RobotModelLbl);
             this.RunPage.Controls.Add(this.label8);
             this.RunPage.Controls.Add(this.label7);
-            this.RunPage.Controls.Add(this.OperatorModeBox);
+            this.RunPage.Controls.Add(this.UserModeBox);
             this.RunPage.Controls.Add(this.RobotSentLbl);
             this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
             this.RunPage.Controls.Add(this.label17);
@@ -2137,7 +2137,7 @@
         private System.Windows.Forms.Button SavePositionsBtn;
         private System.Windows.Forms.Button ClearPositionsBtn;
         private System.Windows.Forms.DataGridView PositionsGrd;
-        private System.Windows.Forms.ComboBox OperatorModeBox;
+        private System.Windows.Forms.ComboBox UserModeBox;
         private System.Windows.Forms.Label RecipeFilenameLbl;
         private System.Windows.Forms.RichTextBox InstructionsRTB;
         private System.Windows.Forms.TabPage manualPage;

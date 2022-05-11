@@ -1,5 +1,6 @@
 # 22 Rect Speed Test
-# All should alternate 3s, 2s per side
+# BE CAREFUL: Robot will move and positions are expected to be OK
+# All should alternate ~3s, ~2s per side
 
 speed = 5
 cmd=grind_rect(60,40,1,{speed},10,0)

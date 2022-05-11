@@ -1,4 +1,4 @@
-# globals_standard.agr
+# globals_standard.txt
 
 tool1 = 400grit
 tool2 = 600grit

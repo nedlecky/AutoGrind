@@ -98,7 +98,7 @@ namespace AutoGrind
             }
 
             LoadPersistent();
-            OperatorModeBox.SelectedIndex = (int)operatorMode;
+            UserModeBox.SelectedIndex = (int)operatorMode;
 
             // Set logfile variable in NLog
             LogManager.Configuration.Variables["LogfileName"] = AutoGrindRoot + "/Logs/AutoGrind.log";
@@ -270,7 +270,7 @@ namespace AutoGrind
             int mins = Math.Abs(elapsed.Minutes);
             int secs = Math.Abs(elapsed.Seconds);
             int msecs = Math.Abs(elapsed.Milliseconds);
-            return String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0) + ((elapsed < TimeSpan.Zero && secs > 1) ? " OVER" : "");
+            return String.Format("{0:00}h {1:00}m {2:00.0}s", hrs, mins, secs + msecs / 1000.0) + ((elapsed < TimeSpan.Zero && secs > 0.1) ? " OVER" : "");
         }
 
         private void RecomputeTimes()
@@ -663,6 +663,8 @@ namespace AutoGrind
                     SafetyStatusBtn.Enabled = true;
                     ProgramStateBtn.Enabled = true;
 
+                    UserModeBox.Enabled = true;
+
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
@@ -708,6 +710,8 @@ namespace AutoGrind
                     SafetyStatusBtn.Enabled = true;
                     ProgramStateBtn.Enabled = true;
 
+                    UserModeBox.Enabled = true;
+
                     ExitBtn.Enabled = true;
                     JogRunBtn.Enabled = robotReady;
                     JogBtn.Enabled = robotReady;
@@ -751,6 +755,8 @@ namespace AutoGrind
                     RobotModeBtn.Enabled = false;
                     SafetyStatusBtn.Enabled = false;
                     ProgramStateBtn.Enabled = false;
+
+                    UserModeBox.Enabled = false;
 
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
@@ -799,6 +805,8 @@ namespace AutoGrind
                     RobotModeBtn.Enabled = true;
                     SafetyStatusBtn.Enabled = true;
                     ProgramStateBtn.Enabled = true;
+
+                    UserModeBox.Enabled = false;
 
                     ExitBtn.Enabled = false;
                     JogRunBtn.Enabled = false;
@@ -936,7 +944,7 @@ namespace AutoGrind
                 // Set Position Button
                 new ControlSpec(PositionSetBtn, ControlSetting.HIDDEN, ControlSetting.DISABLED, ControlSetting.NORMAL),
 
-                // Special test controls
+                // Special Test Controls
                 new ControlSpec(StressBtn, ControlSetting.HIDDEN, ControlSetting.HIDDEN, ControlSetting.NORMAL),
                 new ControlSpec(StressChk, ControlSetting.HIDDEN, ControlSetting.HIDDEN, ControlSetting.NORMAL),
             };
@@ -949,7 +957,7 @@ namespace AutoGrind
 
             OperatorMode origOperatorMode = operatorMode;
 
-            OperatorMode newOperatorMode = (OperatorMode)OperatorModeBox.SelectedIndex;
+            OperatorMode newOperatorMode = (OperatorMode)UserModeBox.SelectedIndex;
             log.Info(string.Format("OperatorMode changing to {0}", newOperatorMode));
 
 #if !DEBUG
@@ -1582,7 +1590,7 @@ namespace AutoGrind
 #else
             operatorMode = OperatorMode.OPERATOR; // (OperatorMode)(Int32)AppNameKey.GetValue("operatorMode", 0);
 #endif
-            OperatorModeBox.SelectedIndex = (int)operatorMode;
+            UserModeBox.SelectedIndex = (int)operatorMode;
 
             // Debug Level selection (forced to INFO now)
             // DebugLevelCombo.Text = (string)AppNameKey.GetValue("DebugLevelCombo.Text", "Info");

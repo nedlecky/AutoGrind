@@ -1,4 +1,5 @@
 # 23 Serp Speed Test
+# BE CAREFUL: Robot will move and positions are expected to be OK
 # All should alternate 3s, 2s on long side
 
 speed = 5

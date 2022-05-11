@@ -1,12 +1,13 @@
 # 21 Line Speed Test
-# All should take 2S
+# BE CAREFUL: Robot will move and positions are expected to be OK
+# All should take ~2s
 
 speed = 20
 
 flat:
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
-grind_line(40,0,1,{speed},10,0)
+grind_line(40,0,2,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 

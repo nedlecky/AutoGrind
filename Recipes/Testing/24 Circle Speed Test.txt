@@ -1,10 +1,10 @@
 # 24 Circle Speed Test
-# All should be ~10S
-# FAILING seem too slow 4/27/2022
+# BE CAREFUL: Robot will move and positions are expected to be OK
+# All should be ~5s in trial, 50s grind
 
 # At trial grind speed of 20mm/s
-# 10s ==> 200m circum ==> 63.7mm diam
-cmd=grind_circle(63.7,1,20,10,0)
+# 5s ==> 100m circum ==> 31.8mm diam
+cmd=grind_circle(31.8,1,2,10,0)
 
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)

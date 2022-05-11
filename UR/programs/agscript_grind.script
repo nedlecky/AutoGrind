@@ -687,6 +687,10 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
+    if ok_to_proceed():
+      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
+    end
+
     # Alternate directions for multiple cycles
     if pdest == p0:
       pdest = p1
@@ -694,9 +698,6 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
       pdest = p0
     end
 
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
-    end
     grind_cycle = grind_cycle + 1
   end
   pattern_complete()
@@ -713,18 +714,19 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    # Alternate directions for multiple cycles
-    if pdest == p0:
-      pdest = p1
-    else:
-      pdest = p0
-    end
 
     if ok_to_proceed():
       # Chugging
       #movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m, t_move = t_move)
       # Better?
       movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m * speed_factor, t_move = t_move)
+    end
+
+    # Alternate directions for multiple cycles
+    if pdest == p0:
+      pdest = p1
+    else:
+      pdest = p0
     end
 
     grind_cycle = grind_cycle + 1
@@ -737,22 +739,22 @@ end
 def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
   p0 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
   p1 = pose_trans(p_center, p[0, 0, 0, drx_rad / 2.0, dry_rad / 2.0, 0])
-  pdest = p1
   t_move = sqrt(drx_rad * drx_rad + dry_rad * dry_rad) / grind_rot_speed_rps / 4
+  pdest = p1
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
+
+    if ok_to_proceed():
+      movel_int(pdest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move)
+    end
 
     # Alternate directions for multiple cycles
     if pdest == p0:
       pdest = p1
     else:
       pdest = p0
-    end
-
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move)
     end
 
     grind_cycle = grind_cycle + 1

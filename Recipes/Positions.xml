@@ -30,9 +30,9 @@
   </Positions>
   <Positions>
     <Name>demo_flat</Name>
-    <Joints>[1.49617,-1.2963,2.11734,-2.39148,-1.57008,3.08211]</Joints>
-    <Pose>p[0.0974071,-0.490654,0.00988549,-3.14128,0.0224655,0.000322027]</Pose>
-    <IsSystem>true</IsSystem>
+    <Joints>[1.49605,-1.29646,2.11757,-2.3918,-1.56987,3.06767]</Joints>
+    <Pose>p[0.0974083,-0.490655,0.00990985,3.14156,2.64733e-05,-1.25557e-05]</Pose>
+    <IsSystem>false</IsSystem>
   </Positions>
   <Positions>
     <Name>demo_cyl</Name>
