@@ -979,7 +979,7 @@ namespace AutoGrind
                     };
                     if (form.ShowDialog(this) != DialogResult.OK || form.Value != "9")
                     {
-                        OperatorModeBox.SelectedIndex = 0;
+                        UserModeBox.SelectedIndex = 0;
                         return;
                     }
                     break;
@@ -995,7 +995,7 @@ namespace AutoGrind
                     };
                     if (form.ShowDialog(this) != DialogResult.OK || form.Value != "99")
                     {
-                        OperatorModeBox.SelectedIndex = 0;
+                        UserModeBox.SelectedIndex = 0;
                         return;
                     }
                     break;

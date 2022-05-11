@@ -415,6 +415,9 @@
             this.XyJogDistanceBox.FormattingEnabled = true;
             this.XyJogDistanceBox.Items.AddRange(new object[] {
             "1",
+            "2",
+            "3",
+            "4",
             "5",
             "10",
             "25",
@@ -437,6 +440,7 @@
             "0.1",
             "1.0",
             "2.0",
+            "3.0",
             "5.0",
             "10.0",
             "22.5",
@@ -478,8 +482,12 @@
             this.ZJogDistanceBox.FormattingEnabled = true;
             this.ZJogDistanceBox.Items.AddRange(new object[] {
             "1",
+            "2",
+            "3",
+            "4",
             "5",
             "10",
+            "15",
             "20"});
             this.ZJogDistanceBox.Location = new System.Drawing.Point(531, 79);
             this.ZJogDistanceBox.Name = "ZJogDistanceBox";

@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle9 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle10 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle11 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle12 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
@@ -180,7 +180,7 @@
             this.PartGeometryBox = new System.Windows.Forms.ComboBox();
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
-            this.ToolTips = new System.Windows.Forms.ToolTip(this.components);
+            this.label18 = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -241,7 +241,6 @@
             this.StepBtn.Size = new System.Drawing.Size(197, 140);
             this.StepBtn.TabIndex = 5;
             this.StepBtn.Text = "Step";
-            this.ToolTips.SetToolTip(this.StepBtn, "Execute only the next recipe step");
             this.StepBtn.UseVisualStyleBackColor = false;
             this.StepBtn.Click += new System.EventHandler(this.StepBtn_Click);
             // 
@@ -287,7 +286,6 @@
             this.StartBtn.Size = new System.Drawing.Size(197, 141);
             this.StartBtn.TabIndex = 1;
             this.StartBtn.Text = "Start";
-            this.ToolTips.SetToolTip(this.StartBtn, "Starts execution of a recipe");
             this.StartBtn.UseVisualStyleBackColor = false;
             this.StartBtn.Click += new System.EventHandler(this.StartBtn_Click);
             // 
@@ -369,13 +367,12 @@
             // 
             this.timeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.timeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeLbl.Location = new System.Drawing.Point(1690, 1390);
+            this.timeLbl.Location = new System.Drawing.Point(1250, 20);
             this.timeLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.timeLbl.Name = "timeLbl";
-            this.timeLbl.Size = new System.Drawing.Size(459, 41);
+            this.timeLbl.Size = new System.Drawing.Size(353, 52);
             this.timeLbl.TabIndex = 5;
-            this.timeLbl.Text = "timeLbl";
-            this.timeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.timeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // StartupTmr
             // 
@@ -600,14 +597,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle9.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle9.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle9.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle9.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle9.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle9.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle9.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle9;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -697,14 +694,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle10.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle10.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle10.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle10.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle10.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle10.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle10.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle10;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -984,10 +981,12 @@
             // RunPage
             // 
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.RunPage.Controls.Add(this.label18);
             this.RunPage.Controls.Add(this.label9);
             this.RunPage.Controls.Add(this.RobotSerialNumberLbl);
             this.RunPage.Controls.Add(this.RobotModelLbl);
             this.RunPage.Controls.Add(this.label8);
+            this.RunPage.Controls.Add(this.timeLbl);
             this.RunPage.Controls.Add(this.label7);
             this.RunPage.Controls.Add(this.UserModeBox);
             this.RunPage.Controls.Add(this.RobotSentLbl);
@@ -1109,7 +1108,7 @@
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(849, 583);
+            this.label17.Location = new System.Drawing.Point(849, 586);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(402, 46);
             this.label17.TabIndex = 147;
@@ -1130,7 +1129,7 @@
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(884, 528);
+            this.label13.Location = new System.Drawing.Point(884, 531);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(367, 46);
             this.label13.TabIndex = 145;
@@ -1151,7 +1150,7 @@
             // 
             this.label16.AutoSize = true;
             this.label16.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label16.Location = new System.Drawing.Point(922, 473);
+            this.label16.Location = new System.Drawing.Point(922, 476);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(329, 46);
             this.label16.TabIndex = 143;
@@ -1235,7 +1234,7 @@
             // 
             this.RunStartedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunStartedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1250, 36);
+            this.RunStartedTimeLbl.Location = new System.Drawing.Point(1250, 76);
             this.RunStartedTimeLbl.Name = "RunStartedTimeLbl";
             this.RunStartedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunStartedTimeLbl.TabIndex = 134;
@@ -1245,7 +1244,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label14.Location = new System.Drawing.Point(1042, 39);
+            this.label14.Location = new System.Drawing.Point(1042, 79);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(203, 46);
             this.label14.TabIndex = 133;
@@ -1269,7 +1268,7 @@
             // 
             this.RunElapsedTimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RunElapsedTimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1250, 93);
+            this.RunElapsedTimeLbl.Location = new System.Drawing.Point(1250, 133);
             this.RunElapsedTimeLbl.Name = "RunElapsedTimeLbl";
             this.RunElapsedTimeLbl.Size = new System.Drawing.Size(353, 52);
             this.RunElapsedTimeLbl.TabIndex = 132;
@@ -1279,7 +1278,7 @@
             // 
             this.label12.AutoSize = true;
             this.label12.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label12.Location = new System.Drawing.Point(953, 96);
+            this.label12.Location = new System.Drawing.Point(953, 136);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(292, 46);
             this.label12.TabIndex = 131;
@@ -1302,7 +1301,7 @@
             // 
             this.Grind.AutoSize = true;
             this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(1353, 638);
+            this.Grind.Location = new System.Drawing.Point(1353, 641);
             this.Grind.Name = "Grind";
             this.Grind.Size = new System.Drawing.Size(54, 46);
             this.Grind.TabIndex = 128;
@@ -1342,7 +1341,7 @@
             // 
             this.label10.AutoSize = true;
             this.label10.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label10.Location = new System.Drawing.Point(1022, 638);
+            this.label10.Location = new System.Drawing.Point(1022, 640);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(229, 46);
             this.label10.TabIndex = 124;
@@ -1651,23 +1650,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle11.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle11.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle11.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle11.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle11.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle11.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle11.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle11;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle12.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle12.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle12.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle12.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle12.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle12.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle12.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle12;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1947,6 +1946,7 @@
             // LogLevelCombo
             // 
             this.LogLevelCombo.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.LogLevelCombo.Font = new System.Drawing.Font("Microsoft Sans Serif", 27.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LogLevelCombo.FormattingEnabled = true;
             this.LogLevelCombo.Items.AddRange(new object[] {
             "Error",
@@ -1956,7 +1956,7 @@
             "Trace"});
             this.LogLevelCombo.Location = new System.Drawing.Point(23, 43);
             this.LogLevelCombo.Name = "LogLevelCombo";
-            this.LogLevelCombo.Size = new System.Drawing.Size(291, 45);
+            this.LogLevelCombo.Size = new System.Drawing.Size(291, 50);
             this.LogLevelCombo.TabIndex = 80;
             this.LogLevelCombo.SelectedIndexChanged += new System.EventHandler(this.DebugLevelCombo_SelectedIndexChanged);
             // 
@@ -2017,16 +2017,23 @@
             // VersionLbl
             // 
             this.VersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VersionLbl.Location = new System.Drawing.Point(1691, 1361);
+            this.VersionLbl.Location = new System.Drawing.Point(1701, 1402);
             this.VersionLbl.Name = "VersionLbl";
-            this.VersionLbl.Size = new System.Drawing.Size(458, 29);
+            this.VersionLbl.Size = new System.Drawing.Size(451, 29);
             this.VersionLbl.TabIndex = 149;
             this.VersionLbl.Text = "VersionLbl";
-            this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
-            // ToolTips
+            // label18
             // 
-            this.ToolTips.ToolTipTitle = "Tool Tip:";
+            this.label18.AutoSize = true;
+            this.label18.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label18.Location = new System.Drawing.Point(994, 24);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(251, 46);
+            this.label18.TabIndex = 155;
+            this.label18.Text = "Current Time";
+            this.label18.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 
@@ -2038,7 +2045,6 @@
             this.Controls.Add(this.VersionLbl);
             this.Controls.Add(this.ExitBtn);
             this.Controls.Add(this.DoorClosedLbl);
-            this.Controls.Add(this.timeLbl);
             this.Controls.Add(this.SaveAsRecipeBtn);
             this.Controls.Add(this.NewRecipeBtn);
             this.Controls.Add(this.LoadRecipeBtn);
@@ -2244,7 +2250,7 @@
         private System.Windows.Forms.CheckBox StressChk;
         private System.Windows.Forms.Button SaveConfigBtn;
         private System.Windows.Forms.Label label9;
-        private System.Windows.Forms.ToolTip ToolTips;
+        private System.Windows.Forms.Label label18;
     }
 }
 

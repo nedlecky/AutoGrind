@@ -1,5 +1,7 @@
 # 26 Concentric Circle Test
 
+move_linear(demo_flat)
+
 # Old school
 grind_circle(30,2,0.9,10,1)
 grind_circle(20,2,0.9,10,1)
