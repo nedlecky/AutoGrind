@@ -102,7 +102,6 @@
             this.ZplusBtn.TabIndex = 1;
             this.ZplusBtn.Text = "Z +";
             this.ZplusBtn.UseVisualStyleBackColor = false;
-            this.ZplusBtn.Click += new System.EventHandler(this.ZplusBtn_Click);
             this.ZplusBtn.MouseDown += new System.Windows.Forms.MouseEventHandler(this.ZplusBtn_MouseDown);
             this.ZplusBtn.MouseUp += new System.Windows.Forms.MouseEventHandler(this.BtnMouseUp);
             // 

@@ -59,12 +59,14 @@ def command_validate():
   end
 
   # Slide the robot commands and parameters back in command[] to remove the index and checksum
-  i = 3
+  local i = 3
   while (i < command[0] + 1):
     command[i-2] = command[i]
     i = i + 1
   end
-  command[0] = command[0] - 2    # 2 feweer elements in the array now!
+  command[i-1] = 0
+  command[i-2] = 0
+  command[0] = command[0] - 2    # 2 fewer elements in the array now!
 
   global robot_index = test_index
   return True
@@ -209,7 +211,10 @@ def command_finish():
     elif command[2] == 19:
       # freedrive on/off
       if (command[3] > 0):
-        freedrive_mode()
+        freeAxes = [command[4],command[5],command[6],command[7],command[8],command[9]]
+        # Only with the new PolyScope??
+        freedrive_mode(freeAxes)
+        #freedrive_mode()
         robot_freedrive_mode = 1
         socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
       else:
@@ -312,11 +317,15 @@ def command_finish():
     global response = "movel_relative_tcp_part()"
   end
 
-  # Change one element of curren#t pose and movel there
+  # Change one element of current pose and movel there
   def movel_one_only(index = 0, val = 0):
     p = get_actual_tcp_pose()
     p[index] = val
-    movel(p, robot_linear_accel_mpss, robot_linear_speed_mps)
+    if index < 3:  # Translational
+      movel(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    else:
+      movel(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
+    end
     global response = "movel_one_only()"
   end
 

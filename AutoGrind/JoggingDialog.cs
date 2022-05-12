@@ -399,7 +399,8 @@ namespace AutoGrind
             }
             else
             {
-                mainForm.RobotSend("30,19,1");
+                string freeAxes = "0,0,1,0,0,0";
+                mainForm.RobotSend("30,19,1," + freeAxes);
                 FreeDriveBtn.Text = "FreeDrive\nON";
                 FreeDriveBtn.BackColor = Color.Blue;
                 SendMessage(Handle, WM_SETREDRAW, false, 0);
@@ -407,11 +408,6 @@ namespace AutoGrind
                 SendMessage(Handle, WM_SETREDRAW, true, 0);
                 Refresh();
             }
-        }
-
-        private void ZplusBtn_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }
