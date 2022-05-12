@@ -209,17 +209,26 @@ def command_finish():
       coolant_flow(False, grind_contact_enable)
       global response = "coolant_off()"
     elif command[2] == 19:
-      # freedrive on/off
-      if (command[3] > 0):
-        freeAxes = [command[4],command[5],command[6],command[7],command[8],command[9]]
-        # Only with the new PolyScope??
-        freedrive_mode(freeAxes)
-        #freedrive_mode()
-        robot_freedrive_mode = 1
+      # freedrive on/off, 0=base|1=tcp|2=tcp_part, 6 axisEnables
+      if command[3] == 0:
+        end_freedrive_mode()
+        set_tcp(robot_tcp)
+        robot_freedrive_mode = 0
         socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
       else:
-        end_freedrive_mode()
-        robot_freedrive_mode = 0
+        local coordSys = command[4]
+        local freeAxes = [command[5], command[6], command[7], command[8], command[9], command[10]]
+        if coordSys == 1:
+          set_tcp(robot_tcp)
+          freedrive_mode(freeAxes = freeAxes, feature = "tool")
+        elif coordSys == 2:
+          set_tcp(robot_tcp_part)
+          freedrive_mode(freeAxes = freeAxes, feature = "tool")
+        else:
+          # Base
+          freedrive_mode(freeAxes = freeAxes)
+        end
+        robot_freedrive_mode = 1
         socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
       end
       global response = "freedrive_mode()"
@@ -293,15 +302,15 @@ def command_finish():
 
   # Movel relatively in base coordinates
   def movel_relative_base(p1):
-    p0 = get_actual_tcp_pose()
-    p2 = pose_add(p0, p1)
+    local p0 = get_actual_tcp_pose()
+    local p2 = pose_add(p0, p1)
     movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
     global response = "movel_relative_base()"
   end
 
   # Movel relatively in TCP coordinates
   def movel_relative_tcp(p1):
-    p1 = pose_trans(get_forward_kin(), p1)
+    local p1 = pose_trans(get_forward_kin(), p1)
     movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     global response = "movel_relative_tcp()"
   end
@@ -309,7 +318,7 @@ def command_finish():
   # Movel relatively in TCP_part coordinates
   def movel_relative_tcp_part(p1):
     set_tcp(robot_tcp_part)
-    p1 = pose_trans(get_forward_kin(), p1)
+    local p1 = pose_trans(get_forward_kin(), p1)
     #p1 = pose_trans(get_forward_kin(q=get_actual_joint_positions(), tcp = robot_tcp_part), p1)
     #p1 = pose_trans(get_forward_kin(q = get_actual_joint_positions(), tcp = robot_tcp_part), p1)
     movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
@@ -319,7 +328,7 @@ def command_finish():
 
   # Change one element of current pose and movel there
   def movel_one_only(index = 0, val = 0):
-    p = get_actual_tcp_pose()
+    local p = get_actual_tcp_pose()
     p[index] = val
     if index < 3:  # Translational
       movel(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
@@ -331,11 +340,11 @@ def command_finish():
 
   # Change only rotation elements of current pose and movel there
   def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
-    p = get_actual_tcp_pose()
+    local p = get_actual_tcp_pose()
     p[3] = r1
     p[4] = r2
     p[5] = r3
-    movel(p, robot_linear_accel_mpss, robot_linear_speed_mps)
+    movel(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
     global response = "movel_rot_only()"
   end
 

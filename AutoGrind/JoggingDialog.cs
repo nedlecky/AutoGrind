@@ -135,9 +135,24 @@ namespace AutoGrind
             switch (CoordBox.Text)
             {
                 case "BASE":
+                    EnableAllButtons(true);
+                    ColorAllButtons();
+                    FreeXChk.Checked = true;
+                    FreeYChk.Checked = true;
+                    FreeZChk.Checked = true;
+                    FreeRxChk.Checked = true;
+                    FreeRyChk.Checked = true;
+                    FreeRzChk.Checked = true;
+                    break;
                 case "TOOL":
                     EnableAllButtons(true);
                     ColorAllButtons();
+                    FreeXChk.Checked = true;
+                    FreeYChk.Checked = true;
+                    FreeZChk.Checked = true;
+                    FreeRxChk.Checked = true;
+                    FreeRyChk.Checked = true;
+                    FreeRzChk.Checked = true;
                     break;
                 case "PART":
                     log.Info("PART: {0}", Part);
@@ -153,6 +168,12 @@ namespace AutoGrind
                         //RxVerticalBtn.Enabled = true;
                         //RyZeroBtn.Enabled = true;
                         ColorAllButtons();
+                        FreeXChk.Checked = false;
+                        FreeYChk.Checked = false;
+                        FreeZChk.Checked = true;
+                        FreeRxChk.Checked = true;
+                        FreeRyChk.Checked = true;
+                        FreeRzChk.Checked = false;
                     }
                     else if (Part.StartsWith("CYLINDER"))
                     {
@@ -165,11 +186,24 @@ namespace AutoGrind
                         RxMinusBtn.Enabled = true;
                         //RxVerticalBtn.Enabled = true;
                         ColorAllButtons();
+                        FreeXChk.Checked = true;
+                        FreeYChk.Checked = false;
+                        FreeZChk.Checked = true;
+                        FreeRxChk.Checked = true;
+                        FreeRyChk.Checked = false;
+                        FreeRzChk.Checked = false;
                     }
                     else // FLAT
                     {
                         EnableAllButtons(true);
                         ColorAllButtons();
+                        FreeXChk.Checked = true;
+                        FreeYChk.Checked = true;
+                        FreeZChk.Checked = true;
+                        FreeRxChk.Checked = false;
+                        FreeRyChk.Checked = false;
+                        FreeRzChk.Checked = false;
+
                     }
                     break;
             }
@@ -332,17 +366,17 @@ namespace AutoGrind
             Repeater();
         }
 
-        private void FlipRBtn_Click(object sender, EventArgs e)
+        private void RxVerticalBtn_Click(object sender, EventArgs e)
         {
             mainForm.RobotSend("16,3," + Deg2Rad(180).ToString());
         }
 
-        private void ZeroPBtn_Click(object sender, EventArgs e)
+        private void RyZeroBtn_Click(object sender, EventArgs e)
         {
             mainForm.RobotSend("16,4,0");
         }
 
-        private void ZeroYBtn_Click(object sender, EventArgs e)
+        private void RzZeroBtn_Click(object sender, EventArgs e)
         {
             mainForm.RobotSend("16,5,0");
         }
@@ -382,13 +416,25 @@ namespace AutoGrind
 
         private const int WM_SETREDRAW = 11;
 
+        private void EnableFreedrive()
+        {
+            string freeAxes = "";
+            freeAxes += (FreeXChk.Checked ? "1" : "0");
+            freeAxes += "," + (FreeYChk.Checked ? "1" : "0");
+            freeAxes += "," + (FreeZChk.Checked ? "1" : "0");
+            freeAxes += "," + (FreeRxChk.Checked ? "1" : "0");
+            freeAxes += "," + (FreeRyChk.Checked ? "1" : "0");
+            freeAxes += "," + (FreeRzChk.Checked ? "1" : "0");
+            mainForm.RobotSend("30,19,1," + CoordBox.SelectedIndex.ToString() + "," + freeAxes);
+        }
+
         private void FreeDriveBtn_Click(object sender, EventArgs e)
         {
             if (FreeDriveBtn.Text.Contains("ON"))
             {
                 mainForm.RobotSend("30,19,0");
 
-                FreeDriveBtn.Text = "FreeDrive";
+                FreeDriveBtn.Text = "Free Drive";
                 FreeDriveBtn.BackColor = Color.Green;
 
                 SendMessage(Handle, WM_SETREDRAW, false, 0);
@@ -399,9 +445,9 @@ namespace AutoGrind
             }
             else
             {
-                string freeAxes = "0,0,1,0,0,0";
-                mainForm.RobotSend("30,19,1," + freeAxes);
-                FreeDriveBtn.Text = "FreeDrive\nON";
+                EnableFreedrive();
+
+                FreeDriveBtn.Text = "Free Drive\nON";
                 FreeDriveBtn.BackColor = Color.Blue;
                 SendMessage(Handle, WM_SETREDRAW, false, 0);
                 ButtonEnable(false);
@@ -409,5 +455,11 @@ namespace AutoGrind
                 Refresh();
             }
         }
+        private void FreeChk_CheckedChanged(object sender, EventArgs e)
+        {
+            if (FreeDriveBtn.Text.Contains("ON"))
+                EnableFreedrive();
+        }
+
     }
 }
