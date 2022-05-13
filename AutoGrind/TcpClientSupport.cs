@@ -1,4 +1,9 @@
-﻿using System;
+﻿// File: TcpClientSupport.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: Implements a TcpClient, used to attached to the UR Dashboard
+
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;

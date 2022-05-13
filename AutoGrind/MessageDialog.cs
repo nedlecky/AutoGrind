@@ -1,4 +1,9 @@
-﻿using System;
+﻿// File: MessageDialog.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: Two-button dialog with relabelable buttons optimized for use with touch screen
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -16,6 +21,7 @@ namespace AutoGrind
 
         public DialogResult result = DialogResult.OK;
 
+        // Can override these before showing dialog
         public string Title { get; set; } = "??";
         public string Label { get; set; } = "???";
         public string OkText { get; set; } = "OK";

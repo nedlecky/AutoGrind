@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+﻿// File: SplashForm.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: Implements the splash screen (also used as the About dialog)
+
+using System;
 using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace AutoGrind
@@ -41,11 +39,11 @@ namespace AutoGrind
             Text = caption;
 
             VersionLbl.Text = caption;
-            
+
             if (AutoClose)
             {
-                Left = (screenDesignWidth - Width)/2;
-                Top = (screenDesignHeight - Height)/2;
+                Left = (screenDesignWidth - Width) / 2;
+                Top = (screenDesignHeight - Height) / 2;
                 CloseBtn.Visible = false;
                 CloseTmr.Interval = 5000;
                 CloseTmr.Enabled = true;

@@ -1,4 +1,9 @@
-﻿using System;
+﻿// File: DirectorySelectDialog.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: Custom Directory Select dialog with large buttons for use with touch screen
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;

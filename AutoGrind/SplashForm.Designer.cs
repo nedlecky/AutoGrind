@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(SplashForm));
             this.CloseTmr = new System.Windows.Forms.Timer(this.components);
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -90,7 +91,7 @@
             // 
             this.DeveloperLogoPic.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.DeveloperLogoPic.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.DeveloperLogoPic.Image = global::AutoGrind.Properties.Resources.Lecky_Engineering_Logo_12_4_2020_Full;
+            this.DeveloperLogoPic.Image = ((System.Drawing.Image)(resources.GetObject("DeveloperLogoPic.Image")));
             this.DeveloperLogoPic.Location = new System.Drawing.Point(499, 504);
             this.DeveloperLogoPic.Name = "DeveloperLogoPic";
             this.DeveloperLogoPic.Size = new System.Drawing.Size(163, 84);
@@ -152,7 +153,7 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.MenuHighlight;
-            this.ClientSize = new System.Drawing.Size(731, 610);
+            this.ClientSize = new System.Drawing.Size(702, 610);
             this.ControlBox = false;
             this.Controls.Add(this.VersionLbl);
             this.Controls.Add(this.label3);

@@ -1,4 +1,9 @@
-﻿using System;
+﻿// File: Program.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: The main rouutine (unmodified from default) for AutoGrind
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

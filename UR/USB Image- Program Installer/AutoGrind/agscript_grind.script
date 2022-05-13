@@ -1,7 +1,7 @@
-# AutoGrind Grinding Functions
-# File: agscript_grind.script
-# Version 2022.04.25.1
-# Programmer: Ned Lecky
+# File: agscript_grind.cs
+# Project: AutoGrind
+# Author: Ned Lecky, Olympus Controls
+# Purpose: All grinding functions used in AutoGrind
 
 global grind_abort_listener_thread_handle = 0
 global pattern_grind_thread_handle = 0
@@ -60,7 +60,8 @@ def speed_setter(speed_mmps):
   end
 end
 
-# Set grind variables
+# Set grind variables chosen by command[2]
+# Value after set is always returned to socket
 def set_grind_variable():
   global grind_ready = False
   socket_send_line("grind_ready=False")
@@ -123,11 +124,12 @@ def set_grind_variable():
   socket_send_line("grind_ready=True")
 end
 
-# Execute the desired grind operation command[2]...
+# Execute the desired grind operation as specified in command[2]...
 def grind():
   global grind_ready = False
   socket_send_line("grind_ready=False")
 
+  # Start listening for abort commands from host
   if grind_abort_listener_thread_handle > 0:
     kill grind_abort_listener_thread_handle
     grind_abort_listener_thread_handle = 0
@@ -156,7 +158,7 @@ def grind():
   set_tcp(robot_tcp_part)
 
   if command[2] == 10:
-    # LINEAR GRINDS
+    # LINEAR GRIND
     global response = "grind_line"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -167,7 +169,7 @@ def grind():
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 20:
-    # RECTANGULAR GRINDS
+    # RECTANGULAR GRIND
     global response = "grind_rect"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -178,7 +180,7 @@ def grind():
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 30:
-    # SERPENTINE GRINDS
+    # SERPENTINE GRIND
     global response = "grind_serpentine"
     global grind_dx_mm = command[3]
     global grind_dy_mm = command[4]
@@ -191,7 +193,7 @@ def grind():
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
   elif command[2] == 40:
-    # CIRCULAR GRINDS
+    # CIRCULAR GRIND
     global response = "grind_circle"
     global grind_circle1_diam_mm = command[3]
     n_cycle_setter(command[4])
@@ -201,7 +203,7 @@ def grind():
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 50:
-    # SPIRAL GRINDS
+    # SPIRAL GRIND
     global response = "grind_spiral"
     global grind_circle1_diam_mm = command[3]
     global grind_circle2_diam_mm = command[4]
@@ -225,6 +227,7 @@ def grind():
   # Restore tool-only tcp
   set_tcp(robot_tcp)
 
+  # Stop listening for abort commands from host
   if grind_abort_listener_thread_handle > 0:
     kill grind_abort_listener_thread_handle
     grind_abort_listener_thread_handle = 0
@@ -234,7 +237,7 @@ def grind():
   socket_send_line("grind_ready=True")
 end
 
-# Get into contact with part (or away from)
+# Get into contact with part (or away from it)
 # enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
 def contact_part(on = False, enable = 0):
   if on:
@@ -264,7 +267,7 @@ def contact_part(on = False, enable = 0):
   return True
 end
 
-# Takes an 8-element list DOUT#,State x 4.  -1 indicates unused slot
+# Sets digital outpus based 8-element list of 4 pairs DOUT#,State.  -1 indicates unused slot
 def set_digital_output_list(list):
   i = 0
   while i < 8:
@@ -276,7 +279,7 @@ def set_digital_output_list(list):
   end
 end
 
-# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+# Turn tool power on/off if enable=2
 def tool_power(on = False, enable = 0):
   if enable < 2:
     return None
@@ -293,7 +296,7 @@ def tool_power(on = False, enable = 0):
   return None
 end
 
-# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+# Turn coolant on/off if enable=2
 def coolant_flow(on = False, enable = 0):
   if enable < 2:
     return None
@@ -310,7 +313,7 @@ def coolant_flow(on = False, enable = 0):
   return None
 end
 
-# enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
+# Turn foce mode on/pff if enable=2
 def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
   if enable < 2:
     return None
@@ -336,7 +339,8 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
   return None
 end
 
-# Setup for grinding
+# Start/stop Grinding (on/off)
+# Pose to center is the offset we shgould move to initial touch point [0]=FLAT [1]=CYLINDER [2]=SPHERE
 global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
   if on and not grind_process_state:
@@ -368,11 +372,13 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     end
     global p_contact_center = pose_trans(p_contact_init, reverse_pose_to_center)
 
+    # Now power everything on (although these will do nothing unless conact_enable==2)
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
     apply_force(True, grind_contact_enable, grind_touch_speed_mmps)
     grind_process_state = True
   elif not on and grind_process_state:
+    # Shut everything down and return to original pose
     apply_force(False, grind_contact_enable, 0)
     contact_part(False, grind_contact_enable)
     coolant_flow(False, grind_contact_enable)
@@ -399,17 +405,17 @@ thread grind_abort_listener_thread():
   while (halt_count == 0):
     global halt_command = socket_read_ascii_float(3, timeout = 0.1)
 
-    # If door is open, that adds a halkt count (anything >0 will stop us!)
+    # If door is open, that adds a halt count (anything >0 will stop us!)
     if not is_door_closed():
       global halt_count = halt_count + 1
     end
 
-    # If we've received(index,checksum,command,...) that adds a halt count (as long as checksum matches)
+    # If we've received(index,checksum,10,...) that adds a halt count (as long as checksum matches)
     if halt_command[0] > 2:
       global test_index = halt_command[1]
       global test_checksum = halt_command[2]
       global test_command = halt_command[3]
-      # Currently expecting halt is command 10 but I think this should be a 97 or comething like that
+
       if test_checksum == 1000 - test_index and test_command == 10:
         global halt_count = halt_count + 1
 
@@ -423,7 +429,7 @@ thread grind_abort_listener_thread():
   return None
 end
 
-# Has the thread not heard a stop message?
+# Should we proceed? lat_count==0 means no door-opens and no abort commands from host
 def ok_to_proceed():
   return halt_count == 0
 end
@@ -649,26 +655,18 @@ end
 ######################################################################################
 # PATTERN GRINDING FUNCTIONS
 #
-global pattern_complete_idx = -1
 
+# Call at end of pattern
 def pattern_complete():
-  pattern_complete_idx = 1
-
-  # Todo: testing this to see if staying on part has less wandering between grinds
-  #stopl(2.0)  # This is causing blend radius failures when we stay on the part
-  pattern_complete_idx = 2
-
-  p0 = get_actual_tcp_pose()
+  # This stops motion but won't kill force_mode the way stopl will
+  local p0 = get_actual_tcp_pose()
   movel(p0, a = grind_accel_mpss, v = grind_speed_mps)
-  pattern_complete_idx = 3
 
-  p0a = get_target_tcp_pose()
-  global pattern_complete_dist1 = pose_dist(p0a, p0)
-  pattern_complete_idx = 4
+  local p0a = get_target_tcp_pose()
+  global pattern_dist1 = pose_dist(p0a, p0)
 
-  p0b = get_actual_tcp_pose()
-  global pattern_complete_dist3 = pose_dist(p0b, p0)
-  pattern_complete_idx = 5
+  local p0b = get_actual_tcp_pose()
+  global pattern_dist2 = pose_dist(p0b, p0)
 end
 
 ######################################################################################

@@ -124,7 +124,7 @@
   <data name="O-C Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Graphics\O-C Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Lecky Engineering Logo 12-4-2020 Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="Lecky_Engineering_Logo_12_4_2020_Full" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

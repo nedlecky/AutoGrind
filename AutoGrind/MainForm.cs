@@ -1,9 +1,7 @@
-﻿// Olympus Controls AutoGrind Application
-// For Tosoh Quartz
-//
-// Programmer: Ned Lecky
-// February 2022
-
+﻿// File: MainForm.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: The main code window for the AutoGrind program
 
 using System;
 using System.Collections.Generic;

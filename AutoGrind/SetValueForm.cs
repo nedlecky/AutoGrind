@@ -1,4 +1,9 @@
-﻿using System;
+﻿// File: SetValueForm.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: A numeric data entry window for use with touch screen (or keyboard)
+
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,13 +19,13 @@ namespace AutoGrind
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
+        // These may ne overridden prior to showing the dialog
         public string Value { get; set; } = "0.000";
         public string Label { get; set; } = "Unspecified";
         public int NumberOfDecimals { get; set; } = 3;
         public bool IsPassword { get; set; } = false;
         public double MaxAllowed { get; set; } = 0;
         public double MinAllowed { get; set; } = 0;
-
 
         public SetValueForm()
         {
@@ -118,6 +123,7 @@ namespace AutoGrind
                 ValueTxt.Text = '-' + current;
         }
 
+        // This handles all of the other key clicks (by looking at the Text on the key!)
         void DefaultKeyClick(object sender, EventArgs e)
         {
             ValueTxt.Select();
@@ -125,15 +131,6 @@ namespace AutoGrind
             if (val == "<<")
                 val = "\b";
             SendKeys.Send(val);
-        }
-
-        private void ButtonPeriod_Click(object sender, EventArgs e)
-        {
-            string current = ValueTxt.Text;
-            if (current.Length == 0)
-                ValueTxt.Text = "0.";
-            else if (!ValueTxt.Text.Contains("."))
-                ValueTxt.Text += ".";
         }
     }
 }

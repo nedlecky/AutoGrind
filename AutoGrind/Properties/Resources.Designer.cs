@@ -65,7 +65,7 @@ namespace AutoGrind.Properties {
         /// </summary>
         internal static System.Drawing.Bitmap Lecky_Engineering_Logo_12_4_2020_Full {
             get {
-                object obj = ResourceManager.GetObject("Lecky Engineering Logo 12-4-2020 Full", resourceCulture);
+                object obj = ResourceManager.GetObject("Lecky_Engineering_Logo_12_4_2020_Full", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

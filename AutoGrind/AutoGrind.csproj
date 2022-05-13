@@ -233,12 +233,13 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG" />
     <None Include="Graphics\O-C Logo.png" />
     <None Include="Graphics\TQ Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="AutoGrindIcon.ico" />
+    <Content Include="Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG" />
+    <None Include="Resources\Lecky Engineering Logo 12-4-2020 Full.bmp" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

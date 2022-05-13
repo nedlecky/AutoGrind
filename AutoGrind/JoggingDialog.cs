@@ -1,4 +1,9 @@
-﻿using Microsoft.Win32;
+﻿// File: JoggingDialog.cs
+// Project: AutoGrind
+// Author: Ned Lecky, Olympus Controls
+// Purpose: Jogging and Freedrive manual robot movement
+
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -184,10 +189,9 @@ namespace AutoGrind
 
 
         static bool continueTask;
-        Task task = null;
         private void Repeater()
         {
-            task = Task.Factory.StartNew(() =>
+            Task.Factory.StartNew(() =>
             {
                 continueTask = true;
                 while (continueTask)
@@ -303,25 +307,10 @@ namespace AutoGrind
             Repeater();
         }
 
-        private void RxVerticalBtn_Click(object sender, EventArgs e)
-        {
-            mainForm.RobotSend("16,3," + Deg2Rad(180).ToString());
-        }
-
-        private void RyZeroBtn_Click(object sender, EventArgs e)
-        {
-            mainForm.RobotSend("16,4,0");
-        }
-
-        private void RzZeroBtn_Click(object sender, EventArgs e)
-        {
-            mainForm.RobotSend("16,5,0");
-        }
         private void ZeroRpyBtn_Click(object sender, EventArgs e)
         {
             mainForm.RobotSend(string.Format("18,{0},0,0", Deg2Rad(180)));
         }
-
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
