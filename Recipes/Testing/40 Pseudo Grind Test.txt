@@ -1,7 +1,6 @@
 # Pseudo Grind Test
 # Test all the patterns on all the geometries
 # Can be run on a flat table area to test force control
-# Ran no errors 10.5 hours 4-25-2022
 
 size1=40
 size2=10

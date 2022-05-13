@@ -15,23 +15,15 @@ namespace AutoGrind
 
     public partial class JoggingDialog : Form
     {
-        public enum RegisterTouchFlags
-        {
-            TWF_NONE = 0x00000000,
-            TWF_FINETOUCH = 0x00000001, //Specifies that hWnd prefers noncoalesced touch input.
-            TWF_WANTPALM = 0x00000002 //Setting this flag disables palm rejection which reduces delays for getting WM_TOUCH messages.
-        }
-        //[DllImport("user32.dll", SetLastError = true)]
-        //static extern bool RegisterTouchWindow(IntPtr hWnd, RegisterTouchFlags flags);
 
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
-        //readonly TcpServerSupport robot;
 
         public string Prompt { get; set; } = "General Jogging";
         public string Part { get; set; } = "UnknownPart";
         public string Tool { get; set; } = "UnknownTool";
 
         public bool ShouldSave { get; set; } = false;
+        private bool freedriveMode = false;
 
         MainForm mainForm;
         public JoggingDialog(MainForm _mainForm)
@@ -42,50 +34,30 @@ namespace AutoGrind
 
         private void ExitBtn_Click(object sender, EventArgs e)
         {
+            FreedriveOff();
             ShouldSave = false;
             Close();
         }
         private void SaveBtn_Click(object sender, EventArgs e)
         {
+            FreedriveOff();
             ShouldSave = true;
             Close();
         }
 
 
-        Button[] buttons;
-
         private void JoggingForm_Load(object sender, EventArgs e)
         {
-            buttons = new Button[]
-            {
-                XplusBtn,
-                XminusBtn,
-                YplusBtn,
-                YminusBtn,
-                ZplusBtn,
-                ZminusBtn,
-                RxPlusBtn,
-                RxMinusBtn,
-                RyPlusBtn,
-                RyMinusBtn,
-                RzPlusBtn,
-                RzMinusBtn,
-
-                ToolVerticalBtn,
-                RxVerticalBtn,
-                RyZeroBtn,
-                RzZeroBtn
-            };
-
             PurposeLbl.Text = Prompt;
             ToolLbl.Text = "Tool: " + Tool;
             PartLbl.Text = "Part: " + Part;
             SaveBtn.Enabled = ShouldSave;
             SaveBtn.BackColor = ShouldSave ? Color.Green : Color.Gray;
 
-            LoadJogPersistent();
+            FreedriveGrp.Enabled = false;
+            ClickJogGrp.Enabled = true;
 
-            //RegisterTouchWindow(ZplusBtn.Handle, RegisterTouchFlags.TWF_WANTPALM);
+            LoadJogPersistent();
         }
         private void JoggingDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
@@ -118,25 +90,12 @@ namespace AutoGrind
             CoordBox.SelectedIndex = (int)AppNameKey.GetValue("CoordBox.SelectedIndex", 0);
         }
 
-        private void ColorAllButtons()
-        {
-            foreach (Button b in buttons)
-                b.BackColor = b.Enabled ? Color.Green : Color.Gray;
-        }
-        private void EnableAllButtons(bool f)
-        {
-            foreach (Button b in buttons)
-                b.Enabled = f;
-        }
-
         // Enable/Hide buttons based on type of jog
         private void RestrictButtons()
         {
             switch (CoordBox.Text)
             {
                 case "BASE":
-                    EnableAllButtons(true);
-                    ColorAllButtons();
                     FreeXChk.Checked = true;
                     FreeYChk.Checked = true;
                     FreeZChk.Checked = true;
@@ -145,8 +104,6 @@ namespace AutoGrind
                     FreeRzChk.Checked = true;
                     break;
                 case "TOOL":
-                    EnableAllButtons(true);
-                    ColorAllButtons();
                     FreeXChk.Checked = true;
                     FreeYChk.Checked = true;
                     FreeZChk.Checked = true;
@@ -158,16 +115,6 @@ namespace AutoGrind
                     log.Info("PART: {0}", Part);
                     if (Part.StartsWith("SPHERE"))
                     {
-                        EnableAllButtons(false);
-                        ZplusBtn.Enabled = true;
-                        ZminusBtn.Enabled = true;
-                        RxPlusBtn.Enabled = true;
-                        RxMinusBtn.Enabled = true;
-                        RyPlusBtn.Enabled = true;
-                        RyMinusBtn.Enabled = true;
-                        //RxVerticalBtn.Enabled = true;
-                        //RyZeroBtn.Enabled = true;
-                        ColorAllButtons();
                         FreeXChk.Checked = false;
                         FreeYChk.Checked = false;
                         FreeZChk.Checked = true;
@@ -177,15 +124,6 @@ namespace AutoGrind
                     }
                     else if (Part.StartsWith("CYLINDER"))
                     {
-                        EnableAllButtons(false);
-                        XplusBtn.Enabled = true;
-                        XminusBtn.Enabled = true;
-                        ZplusBtn.Enabled = true;
-                        ZminusBtn.Enabled = true;
-                        RxPlusBtn.Enabled = true;
-                        RxMinusBtn.Enabled = true;
-                        //RxVerticalBtn.Enabled = true;
-                        ColorAllButtons();
                         FreeXChk.Checked = true;
                         FreeYChk.Checked = false;
                         FreeZChk.Checked = true;
@@ -195,15 +133,12 @@ namespace AutoGrind
                     }
                     else // FLAT
                     {
-                        EnableAllButtons(true);
-                        ColorAllButtons();
                         FreeXChk.Checked = true;
                         FreeYChk.Checked = true;
                         FreeZChk.Checked = true;
                         FreeRxChk.Checked = false;
                         FreeRyChk.Checked = false;
                         FreeRzChk.Checked = false;
-
                     }
                     break;
             }
@@ -212,6 +147,8 @@ namespace AutoGrind
         private void CoordBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             RestrictButtons();
+            if (FreeDriveBtn.Text.Contains("ON"))
+                EnableFreedrive();
         }
 
         private double Deg2Rad(double d)
@@ -385,31 +322,6 @@ namespace AutoGrind
             mainForm.RobotSend(string.Format("18,{0},0,0", Deg2Rad(180)));
         }
 
-        // Run through all the controls in the form and enable/disable buttons and comboboxes
-        // Don't adjust the FreeDriveButton and keep SaveBtn
-        private void ButtonEnable(bool enable)
-        {
-            foreach (Control c in this.Controls)
-            {
-                log.Info("type={0}", c.GetType());
-                if (c != FreeDriveBtn && (c.GetType().Name == "Button" || c.GetType().Name == "ComboBox"))
-                {
-                    if (c == SaveBtn)
-                    {
-                        if (enable)
-                            c.Enabled = ShouldSave;
-                        else
-                            c.Enabled = false;
-                    }
-                    else
-                        c.Enabled = enable;
-
-                    c.BackColor = c.Enabled ? Color.Green : Color.Gray;
-                }
-
-            }
-
-        }
 
         [DllImport("user32.dll")]
         public static extern int SendMessage(IntPtr hWnd, Int32 wMsg, bool wParam, Int32 lParam);
@@ -428,38 +340,93 @@ namespace AutoGrind
             mainForm.RobotSend("30,19,1," + CoordBox.SelectedIndex.ToString() + "," + freeAxes);
         }
 
+        private void FreedriveOn()
+        {
+
+            if (freedriveMode) return;
+
+            freedriveMode = true;
+            FreedriveGrp.Enabled = true;
+            ClickJogGrp.Enabled = false;
+
+            EnableFreedrive();
+
+            FreeDriveBtn.Text = "Free Drive\nON";
+            FreeDriveBtn.BackColor = Color.Blue;
+            SendMessage(Handle, WM_SETREDRAW, false, 0);
+            SendMessage(Handle, WM_SETREDRAW, true, 0);
+            Refresh();
+        }
+        private void FreedriveOff()
+        {
+            if (!freedriveMode) return;
+
+            freedriveMode = false;
+            FreedriveGrp.Enabled = false;
+            ClickJogGrp.Enabled = true;
+
+
+            mainForm.RobotSend("30,19,0");
+
+            FreeDriveBtn.Text = "Free Drive";
+            FreeDriveBtn.BackColor = Color.Green;
+
+            SendMessage(Handle, WM_SETREDRAW, false, 0);
+            RestrictButtons();
+            SendMessage(Handle, WM_SETREDRAW, true, 0);
+            Refresh();
+        }
         private void FreeDriveBtn_Click(object sender, EventArgs e)
         {
-            if (FreeDriveBtn.Text.Contains("ON"))
-            {
-                mainForm.RobotSend("30,19,0");
-
-                FreeDriveBtn.Text = "Free Drive";
-                FreeDriveBtn.BackColor = Color.Green;
-
-                SendMessage(Handle, WM_SETREDRAW, false, 0);
-                ButtonEnable(true);
-                RestrictButtons();
-                SendMessage(Handle, WM_SETREDRAW, true, 0);
-                Refresh();
-            }
+            if (freedriveMode)
+                FreedriveOff();
             else
-            {
-                EnableFreedrive();
-
-                FreeDriveBtn.Text = "Free Drive\nON";
-                FreeDriveBtn.BackColor = Color.Blue;
-                SendMessage(Handle, WM_SETREDRAW, false, 0);
-                ButtonEnable(false);
-                SendMessage(Handle, WM_SETREDRAW, true, 0);
-                Refresh();
-            }
+                FreedriveOn();
         }
         private void FreeChk_CheckedChanged(object sender, EventArgs e)
         {
-            if (FreeDriveBtn.Text.Contains("ON"))
+            if (freedriveMode)
                 EnableFreedrive();
         }
 
+        private void FreedriveAllBtn_Click(object sender, EventArgs e)
+        {
+            FreeXChk.Checked = true;
+            FreeYChk.Checked = true;
+            FreeZChk.Checked = true;
+            FreeRxChk.Checked = true;
+            FreeRyChk.Checked = true;
+            FreeRzChk.Checked = true;
+        }
+
+        private void FreedriveTransBtn_Click(object sender, EventArgs e)
+        {
+            FreeXChk.Checked = true;
+            FreeYChk.Checked = true;
+            FreeZChk.Checked = true;
+            FreeRxChk.Checked = false;
+            FreeRyChk.Checked = false;
+            FreeRzChk.Checked = false;
+        }
+
+        private void FreedrivePlaneBtn_Click(object sender, EventArgs e)
+        {
+            FreeXChk.Checked = true;
+            FreeYChk.Checked = true;
+            FreeZChk.Checked = false;
+            FreeRxChk.Checked = false;
+            FreeRyChk.Checked = false;
+            FreeRzChk.Checked = false;
+        }
+
+        private void FreedriveRotBtn_Click(object sender, EventArgs e)
+        {
+            FreeXChk.Checked = false;
+            FreeYChk.Checked = false;
+            FreeZChk.Checked = false;
+            FreeRxChk.Checked = true;
+            FreeRyChk.Checked = true;
+            FreeRzChk.Checked = true;
+        }
     }
 }

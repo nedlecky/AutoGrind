@@ -304,24 +304,34 @@ def command_finish():
   def movel_relative_base(p1):
     local p0 = get_actual_tcp_pose()
     local p2 = pose_add(p0, p1)
-    movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+    if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+      movel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+    else:
+      movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+    end
     global response = "movel_relative_base()"
   end
 
   # Movel relatively in TCP coordinates
   def movel_relative_tcp(p1):
-    local p1 = pose_trans(get_forward_kin(), p1)
-    movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    local p2 = pose_trans(get_forward_kin(), p1)
+    if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+      movel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+    else:
+      movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+    end
     global response = "movel_relative_tcp()"
   end
 
   # Movel relatively in TCP_part coordinates
   def movel_relative_tcp_part(p1):
     set_tcp(robot_tcp_part)
-    local p1 = pose_trans(get_forward_kin(), p1)
-    #p1 = pose_trans(get_forward_kin(q=get_actual_joint_positions(), tcp = robot_tcp_part), p1)
-    #p1 = pose_trans(get_forward_kin(q = get_actual_joint_positions(), tcp = robot_tcp_part), p1)
-    movel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    local p2 = pose_trans(get_forward_kin(), p1)
+    if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+      movel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+    else:
+      movel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+    end
     set_tcp(robot_tcp)
     global response = "movel_relative_tcp_part()"
   end

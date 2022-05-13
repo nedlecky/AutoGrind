@@ -2796,7 +2796,7 @@ namespace AutoGrind
             ExecuteLine(-1, String.Format("set_linear_accel({0})", 500));
             ExecuteLine(-1, String.Format("set_blend_radius({0})", 3));
             ExecuteLine(-1, String.Format("set_joint_speed({0})", 45));
-            ExecuteLine(-1, String.Format("set_joint_accel({0})", 180));
+            ExecuteLine(-1, String.Format("set_joint_accel({0})", 30));
         }
 
         private void SetTouchSpeedBtn_Click(object sender, EventArgs e)
