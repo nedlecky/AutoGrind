@@ -1,0 +1,12 @@
+# Remove Current Tool
+
+# Go through demount procedure
+# Assumes you have selected whatever tool is actually mounted!
+
+prompt(Please confirm: you wish to demount {robot_tool}?)
+
+move_tool_home()
+move_tool_mount()
+prompt(Please demount tool {robot_tool})
+
+select_tool(none)

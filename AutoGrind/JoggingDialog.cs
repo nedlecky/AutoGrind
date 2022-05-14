@@ -96,6 +96,7 @@ namespace AutoGrind
         }
 
         // Enable/Hide buttons based on type of jog
+        // This may be non-useful! Will see during installation
         private void RestrictButtons()
         {
             switch (CoordBox.Text)
@@ -141,9 +142,9 @@ namespace AutoGrind
                         FreeXChk.Checked = true;
                         FreeYChk.Checked = true;
                         FreeZChk.Checked = true;
-                        FreeRxChk.Checked = false;
-                        FreeRyChk.Checked = false;
-                        FreeRzChk.Checked = false;
+                        FreeRxChk.Checked = true;
+                        FreeRyChk.Checked = true;
+                        FreeRzChk.Checked = true;
                     }
                     break;
             }
@@ -152,7 +153,7 @@ namespace AutoGrind
         private void CoordBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             RestrictButtons();
-            if (FreeDriveBtn.Text.Contains("ON"))
+            if (FreedriveBtn.Text.Contains("ON"))
                 EnableFreedrive();
         }
 
@@ -340,8 +341,8 @@ namespace AutoGrind
 
             EnableFreedrive();
 
-            FreeDriveBtn.Text = "Free Drive\nON";
-            FreeDriveBtn.BackColor = Color.Blue;
+            FreedriveBtn.Text = "Freedrive\nON";
+            FreedriveBtn.BackColor = Color.Blue;
             SendMessage(Handle, WM_SETREDRAW, false, 0);
             SendMessage(Handle, WM_SETREDRAW, true, 0);
             Refresh();
@@ -357,8 +358,8 @@ namespace AutoGrind
 
             mainForm.RobotSend("30,19,0");
 
-            FreeDriveBtn.Text = "Free Drive";
-            FreeDriveBtn.BackColor = Color.Green;
+            FreedriveBtn.Text = "Freedrive";
+            FreedriveBtn.BackColor = Color.Green;
 
             SendMessage(Handle, WM_SETREDRAW, false, 0);
             RestrictButtons();

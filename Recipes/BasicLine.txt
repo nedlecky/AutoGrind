@@ -1,6 +1,0 @@
-# Line Test
-move_linear(demo_flat)
-
-grind_line(-20,20,5,20,10,0)
-end
-grind_rect(20,20,4,20,10,0)

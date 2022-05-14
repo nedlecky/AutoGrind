@@ -114,8 +114,8 @@
   </Positions>
   <Positions>
     <Name>start</Name>
-    <Joints>[1.09475,-1.45271,1.99355,-2.11144,-1.56998,2.66599]</Joints>
-    <Pose>p[-0.103856,-0.493229,0.108058,-3.14155,0.000100552,-6.75798e-05]</Pose>
+    <Joints>[1.09471,-1.45256,1.9937,-2.11151,-1.56996,2.66595]</Joints>
+    <Pose>p[-0.103843,-0.493173,0.10793,-3.14135,0.000105772,-0.000258336]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
   <Positions>
@@ -140,6 +140,12 @@
     <Name>p3</Name>
     <Joints>[1.09475,-1.45268,1.99357,-2.11141,-1.56994,2.66601]</Joints>
     <Pose>p[-0.103858,-0.493234,0.283037,-3.1415,0.000138017,-0.000169298]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>grind_start</Name>
+    <Joints>[1.49602,-1.29644,2.11754,-2.39179,-1.56988,3.06767]</Joints>
+    <Pose>p[0.0973893,-0.490672,0.00991122,3.14155,-3.70326e-05,-2.59641e-05]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
 </NewDataSet>

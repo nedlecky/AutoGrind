@@ -876,7 +876,10 @@ namespace AutoGrind
         private void UpdateGeometryToRobot()
         {
             if (robotCommandServer != null)
+            {
                 ExecuteLine(-1, String.Format("set_part_geometry_N({0},{1})", PartGeometryBox.SelectedIndex + 1, DiameterLbl.Text));
+                WriteVariable("robot_geometry", String.Format("{0},{1}", PartGeometryBox.SelectedItem, DiameterLbl.Text));
+            }
         }
 
         bool partGeometryBoxDisabled = false;
@@ -1219,8 +1222,6 @@ namespace AutoGrind
 
             SetCurrentLine(0);
             bool goodLabels = BuildLabelTable();
-            if (!goodLabels)
-                ErrorMessageBox("Error parsing labels from recipe.");
             return goodLabels;
         }
 
@@ -1780,7 +1781,15 @@ namespace AutoGrind
                 var label = IsLineALabel(line);
                 if (label.Success)
                 {
-                    labels.Add(label.Value, lineNo);
+                    try
+                    {
+                        labels.Add(label.Value, lineNo);
+                    }
+                    catch
+                    {
+                        ErrorMessageBox(String.Format("Label Problem\nRepeated label \"{0}\" on line {1}", label.Value, lineNo));
+                        return false;
+                    }
                     log.Debug("EXEC Found label {0:000}: {1}", lineNo, label.Value);
                 }
                 lineNo++;
@@ -2130,7 +2139,7 @@ namespace AutoGrind
                 }
                 if (value != parameters[1])
                 {
-                    ExecError(String.Format("Assert FAILS Line {0}: {1}", lineNumber, origLine));
+                    ExecError(String.Format("Assertion FAILS Line {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 return true;
@@ -3441,6 +3450,7 @@ namespace AutoGrind
                 string position = SelectedRow(ToolsGrd)["MountPosition"].ToString();
                 log.Info("Joint Move Tool Mount to {0}", position.ToString());
                 GotoPositionJoint(position);
+                PromptOperator("Wait for move to tool mount position complete", true);
             }
         }
 
@@ -3454,6 +3464,7 @@ namespace AutoGrind
                 string position = SelectedRow(ToolsGrd)["HomePosition"].ToString();
                 log.Info("Joint Move Tool Home to {0}", position);
                 GotoPositionJoint(position);
+                PromptOperator("Wait for move to tool home complete", true);
             }
         }
 
@@ -3545,13 +3556,13 @@ namespace AutoGrind
         private void MoveToolMountBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolMountBtn.Text);
-            PromptOperator("Wait for robot motion complete", true);
+            PromptOperator("Wait for move to tool mount position complete", true);
         }
 
         private void MoveToolHomeBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolHomeBtn.Text);
-            PromptOperator("Wait for robot motion complete", true);
+            PromptOperator("Wait for move to tool home complete", true);
         }
 
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
@@ -3766,7 +3777,7 @@ namespace AutoGrind
             else
             {
                 GotoPositionPose(name);
-                PromptOperator("Wait for robot linear move motion complete", true);
+                PromptOperator(String.Format("Wait for robot linear move to {0} complete",name), true);
             }
         }
 
@@ -3778,7 +3789,7 @@ namespace AutoGrind
             else
             {
                 GotoPositionJoint(name);
-                PromptOperator("Wait for robot joint move motion complete", true);
+                PromptOperator(String.Format("Wait for robot joint move to {0} complete", name), true);
             }
         }
 

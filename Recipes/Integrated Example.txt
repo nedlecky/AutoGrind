@@ -1,0 +1,34 @@
+# Integrated Example
+# Assumes we're where we want to grind initially but need to do a tool swap mid-way
+
+tool1=2F85
+tool2=vertest
+
+# Program assumes we are starting with tool1- verify internally and with operator!
+assert(robot_tool,{tool1})
+prompt(Confirming tool {tool1} is currently mounted and you are grinding on {robot_geometry})
+
+# This will always be our grind_start position
+save_position(grind_start)
+
+# Do some grinding with tool1
+move_linear(grind_start)
+grind_rect(30,30,3,10,10,1)
+grind_rect(20,20,3,10,10,1)
+
+prompt(Ready to swap {tool1} to {tool2}?)
+# Remove {tool1}
+move_tool_home()
+move_tool_mount()
+prompt(Please remove {tool1})
+
+# Install {tool2}
+select_tool({tool2})
+move_tool_mount()
+prompt(Please install {tool2})
+move_tool_home()
+
+# Do some grinding with tool2
+move_linear(grind_start) # Returns us to the starting position
+grind_rect(30,30,3,10,10,1)
+grind_rect(20,20,3,10,10,1)

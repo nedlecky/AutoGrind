@@ -239,7 +239,9 @@
   <ItemGroup>
     <Content Include="AutoGrindIcon.ico" />
     <Content Include="Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG" />
-    <None Include="Resources\Lecky Engineering Logo 12-4-2020 Full.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

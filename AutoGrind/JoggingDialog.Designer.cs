@@ -44,7 +44,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.ToolVerticalBtn = new System.Windows.Forms.Button();
-            this.FreeDriveBtn = new System.Windows.Forms.Button();
+            this.FreedriveBtn = new System.Windows.Forms.Button();
             this.PurposeLbl = new System.Windows.Forms.Label();
             this.SaveBtn = new System.Windows.Forms.Button();
             this.ToolLbl = new System.Windows.Forms.Label();
@@ -300,19 +300,19 @@
             this.ToolVerticalBtn.UseVisualStyleBackColor = false;
             this.ToolVerticalBtn.Click += new System.EventHandler(this.ZeroRpyBtn_Click);
             // 
-            // FreeDriveBtn
+            // FreedriveBtn
             // 
-            this.FreeDriveBtn.BackColor = System.Drawing.Color.Green;
-            this.FreeDriveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FreeDriveBtn.ForeColor = System.Drawing.Color.White;
-            this.FreeDriveBtn.Location = new System.Drawing.Point(950, 543);
-            this.FreeDriveBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.FreeDriveBtn.Name = "FreeDriveBtn";
-            this.FreeDriveBtn.Size = new System.Drawing.Size(409, 141);
-            this.FreeDriveBtn.TabIndex = 19;
-            this.FreeDriveBtn.Text = "Free Drive";
-            this.FreeDriveBtn.UseVisualStyleBackColor = false;
-            this.FreeDriveBtn.Click += new System.EventHandler(this.FreeDriveBtn_Click);
+            this.FreedriveBtn.BackColor = System.Drawing.Color.Green;
+            this.FreedriveBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.FreedriveBtn.ForeColor = System.Drawing.Color.White;
+            this.FreedriveBtn.Location = new System.Drawing.Point(950, 543);
+            this.FreedriveBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.FreedriveBtn.Name = "FreedriveBtn";
+            this.FreedriveBtn.Size = new System.Drawing.Size(409, 141);
+            this.FreedriveBtn.TabIndex = 19;
+            this.FreedriveBtn.Text = "Freedrive";
+            this.FreedriveBtn.UseVisualStyleBackColor = false;
+            this.FreedriveBtn.Click += new System.EventHandler(this.FreeDriveBtn_Click);
             // 
             // PurposeLbl
             // 
@@ -666,7 +666,7 @@
             this.Controls.Add(this.ToolLbl);
             this.Controls.Add(this.SaveBtn);
             this.Controls.Add(this.PurposeLbl);
-            this.Controls.Add(this.FreeDriveBtn);
+            this.Controls.Add(this.FreedriveBtn);
             this.Controls.Add(this.ExitBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Name = "JoggingDialog";
@@ -698,7 +698,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button ToolVerticalBtn;
-        private System.Windows.Forms.Button FreeDriveBtn;
+        private System.Windows.Forms.Button FreedriveBtn;
         private System.Windows.Forms.Label PurposeLbl;
         private System.Windows.Forms.Button SaveBtn;
         private System.Windows.Forms.Label ToolLbl;

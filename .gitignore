@@ -364,3 +364,5 @@ FodyWeavers.xsd
 
 # AutoGrind Specific
 Recipes/Variables.xml
+Recipes/Tools.xml
+Recipes/Positions.xml

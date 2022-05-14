@@ -1,0 +1,17 @@
+# Install 2F85
+# Example to install a tool when none is currently installed
+# We just select the new tool, move to the mount position, prompt the operator, and move to move_tool_home
+
+# Change to whatever tool you like
+tool=2F85
+
+# Operator confirmation
+prompt(About to mount {tool})
+
+# Mounting process
+select_tool({tool})  # This only informs the robot what is mounted
+
+# This does the physical swap
+move_tool_mount()
+prompt(Please mount tool {tool})
+move_tool_home()
