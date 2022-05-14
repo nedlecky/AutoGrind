@@ -1,10 +1,10 @@
-# Crash Restart Test
+# 90 Crash Restart Test
 
 again:
 
-movelinear(2F85_home)
+move_linear(2F85_home)
 sleep(1)
-movelinear(demo_flat)
+move_linear(demo_flat)
 sleep(1)
 
 jump(again)

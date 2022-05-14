@@ -1,6 +1,6 @@
-# Small Pattern Test
+# 30 Small Pattern Test
 
-movelinear(demo_flat)
+move_linear(demo_flat)
 speed = 20
 continue = 1
 jump(spiral)
@@ -34,4 +34,4 @@ grind_spiral(0,50,3,2,{speed},10,{continue})
 grind_spiral(50,0,3,2,{speed},10,{continue})
 grind_spiral(0,0,3,2,{speed},10,{continue})
 # This should trigger the safety termination
-sleep(4000)
+sleep(4)
