@@ -3,7 +3,6 @@
 move_linear(demo_flat)
 speed = 20
 continue = 1
-jump(spiral)
 
 set_part_geometry(FLAT,0)
 
