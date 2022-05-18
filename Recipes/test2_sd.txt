@@ -6,7 +6,7 @@ move_linear(grind1)
 
 grind_circle(20,{ncycles},{speed},{force},1)
 
-prompt (Ready to move to next position?)
+prompt(Ready to move to next position?)
 
 move_linear(grind3)
 

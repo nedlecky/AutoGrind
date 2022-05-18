@@ -397,7 +397,7 @@ end
 # ####################################################################################
 # START AUTOMATED DOOR MONITORING THREAD
 #
-# Return True if door in closed state (or if door I/IO is undefined)
+# Return True if door in closed state (or if door input is undefined)
 def is_door_closed():
   if robot_door_closed_input[0] < 0:
     return True
@@ -410,19 +410,32 @@ def is_door_closed():
   return f == robot_door_closed_input[1]
 end
 
+def footswitch_state():
+  return get_standard_digital_in(7)
+end
+
 global robot_door_closed = is_door_closed()
+global robot_footswitch = footswitch_state()
 global time_in_uncommanded_grind = 0
 global time_door_check_rate_s = 0.250
 global grind_max_wait_ms = 1500
+# Also monitors footswitch!
 thread door_monitor_thread():
   while True:
     sleep(time_door_check_rate_s)
     new_door_closed = is_door_closed()
+    new_footswitch = footswitch_state()
 
     # Notify host if door state has changed
     if robot_door_closed != new_door_closed:
       robot_door_closed = new_door_closed
       socket_set_var("robot_door_closed", robot_door_closed)
+    end
+
+    # Notify host if footswitch state has changed
+    if robot_footswitch != new_footswitch:
+      robot_footswitch = new_footswitch
+      socket_set_var("robot_footswitch", robot_footswitch)
     end
 
     # Check for still in grind process but not executing a grind command
