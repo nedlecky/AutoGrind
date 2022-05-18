@@ -1,0 +1,13 @@
+WiFi: TQP - Guest
+PW: Semper Idem
+
+IPs
+169.254.254.100/16  BOT
+.200 LAPTOP
+.210 TABLET
+
+Air output 2
+Water output 3
+Motor output 4
+
+Footswitch Din 7

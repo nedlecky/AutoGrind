@@ -1,0 +1,15 @@
+force=10
+ncycles=2
+speed=10
+
+move_joint(grind1)
+
+grind_circle(20,{ncycles},{speed},{force},1)
+
+prompt(Ready)
+
+move_linear(grind3)
+
+grind_circle(20,{ncycles},{speed},{force},1)
+
+move_joint(spindle_mount)

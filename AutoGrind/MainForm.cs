@@ -1719,7 +1719,7 @@ namespace AutoGrind
                 Value = DiameterLbl.Text,
                 Label = PartGeometryBox.Text + " DIAM, MM",
                 NumberOfDecimals = 0,
-                MaxAllowed = 1100,
+                MaxAllowed = 3000,
                 MinAllowed = 75,
             };
 

@@ -298,7 +298,7 @@
             this.ToolVerticalBtn.TabIndex = 18;
             this.ToolVerticalBtn.Text = "Align Tool Vertical";
             this.ToolVerticalBtn.UseVisualStyleBackColor = false;
-            this.ToolVerticalBtn.Click += new System.EventHandler(this.ZeroRpyBtn_Click);
+            this.ToolVerticalBtn.Click += new System.EventHandler(this.ALignButton_Click);
             // 
             // FreedriveBtn
             // 

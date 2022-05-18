@@ -1,0 +1,13 @@
+force=10
+ncycles=2
+speed=10
+
+move_linear(grind1)
+
+grind_circle(20,{ncycles},{speed},{force},1)
+
+prompt (Ready to move to next position?)
+
+move_linear(grind3)
+
+grind_circle(20,{ncycles},{speed},{force},1)

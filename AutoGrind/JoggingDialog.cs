@@ -308,9 +308,9 @@ namespace AutoGrind
             Repeater();
         }
 
-        private void ZeroRpyBtn_Click(object sender, EventArgs e)
+        private void ALignButton_Click(object sender, EventArgs e)
         {
-            mainForm.RobotSend(string.Format("18,{0},0,0", Deg2Rad(180)));
+            mainForm.RobotSend(string.Format("18,0,{0},0", Deg2Rad(180)));
         }
 
         [DllImport("user32.dll")]

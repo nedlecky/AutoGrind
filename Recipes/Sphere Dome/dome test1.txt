@@ -1,0 +1,11 @@
+force=10
+ncycles=2
+speed=5
+
+move_joint(dome1)
+
+grind_circle(20,{ncycles},{speed},{force},1)
+grind_circle(40,{ncycles},{speed},{force},1)
+grind_circle(60,2,12,{force},0)
+
+move_joint(spindle_mount)
