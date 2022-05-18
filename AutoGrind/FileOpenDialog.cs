@@ -95,7 +95,6 @@ namespace AutoGrind
             OpenBtn_Click(null, null);
         }
 
-
         private void FileNameTxt_TextChanged(object sender, EventArgs e)
         {
             LoadFiles(DirectoryNameLbl.Text, FileNameTxt.Text);
