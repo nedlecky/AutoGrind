@@ -140,7 +140,7 @@ def set_variable():
     if shape == 1:
       robot_part_geometry = [1, 0]
     elif shape == 2 or shape == 3:
-      diameter_mm = limiter(command[4], 50, 1100)
+      diameter_mm = limiter(command[4], 50, 3000)
       robot_part_geometry = [shape, diameter_mm]
     end
 
