@@ -239,6 +239,7 @@
   <ItemGroup>
     <Content Include="AutoGrindIcon.ico" />
     <Content Include="Graphics\Lecky Engineering Logo 12-4-2020 Full.PNG" />
+    <Content Include="TQ Setup Notes.txt" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
