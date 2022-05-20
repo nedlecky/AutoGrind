@@ -1,13 +1,114 @@
-WiFi: TQP - Guest
-PW: Semper Idem
+Site-specific Notes for Tosoh Quartz Setup
+5/18/2022
 
-IPs
-169.254.254.100/16  BOT
-.200 LAPTOP
-.210 TABLET
+Lead Engineer: Daniel Page
+Project Engineer: Stefan Dietz
+Olympus Suppport: Lance Price
+Sogftware: Ned Lecky
 
-Air output 2
-Water output 3
-Motor output 4
+Guest WiFi:
+SSID: TQP - Guest
+  PW: Semper Idem
 
-Footswitch Din 7
+IP Addresses:
+UR10     Robot   169.254.254.100/16
+LeckyOne Laptop  169.254.254.200/16
+Zebra    Tablet  169.254.254.210/16
+
+Digital Outputs:
+Air         output Dout2
+Water       output Dout3
+Motor       output Dout4
+Footswitch  input  Din7
+
+TCP Orientation:
+Plug on faceplate is Y- faces away from bot base
+X (red) lateral motion along cylinder
+Y (G)   positive toward robot base, perpendicular to cylinder
+Z (B)   positive down (tool advance) down
+
+STANDARD TOOL RECORDS 5/18/2022
+  <Tools>
+    <Name>sander</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.186</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>2.99</mass_kg>
+    <cogx_m>-0.011</cogx_m>
+    <cogy_m>0.019</cogy_m>
+    <cogz_m>0.067</cogz_m>
+    <ToolOnOuts>2,1</ToolOnOuts>
+    <ToolOffOuts>2,0</ToolOffOuts>
+    <CoolantOnOuts>3,1</CoolantOnOuts>
+    <CoolantOffOuts>3,0</CoolantOffOuts>
+    <MountPosition>sander_mount</MountPosition>
+    <HomePosition>sander_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>spindle</Name>
+    <x_m>0</x_m>
+    <y_m>-0.165</y_m>
+    <z_m>0.09</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>2.2214</ry_rad>
+    <rz_rad>-2.2214</rz_rad>
+    <mass_kg>2.61</mass_kg>
+    <cogx_m>-0.004</cogx_m>
+    <cogy_m>-0.015</cogy_m>
+    <cogz_m>0.049</cogz_m>
+    <ToolOnOuts>5,1</ToolOnOuts>
+    <ToolOffOuts>5,0</ToolOffOuts>
+    <CoolantOnOuts>3,1</CoolantOnOuts>
+    <CoolantOffOuts>3,0</CoolantOffOuts>
+    <MountPosition>spindle_mount</MountPosition>
+    <HomePosition>spindle_home</HomePosition>
+  </Tools>
+
+
+STANDARD WORK CELL POSITIONS 5/18/2022
+  <Positions>
+	<Name>spindle_mount</Name>
+	<Joints>[-2.68179,-1.90227,-1.42486,-2.95848,-1.70261,0.000928376]</Joints>
+	<Pose>p[-0.928515, -0.296863, 0.369036, 1.47493, 2.77222, 0.00280416]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>spindle_home</Name>
+	<Joints>[-2.71839,-0.892528,-2.14111,-3.27621,-1.68817,-0.019554]</Joints>
+	<Pose>p[-0.410055, -0.0168446, 0.429258, -1.54452, -2.73116, -0.0509774]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>sander_mount</Name>
+	<Joints>[-2.53006,-2.15599,-1.18223,-1.37402,1.57131,0.124]</Joints>
+	<Pose>p[-0.933321, -0.442727, 0.284064, 1.61808, 2.6928, 0.000150004]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>sander_home</Name>
+	<Joints>[-2.57091,-0.82644,-2.14277,-1.743,1.57367,-0.999559]</Joints>
+	<Pose>p[-0.319246, 0.00105911, 0.464005, -5.0997e-05, 3.14151, 3.32468e-05]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>grind1</Name>
+	<Joints>[-0.964841,-1.56224,-2.25801,-2.46721,-0.975704,0.0351043]</Joints>
+	<Pose>p[0.115668, -0.664968, 0.149296, -0.0209003, 3.11011, 0.00405717]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>grind2</Name>
+	<Joints>[-1.19025,-1.54723,-2.28053,-2.45891,-1.20106,0.0341677]</Joints>
+	<Pose>p[0.00572967, -0.666445, 0.145823, -0.0208504, 3.11009, 0.004073]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+	<Name>grind3</Name>
+	<Joints>[-1.41341,-1.57357,-2.26161,-2.45085,-1.42422,0.0333479]</Joints>
+	<Pose>p[-0.0942147, -0.667831, 0.142729, -0.0208677, 3.1101, 0.00394188]</Pose>
+	<IsSystem>false</IsSystem>
+  </Positions>
+

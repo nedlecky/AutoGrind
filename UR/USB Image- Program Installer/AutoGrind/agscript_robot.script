@@ -380,8 +380,9 @@ end
 #
 # How is it implemented?
 #
-# 1) door_monitor_thread (below) is ALWAYS running. Fires every time_door_check_rate_s (0.25s)
+# 1) io_monitor_thread (below) is ALWAYS running. Fires every time_door_check_rate_s (0.25s)
 #    - Whenever it sees the state of the door change, it sends SET robot_door_closed state to host
+#    - Whenever it sees the state of the footswitch (DIN7) change, it sends SET robot_footswitch state to host
 #    - It monitors if we're still in contact wth the part butr not grinding (grind_process_state and grind_ready)
 #      - If that goes beyond grind_max_wait_ms it sets halt_grind=True
 # 2) no_command function (below). Called by PolScript everyu time it's waiting for a command and doesn't get one with a second
@@ -420,7 +421,11 @@ global time_in_uncommanded_grind = 0
 global time_door_check_rate_s = 0.250
 global grind_max_wait_ms = 1500
 # Also monitors footswitch!
-thread door_monitor_thread():
+thread io_monitor_thread():
+  # Send current state on start... in future will only be sent on change
+  socket_set_var("robot_door_closed", robot_door_closed)
+  socket_set_var("robot_footswitch", robot_footswitch)
+  
   while True:
     sleep(time_door_check_rate_s)
     new_door_closed = is_door_closed()
@@ -451,7 +456,7 @@ thread door_monitor_thread():
     end
   end
 end
-global doorMonitorThread = run door_monitor_thread()
+global ioMonitorThread = run io_monitor_thread()
 #
 # END AUTOMATED DOOR MONITORING THREAD
 # ####################################################################################
