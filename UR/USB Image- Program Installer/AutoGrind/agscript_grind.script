@@ -1109,7 +1109,7 @@ def recommend_npoints(diam_m, blend_radius_m):
     # Blend radius is 0... model would be 10 points for a 10mm diameter (1000 points for 1m diameter!)
     n_points = ceil(diam_m * 1000.0)
   end
-  return limiter(n_points, 1, 100)
+  return limiter(n_points, 1, 1000)
 end
 
 # Grind along a flat circle circle_diam_m centered on p_center. Repeat n_cycles times.

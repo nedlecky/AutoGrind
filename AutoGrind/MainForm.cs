@@ -2896,7 +2896,7 @@ namespace AutoGrind
                 Label = "Grind TRIAL SPEED, mm/s",
                 NumberOfDecimals = 1,
                 MinAllowed = 1,
-                MaxAllowed = 25
+                MaxAllowed = 200
             };
 
             if (form.ShowDialog(this) == DialogResult.OK)
@@ -3744,7 +3744,6 @@ namespace AutoGrind
             positions.Rows.Add(new object[] { "grind1", "[-0.964841,-1.56224,-2.25801,-2.46721,-0.975704,0.0351043]", "p[0.115668, -0.664968, 0.149296, -0.0209003, 3.11011, 0.00405717]" });
             positions.Rows.Add(new object[] { "grind2", "[-1.19025,-1.54723,-2.28053,-2.45891,-1.20106,0.0341677]", "p[0.00572967, -0.666445, 0.145823, -0.0208504, 3.11009, 0.004073]" });
             positions.Rows.Add(new object[] { "grind3", "[-1.41341,-1.57357,-2.26161,-2.45085,-1.42422,0.0333479]", "p[-0.0942147, -0.667831, 0.142729, -0.0208677, 3.1101, 0.00394188]" });
-
         }
 
         /*
