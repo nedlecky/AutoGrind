@@ -76,4 +76,16 @@
     <Pose>p[-0.758566,0.0250416,0.277427,1.53137,2.72277,0.107418]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>cylgrind</Name>
+    <Joints>[-1.68235,-1.88041,-1.80076,-3.00935,-1.69644,-0.0186384]</Joints>
+    <Pose>p[-0.233325,-0.730212,0.128091,-0.0301142,3.04982,0.624951]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>domegrind</Name>
+    <Joints>[-2.97983,-1.67661,-1.90507,-2.75137,-1.70099,-0.0193737]</Joints>
+    <Pose>p[-0.774846,0.025403,0.337363,1.86032,2.50809,0.0751757]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>
