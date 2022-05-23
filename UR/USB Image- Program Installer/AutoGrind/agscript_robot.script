@@ -256,6 +256,12 @@ def set_variable():
     return_vector(robot_payload_cog_m, 3)
     socket_send_lf()
     global response = "set_payload()"
+  elif command[2] == 30:
+    # set_output
+    local out = command[3]
+    local state = command[4]>0
+    set_digital_out(out,state)
+    global response = "set_output()"
   else:
     global response = "set_variable ERROR"
   end

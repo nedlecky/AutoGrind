@@ -892,7 +892,7 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
     # New 8-point beveled rectangle 2022-05-23
-    #Initial Move	-x2	-y2
+    #Initial Move	-x2	-rx2
     #c1a   x2-r	-rx2
     #c1b	 x2	  -rx2+rr
     #c2a	 x2	   rx2-rr
@@ -982,7 +982,7 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
     # New 8-point beveled rectangle 2022-05-23
-    #Initial Move	-x2	-y2
+    #Initial Move	-rx2	-ry2
     #c1a   rx2-rr	-ry2
     #c1b	 rx2	  -ry2+rr
     #c2a	 rx2	   ry2-rr

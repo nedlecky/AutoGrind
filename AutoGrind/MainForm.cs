@@ -2009,6 +2009,8 @@ namespace AutoGrind
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
 
+            {"set_output",              new CommandSpec(){nParams=2,  prefix="30,30," } },
+
             {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="35,1," } },
             {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="35,2," } },
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="35,3," } },
