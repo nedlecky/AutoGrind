@@ -355,7 +355,6 @@ namespace AutoGrind
             FreedriveGrp.Enabled = false;
             ClickJogGrp.Enabled = true;
 
-
             mainForm.RobotSend("30,19,0");
 
             FreedriveBtn.Text = "Freedrive";

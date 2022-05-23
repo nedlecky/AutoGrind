@@ -1229,6 +1229,17 @@ namespace AutoGrind
         {
             log.Info("StartBtn_Click(...)");
 
+            if (ReadVariable("robot_door_closed", "0") != "1")
+            {
+                ErrorMessageBox("Cannot Start. Door Open!");
+                return;
+            }
+            if (ReadVariable("robot_footswitch", "0") == "1")
+            {
+                ErrorMessageBox("Cannot Start. Footswitch Pressed!");
+                return;
+            }
+
             if (PrepareToRun())
             {
                 isSingleStep = false;
@@ -1250,6 +1261,17 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     // Perform CONTINUE function
+                    if (ReadVariable("robot_door_closed", "0") != "1")
+                    {
+                        ErrorMessageBox("Cannot Continue. Door Open!");
+                        return;
+                    }
+                    if (ReadVariable("robot_footswitch", "0") == "1")
+                    {
+                        ErrorMessageBox("Cannot Continue. Footswitch Pressed!");
+                        return;
+                    }
+
                     MessageDialog messageForm = new MessageDialog()
                     {
                         Title = "System Question",
@@ -1268,6 +1290,17 @@ namespace AutoGrind
         private void StepBtn_Click(object sender, EventArgs e)
         {
             log.Info("StepBtn_Click(...) STATE IS {0}", runState);
+            if (ReadVariable("robot_door_closed", "0") != "1")
+            {
+                ErrorMessageBox("Cannot Step. Door Open!");
+                return;
+            }
+            if (ReadVariable("robot_footswitch", "0") == "1")
+            {
+                ErrorMessageBox("Cannot Step. Footswitch Pressed!");
+                return;
+            }
+
             switch (runState)
             {
                 case RunState.READY:
@@ -1295,7 +1328,6 @@ namespace AutoGrind
                     SetState(RunState.RUNNING);
                     break;
             }
-
         }
 
         private void StopBtn_Click(object sender, EventArgs e)
@@ -3163,6 +3195,21 @@ namespace AutoGrind
                             break;
                     }
                     break;
+                case "robot_footswitch":
+                    switch (valueTrimmed)
+                    {
+                        case "1":
+                            if (runState != RunState.RUNNING)
+                                // Enable freedrive in base coords with all axes on
+                                RobotSend("30,19,1,0,1,1,1,1,1,1");
+                            break;
+                        default:
+                            if (runState != RunState.RUNNING)
+                                // Disable freedrive mode
+                                RobotSend("30,19,0");
+                            break;
+                    }
+                    break;
                 case "grind_touch_speed_mmps":
                     SetTouchSpeedBtn.Text = "Grind Touch Speed\n" + valueTrimmed + " mm/s";
                     break;
@@ -3549,47 +3596,47 @@ namespace AutoGrind
             tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });
         }
 
-/*
-  From TQ 5/18/2022
-  <Tools>
-    <Name>sander</Name>
-    <x_m>0</x_m>
-    <y_m>0</y_m>
-    <z_m>0.186</z_m>
-    <rx_rad>0</rx_rad>
-    <ry_rad>0</ry_rad>
-    <rz_rad>0</rz_rad>
-    <mass_kg>2.99</mass_kg>
-    <cogx_m>-0.011</cogx_m>
-    <cogy_m>0.019</cogy_m>
-    <cogz_m>0.067</cogz_m>
-    <ToolOnOuts>2,1</ToolOnOuts>
-    <ToolOffOuts>2,0</ToolOffOuts>
-    <CoolantOnOuts>3,1</CoolantOnOuts>
-    <CoolantOffOuts>3,0</CoolantOffOuts>
-    <MountPosition>sander_mount</MountPosition>
-    <HomePosition>sander_home</HomePosition>
-  </Tools>
-  <Tools>
-    <Name>spindle</Name>
-    <x_m>0</x_m>
-    <y_m>-0.165</y_m>
-    <z_m>0.09</z_m>
-    <rx_rad>0</rx_rad>
-    <ry_rad>2.2214</ry_rad>
-    <rz_rad>-2.2214</rz_rad>
-    <mass_kg>2.61</mass_kg>
-    <cogx_m>-0.004</cogx_m>
-    <cogy_m>-0.015</cogy_m>
-    <cogz_m>0.049</cogz_m>
-    <ToolOnOuts>5,1</ToolOnOuts>
-    <ToolOffOuts>5,0</ToolOffOuts>
-    <CoolantOnOuts>3,1</CoolantOnOuts>
-    <CoolantOffOuts>3,0</CoolantOffOuts>
-    <MountPosition>spindle_mount</MountPosition>
-    <HomePosition>spindle_home</HomePosition>
-  </Tools>
-*/
+        /*
+          From TQ 5/18/2022
+          <Tools>
+            <Name>sander</Name>
+            <x_m>0</x_m>
+            <y_m>0</y_m>
+            <z_m>0.186</z_m>
+            <rx_rad>0</rx_rad>
+            <ry_rad>0</ry_rad>
+            <rz_rad>0</rz_rad>
+            <mass_kg>2.99</mass_kg>
+            <cogx_m>-0.011</cogx_m>
+            <cogy_m>0.019</cogy_m>
+            <cogz_m>0.067</cogz_m>
+            <ToolOnOuts>2,1</ToolOnOuts>
+            <ToolOffOuts>2,0</ToolOffOuts>
+            <CoolantOnOuts>3,1</CoolantOnOuts>
+            <CoolantOffOuts>3,0</CoolantOffOuts>
+            <MountPosition>sander_mount</MountPosition>
+            <HomePosition>sander_home</HomePosition>
+          </Tools>
+          <Tools>
+            <Name>spindle</Name>
+            <x_m>0</x_m>
+            <y_m>-0.165</y_m>
+            <z_m>0.09</z_m>
+            <rx_rad>0</rx_rad>
+            <ry_rad>2.2214</ry_rad>
+            <rz_rad>-2.2214</rz_rad>
+            <mass_kg>2.61</mass_kg>
+            <cogx_m>-0.004</cogx_m>
+            <cogy_m>-0.015</cogy_m>
+            <cogz_m>0.049</cogz_m>
+            <ToolOnOuts>5,1</ToolOnOuts>
+            <ToolOffOuts>5,0</ToolOffOuts>
+            <CoolantOnOuts>3,1</CoolantOnOuts>
+            <CoolantOffOuts>3,0</CoolantOffOuts>
+            <MountPosition>spindle_mount</MountPosition>
+            <HomePosition>spindle_home</HomePosition>
+          </Tools>
+        */
         private void ClearToolsBtn_Click(object sender, EventArgs e)
         {
             if (DialogResult.OK == ConfirmMessageBox("This will clear all tools. Proceed?"))
@@ -3875,7 +3922,7 @@ namespace AutoGrind
             else
             {
                 GotoPositionPose(name);
-                PromptOperator(String.Format("Wait for robot linear move to {0} complete",name), true);
+                PromptOperator(String.Format("Wait for robot linear move to {0} complete", name), true);
             }
         }
 

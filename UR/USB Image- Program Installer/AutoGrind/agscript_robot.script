@@ -411,6 +411,7 @@ def is_door_closed():
   return f == robot_door_closed_input[1]
 end
 
+# Would be nice to have this din programmable like door_closed above! TODO
 def footswitch_state():
   return get_standard_digital_in(7)
 end

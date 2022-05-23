@@ -56,7 +56,13 @@ def speed_setter(speed_mmps):
     # These are 1/4 the theoretical rotational speeds but we need to set them like this to get the correct speed- why??????
     global grind_rot_speed_rps = grind_speed_mps * 0.5 / diam_m
     global grind_rot_accel_rpss = grind_accel_mpss * 0.5 / diam_m
-    global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m #TRYING THIS AGAIN * 0.5 / diam_m Cannot scale blend_radius down! Leave as-is
+    # Increasing blend radius for small diam (< 0.5m) may help things
+    if diam_m < 0.5:
+      global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m
+    else:
+      # Large diam (> 0.5m): Just use as-is blrnd radiusBack to as originally detemrined... leave this alone (note it would increase the blend radius for small radius)
+      global grind_rot_blend_radius_rad = grind_blend_radius_m
+    end
   end
 end
 
