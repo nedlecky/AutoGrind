@@ -88,7 +88,11 @@ namespace AutoGrind
 
         private void FileListBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            PreviewRTB.LoadFile(Path.Combine(DirectoryNameLbl.Text, FileListBox.Items[FileListBox.SelectedIndex].ToString()), System.Windows.Forms.RichTextBoxStreamType.PlainText);
+            try
+            {
+                PreviewRTB.LoadFile(Path.Combine(DirectoryNameLbl.Text, FileListBox.Items[FileListBox.SelectedIndex].ToString()), System.Windows.Forms.RichTextBoxStreamType.PlainText);
+            }
+            catch { }
         }
         private void FileListBox_DoubleClick(object sender, EventArgs e)
         {
@@ -104,6 +108,7 @@ namespace AutoGrind
             // If nothing selected, try to interpret as a typein?
             if (FileListBox.SelectedIndex < 0)
             {
+                if (FileNameTxt.Text.Length == 0) return;
                 string filename = Path.Combine(DirectoryNameLbl.Text, FileNameTxt.Text);
                 FileName = Path.ChangeExtension(filename, ".txt");
             }

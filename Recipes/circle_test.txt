@@ -1,0 +1,10 @@
+force=5
+speed=5
+n=1
+
+size = 300
+
+repeat:
+grind_circle({size},{n},{speed},{force},1)
+size-=50
+jump_gt_zero(size,repeat)

@@ -5,7 +5,7 @@ speed=5
 loop:
 #grind_rect(40,100,{ncycles},{speed},{force},1)
 #grind_circle(40,{ncycles},{speed},{force},0)
-move_linear(Grind3)
+move_linear(grind3)
 
 
 

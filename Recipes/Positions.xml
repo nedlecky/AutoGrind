@@ -64,4 +64,16 @@
     <Pose>p[-0.0942147,-0.667831,0.142729,-0.0208677,3.1101,0.00394188]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>newgrind</Name>
+    <Joints>[-2.2619,-2.15974,-1.64931,-2.47415,-2.25991,0.000360336]</Joints>
+    <Pose>p[-0.636288,-0.688006,0.136415,-6.71408e-05,3.14152,5.26112e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
+  <Positions>
+    <Name>flatgrind</Name>
+    <Joints>[-3.05088,-1.74427,-1.93858,-2.67526,-2.0223,-0.0515431]</Joints>
+    <Pose>p[-0.758566,0.0250416,0.277427,1.53137,2.72277,0.107418]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>

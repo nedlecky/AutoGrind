@@ -1738,7 +1738,7 @@
             this.GeneralConfigGrp.Margin = new System.Windows.Forms.Padding(2);
             this.GeneralConfigGrp.Name = "GeneralConfigGrp";
             this.GeneralConfigGrp.Padding = new System.Windows.Forms.Padding(2);
-            this.GeneralConfigGrp.Size = new System.Drawing.Size(1166, 345);
+            this.GeneralConfigGrp.Size = new System.Drawing.Size(1180, 345);
             this.GeneralConfigGrp.TabIndex = 96;
             this.GeneralConfigGrp.TabStop = false;
             this.GeneralConfigGrp.Text = "General Configuration";
@@ -1746,7 +1746,7 @@
             // SaveConfigBtn
             // 
             this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveConfigBtn.Location = new System.Drawing.Point(809, 242);
+            this.SaveConfigBtn.Location = new System.Drawing.Point(847, 242);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.SaveConfigBtn.TabIndex = 100;
@@ -1758,7 +1758,7 @@
             // 
             this.AllowRunningOfflineChk.Appearance = System.Windows.Forms.Appearance.Button;
             this.AllowRunningOfflineChk.AutoSize = true;
-            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(641, 171);
+            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(760, 174);
             this.AllowRunningOfflineChk.Name = "AllowRunningOfflineChk";
             this.AllowRunningOfflineChk.Size = new System.Drawing.Size(333, 47);
             this.AllowRunningOfflineChk.TabIndex = 89;
@@ -1786,7 +1786,7 @@
             // LoadConfigBtn
             // 
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(641, 242);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(678, 242);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.LoadConfigBtn.TabIndex = 98;
@@ -1797,7 +1797,7 @@
             // DefaultConfigBtn
             // 
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(974, 242);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(1015, 242);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.DefaultConfigBtn.TabIndex = 99;
@@ -1809,7 +1809,7 @@
             // 
             this.ServerIpTxt.Location = new System.Drawing.Point(397, 173);
             this.ServerIpTxt.Name = "ServerIpTxt";
-            this.ServerIpTxt.Size = new System.Drawing.Size(227, 44);
+            this.ServerIpTxt.Size = new System.Drawing.Size(267, 44);
             this.ServerIpTxt.TabIndex = 79;
             this.ServerIpTxt.Text = "192.168.0.253";
             // 
@@ -1837,7 +1837,7 @@
             // 
             this.RobotIpTxt.Location = new System.Drawing.Point(397, 223);
             this.RobotIpTxt.Name = "RobotIpTxt";
-            this.RobotIpTxt.Size = new System.Drawing.Size(227, 44);
+            this.RobotIpTxt.Size = new System.Drawing.Size(267, 44);
             this.RobotIpTxt.TabIndex = 72;
             this.RobotIpTxt.Text = "192.168.0.2";
             // 
