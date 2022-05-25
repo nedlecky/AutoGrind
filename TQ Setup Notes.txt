@@ -1,5 +1,5 @@
 Site-specific Notes for Tosoh Quartz Setup
-5/18/2022
+5/25/2022
 
 Lead Engineer: Daniel Page
 Project Engineer: Stefan Dietz
@@ -16,16 +16,20 @@ LeckyOne Laptop  169.254.254.200/16
 Zebra    Tablet  169.254.254.210/16
 
 Digital Outputs:
-Air         output Dout2
-Water       output Dout3
-Motor       output Dout4
-Footswitch  input  Din7
+Stacklight   output Dout0
+Air          output Dout2
+Water        output Dout3
+Table        output Dout4  (unused)
+Motor Fwd    output Dout5
+Motor Rev    output Dout6  (unused)
+Tool Changer output Dout7  (unused)
+Footswitch    input  Din7
 
 TCP Orientation:
 Plug on faceplate is Y- faces away from bot base
-X (red) lateral motion along cylinder
-Y (G)   positive toward robot base, perpendicular to cylinder
-Z (B)   positive down (tool advance) down
+X (red) points laterally along cylinder toward operator
+Y (G)   points toward robot base, perpendicular to cylinder
+Z (B)   points down (tool advance)
 
 STANDARD TOOL RECORDS 5/18/2022
   <Tools>

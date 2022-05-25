@@ -60,6 +60,8 @@ namespace AutoGrind
         }
         OperatorMode operatorMode = OperatorMode.OPERATOR;
 
+        string executionRoot = "";
+
         public MainForm()
         {
             InitializeComponent();
@@ -71,7 +73,7 @@ namespace AutoGrind
             string productVersion = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             string executable = Application.ExecutablePath;
             string filename = Path.GetFileName(executable);
-            string directory = Path.GetDirectoryName(executable);
+            executionRoot = Path.GetDirectoryName(executable);
             string caption = appName + " Rev " + productVersion;
 #if DEBUG
             caption += " DEBUG";
@@ -104,7 +106,7 @@ namespace AutoGrind
 
             // Flag that we're starting
             log.Info("================================================================");
-            log.Info(string.Format("Starting {0} in [{1}]", filename, directory));
+            log.Info(string.Format("Starting {0} in [{1}]", filename, executionRoot));
             log.Info(caption);
             log.Info("================================================================");
 
@@ -437,7 +439,8 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
-                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "3,1").Trim(new char[] { '[', ']' })));
+                        ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
+                        ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -1234,7 +1237,7 @@ namespace AutoGrind
                 ErrorMessageBox("Cannot Start. Door Open!");
                 return;
             }
-            if (ReadVariable("robot_footswitch", "0") == "1")
+            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
             {
                 ErrorMessageBox("Cannot Start. Footswitch Pressed!");
                 return;
@@ -1266,7 +1269,7 @@ namespace AutoGrind
                         ErrorMessageBox("Cannot Continue. Door Open!");
                         return;
                     }
-                    if (ReadVariable("robot_footswitch", "0") == "1")
+                    if (ReadVariable("robot_footswitch_pressed", "0") == "1")
                     {
                         ErrorMessageBox("Cannot Continue. Footswitch Pressed!");
                         return;
@@ -1295,7 +1298,7 @@ namespace AutoGrind
                 ErrorMessageBox("Cannot Step. Door Open!");
                 return;
             }
-            if (ReadVariable("robot_footswitch", "0") == "1")
+            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
             {
                 ErrorMessageBox("Cannot Step. Footswitch Pressed!");
                 return;
@@ -1636,14 +1639,24 @@ namespace AutoGrind
             // Load the variables table
             LoadVariablesBtn_Click(null, null);
 
-            // Load the User's Manual
+            // Load the Recipe Commands for User Inspection
             try
             {
-                InstructionsRTB.LoadFile("RecipeCommands.rtf");
+                RecipeCommandsRTB.LoadFile("RecipeCommands.rtf");
             }
             catch (Exception ex)
             {
-                log.Error(ex, "Could not load instruction sheet!");
+                log.Error(ex, "Could not load RecipeCommands.rtf!");
+            }
+
+            // Load Revision Hstory for User Inspection
+            try
+            {
+                RevHistRTB.LoadFile("RevisionHistory.rtf");
+            }
+            catch (Exception ex)
+            {
+                log.Error(ex, "Could not load RevisionHistory.rtf!");
             }
 
             // Autoload file is the last loaded recipe
@@ -1996,7 +2009,7 @@ namespace AutoGrind
             {"set_joint_speed",         new CommandSpec(){nParams=1,  prefix="30,4," } },
             {"set_joint_accel",         new CommandSpec(){nParams=1,  prefix="30,5," } },
             {"set_part_geometry_N",     new CommandSpec(){nParams=2,  prefix="30,6," } },
-            {"set_door_closed_input",   new CommandSpec(){nParams=-1, prefix="30,10," } },
+            {"set_door_closed_input",   new CommandSpec(){nParams=2,  prefix="30,10," } },
             {"set_tool_on_outputs",     new CommandSpec(){nParams=-1, prefix="30,11," } },
             {"set_tool_off_outputs",    new CommandSpec(){nParams=-1, prefix="30,12," } },
             {"set_coolant_on_outputs",  new CommandSpec(){nParams=-1, prefix="30,13," } },
@@ -2008,6 +2021,7 @@ namespace AutoGrind
             {"free_drive",              new CommandSpec(){nParams=1,  prefix="30,19," } },
             {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
             {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
+            {"set_footswitch_pressed_input", new CommandSpec(){nParams=2,  prefix="30,22," } },
 
             {"set_output",              new CommandSpec(){nParams=2,  prefix="30,30," } },
 
@@ -3169,8 +3183,10 @@ namespace AutoGrind
                     SetJointAccelBtn.Text = "Joint Acceleration\n" + valueTrimmed + " deg/s^2";
                     break;
                 case "robot_door_closed_input":
-                    SetDoorClosedInputBtn.Text = "Set Door Closed Input = " + valueTrimmed;
-                    DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
+                    DoorClosedInputLbl.Text = DoorClosedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
+                    break;
+                case "robot_footswitch_pressed_input":
+                    FootswitchPressedInputLbl.Text = FootswitchPressedInputTxt.Text = valueTrimmed.Trim(new char[] { '[', ']' });
                     break;
                 case "robot_step_time_estimate_ms":
                     double ms = Convert.ToDouble(valueTrimmed);
@@ -3193,22 +3209,30 @@ namespace AutoGrind
                             break;
                         default:
                             DoorClosedLbl.Text = "DOOR ????";
-                            DoorClosedLbl.BackColor = Color.Red;
+                            DoorClosedLbl.BackColor = Color.Yellow;
                             break;
                     }
                     break;
-                case "robot_footswitch":
+                case "robot_footswitch_pressed":
                     switch (valueTrimmed)
                     {
+                        case "0":
+                            FootswitchPressedLbl.Text = "FOOTSWITCH RELEASED";
+                            FootswitchPressedLbl.BackColor = Color.Green;
+                            if (runState != RunState.RUNNING)
+                                // Disable freedrive mode
+                                RobotSend("30,19,0");
+                            break;
                         case "1":
+                            FootswitchPressedLbl.Text = "FOOTSWITCH PRESSED";
+                            FootswitchPressedLbl.BackColor = Color.Red;
                             if (runState != RunState.RUNNING)
                                 // Enable freedrive in base coords with all axes on
                                 RobotSend("30,19,1,0,1,1,1,1,1,1");
                             break;
                         default:
-                            if (runState != RunState.RUNNING)
-                                // Disable freedrive mode
-                                RobotSend("30,19,0");
+                            FootswitchPressedLbl.Text = "FOOTSWITCH ????";
+                            FootswitchPressedLbl.BackColor = Color.Yellow;
                             break;
                     }
                     break;
@@ -3518,6 +3542,26 @@ namespace AutoGrind
         }
 
 
+        private void ToolTestBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, "tool_on()");
+        }
+
+        private void ToolOffBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, "tool_off()");
+        }
+
+        private void CoolantTestBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, "coolant_on()");
+        }
+
+        private void CoolantOffBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, "coolant_off()");
+        }
+
         readonly string toolsFilename = "Tools.xml";
         private void ClearAndInitializeTools()
         {
@@ -3587,15 +3631,11 @@ namespace AutoGrind
 
         private void CreateDefaultTools()
         {
-            ClearAndInitializeTools();
             tools.Rows.Add(new object[] { "sander", 0, 0, 0.186, 0, 0, 0, 2.99, -0.011, 0.019, 0.067, "2,1", "2,0", "3,1", "3,0", "sander_mount", "sander_home" });
-            tools.Rows.Add(new object[] { "spindle", 0, -0.165, 0.09, 0, 2.2214, 2.2214, 2.61, -0.004, -0.015, 0.049, "5,1", "5,0", "3,1", "3,0", "spindle_mount", "spindle_home" });
-            tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "1,1", "1,0", "3,1", "3,0", "none_mount", "none_home" });
-            tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
-            tools.Rows.Add(new object[] { "2F85long", 0, 0, 0.275, 0, 0, 0, 1.0, 0, 0, 0.050, "1,1,3,1", "1,0,3,0", "4,1", "4,0", "2F85_mount", "2F85_home" });
-            tools.Rows.Add(new object[] { "offset", 0, 0.1, 0.1, 0, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "offset_mount", "offset_home" });
-            tools.Rows.Add(new object[] { "2F85Angle", 0, 0, 0.175, 0.4, 0, 0, 1.0, 0, 0, 0.050, "1,0,2,0", "1,1,2,1", "3,0,4,0", "3,1,4,1", "2F85a_mount", "2F85a_home" });
-            tools.Rows.Add(new object[] { "vertest", 0, 0.200, 0.050, 0, 2.2214, 2.2214, 1.0, 0, 0, 0.050, "1,1,2,1", "1,0,2,0", "3,0,4,0", "3,1,4,1", "vertest_mount", "vertest_home" });
+            tools.Rows.Add(new object[] { "spindle", 0, -0.165, 0.09, 0, 2.2214, -2.2214, 2.61, -0.004, -0.015, 0.049, "5,1", "5,0", "3,1", "3,0", "spindle_mount", "spindle_home" });
+            tools.Rows.Add(new object[] { "pen", 0, -0.08, 0.075, 0, 2.2214, -2.2214, 1.0, -0.004, -0.015, 0.049, "2,0,5,0", "2,0,5,0", "3,0", "3,0", "spindle_mount", "spindle_home" });
+            tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "2,1,5,1", "2,0,5,0", "3,1", "3,0", "sander_mount", "sander_home" });
+            tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", "", "", "", "sander_mount", "sander_home" });
         }
 
         /*
@@ -3641,10 +3681,11 @@ namespace AutoGrind
         */
         private void ClearToolsBtn_Click(object sender, EventArgs e)
         {
-            if (DialogResult.OK == ConfirmMessageBox("This will clear all tools. Proceed?"))
+            if (DialogResult.OK == ConfirmMessageBox("This will clear all existing tools. Proceed?"))
+                ClearAndInitializeTools();
+            if (DialogResult.OK == ConfirmMessageBox("Would you like to create the default tools?"))
                 CreateDefaultTools();
         }
-
 
         private void MoveToolMountBtn_Click(object sender, EventArgs e)
         {
@@ -3661,8 +3702,13 @@ namespace AutoGrind
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
         {
             ExecuteLine(-1, string.Format("set_door_closed_input({0})", DoorClosedInputTxt.Text));
-
         }
+
+        private void SetFootswitchInputBtn_Click(object sender, EventArgs e)
+        {
+            ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", FootswitchPressedInputTxt.Text));
+        }
+
         private DataRow FindTool(string name)
         {
             foreach (DataRow row in tools.Rows)
@@ -3772,9 +3818,20 @@ namespace AutoGrind
 
         private void ClearPositionsBtn_Click(object sender, EventArgs e)
         {
-            while (DeleteFirstNonSystemEntry(positions)) ;
+            if (DialogResult.OK == ConfirmMessageBox("This will clear all non-system positions. Proceed?"))
+                while (DeleteFirstNonSystemEntry(positions)) ;
         }
 
+        private void CreateDefaultPositions()
+        {
+            positions.Rows.Add(new object[] { "spindle_mount", "[-2.68179,-1.90227,-1.42486,-2.95848,-1.70261,0.000928376]", "p[-0.928515, -0.296863, 0.369036, 1.47493, 2.77222, 0.00280416]" });
+            positions.Rows.Add(new object[] { "spindle_home", "[-2.71839,-0.892528,-2.14111,-3.27621,-1.68817,-0.019554]", "p[-0.410055, -0.0168446, 0.429258, -1.54452, -2.73116, -0.0509774]" });
+            positions.Rows.Add(new object[] { "sander_mount", "[-2.53006,-2.15599,-1.18223,-1.37402,1.57131,0.124]", "p[-0.933321, -0.442727, 0.284064, 1.61808, 2.6928, 0.000150004]" });
+            positions.Rows.Add(new object[] { "sander_home", "[-2.57091,-0.82644,-2.14277,-1.743,1.57367,-0.999559]", "p[-0.319246, 0.00105911, 0.464005, -5.0997e-05, 3.14151, 3.32468e-05]" });
+            positions.Rows.Add(new object[] { "grind1", "[-0.964841,-1.56224,-2.25801,-2.46721,-0.975704,0.0351043]", "p[0.115668, -0.664968, 0.149296, -0.0209003, 3.11011, 0.00405717]" });
+            positions.Rows.Add(new object[] { "grind2", "[-1.19025,-1.54723,-2.28053,-2.45891,-1.20106,0.0341677]", "p[0.00572967, -0.666445, 0.145823, -0.0208504, 3.11009, 0.004073]" });
+            positions.Rows.Add(new object[] { "grind3", "[-1.41341,-1.57357,-2.26161,-2.45085,-1.42422,0.0333479]", "p[-0.0942147, -0.667831, 0.142729, -0.0208677, 3.1101, 0.00394188]" });
+        }
         private void ClearAndInitializePositions()
         {
             positions = new DataTable("Positions");
@@ -3785,14 +3842,6 @@ namespace AutoGrind
             positions.CaseSensitive = true;
             positions.PrimaryKey = new DataColumn[] { name };
             PositionsGrd.DataSource = positions;
-
-            //positions.Rows.Add(new object[] { "spindle_mount", "[-2.68179,-1.90227,-1.42486,-2.95848,-1.70261,0.000928376]", "p[-0.928515, -0.296863, 0.369036, 1.47493, 2.77222, 0.00280416]" });
-            //positions.Rows.Add(new object[] { "spindle_home", "[-2.71839,-0.892528,-2.14111,-3.27621,-1.68817,-0.019554]", "p[-0.410055, -0.0168446, 0.429258, -1.54452, -2.73116, -0.0509774]" });
-            //positions.Rows.Add(new object[] { "sander_mount", "[-2.53006,-2.15599,-1.18223,-1.37402,1.57131,0.124]", "p[-0.933321, -0.442727, 0.284064, 1.61808, 2.6928, 0.000150004]" });
-            //positions.Rows.Add(new object[] { "sander_home", "[-2.57091,-0.82644,-2.14277,-1.743,1.57367,-0.999559]", "p[-0.319246, 0.00105911, 0.464005, -5.0997e-05, 3.14151, 3.32468e-05]" });
-            //positions.Rows.Add(new object[] { "grind1", "[-0.964841,-1.56224,-2.25801,-2.46721,-0.975704,0.0351043]", "p[0.115668, -0.664968, 0.149296, -0.0209003, 3.11011, 0.00405717]" });
-            //positions.Rows.Add(new object[] { "grind2", "[-1.19025,-1.54723,-2.28053,-2.45891,-1.20106,0.0341677]", "p[0.00572967, -0.666445, 0.145823, -0.0208504, 3.11009, 0.004073]" });
-            //positions.Rows.Add(new object[] { "grind3", "[-1.41341,-1.57357,-2.26161,-2.45085,-1.42422,0.0333479]", "p[-0.0942147, -0.667831, 0.142729, -0.0208677, 3.1101, 0.00394188]" });
         }
 
         /*
@@ -3845,6 +3894,8 @@ namespace AutoGrind
         {
             if (DialogResult.OK == ConfirmMessageBox("This will clear all positions INCLUDING system positions. Proceed?"))
                 ClearAndInitializePositions();
+            if (DialogResult.OK == ConfirmMessageBox("Would you like to create the default positions?"))
+                CreateDefaultPositions();
         }
 
         private void RecordPosition(string prompt, string varName)
@@ -3990,6 +4041,19 @@ namespace AutoGrind
 
             // Start the task.
             taskA.Start();
+        }
+
+        private void FullManualBtn_Click(object sender, EventArgs e)
+        {
+            string ExecutionRoot = AppDomain.CurrentDomain.BaseDirectory;
+            System.Diagnostics.Process process = new System.Diagnostics.Process();
+            System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
+            startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
+            startInfo.FileName = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
+            startInfo.Arguments = String.Format("file:\\{0}\\AutoGrind%20User%20Manual.pdf",executionRoot);
+            process.StartInfo = startInfo;
+            process.Start();
+            
         }
     }
     public static class RichTextBoxExtensions

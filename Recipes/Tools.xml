@@ -85,11 +85,49 @@
     <cogx_m>-0.004</cogx_m>
     <cogy_m>-0.015</cogy_m>
     <cogz_m>0.049</cogz_m>
-    <ToolOnOuts>5,0</ToolOnOuts>
-    <ToolOffOuts>5,0</ToolOffOuts>
+    <ToolOnOuts>2,0,5,0</ToolOnOuts>
+    <ToolOffOuts>2,0,5,0</ToolOffOuts>
     <CoolantOnOuts>3,0</CoolantOnOuts>
     <CoolantOffOuts>3,0</CoolantOffOuts>
     <MountPosition>spindle_mount</MountPosition>
     <HomePosition>spindle_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>2F85</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0.175</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0.05</cogz_m>
+    <ToolOnOuts>2,1,5,1</ToolOnOuts>
+    <ToolOffOuts>2,0,5,0</ToolOffOuts>
+    <CoolantOnOuts>3,1</CoolantOnOuts>
+    <CoolantOffOuts>3,0</CoolantOffOuts>
+    <MountPosition>sander_mount</MountPosition>
+    <HomePosition>sander_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>none</Name>
+    <x_m>0</x_m>
+    <y_m>0</y_m>
+    <z_m>0</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>0</ry_rad>
+    <rz_rad>0</rz_rad>
+    <mass_kg>0</mass_kg>
+    <cogx_m>0</cogx_m>
+    <cogy_m>0</cogy_m>
+    <cogz_m>0</cogz_m>
+    <ToolOnOuts />
+    <ToolOffOuts />
+    <CoolantOnOuts />
+    <CoolantOffOuts />
+    <MountPosition>sander_mount</MountPosition>
+    <HomePosition>sander_home</HomePosition>
   </Tools>
 </NewDataSet>

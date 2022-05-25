@@ -60,7 +60,8 @@ def speed_setter(speed_mmps):
     if diam_m < 0.5:
       global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m
     else:
-      # Large diam (> 0.5m): Just use as-is blrnd radiusBack to as originally detemrined... leave this alone (note it would increase the blend radius for small radius)
+      # Large diam (> 0.5m): Just use as-is blend radius back to as originally determined...
+      # leave this alone (note it would increase the blend radius for small radius)
       global grind_rot_blend_radius_rad = grind_blend_radius_m
     end
   end
@@ -903,38 +904,38 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     #c4b	-x2+r	-rx2
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[x2-r, 0, 0, -rx2, 0, 0])
+      p1 = pose_trans(p_center, p[x2 - r, 0, 0, -rx2, 0, 0])
       movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[x2, 0, 0, -rx2+rr, 0, 0])
+      p1 = pose_trans(p_center, p[x2, 0, 0, -rx2 + rr, 0, 0])
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[x2, 0, 0, rx2-rr, 0, 0])
+      p1 = pose_trans(p_center, p[x2, 0, 0, rx2 - rr, 0, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[x2-r, 0, 0, rx2, 0, 0])
+      p1 = pose_trans(p_center, p[x2 - r, 0, 0, rx2, 0, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-x2+r, 0, 0, rx2, 0, 0])
+      p1 = pose_trans(p_center, p[-x2 + r, 0, 0, rx2, 0, 0])
       movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-x2, 0, 0, rx2-rr, 0, 0])
+      p1 = pose_trans(p_center, p[-x2, 0, 0, rx2 - rr, 0, 0])
       movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-x2, 0, 0, -rx2+rr, 0, 0])
+      p1 = pose_trans(p_center, p[-x2, 0, 0, -rx2 + rr, 0, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-x2+r, 0, 0, -rx2, 0, 0])
+      p1 = pose_trans(p_center, p[-x2 + r, 0, 0, -rx2, 0, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
 
@@ -993,61 +994,61 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     #c4b	-rx2+rr	-ry2
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, rx2-rr, -ry2, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, rx2 - rr, -ry2, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2+rr, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2 + rr, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2-rr, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2 - rr, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, rx2-rr, ry2, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, rx2 - rr, ry2, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, -rx2+rr, ry2, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, -rx2 + rr, ry2, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2-rr, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2 - rr, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
     end
 
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2+rr, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2 + rr, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
     end
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, -rx2+rr, -ry2, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, -rx2 + rr, -ry2, 0])
       movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
     end
 
     # Original 4-point Rectangle
-#    if ok_to_proceed():
-#      p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2, 0])
-#      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
-#    end
-#
-#    if ok_to_proceed():
-#      p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2, 0])
-#      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
-#    end
-#
-#    if ok_to_proceed():
-#      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2, 0])
-#      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
-#    end
+    #    if ok_to_proceed():
+    #      p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2, 0])
+    #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+    #    end
+    #
+    #    if ok_to_proceed():
+    #      p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2, 0])
+    #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+    #    end
+    #
+    #    if ok_to_proceed():
+    #      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2, 0])
+    #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+    #    end
 
-#    if ok_to_proceed():
-#      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2, 0])
-#      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
-#    end
+    #    if ok_to_proceed():
+    #      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2, 0])
+    #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+    #    end
     grind_cycle = grind_cycle + 1
   end
   pattern_complete()

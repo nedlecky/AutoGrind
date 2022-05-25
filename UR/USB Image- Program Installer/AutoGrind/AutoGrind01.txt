@@ -17,7 +17,7 @@
        If not socket_is_open
          socket_is_open≔socket_open("169.254.254.210", 30000)
        If not socket_is_open
-         socket_is_open≔socket_open("192.168.0.121", 30000)
+         socket_is_open≔socket_open("192.168.0.252", 30000)
      response≔"Unknown command"
      command≔socket_read_ascii_float(12)
      If command_validate()

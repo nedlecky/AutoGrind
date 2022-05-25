@@ -1,5 +1,14 @@
 def AutoGrind01():
-  set_gravity([0.0, 0.0, 9.82])
+  global _hidden_verificationVariable=0
+  step_count_4b148876_b111_4385_a513_fd1a88d7ec7e = 0.0
+  thread Step_Counter_Thread_03913d11_5233_48a8_b7af_adacf42b5585():
+    while (True):
+      step_count_4b148876_b111_4385_a513_fd1a88d7ec7e = step_count_4b148876_b111_4385_a513_fd1a88d7ec7e + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_03913d11_5233_48a8_b7af_adacf42b5585()
+  set_tcp(p[0.0,-0.2,0.05,0.0,2.221441469079183,-2.221441469079183])
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -10,21 +19,13 @@ def AutoGrind01():
   set_standard_digital_input_action(7, "freedrive")
   set_runstate_standard_digital_output_to_value(1, 5)
   set_safety_mode_transition_hardness(1)
-  set_tcp(p[0.0,-0.2,0.05,0.0,2.221441469079183,-2.221441469079183])
-  step_count_d168a517_5913_465e_a9e6_db3ec59335fb = 0.0
-  thread Step_Counter_Thread_37651b9b_038e_4e7c_a928_a3449be30df5():
-    while (True):
-      step_count_d168a517_5913_465e_a9e6_db3ec59335fb = step_count_d168a517_5913_465e_a9e6_db3ec59335fb + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_37651b9b_038e_4e7c_a928_a3449be30df5()
+  set_gravity([0.0, 0.0, 9.82])
+  set_target_payload(0.650000, [0.009000, 0.054000, 0.034000], [0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000])
   set_tool_communication(False, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(0)
-  set_target_payload(0.650000, [0.009000, 0.054000, 0.034000], [0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000])
   global Vertical_3_p=p[.138885408770, -.597734994115, .345465728645, .020328607375, .009472346729, .004936256276]
   global Vertical_3_q=[1.5825845003128052, -1.3035788101008912, 1.3692634741412562, -1.6159240208067835, -1.5805562178241175, 3.148454189300537]
   global Tilted_1_p=p[.138883686744, -.597728142783, .345429622193, -.448043800451, .010443563975, .002601926233]
@@ -166,6 +167,7 @@ def AutoGrind01():
   # Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_mm)
   global robot_part_geometry = [0, 0]
   global robot_door_closed_input = [-1, -1]
+  global robot_footswitch_pressed_input = [-1, -1]
   global robot_tool_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
   global robot_tool_off_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
   global robot_coolant_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
@@ -298,7 +300,7 @@ def AutoGrind01():
       socket_send_lf()
       global response = "set_part_geometry()"
     elif command[2] == 10:
-      # Set door closed IO
+      # Set door closed input
       if command[3] >= 0:
         robot_door_closed_input[0] = command[3]
         robot_door_closed_input[1] = command[4]
@@ -310,7 +312,7 @@ def AutoGrind01():
       socket_set_var("robot_door_closed", is_door_closed())
       global response = "set_door_closed_input()"
     elif command[2] == 11:
-      # Set tool on Output
+      # Set tool on output
       robot_tool_on_outputs = command_3_padded_8(command)
   
       socket_send_string("robot_tool_on_outputs=")
@@ -318,7 +320,7 @@ def AutoGrind01():
       socket_send_lf()
       global response = "set_tool_on_outputs()"
     elif command[2] == 12:
-      # Set tool off Output
+      # Set tool off output
       robot_tool_off_outputs = command_3_padded_8(command)
   
       socket_send_string("robot_tool_off_outputs=")
@@ -326,7 +328,7 @@ def AutoGrind01():
       socket_send_lf()
       global response = "set_tool_off_outputs()"
     elif command[2] == 13:
-      # Set coolant on Output
+      # Set coolant on output
       robot_coolant_on_outputs = command_3_padded_8(command)
   
       socket_send_string("robot_coolant_on_outputs=")
@@ -334,7 +336,7 @@ def AutoGrind01():
       socket_send_lf()
       global response = "set_coolant_on_outputs()"
     elif command[2] == 14:
-      # Set coolant off Output
+      # Set coolant off output
       robot_coolant_off_outputs = command_3_padded_8(command)
   
       socket_send_string("robot_coolant_off_outputs=")
@@ -403,6 +405,24 @@ def AutoGrind01():
       return_vector(robot_payload_cog_m, 3)
       socket_send_lf()
       global response = "set_payload()"
+    elif command[2] == 22:
+      # Set footswitch pressed input
+      if command[3] >= 0:
+        robot_footswitch_pressed_input[0] = command[3]
+        robot_footswitch_pressed_input[1] = command[4]
+      end
+  
+      socket_send_string("robot_footswitch_pressed_input=")
+      return_vector(robot_footswitch_pressed_input, 2)
+      socket_send_lf()
+      socket_set_var("robot_footswitch_pressed", is_footswitch_pressed())
+      global response = "set footswitch_pressed_input()"
+  elif command[2] == 30:
+      # set_output
+      local out = command[3]
+      local state = command[4]>0
+      set_digital_out(out,state)
+      global response = "set_output()"
     else:
       global response = "set_variable ERROR"
     end
@@ -527,8 +547,9 @@ def AutoGrind01():
   #
   # How is it implemented?
   #
-  # 1) door_monitor_thread (below) is ALWAYS running. Fires every time_door_check_rate_s (0.25s)
+  # 1) io_monitor_thread (below) is ALWAYS running. Fires every time_door_check_rate_s (0.25s)
   #    - Whenever it sees the state of the door change, it sends SET robot_door_closed state to host
+  #    - Whenever it sees the state of the footswitch (DIN7) change, it sends SET robot_footswitch state to host
   #    - It monitors if we're still in contact wth the part butr not grinding (grind_process_state and grind_ready)
   #      - If that goes beyond grind_max_wait_ms it sets halt_grind=True
   # 2) no_command function (below). Called by PolScript everyu time it's waiting for a command and doesn't get one with a second
@@ -544,7 +565,7 @@ def AutoGrind01():
   # ####################################################################################
   # START AUTOMATED DOOR MONITORING THREAD
   #
-  # Return True if door in closed state (or if door I/IO is undefined)
+  # Return True if door in closed state (or if door input is undefined)
   def is_door_closed():
     if robot_door_closed_input[0] < 0:
       return True
@@ -557,19 +578,45 @@ def AutoGrind01():
     return f == robot_door_closed_input[1]
   end
   
+  # Would be nice to have this din programmable like door_closed above! TODO
+  def is_footswitch_pressed():
+    if robot_footswitch_pressed_input[0] < 0:
+      return False
+    end
+    if get_standard_digital_in(robot_footswitch_pressed_input[0]):
+      f = 1
+    else:
+      f = 0
+    end
+    return f == robot_footswitch_pressed_input[1]
+  end
+  
   global robot_door_closed = is_door_closed()
+  global robot_footswitch_pressed = is_footswitch_pressed()
   global time_in_uncommanded_grind = 0
   global time_door_check_rate_s = 0.250
   global grind_max_wait_ms = 1500
-  thread door_monitor_thread():
+  # Also monitors footswitch!
+  thread io_monitor_thread():
+    # Send current state on start... in future will only be sent on change
+    socket_set_var("robot_door_closed", robot_door_closed)
+    socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
+  
     while True:
       sleep(time_door_check_rate_s)
-      new_door_closed = is_door_closed()
+      local new_door_closed = is_door_closed()
+      local new_footswitch_pressed = is_footswitch_pressed()
   
       # Notify host if door state has changed
       if robot_door_closed != new_door_closed:
         robot_door_closed = new_door_closed
         socket_set_var("robot_door_closed", robot_door_closed)
+      end
+  
+      # Notify host if footswitch state has changed
+      if robot_footswitch_pressed != new_footswitch_pressed:
+        robot_footswitch_pressed = new_footswitch_pressed
+        socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
       end
   
       # Check for still in grind process but not executing a grind command
@@ -585,7 +632,7 @@ def AutoGrind01():
       end
     end
   end
-  global doorMonitorThread = run door_monitor_thread()
+  global ioMonitorThread = run io_monitor_thread()
   #
   # END AUTOMATED DOOR MONITORING THREAD
   # ####################################################################################
@@ -621,7 +668,7 @@ def AutoGrind01():
     local p0 = get_target_tcp_pose()
     # Chugging on CYL 80 lines and rects at 4Hz
     # Generate 10 points per second
-    global grind_n_segments = limiter(ceil(t_move * 10.0), 1, 1000)
+    global grind_n_segments = 1#limiter(ceil(t_move * 10.0), 1, 1000)
   
     i = 1
     while i <= grind_n_segments and ok_to_proceed():
@@ -767,7 +814,14 @@ def AutoGrind01():
       # These are 1/4 the theoretical rotational speeds but we need to set them like this to get the correct speed- why??????
       global grind_rot_speed_rps = grind_speed_mps * 0.5 / diam_m
       global grind_rot_accel_rpss = grind_accel_mpss * 0.5 / diam_m
-      global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m #TRYING THIS AGAIN * 0.5 / diam_m Cannot scale blend_radius down! Leave as-is
+      # Increasing blend radius for small diam (< 0.5m) may help things
+      if diam_m < 0.5:
+        global grind_rot_blend_radius_rad = grind_blend_radius_m * 0.5 / diam_m
+      else:
+        # Large diam (> 0.5m): Just use as-is blend radius back to as originally determined...
+        # leave this alone (note it would increase the blend radius for small radius)
+        global grind_rot_blend_radius_rad = grind_blend_radius_m
+      end
     end
   end
   
@@ -1476,39 +1530,101 @@ def AutoGrind01():
   # RECT PATTERNS
   #
   
+  #Initial Move	-x2	-y2
+  #c1a   x2-r	-y2
+  #c1b	 x2	  -y2+r
+  #c2a	 x2	   y2-r
+  #c2b	 x2-r	 y2
+  #c3a	-x2+r	 y2
+  #c3b	-x2	   y2-r
+  #c4a	-x2	  -y2+r
+  #c4b	-x2+r	-y2
+  
   # Move along a flat rect dx_m x dy_m centered on p_center. Repeat n_cycles times.
   # Move in x direction first, then y
   def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     t_move_x = dx_m / grind_speed_mps
     t_move_y = dy_m / grind_speed_mps
   
+    local x2 = dx_m / 2.0
+    local y2 = dy_m / 2.0
+    local r = grind_blend_radius_m * 1.5
+  
     global grind_cycle = 1
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
+      p1 = pose_trans(p_center, p[-x2, -y2, 0, 0, 0, 0])
       movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = 1)
     end
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       socket_set_var("grind_cycle", grind_cycle)
   
+      # New 8-point beveled rectangle 2022-05-23
+      #Initial Move	-x2	-y2
+      #c1a   x2-r	-y2
+      #c1b	 x2	  -y2+r
+      #c2a	 x2	   y2-r
+      #c2b	 x2-r	 y2
+      #c3a	-x2+r	 y2
+      #c3b	-x2	   y2-r
+      #c4a	-x2	  -y2+r
+      #c4b	-x2+r	-y2
+  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
+        p1 = pose_trans(p_center, p[x2 - r, -y2, 0, 0, 0, 0])
         movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
-  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[dx_m / 2.0, dy_m / 2.0, 0, 0, 0, 0])
-        movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+        p1 = pose_trans(p_center, p[x2, -y2 + r, 0, 0, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[-dx_m / 2.0, dy_m / 2.0, 0, 0, 0, 0])
+        p1 = pose_trans(p_center, p[x2, y2 - r, 0, 0, 0, 0])
+        movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[x2 - r, y2, 0, 0, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      end
+  
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2 + r, y2, 0, 0, 0, 0])
         movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2, y2 - r, 0, 0, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
+        p1 = pose_trans(p_center, p[-x2, -y2 + r, 0, 0, 0, 0])
         movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2 + r, -y2, 0, 0, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      end
+  
+      # Original 4-point rtectangle
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[x2, -y2, 0, 0, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[x2, y2, 0, 0, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[-x2, y2, 0, 0, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[-x2, -y2, 0, 0, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      #    end
       grind_cycle = grind_cycle + 1
     end
     pattern_complete()
@@ -1519,34 +1635,88 @@ def AutoGrind01():
   def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     t_move_x = dx_m / grind_speed_mps
     t_move_rx = drx_rad / grind_rot_speed_rps / 4
+    local x2 = dx_m / 2.0
+    local rx2 = drx_rad / 2.0
+    local r = grind_blend_radius_m * 1.5
+    local rr = grind_rot_blend_radius_rad * 1.5
+  
   
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
+      p1 = pose_trans(p_center, p[-x2, 0, 0, -rx2, 0, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = 1)
     end
   
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       socket_set_var("grind_cycle", grind_cycle)
+  
+      # New 8-point beveled rectangle 2022-05-23
+      #Initial Move	-x2	-rx2
+      #c1a   x2-r	-rx2
+      #c1b	 x2	  -rx2+rr
+      #c2a	 x2	   rx2-rr
+      #c2b	 x2-r	 rx2
+      #c3a	-x2+r	 rx2
+      #c3b	-x2	   rx2-rr
+      #c4a	-x2	  -rx2+rr
+      #c4b	-x2+r	-rx2
+  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
+        p1 = pose_trans(p_center, p[x2 - r, 0, 0, -rx2, 0, 0])
         movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
-  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[dx_m / 2.0, 0, 0, drx_rad / 2.0, 0, 0])
-        movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+        p1 = pose_trans(p_center, p[x2, 0, 0, -rx2 + rr, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, drx_rad / 2.0, 0, 0])
+        p1 = pose_trans(p_center, p[x2, 0, 0, rx2 - rr, 0, 0])
+        movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[x2 - r, 0, 0, rx2, 0, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      end
+  
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2 + r, 0, 0, rx2, 0, 0])
         movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2, 0, 0, rx2 - rr, 0, 0])
+        movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
+        p1 = pose_trans(p_center, p[-x2, 0, 0, -rx2 + rr, 0, 0])
         movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[-x2 + r, 0, 0, -rx2, 0, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      end
+  
+      # Original 4-point Rectangle
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[x2, 0, 0, -rx2, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[x2, 0, 0, rx2, 0, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[-x2, 0, 0, rx2, 0, 0])
+      #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[-x2, 0, 0, -rx2, 0, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #    end
       grind_cycle = grind_cycle + 1
     end
     pattern_complete()
@@ -1557,34 +1727,86 @@ def AutoGrind01():
   def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     t_move_rx = drx_rad / grind_rot_speed_rps / 4
     t_move_ry = dry_rad / grind_rot_speed_rps / 4
+    local rx2 = drx_rad / 2.0
+    local ry2 = dry_rad / 2.0
+    local rr = grind_rot_blend_radius_rad * 1.5
   
     if ok_to_proceed():
-      p1 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
+      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2, 0])
       movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = 1)
     end
   
     global grind_cycle = 1
     while (ok_to_proceed() and grind_cycle <= n_cycles):
       socket_set_var("grind_cycle", grind_cycle)
+  
+      # New 8-point beveled rectangle 2022-05-23
+      #Initial Move	-rx2	-ry2
+      #c1a   rx2-rr	-ry2
+      #c1b	 rx2	  -ry2+rr
+      #c2a	 rx2	   ry2-rr
+      #c2b	 rx2-rr	 ry2
+      #c3a	-rx2+rr	 ry2
+      #c3b	-rx2	   ry2-rr
+      #c4a	-rx2	  -ry2+rr
+      #c4b	-rx2+rr	-ry2
+  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[0, 0, 0, drx_rad / 2.0, -dry_rad / 2.0, 0])
+        p1 = pose_trans(p_center, p[0, 0, 0, rx2 - rr, -ry2, 0])
         movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
       end
-  
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[0, 0, 0, drx_rad / 2.0, dry_rad / 2.0, 0])
-        movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+        p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2 + rr, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
       end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, dry_rad / 2.0, 0])
+        p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2 - rr, 0])
+        movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[0, 0, 0, rx2 - rr, ry2, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      end
+  
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[0, 0, 0, -rx2 + rr, ry2, 0])
         movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2 - rr, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      end
   
       if ok_to_proceed():
-        p1 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
+        p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2 + rr, 0])
         movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
       end
+      if ok_to_proceed():
+        p1 = pose_trans(p_center, p[0, 0, 0, -rx2 + rr, -ry2, 0])
+        movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      end
+  
+      # Original 4-point Rectangle
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[0, 0, 0, rx2, ry2, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      #    end
+      #
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #    end
+  
+      #    if ok_to_proceed():
+      #      p1 = pose_trans(p_center, p[0, 0, 0, -rx2, -ry2, 0])
+      #      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      #    end
       grind_cycle = grind_cycle + 1
     end
     pattern_complete()
@@ -1820,7 +2042,7 @@ def AutoGrind01():
       # Blend radius is 0... model would be 10 points for a 10mm diameter (1000 points for 1m diameter!)
       n_points = ceil(diam_m * 1000.0)
     end
-    return limiter(n_points, 1, 100)
+    return limiter(n_points, 1, 1000)
   end
   
   # Grind along a flat circle circle_diam_m centered on p_center. Repeat n_cycles times.
@@ -2042,8 +2264,8 @@ def AutoGrind01():
       end
       $ 18 "If not socket_is_open"
       if (not socket_is_open):
-        $ 19 "socket_is_open≔socket_open('192.168.0.121', 30000)"
-        global socket_is_open=socket_open("192.168.0.121", 30000)
+        $ 19 "socket_is_open≔socket_open('192.168.0.252', 30000)"
+        global socket_is_open=socket_open("192.168.0.252", 30000)
       end
     end
     $ 20 "response≔'Unknown command'"

@@ -19,6 +19,7 @@ global robot_payload_cog_m = [0, 0, 0.50]
 # Geometry [1=FLAT 2=CYL 3=SPHERE, diameter_mm)
 global robot_part_geometry = [0, 0]
 global robot_door_closed_input = [-1, -1]
+global robot_footswitch_pressed_input = [-1, -1]
 global robot_tool_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_tool_off_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_coolant_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
@@ -151,7 +152,7 @@ def set_variable():
     socket_send_lf()
     global response = "set_part_geometry()"
   elif command[2] == 10:
-    # Set door closed IO
+    # Set door closed input
     if command[3] >= 0:
       robot_door_closed_input[0] = command[3]
       robot_door_closed_input[1] = command[4]
@@ -163,7 +164,7 @@ def set_variable():
     socket_set_var("robot_door_closed", is_door_closed())
     global response = "set_door_closed_input()"
   elif command[2] == 11:
-    # Set tool on Output
+    # Set tool on output
     robot_tool_on_outputs = command_3_padded_8(command)
 
     socket_send_string("robot_tool_on_outputs=")
@@ -171,7 +172,7 @@ def set_variable():
     socket_send_lf()
     global response = "set_tool_on_outputs()"
   elif command[2] == 12:
-    # Set tool off Output
+    # Set tool off output
     robot_tool_off_outputs = command_3_padded_8(command)
 
     socket_send_string("robot_tool_off_outputs=")
@@ -179,7 +180,7 @@ def set_variable():
     socket_send_lf()
     global response = "set_tool_off_outputs()"
   elif command[2] == 13:
-    # Set coolant on Output
+    # Set coolant on output
     robot_coolant_on_outputs = command_3_padded_8(command)
 
     socket_send_string("robot_coolant_on_outputs=")
@@ -187,7 +188,7 @@ def set_variable():
     socket_send_lf()
     global response = "set_coolant_on_outputs()"
   elif command[2] == 14:
-    # Set coolant off Output
+    # Set coolant off output
     robot_coolant_off_outputs = command_3_padded_8(command)
 
     socket_send_string("robot_coolant_off_outputs=")
@@ -196,19 +197,19 @@ def set_variable():
     global response = "set_coolant_off_outputs()"
   elif command[2] == 15:
     # tool_on
-    tool_power(True, grind_contact_enable)
+    tool_power(True, 2)
     global response = "tool_on()"
   elif command[2] == 16:
     # tool_off
-    tool_power(False, grind_contact_enable)
+    tool_power(False, 2)
     global response = "tool_off()"
   elif command[2] == 17:
     # coolant_on
-    coolant_flow(True, grind_contact_enable)
+    coolant_flow(True, 2)
     global response = "coolant_on()"
   elif command[2] == 18:
     # coolant_off
-    coolant_flow(False, grind_contact_enable)
+    coolant_flow(False, 2)
     global response = "coolant_off()"
   elif command[2] == 19:
     # freedrive 1=on/0=off, 0=base|1=tcp|2=tcp_part, 6 axisEnables
@@ -256,7 +257,19 @@ def set_variable():
     return_vector(robot_payload_cog_m, 3)
     socket_send_lf()
     global response = "set_payload()"
-  elif command[2] == 30:
+  elif command[2] == 22:
+    # Set footswitch pressed input
+    if command[3] >= 0:
+      robot_footswitch_pressed_input[0] = command[3]
+      robot_footswitch_pressed_input[1] = command[4]
+    end
+
+    socket_send_string("robot_footswitch_pressed_input=")
+    return_vector(robot_footswitch_pressed_input, 2)
+    socket_send_lf()
+    socket_set_var("robot_footswitch_pressed", is_footswitch_pressed())
+    global response = "set footswitch_pressed_input()"
+elif command[2] == 30:
     # set_output
     local out = command[3]
     local state = command[4]>0
@@ -418,12 +431,20 @@ def is_door_closed():
 end
 
 # Would be nice to have this din programmable like door_closed above! TODO
-def footswitch_state():
-  return get_standard_digital_in(7)
+def is_footswitch_pressed():
+  if robot_footswitch_pressed_input[0] < 0:
+    return False
+  end
+  if get_standard_digital_in(robot_footswitch_pressed_input[0]):
+    f = 1
+  else:
+    f = 0
+  end
+  return f == robot_footswitch_pressed_input[1]
 end
 
 global robot_door_closed = is_door_closed()
-global robot_footswitch = footswitch_state()
+global robot_footswitch_pressed = is_footswitch_pressed()
 global time_in_uncommanded_grind = 0
 global time_door_check_rate_s = 0.250
 global grind_max_wait_ms = 1500
@@ -431,12 +452,12 @@ global grind_max_wait_ms = 1500
 thread io_monitor_thread():
   # Send current state on start... in future will only be sent on change
   socket_set_var("robot_door_closed", robot_door_closed)
-  socket_set_var("robot_footswitch", robot_footswitch)
+  socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
   
   while True:
     sleep(time_door_check_rate_s)
-    new_door_closed = is_door_closed()
-    new_footswitch = footswitch_state()
+    local new_door_closed = is_door_closed()
+    local new_footswitch_pressed = is_footswitch_pressed()
 
     # Notify host if door state has changed
     if robot_door_closed != new_door_closed:
@@ -445,9 +466,9 @@ thread io_monitor_thread():
     end
 
     # Notify host if footswitch state has changed
-    if robot_footswitch != new_footswitch:
-      robot_footswitch = new_footswitch
-      socket_set_var("robot_footswitch", robot_footswitch)
+    if robot_footswitch_pressed != new_footswitch_pressed:
+      robot_footswitch_pressed = new_footswitch_pressed
+      socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
     end
 
     # Check for still in grind process but not executing a grind command
