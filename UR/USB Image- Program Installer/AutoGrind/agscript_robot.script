@@ -29,7 +29,6 @@ global robot_freedrive_mode = 0
 # Defaults get set on load... and can be queried (or changed) from C#
 set_tcp(robot_tcp)
 set_payload(robot_payload_mass_kg, robot_payload_cog_m)
-set_gravity([0.0, 0.0, 9.82])
 
 # command should be[nElements,index,checkval,param[0],param[1],...]
 # put index into robot_index
@@ -520,7 +519,7 @@ def movel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, t_move = 1):
   local p0 = get_target_tcp_pose()
   # Chugging on CYL 80 lines and rects at 4Hz
   # Generate 10 points per second
-  global grind_n_segments = 1#limiter(ceil(t_move * 10.0), 1, 1000)
+  global grind_n_segments = limiter(ceil(t_move * 10.0), 1, 1000)
 
   i = 1
   while i <= grind_n_segments and ok_to_proceed():

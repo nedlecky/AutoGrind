@@ -785,8 +785,8 @@ end
 # Move along a flat rect dx_m x dy_m centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then y
 def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
-  t_move_x = dx_m / grind_speed_mps
-  t_move_y = dy_m / grind_speed_mps
+  global t_move_x = dx_m / grind_speed_mps
+  global t_move_y = dy_m / grind_speed_mps
 
   local x2 = dx_m / 2.0
   local y2 = dy_m / 2.0
@@ -817,7 +817,8 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[x2, -y2 + r, 0, 0, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
     if ok_to_proceed():
@@ -826,7 +827,8 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[x2 - r, y2, 0, 0, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
     if ok_to_proceed():
@@ -835,7 +837,8 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[-x2, y2 - r, 0, 0, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
     if ok_to_proceed():
@@ -844,10 +847,11 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[-x2 + r, -y2, 0, 0, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
-    # Original 4-point rtectangle
+    # Original 4-point rectangle
     #    if ok_to_proceed():
     #      p1 = pose_trans(p_center, p[x2, -y2, 0, 0, 0, 0])
     #      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
@@ -909,7 +913,8 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[x2, 0, 0, -rx2 + rr, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
     if ok_to_proceed():
@@ -918,7 +923,8 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[x2 - r, 0, 0, rx2, 0, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     if ok_to_proceed():
@@ -927,7 +933,8 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[-x2, 0, 0, rx2 - rr, 0, 0])
-      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      #movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x)
+      movel(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
     end
 
     if ok_to_proceed():
@@ -936,7 +943,8 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[-x2 + r, 0, 0, -rx2, 0, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     # Original 4-point Rectangle
@@ -999,7 +1007,8 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[0, 0, 0, rx2, -ry2 + rr, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     if ok_to_proceed():
@@ -1008,7 +1017,8 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[0, 0, 0, rx2 - rr, ry2, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     if ok_to_proceed():
@@ -1017,7 +1027,8 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[0, 0, 0, -rx2, ry2 - rr, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     if ok_to_proceed():
@@ -1026,7 +1037,8 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
     end
     if ok_to_proceed():
       p1 = pose_trans(p_center, p[0, 0, 0, -rx2 + rr, -ry2, 0])
-      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      #movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry)
+      movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
     end
 
     # Original 4-point Rectangle

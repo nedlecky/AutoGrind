@@ -1,11 +1,11 @@
-force=5
-speed=5
+force=7
+speed=10
 n=1
 
-size = 150
+size = 100
 
 repeat:
-grind_rect({size},{size},{n},{speed},{force},1)
+grind_rect({size},{size},{n},{speed},{force},0)
 size-=20
 
 jump_gt_zero(size,repeat)

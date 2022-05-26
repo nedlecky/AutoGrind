@@ -2389,10 +2389,10 @@ namespace AutoGrind
                         DiameterDimLbl.Visible = false;
                         break;
                     case "CYLINDER":
-                        if (!ValidNumericString(paramList[1], 75, 1100))
+                        if (!ValidNumericString(paramList[1], 75, 3000))
                         {
-                            log.Error("Diameter must be between 75 and 1100 EXEC: {0.000} {1}", lineNumber, command);
-                            PromptOperator("Diameter be between 75 and 1100:\n" + command);
+                            log.Error("Diameter must be between 75 and 3000 EXEC: {0.000} {1}", lineNumber, command);
+                            PromptOperator("Diameter be between 75 and 3000:\n" + command);
                             return true;
                         }
                         DiameterLbl.Text = paramList[1];
@@ -2401,10 +2401,10 @@ namespace AutoGrind
                         diameterDefaults[1] = paramList[1];
                         break;
                     case "SPHERE":
-                        if (!ValidNumericString(paramList[1], 75, 1100))
+                        if (!ValidNumericString(paramList[1], 75, 3000))
                         {
-                            log.Error("Diameter must be between 75 and 1100 EXEC: {0.000} {1}", lineNumber, command);
-                            PromptOperator("Diameter be between 75 and 1100:\n" + command);
+                            log.Error("Diameter must be between 75 and 3000 EXEC: {0.000} {1}", lineNumber, command);
+                            PromptOperator("Diameter be between 75 and 3000:\n" + command);
                             return true;
                         }
                         DiameterLbl.Text = paramList[1];
@@ -3634,6 +3634,7 @@ namespace AutoGrind
             tools.Rows.Add(new object[] { "sander", 0, 0, 0.186, 0, 0, 0, 2.99, -0.011, 0.019, 0.067, "2,1", "2,0", "3,1", "3,0", "sander_mount", "sander_home" });
             tools.Rows.Add(new object[] { "spindle", 0, -0.165, 0.09, 0, 2.2214, -2.2214, 2.61, -0.004, -0.015, 0.049, "5,1", "5,0", "3,1", "3,0", "spindle_mount", "spindle_home" });
             tools.Rows.Add(new object[] { "pen", 0, -0.08, 0.075, 0, 2.2214, -2.2214, 1.0, -0.004, -0.015, 0.049, "2,0,5,0", "2,0,5,0", "3,0", "3,0", "spindle_mount", "spindle_home" });
+            tools.Rows.Add(new object[] { "pen_SA", 0, -0.072, 0.103, 0, 2.2214, -2.2214, 0.98, 0, 0.002, 0.048, "2,0,5,0", "2,0,5,0", "3,0", "3,0", "spindle_mount", "spindle_home" });
             tools.Rows.Add(new object[] { "2F85", 0, 0, 0.175, 0, 0, 0, 1.0, 0, 0, 0.050, "2,1,5,1", "2,0,5,0", "3,1", "3,0", "sander_mount", "sander_home" });
             tools.Rows.Add(new object[] { "none", 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, "", "", "", "", "sander_mount", "sander_home" });
         }

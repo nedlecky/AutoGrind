@@ -17,7 +17,14 @@ def AutoGrind01():
   set_analog_outputdomain(1, 1)
   set_input_actions_to_default()
   set_standard_digital_input_action(7, "freedrive")
+  set_runstate_standard_digital_outputs([0,2,3,4,5,6])
+  set_runstate_standard_digital_output_to_value(0, 4)
   set_runstate_standard_digital_output_to_value(1, 5)
+  set_runstate_standard_digital_output_to_value(2, 4)
+  set_runstate_standard_digital_output_to_value(3, 4)
+  set_runstate_standard_digital_output_to_value(4, 4)
+  set_runstate_standard_digital_output_to_value(5, 4)
+  set_runstate_standard_digital_output_to_value(6, 4)
   set_safety_mode_transition_hardness(1)
   set_gravity([0.0, 0.0, 9.82])
   set_target_payload(0.650000, [0.009000, 0.054000, 0.034000], [0.000000, 0.000000, 0.000000, 0.000000, 0.000000, 0.000000])
@@ -178,6 +185,10 @@ def AutoGrind01():
   set_tcp(robot_tcp)
   set_payload(robot_payload_mass_kg, robot_payload_cog_m)
   set_gravity([0.0, 0.0, 9.82])
+  
+  set_runstate_configurable_digital_output_to_value(2,5)
+  set_runstate_configurable_digital_output_to_value(3,5)
+  set_runstate_configurable_digital_output_to_value(5,5)
   
   # command should be[nElements,index,checkval,param[0],param[1],...]
   # put index into robot_index
@@ -345,19 +356,19 @@ def AutoGrind01():
       global response = "set_coolant_off_outputs()"
     elif command[2] == 15:
       # tool_on
-      tool_power(True, grind_contact_enable)
+      tool_power(True, 2)
       global response = "tool_on()"
     elif command[2] == 16:
       # tool_off
-      tool_power(False, grind_contact_enable)
+      tool_power(False, 2)
       global response = "tool_off()"
     elif command[2] == 17:
       # coolant_on
-      coolant_flow(True, grind_contact_enable)
+      coolant_flow(True, 2)
       global response = "coolant_on()"
     elif command[2] == 18:
       # coolant_off
-      coolant_flow(False, grind_contact_enable)
+      coolant_flow(False, 2)
       global response = "coolant_off()"
     elif command[2] == 19:
       # freedrive 1=on/0=off, 0=base|1=tcp|2=tcp_part, 6 axisEnables

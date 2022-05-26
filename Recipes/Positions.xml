@@ -88,4 +88,10 @@
     <Pose>p[-0.774846,0.025403,0.337363,1.86032,2.50809,0.0751757]</Pose>
     <IsSystem>false</IsSystem>
   </Positions>
+  <Positions>
+    <Name>papercenter</Name>
+    <Joints>[-1.6987,-2.17769,-1.97694,-2.12874,-1.69591,-0.00230438]</Joints>
+    <Pose>p[-0.18863,-0.632771,0.00689913,8.00566e-05,-3.14155,-8.14575e-05]</Pose>
+    <IsSystem>false</IsSystem>
+  </Positions>
 </NewDataSet>

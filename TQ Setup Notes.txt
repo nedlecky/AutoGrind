@@ -31,8 +31,8 @@ X (red) points laterally along cylinder toward operator
 Y (G)   points toward robot base, perpendicular to cylinder
 Z (B)   points down (tool advance)
 
-STANDARD TOOL RECORDS 5/18/2022
-  <Tools>
+STANDARD TOOL RECORDS 5/26/2022
+ <Tools>
     <Name>sander</Name>
     <x_m>0</x_m>
     <y_m>0</y_m>
@@ -66,6 +66,25 @@ STANDARD TOOL RECORDS 5/18/2022
     <ToolOnOuts>5,1</ToolOnOuts>
     <ToolOffOuts>5,0</ToolOffOuts>
     <CoolantOnOuts>3,1</CoolantOnOuts>
+    <CoolantOffOuts>3,0</CoolantOffOuts>
+    <MountPosition>spindle_mount</MountPosition>
+    <HomePosition>spindle_home</HomePosition>
+  </Tools>
+  <Tools>
+    <Name>pen</Name>
+    <x_m>0</x_m>
+    <y_m>-0.08</y_m>
+    <z_m>0.075</z_m>
+    <rx_rad>0</rx_rad>
+    <ry_rad>2.2214</ry_rad>
+    <rz_rad>-2.2214</rz_rad>
+    <mass_kg>1</mass_kg>
+    <cogx_m>-0.004</cogx_m>
+    <cogy_m>-0.015</cogy_m>
+    <cogz_m>0.049</cogz_m>
+    <ToolOnOuts>2,0,5,0</ToolOnOuts>
+    <ToolOffOuts>2,0,5,0</ToolOffOuts>
+    <CoolantOnOuts>3,0</CoolantOnOuts>
     <CoolantOffOuts>3,0</CoolantOffOuts>
     <MountPosition>spindle_mount</MountPosition>
     <HomePosition>spindle_home</HomePosition>
