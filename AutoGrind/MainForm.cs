@@ -1068,6 +1068,7 @@ namespace AutoGrind
 
         private void RobotModeBtn_Click(object sender, EventArgs e)
         {
+            CloseSafetyPopup();
             switch (RobotModeBtn.Text)
             {
                 case "Robotmode: RUNNING":
@@ -1084,11 +1085,11 @@ namespace AutoGrind
                     ErrorMessageBox(String.Format("Unsure how to recover from {0}", RobotModeBtn.Text));
                     break;
             }
-
         }
 
         private void SafetyStatusBtn_Click(object sender, EventArgs e)
         {
+            CloseSafetyPopup();
             switch (SafetyStatusBtn.Text)
             {
                 case "Safetystatus: NORMAL":
@@ -1112,6 +1113,7 @@ namespace AutoGrind
 
         private void ProgramStateBtn_Click(object sender, EventArgs e)
         {
+            CloseSafetyPopup();
             if (ProgramStateBtn.Text.StartsWith("PLAYING"))
             {
                 RobotSend("99");
@@ -2173,6 +2175,7 @@ namespace AutoGrind
             // assert?
             if (command.StartsWith("assert("))
             {
+                LogInterpret("assert", lineNumber, command);
                 string[] parameters = ExtractParameters(command, 2).Split(',');
                 if (parameters.Length != 2)
                 {
@@ -2264,8 +2267,8 @@ namespace AutoGrind
             // move_joint
             if (command.StartsWith("move_joint("))
             {
-                string positionName = ExtractParameters(command);
                 LogInterpret("move_joint", lineNumber, command);
+                string positionName = ExtractParameters(command);
 
                 if (!GotoPositionJoint(positionName))
                     ExecError(string.Format("Joint move failed line {0}: {1}", lineNumber, origLine));
@@ -2275,8 +2278,8 @@ namespace AutoGrind
             // move_linear
             if (command.StartsWith("move_linear("))
             {
-                string positionName = ExtractParameters(command);
                 LogInterpret("move_linear", lineNumber, origLine);
+                string positionName = ExtractParameters(command);
 
                 if (!GotoPositionPose(positionName))
                     ExecError(string.Format("Linear move failed line {0}: {1}", lineNumber, origLine));
@@ -2286,8 +2289,8 @@ namespace AutoGrind
             // save_position
             if (command.StartsWith("save_position("))
             {
+                LogInterpret("save_position", lineNumber, origLine);
                 string positionName = ExtractParameters(command);
-                LogInterpret("saveposition", lineNumber, origLine);
                 if (positionName.Length < 1)
                 {
                     ExecError(string.Format("No position name specified line {0}: {1}", lineNumber, origLine));
@@ -2301,6 +2304,7 @@ namespace AutoGrind
             // move_tool_home
             if (command.StartsWith("move_tool_home()"))
             {
+                LogInterpret("move_tool_home", lineNumber, origLine);
                 MoveToolHomeBtn_Click(null, null);
                 return true;
             }
@@ -2308,6 +2312,7 @@ namespace AutoGrind
             // move_tool_mount
             if (command.StartsWith("move_tool_mount()"))
             {
+                LogInterpret("move_tool_mount", lineNumber, origLine);
                 MoveToolMountBtn_Click(null, null);
                 return true;
             }
@@ -2646,6 +2651,12 @@ namespace AutoGrind
             CloseCommandServer();
             CloseDashboardClient();
         }
+
+        private void CloseSafetyPopup()
+        {
+            log.Info("close popup = {0}", robotDashboardClient.InquiryResponse("close popup"), 200);
+            log.Info("close safety popup = {0}", robotDashboardClient.InquiryResponse("close safety popup"), 200);
+        }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
             bool fReconnect = RobotConnectBtn.Text == "OFF";
@@ -2678,9 +2689,10 @@ namespace AutoGrind
             RobotConnectBtn.Text = "Dashboard OK";
 
             // Start querying the bot
-            RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model");
-            RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number");
-            robotDashboardClient.InquiryResponse("stop");
+            RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model",200);
+            RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number",200);
+            robotDashboardClient.InquiryResponse("stop",200);
+            CloseSafetyPopup();
 
             string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
             string isInRemoteControlResponse = robotDashboardClient.InquiryResponse("is in remote control", 1000);
