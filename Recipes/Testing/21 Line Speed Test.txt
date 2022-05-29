@@ -3,7 +3,7 @@
 # All should take ~2s
 
 speed = 20
-
+jump(cylinder)
 flat:
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
@@ -13,12 +13,12 @@ grind_line(28.3,28.3,1,{speed},10,0)
 
 cylinder:
 move_linear(demo_cyl)
-set_part_geometry(CYLINDER,80)
-grind_line(40,0,1,{speed},10,0)
-grind_line(40,1,1,{speed},10,0)
-grind_line(0,40,1,{speed},10,0)
-grind_line(1,40,1,{speed},10,0)
-grind_line(28.3,28.3,1,{speed},10,0)
+#set_part_geometry(CYLINDER,80)
+#grind_line(40,0,1,{speed},10,0)
+#grind_line(40,1,1,{speed},10,0)
+#grind_line(0,40,1,{speed},10,0)
+#grind_line(1,40,1,{speed},10,0)
+#grind_line(28.3,28.3,1,{speed},10,0)
 
 set_part_geometry(CYLINDER,200)
 grind_line(40,0,1,{speed},10,0)
@@ -35,17 +35,17 @@ grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 
-set_part_geometry(CYLINDER,1100)
+set_part_geometry(CYLINDER,1200)
 grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 
 sphere:
 move_linear(demo_sphere)
-set_part_geometry(SPHERE,80)
-grind_line(40,0,1,{speed},10,0)
-grind_line(0,40,1,{speed},10,0)
-grind_line(28.3,28.3,1,{speed},10,0)
+#set_part_geometry(SPHERE,80)
+#grind_line(40,0,1,{speed},10,0)
+#grind_line(0,40,1,{speed},10,0)
+#grind_line(28.3,28.3,1,{speed},10,0)
 
 set_part_geometry(SPHERE,200)
 grind_line(40,0,1,{speed},10,0)
@@ -62,7 +62,7 @@ grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)
 
-set_part_geometry(SPHERE,1100)
+set_part_geometry(SPHERE,1200)
 grind_line(40,0,1,{speed},10,0)
 grind_line(0,40,1,{speed},10,0)
 grind_line(28.3,28.3,1,{speed},10,0)

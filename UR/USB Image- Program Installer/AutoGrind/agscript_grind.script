@@ -653,8 +653,68 @@ end
 
 
 ######################################################################################
-# PATTERN GRINDING FUNCTIONS
+# PATTERN GRINDING SUPPORT FUNCTIONS
 #
+
+#
+# Segmented move grind_movel... grinds along a polygon point by point (in any coordinates) in 250mS segments
+#
+global grind_movel_p_center = p[0, 0, 0, 0, 0, 0]
+global grind_movel_dp1 = p[0, 0, 0, 0, 0, 0]
+global grind_movel_p1 = p[0, 0, 0, 0, 0, 0]
+global grind_movel_p_latest = p[0, 0, 0, 0, 0, 0]
+global grind_movel_accel_mpss = 1
+global grind_movel_speed_mps = 1
+
+# Start a grind_movel
+def grind_movel_start(p_center, dp, a, v):
+  global grind_movel_p_center = p_center
+  global grind_movel_dp1 = dp
+  global grind_movel_p1 = pose_trans(p_center, grind_movel_dp1)
+  global grind_movel_accel_mpss = a
+  global grind_movel_speed_mps = v
+
+  global grind_cycle = 1
+  if ok_to_proceed():
+    movel(grind_movel_p1, a = grind_movel_accel_mpss, v = grind_movel_speed_mps)
+  end
+end
+
+# Complete a grind_movel
+def grind_movel_finish():
+  if ok_to_proceed():
+    movel(grind_movel_p_latest, a = grind_movel_accel_mpss, v = grind_movel_speed_mps)
+  end
+end
+
+# Next waypoint in the polygon
+def grind_movel(dp, a, v, t, r):
+  local ddp = dp
+  local i = 0
+  while i <= 5:
+    ddp[i] = ddp[i] - grind_movel_dp1[i]
+    i = i + 1
+  end
+  local n = ceil(t * 4.0) # number of segments to use; 4 per second ==> can stop within 0.25s
+
+  local i = 1
+  while i <= n and ok_to_proceed():
+    local dp = grind_movel_dp1
+    local scale = i / n
+    local j = 0
+    while j <= 5:
+      dp[j] = grind_movel_dp1[j] + ddp[j] * scale
+      j = j + 1
+    end
+    global grind_movel_p_latest = pose_trans(grind_movel_p_center, dp)
+    movel(grind_movel_p_latest, a = a, v = v, r = r)
+    i = i + 1
+  end
+  # TODO is this necessary? Brings us ta a halt at the end of the line
+  # Needed this to not round off skinny rects, for example
+  movel(grind_movel_p_latest, a = a, v = v)
+  global grind_movel_dp1 = dp
+end
 
 # Call at end of pattern
 def pattern_complete():
@@ -670,93 +730,97 @@ def pattern_complete():
 end
 
 ######################################################################################
+######################################################################################
+######################################################################################
+#
+# PATTERN GRINDING FUNCTIONS
+#
+
+######################################################################################
 # LINE PATTERNS
 #
 
 # Move along a flat line dx_m x dy_m centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then y
 def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
-  p0 = pose_trans(p_center, p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
-  p1 = pose_trans(p_center, p[dx_m / 2.0, dy_m / 2.0, 0, 0, 0, 0])
-  t_move = sqrt(dx_m * dx_m + dy_m * dy_m) / grind_speed_mps
-  pdest = p1
+  local dp1 = p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0]
+  local dp2 = p[dx_m / 2.0, dy_m / 2.0, 0, 0, 0, 0]
+  local t_move = sqrt(dx_m * dx_m + dy_m * dy_m) / grind_speed_mps
+  local dp_dest = dp2
 
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss, v = grind_speed_mps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move)
-    end
+    grind_movel(dp_dest, a = grind_accel_mpss, v = grind_speed_mps, t = t_move, r = grind_blend_radius_m)
 
     # Alternate directions for multiple cycles
-    if pdest == p0:
-      pdest = p1
+    if dp_dest == dp1:
+      dp_dest = dp2
     else:
-      pdest = p0
+      dp_dest = dp1
     end
 
     grind_cycle = grind_cycle + 1
   end
+  grind_movel_finish()
   pattern_complete()
 end
 
 # Move along a cylindrical line dx_mm,drx_rad centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then rx
 def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
-  p0 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
-  p1 = pose_trans(p_center, p[dx_m / 2.0, 0, 0, drx_rad / 2.0, 0, 0])
+  dp1 = p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0]
+  dp2 = p[dx_m / 2.0, 0, 0, drx_rad / 2.0, 0, 0]
   t_move = sqrt(pow(dx_m / grind_speed_mps, 2) + pow(drx_rad / grind_rot_speed_rps / 4, 2))
-  pdest = p1
+  local dp_dest = dp2
 
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    if ok_to_proceed():
-      # Chugging
-      #movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m, t_move = t_move)
-      # Better?
-      movel_int(pdest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, r = grind_blend_radius_m * speed_factor, t_move = t_move)
-    end
+    grind_movel(dp_dest, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = t_move, r = grind_blend_radius_m * speed_factor)
 
     # Alternate directions for multiple cycles
-    if pdest == p0:
-      pdest = p1
+    if dp_dest == dp1:
+      dp_dest = dp2
     else:
-      pdest = p0
+      dp_dest = dp1
     end
 
     grind_cycle = grind_cycle + 1
   end
+  grind_movel_finish()
   pattern_complete()
 end
 
 # Move along a spherical line drx_rad,dry_rad centered on p_center. Repeat n_cycles times.
 # Move in rx direction first, then ry
 def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
-  p0 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
-  p1 = pose_trans(p_center, p[0, 0, 0, drx_rad / 2.0, dry_rad / 2.0, 0])
+  dp1 = p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]
+  dp2 = p[0, 0, 0, drx_rad / 2.0, dry_rad / 2.0, 0]
   t_move = sqrt(drx_rad * drx_rad + dry_rad * dry_rad) / grind_rot_speed_rps / 4
-  pdest = p1
+  local dp_dest = dp2
 
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    if ok_to_proceed():
-      movel_int(pdest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move)
-    end
+    grind_movel(dp_dest, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move, r = grind_rot_blend_radius_rad)
 
     # Alternate directions for multiple cycles
-    if pdest == p0:
-      pdest = p1
+    if dp_dest == dp1:
+      dp_dest = dp2
     else:
-      pdest = p0
+      dp_dest = dp1
     end
 
     grind_cycle = grind_cycle + 1
   end
+  grind_movel_finish()
   pattern_complete()
 end
 
@@ -764,36 +828,6 @@ end
 ######################################################################################
 # RECT PATTERNS
 #
-
-global movel_steps_dp1 = p[0, 0, 0, 0, 0, 0]
-def movel_steps_init(dp):
-  global movel_steps_dp1 = dp
-end
-
-def movel_steps(p_center, dp, t, a, v, r):
-  local ddp = dp
-  local i = 0
-  while i <= 5:
-    ddp[i] = ddp[i] - movel_steps_dp1[i]
-    i = i + 1
-  end
-  local n = 1#ceil(t * 4.0) # number of segments to use; 4 per second ==> can stop within 0.25s
-
-  local i = 1
-  while i <= n and ok_to_proceed():
-    local dp = movel_steps_dp1
-    local scale = i / n
-    local j = 0
-    while j <= 5:
-      dp[j] = movel_steps_dp1[j] + ddp[j] * scale
-      j = j + 1
-    end
-    pm = pose_trans(p_center, dp)
-    movel(pm, a = a, v = v, r = r)
-    i = i + 1
-  end
-  global movel_steps_dp1 = dp
-end
 
 # Move along a flat rect dx_m x dy_m centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then y
@@ -808,27 +842,21 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
   local dp2 = p[x2, -y2, 0, 0, 0, 0]
   local dp3 = p[x2, y2, 0, 0, 0, 0]
   local dp4 = p[-x2, y2, 0, 0, 0, 0]
-  local p1 = pose_trans(p_center, dp1)
 
   global grind_cycle = 1
-  if ok_to_proceed():
-    movel(p1, a = grind_accel_mpss, v = grind_speed_mps)
-  end
 
-  movel_steps_init(dp1)
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss, v = grind_speed_mps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    movel_steps(p_center, dp2, t = t_move_x, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
-    movel_steps(p_center, dp3, t = t_move_y, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
-    movel_steps(p_center, dp4, t = t_move_x, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
-    movel_steps(p_center, dp1, t = t_move_y, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
+    grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x, r = grind_blend_radius_m)
+    grind_movel(dp3, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_y, r = grind_blend_radius_m)
+    grind_movel(dp4, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x, r = grind_blend_radius_m)
+    grind_movel(dp1, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_y, r = grind_blend_radius_m)
 
     grind_cycle = grind_cycle + 1
   end
-  if ok_to_proceed():
-    movel(p1, a = grind_accel_mpss, v = grind_speed_mps)
-  end
+  grind_movel_finish()
   pattern_complete()
 end
 
@@ -844,27 +872,20 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
   local dp2 = p[x2, 0, 0, -rx2, 0, 0]
   local dp3 = p[x2, 0, 0, rx2, 0, 0]
   local dp4 = p[-x2, 0, 0, rx2, 0, 0]
-  local p1 = pose_trans(p_center, dp1)
-
-  if ok_to_proceed():
-    movel(p1, a = grind_accel_mpss, v = grind_speed_mps)
-  end
 
   global grind_cycle = 1
-  movel_steps_init(dp1)
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss, v = grind_speed_mps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    movel_steps(p_center, dp2, t = t_move_x, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
-    movel_steps(p_center, dp3, t = t_move_rx, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
-    movel_steps(p_center, dp4, t = t_move_x, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m)
-    movel_steps(p_center, dp1, t = t_move_rx, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
+    grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x, r = grind_blend_radius_m)
+    grind_movel(dp3, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx, r = grind_rot_blend_radius_rad)
+    grind_movel(dp4, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x, r = grind_blend_radius_m)
+    grind_movel(dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx, r = grind_rot_blend_radius_rad)
 
     grind_cycle = grind_cycle + 1
   end
-  if ok_to_proceed():
-    movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
-  end
+  grind_movel_finish()
   pattern_complete()
 end
 
@@ -880,28 +901,20 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
   local dp2 = p[0, 0, 0, rx2, -ry2, 0]
   local dp3 = p[0, 0, 0, rx2, ry2, 0]
   local dp4 = p[0, 0, 0, -rx2, ry2, 0]
-  local p1 = pose_trans(p_center, dp1)
-
-  if ok_to_proceed():
-    movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
-  end
 
   global grind_cycle = 1
-  movel_steps_init(dp1)
+  grind_movel_start(p_center, dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    movel_steps(p_center, dp2, t = t_move_ry, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
-    movel_steps(p_center, dp3, t = t_move_rx, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
-    movel_steps(p_center, dp4, t = t_move_ry, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
-    movel_steps(p_center, dp1, t = t_move_rx, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad)
+    grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx, r = grind_rot_blend_radius_rad)
+    grind_movel(dp3, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_ry, r = grind_rot_blend_radius_rad)
+    grind_movel(dp4, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx, r = grind_rot_blend_radius_rad)
+    grind_movel(dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_ry, r = grind_rot_blend_radius_rad)
 
     grind_cycle = grind_cycle + 1
   end
-
-  if ok_to_proceed():
-    movel(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
-  end
+  grind_movel_finish()
   pattern_complete()
 end
 
@@ -913,25 +926,29 @@ end
 # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps centered on p_center. Repeat n_cycles times.
 # Move in direction of whichever nsteps is 1 first
 def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
-  t_move_x = dx_m / grind_speed_mps
-  t_move_y = dy_m / grind_speed_mps
+  local t_move_x = dx_m / grind_speed_mps
+  local t_move_y = dy_m / grind_speed_mps
 
   # Bottom left corner, grid 0,0
-  p0 = pose_trans(p_center, p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0])
+  local x2 = dx_m / 2.0
+  local y2 = dy_m / 2.0
+  local dp1 = p[-x2, -y2, 0, 0, 0, 0]
+
 
   # Track our grid square number... we're in [0,0] and moving [+1,+1] in either x or y
-  x_grid = 0
-  y_grid = 0
-  x_incr = 1
-  y_incr = 1
-  grid_dx_m = dx_m / n_xsteps
-  grid_dy_m = dy_m / n_ysteps
+  local x_grid = 0
+  local y_grid = 0
+  local x_incr = 1
+  local y_incr = 1
+  local grid_dx_m = dx_m / n_xsteps
+  local grid_dy_m = dy_m / n_ysteps
 
   # How many moves does it take to complete a pass?
   global n_moves_per_pass = (n_xsteps + n_ysteps) * 2 - 1
 
-  move_count = 0
+  local move_count = 0
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss, v = grind_speed_mps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     # This will repeat for each leg of the serpentine!
     socket_set_var("grind_cycle", grind_cycle)
@@ -942,8 +959,8 @@ def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
       x_grid = x_grid + x_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[x_grid * grid_dx_m, y_grid * grid_dy_m, 0, 0, 0, 0])
-      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x / n_xsteps)
+      local dp2 = p[x_grid * grid_dx_m - x2, y_grid * grid_dy_m - y2, 0, 0, 0, 0]
+      grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x / n_xsteps, r = grind_blend_radius_m)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -959,8 +976,8 @@ def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
       y_grid = y_grid + y_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[x_grid * grid_dx_m, y_grid * grid_dy_m, 0, 0, 0, 0])
-      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_y / n_ysteps)
+      local dp2 = p[x_grid * grid_dx_m - x2, y_grid * grid_dy_m - y2, 0, 0, 0, 0]
+      grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x / n_ysteps, r = grind_blend_radius_m)
 
       # Adjust y direction
       if y_grid >= n_ysteps:
@@ -977,31 +994,35 @@ def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
       move_count = 0
     end
   end
+  grind_movel_finish()
   pattern_complete()
 end
 
 # Move along a cylindrical serpentine dx_m,drx_rad in n_xsteps,n_rxsteps centered on p_center. Repeat n_cycles times.
 # Move in direction of whichever nsteps is 1 first
 def pattern_serpentine_cylinder(p_center, dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
-  t_move_x = dx_m / grind_speed_mps
-  t_move_rx = drx_rad / grind_rot_speed_rps / 4
+  local t_move_x = dx_m / grind_speed_mps
+  local t_move_rx = drx_rad / grind_rot_speed_rps / 4
 
   # Bottom left corner, grid 0,0
-  p0 = pose_trans(p_center, p[-dx_m / 2.0, 0, 0, -drx_rad / 2.0, 0, 0])
+  local x2 = dx_m / 2.0
+  local rx2 = drx_rad / 2.0
+  local dp1 = p[-x2, 0, 0, -rx2, 0, 0]
 
   # Track our grid square number... we're in [0,0] and moving [+1,+1] in either x or y
-  x_grid = 0
-  y_grid = 0
-  x_incr = 1
-  y_incr = 1
-  grid_dx_m = dx_m / n_xsteps
-  grid_drx_rad = drx_rad / n_rxsteps
+  local x_grid = 0
+  local y_grid = 0
+  local x_incr = 1
+  local y_incr = 1
+  local grid_dx_m = dx_m / n_xsteps
+  local grid_drx_rad = drx_rad / n_rxsteps
 
   # How many moves does it take to complete a pass?
   global n_moves_per_pass = (n_xsteps + n_rxsteps) * 2 - 1
 
-  move_count = 0
+  local move_count = 0
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_accel_mpss, v = grind_speed_mps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     # This will repeat for each leg of the serpentine!
     socket_set_var("grind_cycle", grind_cycle)
@@ -1012,8 +1033,8 @@ def pattern_serpentine_cylinder(p_center, dx_m, drx_rad, n_xsteps, n_rxsteps, n_
       x_grid = x_grid + x_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[x_grid * grid_dx_m, 0, 0, y_grid * grid_drx_rad, 0, 0])
-      movel_int(p1, a = grind_accel_mpss, v = grind_speed_mps, r = grind_blend_radius_m, t_move = t_move_x / n_xsteps)
+      local dp2 = p[x_grid * grid_dx_m - x2, 0, 0, y_grid * grid_drx_rad - rx2, 0, 0]
+      grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move_x / n_xsteps, r = grind_blend_radius_m)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -1029,8 +1050,8 @@ def pattern_serpentine_cylinder(p_center, dx_m, drx_rad, n_xsteps, n_rxsteps, n_
       y_grid = y_grid + y_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[x_grid * grid_dx_m, 0, 0, y_grid * grid_drx_rad, 0, 0])
-      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx / n_rxsteps)
+      local dp2 = p[x_grid * grid_dx_m - x2, 0, 0, y_grid * grid_drx_rad - rx2, 0, 0]
+      grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx / n_rxsteps, r = grind_rot_blend_radius_rad)
 
       # Adjust y direction
       if y_grid >= n_rxsteps:
@@ -1047,31 +1068,35 @@ def pattern_serpentine_cylinder(p_center, dx_m, drx_rad, n_xsteps, n_rxsteps, n_
       move_count = 0
     end
   end
+  grind_movel_finish()
   pattern_complete()
 end
 
 # Move along a sperical serpentine drx_rad,dry_rad in n_rxsteps,n_rysteps centered on p_center. Repeat n_cycles times.
 # Move in direction of whichever nsteps is 1 first
 def pattern_serpentine_sphere(p_center, drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
-  t_move_rx = drx_rad / grind_rot_speed_rps / 4
-  t_move_ry = dry_rad / grind_rot_speed_rps / 4
+  local t_move_rx = drx_rad / grind_rot_speed_rps / 4
+  local t_move_ry = dry_rad / grind_rot_speed_rps / 4
 
   # Bottom left corner, grid 0,0
-  p0 = pose_trans(p_center, p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0])
+  local rx2 = drx_rad / 2.0
+  local ry2 = dry_rad / 2.0
+  local dp1 = p[0, 0, 0, -rx2, -ry2, 0]
 
   # Track our grid square number... we're in [0,0] and moving [+1,+1] in either x or y
-  x_grid = 0
-  y_grid = 0
-  x_incr = 1
-  y_incr = 1
-  grid_drx_rad = drx_rad / n_rxsteps
-  grid_dry_rad = dry_rad / n_rysteps
+  local x_grid = 0
+  local y_grid = 0
+  local x_incr = 1
+  local y_incr = 1
+  local grid_drx_rad = drx_rad / n_rxsteps
+  local grid_dry_rad = dry_rad / n_rysteps
 
   # How many moves does it take to complete a pass?
   global n_moves_per_pass = (n_rxsteps + n_rysteps) * 2 - 1
 
-  move_count = 0
+  local move_count = 0
   global grind_cycle = 1
+  grind_movel_start(p_center, dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     # This will repeat for each leg of the serpentine!
     socket_set_var("grind_cycle", grind_cycle)
@@ -1082,8 +1107,8 @@ def pattern_serpentine_sphere(p_center, drx_rad, dry_rad, n_rxsteps, n_rysteps, 
       x_grid = x_grid + x_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[0, 0, 0, x_grid * grid_drx_rad, y_grid * grid_dry_rad, 0])
-      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_rx / n_rxsteps)
+      local dp2 = p[0, 0, 0, x_grid * grid_drx_rad - rx2, y_grid * grid_dry_rad - ry2, 0]
+      grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_rx / n_rxsteps, r = grind_rot_blend_radius_rad)
 
       # Adjust x direction
       if x_grid >= n_rxsteps:
@@ -1099,8 +1124,8 @@ def pattern_serpentine_sphere(p_center, drx_rad, dry_rad, n_rxsteps, n_rysteps, 
       y_grid = y_grid + y_incr
 
       # Move to the corresponding position
-      p1 = pose_trans(p0, p[0, 0, 0, x_grid * grid_drx_rad, y_grid * grid_dry_rad, 0])
-      movel_int(p1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, r = grind_rot_blend_radius_rad, t_move = t_move_ry / n_rysteps)
+      local dp2 = p[0, 0, 0, x_grid * grid_drx_rad - rx2, y_grid * grid_dry_rad - ry2, 0]
+      grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move_ry / n_rysteps, r = grind_rot_blend_radius_rad)
 
       # Adjust y direction
       if y_grid >= n_rysteps:
@@ -1117,6 +1142,7 @@ def pattern_serpentine_sphere(p_center, drx_rad, dry_rad, n_rxsteps, n_rysteps, 
       move_count = 0
     end
   end
+  grind_movel_finish()
   pattern_complete()
 end
 

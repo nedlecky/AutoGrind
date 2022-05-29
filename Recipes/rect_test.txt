@@ -1,11 +1,13 @@
-force=7
-speed=10
 n=1
+speed=20
+force=7
 
 size_x = 125
 size_y = 100
 
-# Rects 
+jump(repeat2)
+
+# Lift rects 
 repeat1:
 grind_rect({size_x},{size_y},{n},{speed},{force},0)
 size_x -= 40
@@ -15,6 +17,7 @@ jump_gt_zero(size_x,repeat1)
 size_x = 125
 size_y = 100
 
+# No Lift Rects
 repeat2:
 grind_rect({size_x},{size_y},{n},{speed},{force},1)
 size_x -= 40

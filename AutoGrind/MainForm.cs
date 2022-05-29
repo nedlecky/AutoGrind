@@ -2137,7 +2137,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // import filename?
+            // import filename
             if (command.StartsWith("import("))
             {
                 LogInterpret("import", lineNumber, command);
@@ -2153,7 +2153,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // sleep?
+            // sleep
             if (command.StartsWith("sleep("))
             {
                 LogInterpret("sleep", lineNumber, command);
@@ -2172,7 +2172,7 @@ namespace AutoGrind
                 return true;
             }
 
-            // assert?
+            // assert
             if (command.StartsWith("assert("))
             {
                 LogInterpret("assert", lineNumber, command);
@@ -2690,7 +2690,8 @@ namespace AutoGrind
 
             // Start querying the bot
             RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model",200);
-            RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number",200);
+            RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number", 200);
+            RobotPolyscopeVersionLbl.Text = robotDashboardClient.InquiryResponse("PolyscopeVersion", 200);
             robotDashboardClient.InquiryResponse("stop",200);
             CloseSafetyPopup();
 
