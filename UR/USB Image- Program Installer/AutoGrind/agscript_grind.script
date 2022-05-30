@@ -29,7 +29,7 @@ MATH_PI = 3.1415926535
 # Set global grind_n_cycles based on whether we really going to grind
 def n_cycle_setter(n_cycles):
   if grind_contact_enable == 2:
-    global grind_n_cycles = n_cycles
+    global grind_n_cycles = limiter(n_cycles, 0, 100)
   else:
     global grind_n_cycles = limiter(n_cycles, 0, 1)
   end
@@ -38,6 +38,7 @@ end
 
 # Set all speed and acceleration globals based on part geometry and whether we really going to grind
 def speed_setter(speed_mmps):
+  speed_mmps = limiter(speed_mmps, 0.1, 40)
   if grind_contact_enable == 2:
     global grind_speed_mps = speed_mmps / 1000.0
   else:
@@ -160,57 +161,57 @@ def grind():
   if command[2] == 10:
     # LINEAR GRIND
     global response = "grind_line"
-    global grind_dx_mm = command[3]
-    global grind_dy_mm = command[4]
+    global grind_dx_mm = limiter(command[3], 0, 1000)
+    global grind_dy_mm = limiter(command[4], 0, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6])
-    global grind_force_N = command[7]
+    global grind_force_N = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 20:
     # RECTANGULAR GRIND
     global response = "grind_rect"
-    global grind_dx_mm = command[3]
-    global grind_dy_mm = command[4]
+    global grind_dx_mm = limiter(command[3], 0, 1000)
+    global grind_dy_mm = limiter(command[4], 0, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6])
-    global grind_force_N = command[7]
+    global grind_force_N = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 30:
     # SERPENTINE GRIND
     global response = "grind_serpentine"
-    global grind_dx_mm = command[3]
-    global grind_dy_mm = command[4]
-    global grind_n_xsteps = limiter(command[5], 1, 10)
-    global grind_n_ysteps = limiter(command[6], 1, 10)
+    global grind_dx_mm = limiter(command[3], 0, 1000)
+    global grind_dy_mm = limiter(command[4], 0, 1000)
+    global grind_n_xsteps = limiter(command[5], 1, grind_dx_mm)
+    global grind_n_ysteps = limiter(command[6], 1, grind_dy_mm)
     n_cycle_setter(command[7])
     speed_setter(command[8])
-    global grind_force_N = command[9]
+    global grind_force_N = limiter(command[9], 0, 10)
     global grind_continue = command[10] > 0
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
   elif command[2] == 40:
     # CIRCULAR GRIND
     global response = "grind_circle"
-    global grind_circle1_diam_mm = command[3]
+    global grind_circle1_diam_mm = limiter(command[3], 0, 1000)
     n_cycle_setter(command[4])
     speed_setter(command[5])
-    global grind_force_N = command[6]
+    global grind_force_N = limiter(command[6], 0, 100)
     global grind_continue = command[7] > 0
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 50:
     # SPIRAL GRIND
     global response = "grind_spiral"
-    global grind_circle1_diam_mm = command[3]
-    global grind_circle2_diam_mm = command[4]
-    global grind_n_spirals = command[5]
+    global grind_circle1_diam_mm = limiter(command[3], 0, 1000)
+    global grind_circle2_diam_mm = limiter(command[4], 0, 1000)
+    global grind_n_spirals = limiter(command[5], 1, 100)
     n_cycle_setter(command[6])
     speed_setter(command[7])
-    global grind_force_N = command[8]
+    global grind_force_N = limiter(command[8], 0, 100)
     global grind_continue = command[9] > 0
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_spirals, grind_n_cycles, grind_continue)
 
@@ -504,7 +505,8 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
-  if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
+  # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
+  if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -dry_rad / 2.0, -drx_rad / 2.0, 0]]):
     return False
   end
 
@@ -515,7 +517,8 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   elif shape == 2:
     pattern_rect_cylinder(p_contact_center, dx_m, dry_rad, n_cycles)
   elif shape == 3:
-    pattern_rect_sphere(p_contact_center, drx_rad, dry_rad, n_cycles)
+    # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
+    pattern_rect_sphere(p_contact_center, dry_rad, drx_rad, n_cycles)
   end
 
   if not stay_in_contact or not ok_to_proceed():
@@ -560,7 +563,8 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   end
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
-  if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -drx_rad / 2.0, -dry_rad / 2.0, 0]]):
+  # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
+  if not set_grind_process_state(True, [p[-dx_m / 2.0, -dy_m / 2.0, 0, 0, 0, 0], p[-dx_m / 2.0, 0, 0, -dry_rad / 2.0, 0, 0], p[0, 0, 0, -dry_rad / 2.0, -drx_rad / 2.0, 0]]):
     return False
   end
 
@@ -571,7 +575,8 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   elif shape == 2:
     pattern_serpentine_cylinder(p_contact_center, dx_m, drx_rad, n_xsteps, n_ysteps, n_cycles)
   elif shape == 3:
-    pattern_serpentine_sphere(p_contact_center, drx_rad, dry_rad, n_xsteps, n_ysteps, n_cycles)
+    # Swapping axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
+    pattern_serpentine_sphere(p_contact_center, dry_rad, drx_rad, n_xsteps, n_ysteps, n_cycles)
   end
 
   if not stay_in_contact or not ok_to_proceed():

@@ -303,7 +303,7 @@ namespace AutoGrind
         private void HeartbeatTmr_Tick(object sender, EventArgs e)
         {
             // Update current time
-            timeLbl.Text = DateTime.Now.ToString();
+            Time2Lbl.Text = TimeLbl.Text = DateTime.Now.ToString();
 
             // Logger stress test
             if (StressChk.Checked)

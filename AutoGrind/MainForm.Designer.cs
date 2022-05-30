@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
@@ -45,7 +45,7 @@
             this.LoadRecipeBtn = new System.Windows.Forms.Button();
             this.SaveRecipeBtn = new System.Windows.Forms.Button();
             this.HeartbeatTmr = new System.Windows.Forms.Timer(this.components);
-            this.timeLbl = new System.Windows.Forms.Label();
+            this.TimeLbl = new System.Windows.Forms.Label();
             this.StartupTmr = new System.Windows.Forms.Timer(this.components);
             this.CloseTmr = new System.Windows.Forms.Timer(this.components);
             this.ExecTmr = new System.Windows.Forms.Timer(this.components);
@@ -127,6 +127,12 @@
             this.RunStateLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
             this.SetupPage = new System.Windows.Forms.TabPage();
+            this.label19 = new System.Windows.Forms.Label();
+            this.RobotPolyscopeVersionLbl = new System.Windows.Forms.Label();
+            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
+            this.label8 = new System.Windows.Forms.Label();
+            this.RobotModelLbl = new System.Windows.Forms.Label();
+            this.label7 = new System.Windows.Forms.Label();
             this.DefaultMoveSetupGrp = new System.Windows.Forms.GroupBox();
             this.SetMoveDefaultsBtn = new System.Windows.Forms.Button();
             this.SetLinearAccelBtn = new System.Windows.Forms.Button();
@@ -189,12 +195,7 @@
             this.DoorClosedLbl = new System.Windows.Forms.Label();
             this.VersionLbl = new System.Windows.Forms.Label();
             this.FootswitchPressedLbl = new System.Windows.Forms.Label();
-            this.RobotModelLbl = new System.Windows.Forms.Label();
-            this.label7 = new System.Windows.Forms.Label();
-            this.RobotPolyscopeVersionLbl = new System.Windows.Forms.Label();
-            this.RobotSerialNumberLbl = new System.Windows.Forms.Label();
-            this.label8 = new System.Windows.Forms.Label();
-            this.label19 = new System.Windows.Forms.Label();
+            this.Time2Lbl = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -378,16 +379,16 @@
             // 
             this.HeartbeatTmr.Tick += new System.EventHandler(this.HeartbeatTmr_Tick);
             // 
-            // timeLbl
+            // TimeLbl
             // 
-            this.timeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.timeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeLbl.Location = new System.Drawing.Point(1250, 20);
-            this.timeLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.timeLbl.Name = "timeLbl";
-            this.timeLbl.Size = new System.Drawing.Size(353, 52);
-            this.timeLbl.TabIndex = 5;
-            this.timeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.TimeLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.TimeLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TimeLbl.Location = new System.Drawing.Point(1250, 20);
+            this.TimeLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.TimeLbl.Name = "TimeLbl";
+            this.TimeLbl.Size = new System.Drawing.Size(353, 52);
+            this.TimeLbl.TabIndex = 5;
+            this.TimeLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // StartupTmr
             // 
@@ -613,14 +614,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -710,14 +711,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1034,7 +1035,7 @@
             this.RunPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
             this.RunPage.Controls.Add(this.label18);
             this.RunPage.Controls.Add(this.label9);
-            this.RunPage.Controls.Add(this.timeLbl);
+            this.RunPage.Controls.Add(this.TimeLbl);
             this.RunPage.Controls.Add(this.UserModeBox);
             this.RunPage.Controls.Add(this.RobotSentLbl);
             this.RunPage.Controls.Add(this.StepTimeRemainingLbl);
@@ -1412,6 +1413,75 @@
             this.SetupPage.Text = "Setup";
             this.SetupPage.UseVisualStyleBackColor = true;
             // 
+            // label19
+            // 
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(793, 1098);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(167, 50);
+            this.label19.TabIndex = 160;
+            this.label19.Text = "Software";
+            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RobotPolyscopeVersionLbl
+            // 
+            this.RobotPolyscopeVersionLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotPolyscopeVersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(964, 1098);
+            this.RobotPolyscopeVersionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotPolyscopeVersionLbl.Name = "RobotPolyscopeVersionLbl";
+            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(469, 50);
+            this.RobotPolyscopeVersionLbl.TabIndex = 159;
+            this.RobotPolyscopeVersionLbl.Text = "PolyScope";
+            this.RobotPolyscopeVersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // RobotSerialNumberLbl
+            // 
+            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotSerialNumberLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(505, 1098);
+            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
+            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 50);
+            this.RobotSerialNumberLbl.TabIndex = 157;
+            this.RobotSerialNumberLbl.Text = "Serial Number";
+            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label8
+            // 
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(420, 1098);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label8.Name = "label8";
+            this.label8.Size = new System.Drawing.Size(81, 50);
+            this.label8.TabIndex = 158;
+            this.label8.Text = "S/N";
+            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // RobotModelLbl
+            // 
+            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.RobotModelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotModelLbl.Location = new System.Drawing.Point(233, 1098);
+            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.RobotModelLbl.Name = "RobotModelLbl";
+            this.RobotModelLbl.Size = new System.Drawing.Size(157, 50);
+            this.RobotModelLbl.TabIndex = 153;
+            this.RobotModelLbl.Text = "Model";
+            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label7
+            // 
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(19, 1098);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label7.Name = "label7";
+            this.label7.Size = new System.Drawing.Size(210, 50);
+            this.label7.TabIndex = 154;
+            this.label7.Text = "Robot Model";
+            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // DefaultMoveSetupGrp
             // 
             this.DefaultMoveSetupGrp.Controls.Add(this.SetMoveDefaultsBtn);
@@ -1761,23 +1831,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -2128,12 +2198,12 @@
             // VersionLbl
             // 
             this.VersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 15.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.VersionLbl.Location = new System.Drawing.Point(1701, 1402);
+            this.VersionLbl.Location = new System.Drawing.Point(1764, 1409);
             this.VersionLbl.Name = "VersionLbl";
-            this.VersionLbl.Size = new System.Drawing.Size(451, 29);
+            this.VersionLbl.Size = new System.Drawing.Size(384, 29);
             this.VersionLbl.TabIndex = 149;
             this.VersionLbl.Text = "VersionLbl";
-            this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.VersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // FootswitchPressedLbl
             // 
@@ -2149,74 +2219,17 @@
             this.FootswitchPressedLbl.Text = "Footswitch Pressed?";
             this.FootswitchPressedLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // RobotModelLbl
+            // Time2Lbl
             // 
-            this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotModelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotModelLbl.Location = new System.Drawing.Point(233, 1098);
-            this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotModelLbl.Name = "RobotModelLbl";
-            this.RobotModelLbl.Size = new System.Drawing.Size(157, 50);
-            this.RobotModelLbl.TabIndex = 153;
-            this.RobotModelLbl.Text = "Model";
-            this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label7
-            // 
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(19, 1098);
-            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(210, 50);
-            this.label7.TabIndex = 154;
-            this.label7.Text = "Robot Model";
-            this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // RobotPolyscopeVersionLbl
-            // 
-            this.RobotPolyscopeVersionLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotPolyscopeVersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(964, 1098);
-            this.RobotPolyscopeVersionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotPolyscopeVersionLbl.Name = "RobotPolyscopeVersionLbl";
-            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(469, 50);
-            this.RobotPolyscopeVersionLbl.TabIndex = 159;
-            this.RobotPolyscopeVersionLbl.Text = "PolyScope";
-            this.RobotPolyscopeVersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // RobotSerialNumberLbl
-            // 
-            this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotSerialNumberLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(505, 1098);
-            this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
-            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 50);
-            this.RobotSerialNumberLbl.TabIndex = 157;
-            this.RobotSerialNumberLbl.Text = "Serial Number";
-            this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label8
-            // 
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(420, 1098);
-            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(81, 50);
-            this.label8.TabIndex = 158;
-            this.label8.Text = "S/N";
-            this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label19
-            // 
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(793, 1098);
-            this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(167, 50);
-            this.label19.TabIndex = 160;
-            this.label19.Text = "Software";
-            this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.Time2Lbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.Time2Lbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Time2Lbl.Location = new System.Drawing.Point(1764, 1359);
+            this.Time2Lbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.Time2Lbl.Name = "Time2Lbl";
+            this.Time2Lbl.Size = new System.Drawing.Size(384, 34);
+            this.Time2Lbl.TabIndex = 151;
+            this.Time2Lbl.Text = "Time";
+            this.Time2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // MainForm
             // 
@@ -2224,6 +2237,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(2160, 1440);
             this.ControlBox = false;
+            this.Controls.Add(this.Time2Lbl);
             this.Controls.Add(this.FootswitchPressedLbl);
             this.Controls.Add(this.JogRunBtn);
             this.Controls.Add(this.VersionLbl);
@@ -2289,7 +2303,7 @@
 
         #endregion
         private System.Windows.Forms.Timer HeartbeatTmr;
-        private System.Windows.Forms.Label timeLbl;
+        private System.Windows.Forms.Label TimeLbl;
         private System.Windows.Forms.Timer StartupTmr;
         private System.Windows.Forms.Timer CloseTmr;
         private System.Windows.Forms.Button SaveAsRecipeBtn;
@@ -2450,6 +2464,7 @@
         private System.Windows.Forms.Label RobotModelLbl;
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.Label Time2Lbl;
     }
 }
 
