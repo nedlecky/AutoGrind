@@ -1,0 +1,34 @@
+n=1
+speed=20
+force=5
+cmd1 = grind_spiral(100,50,3,{n},{speed},{force}
+cmd2 = grind_spiral(10,50,3,{n},{speed},{force}
+
+move_joint(demo_safe)
+
+#Flat
+flat:
+move_linear(demo_flat)
+set_part_geometry(FLAT,0)
+{cmd1},0)
+{cmd2},0)
+{cmd1},1)
+{cmd2},1)
+
+move_linear(demo_safe)
+
+cylinder:
+move_linear(demo_cyl)
+set_part_geometry(CYLINDER,1200)
+{cmd1},0)
+{cmd2},0)
+{cmd1},1)
+{cmd2},1)
+
+sphere:
+move_linear(demo_sphere)
+set_part_geometry(SPHERE,1200)
+{cmd1},0)
+{cmd2},0)
+{cmd1},1)
+{cmd2},1)

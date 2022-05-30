@@ -1,10 +1,62 @@
+n=1
+speed=20
 force=5
-speed=5
-count=1
-size = 100
 
-repeat:
-grind_circle({size},{count},{speed},{force},1)
-size-=25
-count++
-jump_gt_zero(size,repeat)
+move_joint(demo_safe)
+
+#Flat
+flat:
+move_linear(demo_flat)
+set_part_geometry(FLAT,0)
+
+# Lift circles 
+diam = 100
+repeat1f:
+grind_circle({diam},{n},{speed},{force},0)
+diam -= 30
+jump_gt_zero(diam,repeat1f)
+
+# No Lift circles
+diam = 100
+repeat2f:
+grind_circle({diam},{n},{speed},{force},1)
+diam -= 30
+jump_gt_zero(diam,repeat2f)
+
+move_linear(demo_safe)
+
+cylinder:
+move_linear(demo_cyl)
+set_part_geometry(CYLINDER,1200)
+
+# Lift circles 
+diam = 100
+repeat1c:
+grind_circle({diam},{n},{speed},{force},0)
+diam -= 30
+jump_gt_zero(diam,repeat1c)
+
+# No Lift circles
+diam = 100
+repeat2c:
+grind_circle({diam},{n},{speed},{force},1)
+diam -= 30
+jump_gt_zero(diam,repeat2c)
+
+sphere:
+move_linear(demo_sphere)
+set_part_geometry(SPHERE,1200)
+
+# Lift circles 
+diam = 100
+repeat1s:
+grind_circle({diam},{n},{speed},{force},0)
+diam -= 30
+jump_gt_zero(diam,repeat1s)
+
+# No Lift circles
+diam = 100
+repeat2s:
+grind_circle({diam},{n},{speed},{force},1)
+diam -= 30
+jump_gt_zero(diam,repeat2s)
