@@ -1,36 +1,48 @@
-speed = 20
+speed = 17
 count=1
 force=5
 
-cmd1_0 = grind_serp(60,40,1,3,{count},{speed},{force},0)
-cmd2_0 = grind_serp(50,70,3,1,{count},{speed},{force},0)
-cmd1_1 = grind_serp(60,40,1,3,{count},{speed},{force},1)
-cmd2_1 = grind_serp(50,70,3,1,{count},{speed},{force},1)
+cmd1 = grind_serp(60,30,1,3,{count},{speed},{force}
+cmd2 = grind_serp(50,40,1,4,{count},{speed},{force}
+cmd3 = grind_serp(40,50,3,1,{count},{speed},{force}
+cmd4 = grind_serp(30,60,4,1,{count},{speed},{force}
 
 move_linear(demo_safe)
 
 flat: 
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
-{cmd1_0}
-{cmd2_0}
-{cmd1_1}
-{cmd2_1}
+{cmd1},0)
+{cmd2},0)
+{cmd3},0)
+{cmd4},0)
+{cmd1},1)
+{cmd2},1)
+{cmd3},1)
+{cmd4},1)
 
 move_linear(demo_safe)
 
 cylinder:
 move_linear(demo_cyl)
 set_part_geometry(CYLINDER,1200)
-{cmd1_0}
-{cmd2_0}
-{cmd1_1}
-{cmd2_1}
+{cmd1},0)
+{cmd2},0)
+{cmd3},0)
+{cmd4},0)
+{cmd1},1)
+{cmd2},1)
+{cmd3},1)
+{cmd4},1)
 
 sphere:
 move_linear(demo_sphere)
 set_part_geometry(SPHERE,1200)
-{cmd1_0}
-{cmd2_0}
-{cmd1_1}
-{cmd2_1}
+{cmd1},0)
+{cmd2},0)
+{cmd3},0)
+{cmd4},0)
+{cmd1},1)
+{cmd2},1)
+{cmd3},1)
+{cmd4},1)

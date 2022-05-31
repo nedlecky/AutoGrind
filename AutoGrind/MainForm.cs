@@ -1560,7 +1560,6 @@ namespace AutoGrind
             AutoGrindRootLbl.Text = "AutoGrind/AutoGrind01.urp";
             ServerIpTxt.Text = "192.168.0.252";
             RobotIpTxt.Text = "192.168.0.2";
-            UtcTimeChk.Checked = false;
             AllowRunningOfflineChk.Checked = false;
         }
         private void LoadConfigBtn_Click(object sender, EventArgs e)
@@ -1573,6 +1572,15 @@ namespace AutoGrind
             log.Info("SaveConfigBtn_Click(...)");
             SavePersistent();
         }
+
+        private void AllowRunningOfflineChk_CheckedChanged(object sender, EventArgs e)
+        {
+            if(AllowRunningOfflineChk.Checked)
+                AllowRunningOfflineChk.BackColor = Color.Green;
+            else
+                AllowRunningOfflineChk.BackColor = Color.Gray;
+        }
+
 
         private string recipeFileToAutoload = "";
         void LoadPersistent()
@@ -1616,7 +1624,6 @@ namespace AutoGrind
             RobotProgramTxt.Text = (string)AppNameKey.GetValue("RobotProgramTxt.Text", "AutoGrind/AutoGrind01.urp");
             RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
             ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
-            UtcTimeChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("UtcTimeChk.Checked", "True"));
             AllowRunningOfflineChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AllowRunningOfflineChk.Checked", "False"));
 
             // Operator Mode
@@ -1691,7 +1698,6 @@ namespace AutoGrind
             AppNameKey.SetValue("RobotProgramTxt.Text", RobotProgramTxt.Text);
             AppNameKey.SetValue("RobotIpTxt.Text", RobotIpTxt.Text);
             AppNameKey.SetValue("ServerIpTxt.Text", ServerIpTxt.Text);
-            AppNameKey.SetValue("UtcTimeChk.Checked", UtcTimeChk.Checked);
             AppNameKey.SetValue("AllowRunningOfflineChk.Checked", AllowRunningOfflineChk.Checked);
 
             // Operator Mode
@@ -3117,10 +3123,8 @@ namespace AutoGrind
                 return false;
             }
             string datetime;
-            if (UtcTimeChk.Checked)
-                datetime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");
-            else
-                datetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff");
+            //datetime = DateTime.UtcNow.ToString("yyyy-MM-ddTHH:mm:ss.fffZ");  // If you prefer UTC time
+            datetime = DateTime.Now.ToString("yyyy-MM-ddTHH:mm:ss.fff");
 
             bool foundVariable = false;
             foreach (DataRow row in variables.Rows)
@@ -3230,7 +3234,7 @@ namespace AutoGrind
                     switch (valueTrimmed)
                     {
                         case "0":
-                            FootswitchPressedLbl.Text = "FOOTSWITCH RELEASED";
+                            FootswitchPressedLbl.Text = "FOOTSWITCH\nNot Pressed";
                             FootswitchPressedLbl.BackColor = Color.Green;
                             if (runState != RunState.RUNNING)
                                 // Disable freedrive mode
@@ -4069,6 +4073,7 @@ namespace AutoGrind
             process.Start();
             
         }
+
     }
     public static class RichTextBoxExtensions
     {

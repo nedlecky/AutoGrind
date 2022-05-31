@@ -1,11 +1,12 @@
 n=1
-speed=20
+speed=2
 force=5
 
 size_x = 125
 size_y = 100
 
 move_joint(demo_safe)
+jump(cylinder)
 
 #Flat
 flat:

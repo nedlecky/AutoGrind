@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
@@ -176,7 +176,6 @@
             this.DefaultConfigBtn = new System.Windows.Forms.Button();
             this.ServerIpTxt = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.UtcTimeChk = new System.Windows.Forms.CheckBox();
             this.RobotIpTxt = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
             this.AutoGrindRootLbl = new System.Windows.Forms.Label();
@@ -614,14 +613,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -711,14 +710,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1431,10 +1430,10 @@
             this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(964, 1098);
             this.RobotPolyscopeVersionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotPolyscopeVersionLbl.Name = "RobotPolyscopeVersionLbl";
-            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(469, 50);
+            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(558, 50);
             this.RobotPolyscopeVersionLbl.TabIndex = 159;
             this.RobotPolyscopeVersionLbl.Text = "PolyScope";
-            this.RobotPolyscopeVersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.RobotPolyscopeVersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // RobotSerialNumberLbl
             // 
@@ -1499,7 +1498,9 @@
             // 
             // SetMoveDefaultsBtn
             // 
-            this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Green;
+            this.SetMoveDefaultsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetMoveDefaultsBtn.ForeColor = System.Drawing.Color.White;
             this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(715, 208);
             this.SetMoveDefaultsBtn.Name = "SetMoveDefaultsBtn";
             this.SetMoveDefaultsBtn.Size = new System.Drawing.Size(171, 130);
@@ -1510,7 +1511,9 @@
             // 
             // SetLinearAccelBtn
             // 
-            this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Green;
+            this.SetLinearAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetLinearAccelBtn.ForeColor = System.Drawing.Color.White;
             this.SetLinearAccelBtn.Location = new System.Drawing.Point(342, 59);
             this.SetLinearAccelBtn.Name = "SetLinearAccelBtn";
             this.SetLinearAccelBtn.Size = new System.Drawing.Size(286, 130);
@@ -1521,7 +1524,9 @@
             // 
             // SetBlendRadiusBtn
             // 
-            this.SetBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
+            this.SetBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
             this.SetBlendRadiusBtn.Location = new System.Drawing.Point(678, 62);
             this.SetBlendRadiusBtn.Name = "SetBlendRadiusBtn";
             this.SetBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
@@ -1532,7 +1537,9 @@
             // 
             // SetJointSpeedBtn
             // 
-            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Green;
+            this.SetJointSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetJointSpeedBtn.ForeColor = System.Drawing.Color.White;
             this.SetJointSpeedBtn.Location = new System.Drawing.Point(49, 209);
             this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
             this.SetJointSpeedBtn.Size = new System.Drawing.Size(243, 130);
@@ -1543,7 +1550,9 @@
             // 
             // SetJointAccelBtn
             // 
-            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetJointAccelBtn.BackColor = System.Drawing.Color.Green;
+            this.SetJointAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetJointAccelBtn.ForeColor = System.Drawing.Color.White;
             this.SetJointAccelBtn.Location = new System.Drawing.Point(342, 208);
             this.SetJointAccelBtn.Name = "SetJointAccelBtn";
             this.SetJointAccelBtn.Size = new System.Drawing.Size(286, 130);
@@ -1554,8 +1563,10 @@
             // 
             // SetLinearSpeedBtn
             // 
-            this.SetLinearSpeedBtn.BackColor = System.Drawing.Color.Transparent;
-            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(49, 59);
+            this.SetLinearSpeedBtn.BackColor = System.Drawing.Color.Green;
+            this.SetLinearSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetLinearSpeedBtn.ForeColor = System.Drawing.Color.White;
+            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(49, 62);
             this.SetLinearSpeedBtn.Name = "SetLinearSpeedBtn";
             this.SetLinearSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetLinearSpeedBtn.TabIndex = 109;
@@ -1582,7 +1593,9 @@
             // 
             // SetGrindDefaultsBtn
             // 
-            this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Green;
+            this.SetGrindDefaultsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetGrindDefaultsBtn.ForeColor = System.Drawing.Color.White;
             this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1900, 56);
             this.SetGrindDefaultsBtn.Name = "SetGrindDefaultsBtn";
             this.SetGrindDefaultsBtn.Size = new System.Drawing.Size(171, 130);
@@ -1593,7 +1606,9 @@
             // 
             // SetGrindAccelBtn
             // 
-            this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Green;
+            this.SetGrindAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetGrindAccelBtn.ForeColor = System.Drawing.Color.White;
             this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 56);
             this.SetGrindAccelBtn.Name = "SetGrindAccelBtn";
             this.SetGrindAccelBtn.Size = new System.Drawing.Size(243, 130);
@@ -1604,7 +1619,9 @@
             // 
             // SetTrialSpeedBtn
             // 
-            this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Green;
+            this.SetTrialSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetTrialSpeedBtn.ForeColor = System.Drawing.Color.White;
             this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 56);
             this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
             this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
@@ -1615,7 +1632,9 @@
             // 
             // SetGrindBlendRadiusBtn
             // 
-            this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
+            this.SetGrindBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetGrindBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
             this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 56);
             this.SetGrindBlendRadiusBtn.Name = "SetGrindBlendRadiusBtn";
             this.SetGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
@@ -1626,7 +1645,9 @@
             // 
             // SetMaxWaitBtn
             // 
-            this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Green;
+            this.SetMaxWaitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetMaxWaitBtn.ForeColor = System.Drawing.Color.White;
             this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 56);
             this.SetMaxWaitBtn.Name = "SetMaxWaitBtn";
             this.SetMaxWaitBtn.Size = new System.Drawing.Size(243, 130);
@@ -1637,7 +1658,9 @@
             // 
             // SetForceDwellBtn
             // 
-            this.SetForceDwellBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetForceDwellBtn.BackColor = System.Drawing.Color.Green;
+            this.SetForceDwellBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetForceDwellBtn.ForeColor = System.Drawing.Color.White;
             this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 56);
             this.SetForceDwellBtn.Name = "SetForceDwellBtn";
             this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
@@ -1648,7 +1671,9 @@
             // 
             // SetTouchSpeedBtn
             // 
-            this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Green;
+            this.SetTouchSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetTouchSpeedBtn.ForeColor = System.Drawing.Color.White;
             this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 56);
             this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
             this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
@@ -1659,7 +1684,9 @@
             // 
             // SetTouchRetractBtn
             // 
-            this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Transparent;
+            this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Green;
+            this.SetTouchRetractBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetTouchRetractBtn.ForeColor = System.Drawing.Color.White;
             this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 56);
             this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
             this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
@@ -1696,46 +1723,54 @@
             // 
             // CoolantOffBtn
             // 
+            this.CoolantOffBtn.BackColor = System.Drawing.Color.Green;
             this.CoolantOffBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CoolantOffBtn.ForeColor = System.Drawing.Color.White;
             this.CoolantOffBtn.Location = new System.Drawing.Point(784, 367);
             this.CoolantOffBtn.Name = "CoolantOffBtn";
             this.CoolantOffBtn.Size = new System.Drawing.Size(82, 96);
             this.CoolantOffBtn.TabIndex = 128;
             this.CoolantOffBtn.Text = "Cool Off";
-            this.CoolantOffBtn.UseVisualStyleBackColor = true;
+            this.CoolantOffBtn.UseVisualStyleBackColor = false;
             this.CoolantOffBtn.Click += new System.EventHandler(this.CoolantOffBtn_Click);
             // 
             // CoolantTestBtn
             // 
+            this.CoolantTestBtn.BackColor = System.Drawing.Color.Green;
             this.CoolantTestBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CoolantTestBtn.ForeColor = System.Drawing.Color.White;
             this.CoolantTestBtn.Location = new System.Drawing.Point(696, 367);
             this.CoolantTestBtn.Name = "CoolantTestBtn";
             this.CoolantTestBtn.Size = new System.Drawing.Size(82, 96);
             this.CoolantTestBtn.TabIndex = 127;
             this.CoolantTestBtn.Text = "Cool Test";
-            this.CoolantTestBtn.UseVisualStyleBackColor = true;
+            this.CoolantTestBtn.UseVisualStyleBackColor = false;
             this.CoolantTestBtn.Click += new System.EventHandler(this.CoolantTestBtn_Click);
             // 
             // ToolOffBtn
             // 
+            this.ToolOffBtn.BackColor = System.Drawing.Color.Green;
             this.ToolOffBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolOffBtn.ForeColor = System.Drawing.Color.White;
             this.ToolOffBtn.Location = new System.Drawing.Point(597, 367);
             this.ToolOffBtn.Name = "ToolOffBtn";
             this.ToolOffBtn.Size = new System.Drawing.Size(82, 96);
             this.ToolOffBtn.TabIndex = 126;
             this.ToolOffBtn.Text = "Tool Off";
-            this.ToolOffBtn.UseVisualStyleBackColor = true;
+            this.ToolOffBtn.UseVisualStyleBackColor = false;
             this.ToolOffBtn.Click += new System.EventHandler(this.ToolOffBtn_Click);
             // 
             // ToolTestBtn
             // 
+            this.ToolTestBtn.BackColor = System.Drawing.Color.Green;
             this.ToolTestBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ToolTestBtn.ForeColor = System.Drawing.Color.White;
             this.ToolTestBtn.Location = new System.Drawing.Point(509, 367);
             this.ToolTestBtn.Name = "ToolTestBtn";
             this.ToolTestBtn.Size = new System.Drawing.Size(82, 96);
             this.ToolTestBtn.TabIndex = 125;
             this.ToolTestBtn.Text = "Tool Test";
-            this.ToolTestBtn.UseVisualStyleBackColor = true;
+            this.ToolTestBtn.UseVisualStyleBackColor = false;
             this.ToolTestBtn.Click += new System.EventHandler(this.ToolTestBtn_Click);
             // 
             // DoorClosedInputLbl
@@ -1766,35 +1801,41 @@
             // 
             // SetFootswitchPressedInputBtn
             // 
+            this.SetFootswitchPressedInputBtn.BackColor = System.Drawing.Color.Green;
             this.SetFootswitchPressedInputBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetFootswitchPressedInputBtn.ForeColor = System.Drawing.Color.White;
             this.SetFootswitchPressedInputBtn.Location = new System.Drawing.Point(1411, 367);
             this.SetFootswitchPressedInputBtn.Name = "SetFootswitchPressedInputBtn";
             this.SetFootswitchPressedInputBtn.Size = new System.Drawing.Size(233, 96);
             this.SetFootswitchPressedInputBtn.TabIndex = 121;
             this.SetFootswitchPressedInputBtn.Text = "Set Footswitch Pressed Input";
-            this.SetFootswitchPressedInputBtn.UseVisualStyleBackColor = true;
+            this.SetFootswitchPressedInputBtn.UseVisualStyleBackColor = false;
             this.SetFootswitchPressedInputBtn.Click += new System.EventHandler(this.SetFootswitchInputBtn_Click);
             // 
             // JointMoveMountBtn
             // 
+            this.JointMoveMountBtn.BackColor = System.Drawing.Color.Green;
             this.JointMoveMountBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.JointMoveMountBtn.ForeColor = System.Drawing.Color.White;
             this.JointMoveMountBtn.Location = new System.Drawing.Point(167, 367);
             this.JointMoveMountBtn.Name = "JointMoveMountBtn";
             this.JointMoveMountBtn.Size = new System.Drawing.Size(155, 96);
             this.JointMoveMountBtn.TabIndex = 120;
             this.JointMoveMountBtn.Text = "Joint Move to Mount";
-            this.JointMoveMountBtn.UseVisualStyleBackColor = true;
+            this.JointMoveMountBtn.UseVisualStyleBackColor = false;
             this.JointMoveMountBtn.Click += new System.EventHandler(this.JointMoveMountBtn_Click);
             // 
             // JointMoveHomeBtn
             // 
+            this.JointMoveHomeBtn.BackColor = System.Drawing.Color.Green;
             this.JointMoveHomeBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.JointMoveHomeBtn.ForeColor = System.Drawing.Color.White;
             this.JointMoveHomeBtn.Location = new System.Drawing.Point(328, 367);
             this.JointMoveHomeBtn.Name = "JointMoveHomeBtn";
             this.JointMoveHomeBtn.Size = new System.Drawing.Size(155, 96);
             this.JointMoveHomeBtn.TabIndex = 119;
             this.JointMoveHomeBtn.Text = "Joint Move to Home";
-            this.JointMoveHomeBtn.UseVisualStyleBackColor = true;
+            this.JointMoveHomeBtn.UseVisualStyleBackColor = false;
             this.JointMoveHomeBtn.Click += new System.EventHandler(this.JointMoveHomeBtn_Click);
             // 
             // DoorClosedInputTxt
@@ -1807,47 +1848,51 @@
             // 
             // SetDoorClosedInputBtn
             // 
+            this.SetDoorClosedInputBtn.BackColor = System.Drawing.Color.Green;
             this.SetDoorClosedInputBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetDoorClosedInputBtn.ForeColor = System.Drawing.Color.White;
             this.SetDoorClosedInputBtn.Location = new System.Drawing.Point(1776, 367);
             this.SetDoorClosedInputBtn.Name = "SetDoorClosedInputBtn";
             this.SetDoorClosedInputBtn.Size = new System.Drawing.Size(205, 96);
             this.SetDoorClosedInputBtn.TabIndex = 96;
             this.SetDoorClosedInputBtn.Text = "Set Door Closed Input";
-            this.SetDoorClosedInputBtn.UseVisualStyleBackColor = true;
+            this.SetDoorClosedInputBtn.UseVisualStyleBackColor = false;
             this.SetDoorClosedInputBtn.Click += new System.EventHandler(this.SetDoorClosedInputBtn_Click);
             // 
             // SelectToolBtn
             // 
+            this.SelectToolBtn.BackColor = System.Drawing.Color.Green;
             this.SelectToolBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SelectToolBtn.ForeColor = System.Drawing.Color.White;
             this.SelectToolBtn.Location = new System.Drawing.Point(6, 367);
             this.SelectToolBtn.Name = "SelectToolBtn";
             this.SelectToolBtn.Size = new System.Drawing.Size(155, 96);
             this.SelectToolBtn.TabIndex = 95;
             this.SelectToolBtn.Text = "Select";
-            this.SelectToolBtn.UseVisualStyleBackColor = true;
+            this.SelectToolBtn.UseVisualStyleBackColor = false;
             this.SelectToolBtn.Click += new System.EventHandler(this.SelectToolBtn_Click);
             // 
             // ToolsGrd
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
+            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
+            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -1856,35 +1901,41 @@
             // 
             // LoadToolsBtn
             // 
+            this.LoadToolsBtn.BackColor = System.Drawing.Color.Green;
             this.LoadToolsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadToolsBtn.ForeColor = System.Drawing.Color.White;
             this.LoadToolsBtn.Location = new System.Drawing.Point(894, 367);
             this.LoadToolsBtn.Name = "LoadToolsBtn";
             this.LoadToolsBtn.Size = new System.Drawing.Size(155, 96);
             this.LoadToolsBtn.TabIndex = 94;
             this.LoadToolsBtn.Text = "Reload";
-            this.LoadToolsBtn.UseVisualStyleBackColor = true;
+            this.LoadToolsBtn.UseVisualStyleBackColor = false;
             this.LoadToolsBtn.Click += new System.EventHandler(this.LoadToolsBtn_Click);
             // 
             // SaveToolsBtn
             // 
+            this.SaveToolsBtn.BackColor = System.Drawing.Color.Green;
             this.SaveToolsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveToolsBtn.ForeColor = System.Drawing.Color.White;
             this.SaveToolsBtn.Location = new System.Drawing.Point(1055, 367);
             this.SaveToolsBtn.Name = "SaveToolsBtn";
             this.SaveToolsBtn.Size = new System.Drawing.Size(155, 96);
             this.SaveToolsBtn.TabIndex = 93;
             this.SaveToolsBtn.Text = "Save";
-            this.SaveToolsBtn.UseVisualStyleBackColor = true;
+            this.SaveToolsBtn.UseVisualStyleBackColor = false;
             this.SaveToolsBtn.Click += new System.EventHandler(this.SaveToolsBtn_Click);
             // 
             // ClearToolsBtn
             // 
+            this.ClearToolsBtn.BackColor = System.Drawing.Color.Green;
             this.ClearToolsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearToolsBtn.ForeColor = System.Drawing.Color.White;
             this.ClearToolsBtn.Location = new System.Drawing.Point(1218, 367);
             this.ClearToolsBtn.Name = "ClearToolsBtn";
             this.ClearToolsBtn.Size = new System.Drawing.Size(155, 96);
             this.ClearToolsBtn.TabIndex = 92;
             this.ClearToolsBtn.Text = "Clear";
-            this.ClearToolsBtn.UseVisualStyleBackColor = true;
+            this.ClearToolsBtn.UseVisualStyleBackColor = false;
             this.ClearToolsBtn.Click += new System.EventHandler(this.ClearToolsBtn_Click);
             // 
             // GeneralConfigGrp
@@ -1897,7 +1948,6 @@
             this.GeneralConfigGrp.Controls.Add(this.DefaultConfigBtn);
             this.GeneralConfigGrp.Controls.Add(this.ServerIpTxt);
             this.GeneralConfigGrp.Controls.Add(this.label2);
-            this.GeneralConfigGrp.Controls.Add(this.UtcTimeChk);
             this.GeneralConfigGrp.Controls.Add(this.RobotIpTxt);
             this.GeneralConfigGrp.Controls.Add(this.label3);
             this.GeneralConfigGrp.Controls.Add(this.AutoGrindRootLbl);
@@ -1914,26 +1964,32 @@
             // 
             // SaveConfigBtn
             // 
-            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SaveConfigBtn.Location = new System.Drawing.Point(847, 242);
+            this.SaveConfigBtn.BackColor = System.Drawing.Color.Green;
+            this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SaveConfigBtn.ForeColor = System.Drawing.Color.White;
+            this.SaveConfigBtn.Location = new System.Drawing.Point(852, 254);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.SaveConfigBtn.TabIndex = 100;
             this.SaveConfigBtn.Text = "Save";
-            this.SaveConfigBtn.UseVisualStyleBackColor = true;
+            this.SaveConfigBtn.UseVisualStyleBackColor = false;
             this.SaveConfigBtn.Click += new System.EventHandler(this.SaveConfigBtn_Click);
             // 
             // AllowRunningOfflineChk
             // 
             this.AllowRunningOfflineChk.Appearance = System.Windows.Forms.Appearance.Button;
             this.AllowRunningOfflineChk.AutoSize = true;
-            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(760, 174);
+            this.AllowRunningOfflineChk.BackColor = System.Drawing.Color.Gray;
+            this.AllowRunningOfflineChk.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AllowRunningOfflineChk.ForeColor = System.Drawing.Color.White;
+            this.AllowRunningOfflineChk.Location = new System.Drawing.Point(847, 173);
             this.AllowRunningOfflineChk.Name = "AllowRunningOfflineChk";
-            this.AllowRunningOfflineChk.Size = new System.Drawing.Size(333, 47);
+            this.AllowRunningOfflineChk.Size = new System.Drawing.Size(325, 43);
             this.AllowRunningOfflineChk.TabIndex = 89;
             this.AllowRunningOfflineChk.Text = "Allow Running Offline";
             this.AllowRunningOfflineChk.UseMnemonic = false;
-            this.AllowRunningOfflineChk.UseVisualStyleBackColor = true;
+            this.AllowRunningOfflineChk.UseVisualStyleBackColor = false;
+            this.AllowRunningOfflineChk.CheckedChanged += new System.EventHandler(this.AllowRunningOfflineChk_CheckedChanged);
             // 
             // label4
             // 
@@ -1954,24 +2010,28 @@
             // 
             // LoadConfigBtn
             // 
-            this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.LoadConfigBtn.Location = new System.Drawing.Point(678, 242);
+            this.LoadConfigBtn.BackColor = System.Drawing.Color.Green;
+            this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.LoadConfigBtn.ForeColor = System.Drawing.Color.White;
+            this.LoadConfigBtn.Location = new System.Drawing.Point(679, 254);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.LoadConfigBtn.TabIndex = 98;
             this.LoadConfigBtn.Text = "Reload";
-            this.LoadConfigBtn.UseVisualStyleBackColor = true;
+            this.LoadConfigBtn.UseVisualStyleBackColor = false;
             this.LoadConfigBtn.Click += new System.EventHandler(this.LoadConfigBtn_Click);
             // 
             // DefaultConfigBtn
             // 
-            this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(1015, 242);
+            this.DefaultConfigBtn.BackColor = System.Drawing.Color.Green;
+            this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DefaultConfigBtn.ForeColor = System.Drawing.Color.White;
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(1015, 251);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.DefaultConfigBtn.TabIndex = 99;
             this.DefaultConfigBtn.Text = "Restore Defaults";
-            this.DefaultConfigBtn.UseVisualStyleBackColor = true;
+            this.DefaultConfigBtn.UseVisualStyleBackColor = false;
             this.DefaultConfigBtn.Click += new System.EventHandler(this.DefaultConfigBtn_Click);
             // 
             // ServerIpTxt
@@ -1990,17 +2050,6 @@
             this.label2.TabIndex = 78;
             this.label2.Text = "UR Robot IP Address";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // UtcTimeChk
-            // 
-            this.UtcTimeChk.Appearance = System.Windows.Forms.Appearance.Button;
-            this.UtcTimeChk.AutoSize = true;
-            this.UtcTimeChk.Location = new System.Drawing.Point(15, 281);
-            this.UtcTimeChk.Name = "UtcTimeChk";
-            this.UtcTimeChk.Size = new System.Drawing.Size(487, 47);
-            this.UtcTimeChk.TabIndex = 77;
-            this.UtcTimeChk.Text = "Use UTC Time in Time Stamps?";
-            this.UtcTimeChk.UseVisualStyleBackColor = true;
             // 
             // RobotIpTxt
             // 
@@ -2080,7 +2129,7 @@
             // StressBtn
             // 
             this.StressBtn.BackColor = System.Drawing.Color.Green;
-            this.StressBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.StressBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.StressBtn.ForeColor = System.Drawing.Color.White;
             this.StressBtn.Location = new System.Drawing.Point(1775, 898);
             this.StressBtn.Name = "StressBtn";
@@ -2104,7 +2153,7 @@
             // AboutBtn
             // 
             this.AboutBtn.BackColor = System.Drawing.Color.Green;
-            this.AboutBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.AboutBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.AboutBtn.ForeColor = System.Drawing.Color.White;
             this.AboutBtn.Location = new System.Drawing.Point(1978, 898);
             this.AboutBtn.Name = "AboutBtn";
@@ -2375,7 +2424,6 @@
         private System.Windows.Forms.TextBox RobotProgramTxt;
         private System.Windows.Forms.TextBox ServerIpTxt;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox UtcTimeChk;
         private System.Windows.Forms.TextBox RobotIpTxt;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label AutoGrindRootLbl;

@@ -77,7 +77,7 @@
             // CloseBtn
             // 
             this.CloseBtn.BackColor = System.Drawing.Color.Green;
-            this.CloseBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.CloseBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CloseBtn.ForeColor = System.Drawing.Color.White;
             this.CloseBtn.Location = new System.Drawing.Point(12, 170);
             this.CloseBtn.Name = "CloseBtn";
