@@ -706,7 +706,10 @@ def grind_movel(dp, a, v, t, r):
     i = i + 1
   end
 
-  local n = ceil(t * 4.0) # number of segments to use; 4 per second ==> can stop within 0.25s
+  local n = 1
+  if t > 0:
+    n = ceil(t * 4.0) # number of segments to use; 4 per second ==> can stop within 0.25s
+  end
 
   local i = 1
   while i <= n:
@@ -719,7 +722,7 @@ def grind_movel(dp, a, v, t, r):
     end
     global grind_movel_p_latest = pose_trans(grind_movel_p_center, dp)
     local br = r
-    if i==n or not ok_to_proceed():
+    if not ok_to_proceed():
       local br = 0
     end
     movel(grind_movel_p_latest, a = a, v = v, r = br)
@@ -734,6 +737,11 @@ end
 # Call at end of pattern
 def pattern_complete():
   # This stops motion but won't kill force_mode the way stopl will
+  local p0 = get_actual_tcp_pose()
+  movel(p0, a = grind_accel_mpss, v = grind_speed_mps)
+
+  # If you are inside the old blend radius the above did nothing!
+  # So try again
   local p0 = get_actual_tcp_pose()
   movel(p0, a = grind_accel_mpss, v = grind_speed_mps)
 end
@@ -845,6 +853,7 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
   local y2 = dy_m / 2.0
 
   local dp1 = p[-x2, -y2, 0, 0, 0, 0]
+  local dp1a = p[-x2 + grind_blend_radius_m * 1.1, -y2, 0, 0, 0, 0]
   local dp2 = p[x2, -y2, 0, 0, 0, 0]
   local dp3 = p[x2, y2, 0, 0, 0, 0]
   local dp4 = p[-x2, y2, 0, 0, 0, 0]
@@ -862,6 +871,9 @@ def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  # dp1a just barely turns the corner, larger then the blend radius
+  # This stops the motion since you need to be out of bland radius and move with blend=0 to stop motion!
+  grind_movel(dp1a, a = grind_accel_mpss, v = grind_speed_mps, t = 0, r = 0)
   grind_movel_finish()
 end
 
@@ -874,6 +886,7 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
   local rx2 = drx_rad / 2.0
 
   local dp1 = p[-x2, 0, 0, -rx2, 0, 0]
+  local dp1a = p[-x2 + grind_rot_blend_radius_rad * 5, 0, 0, -rx2, 0, 0]
   local dp2 = p[x2, 0, 0, -rx2, 0, 0]
   local dp3 = p[x2, 0, 0, rx2, 0, 0]
   local dp4 = p[-x2, 0, 0, rx2, 0, 0]
@@ -890,6 +903,9 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  # dp1a just barely turns the corner, larger then the blend radius
+  # This stops the motion since you need to be out of bland radius and move with blend=0 to stop motion!
+  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = 0, r = 0)
   grind_movel_finish()
 end
 
@@ -902,6 +918,7 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
   local ry2 = dry_rad / 2.0
 
   local dp1 = p[0, 0, 0, -rx2, -ry2, 0]
+  local dp1a = p[0, 0, 0, -rx2 + grind_rot_blend_radius_rad * 5, -ry2, 0]
   local dp2 = p[0, 0, 0, rx2, -ry2, 0]
   local dp3 = p[0, 0, 0, rx2, ry2, 0]
   local dp4 = p[0, 0, 0, -rx2, ry2, 0]
@@ -918,6 +935,9 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
 
     grind_cycle = grind_cycle + 1
   end
+  # dp1a just barely turns the corner, larger then the blend radius
+  # This stops the motion since you need to be out of bland radius and move with blend=0 to stop motion!
+  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = 0, r = 0)
   grind_movel_finish()
 end
 

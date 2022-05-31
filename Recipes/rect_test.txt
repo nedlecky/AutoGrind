@@ -6,7 +6,6 @@ size_x = 125
 size_y = 100
 
 move_joint(demo_safe)
-#jump(cylinder)
 
 #Flat
 flat:
