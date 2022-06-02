@@ -1,6 +1,6 @@
 # File: agscript_grind.cs
 # Project: AutoGrind
-# Author: Ned Lecky, Lecky Engineering LLC www.lecky.com
+# Author: Ned Lecky, Olympus Controls
 # Purpose: General utility function used in AutoGrind
 
 # Return max of 2 numeric values

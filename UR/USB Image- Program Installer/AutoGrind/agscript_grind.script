@@ -1,6 +1,6 @@
 # File: agscript_grind.cs
 # Project: AutoGrind
-# Author: Ned Lecky, Lecky Engineering LLC www.lecky.com
+# Author: Ned Lecky, Olympus Controls
 # Purpose: All grinding functions used in AutoGrind
 
 global grind_abort_listener_thread_handle = 0
