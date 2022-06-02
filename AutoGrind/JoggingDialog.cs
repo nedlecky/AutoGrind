@@ -1,5 +1,5 @@
 ﻿// File: JoggingDialog.cs
-// Project: AutoGrind
+// Project: AutoGrind master
 // Author: Ned Lecky, Olympus Controls
 // Purpose: Jogging and Freedrive manual robot movement
 
@@ -188,8 +188,6 @@ namespace AutoGrind
             mainForm.RobotSend(lastJogCommand);
         }
 
-        // Test comment added in master branch for testing
-        // Second test comment
         static bool continueTask;
         private void Repeater()
         {
