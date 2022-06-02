@@ -6,6 +6,14 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AutoGrind", "AutoGrind\AutoGrind.csproj", "{F7D044A8-5B81-4D11-BE3F-211B2AE919EE}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{7B9FB4B9-3D6E-4F53-B9E4-0E2EF99281AD}"
+	ProjectSection(SolutionItems) = preProject
+		UR\USB Image- Program Installer\AutoGrind\agscript_grind.script = UR\USB Image- Program Installer\AutoGrind\agscript_grind.script
+		UR\USB Image- Program Installer\AutoGrind\agscript_robot.script = UR\USB Image- Program Installer\AutoGrind\agscript_robot.script
+		UR\USB Image- Program Installer\AutoGrind\agscript_util.script = UR\USB Image- Program Installer\AutoGrind\agscript_util.script
+		UR\USB Image- Program Installer\AutoGrind\AutoGrind01.script = UR\USB Image- Program Installer\AutoGrind\AutoGrind01.script
+		UR\USB Image- Program Installer\AutoGrind\AutoGrind01.txt = UR\USB Image- Program Installer\AutoGrind\AutoGrind01.txt
+		UR\USB Image- Program Installer\AutoGrind\AutoGrind01.urp = UR\USB Image- Program Installer\AutoGrind\AutoGrind01.urp
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
