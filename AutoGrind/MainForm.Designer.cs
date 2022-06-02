@@ -144,7 +144,7 @@
             this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
             this.SetGrindAccelBtn = new System.Windows.Forms.Button();
             this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
-            this.SetGrindBlendRadiusBtn = new System.Windows.Forms.Button();
+            this.SetMaxGrindBlendRadiusBtn = new System.Windows.Forms.Button();
             this.SetMaxWaitBtn = new System.Windows.Forms.Button();
             this.SetForceDwellBtn = new System.Windows.Forms.Button();
             this.SetTouchSpeedBtn = new System.Windows.Forms.Button();
@@ -1579,7 +1579,7 @@
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindDefaultsBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindAccelBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTrialSpeedBtn);
-            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindBlendRadiusBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetMaxGrindBlendRadiusBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetMaxWaitBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetForceDwellBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchSpeedBtn);
@@ -1630,18 +1630,18 @@
             this.SetTrialSpeedBtn.UseVisualStyleBackColor = false;
             this.SetTrialSpeedBtn.Click += new System.EventHandler(this.SetTrialSpeedBtn_Click);
             // 
-            // SetGrindBlendRadiusBtn
+            // SetMaxGrindBlendRadiusBtn
             // 
-            this.SetGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
-            this.SetGrindBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SetGrindBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
-            this.SetGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 56);
-            this.SetGrindBlendRadiusBtn.Name = "SetGrindBlendRadiusBtn";
-            this.SetGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
-            this.SetGrindBlendRadiusBtn.TabIndex = 118;
-            this.SetGrindBlendRadiusBtn.Text = "Set Blend Radius";
-            this.SetGrindBlendRadiusBtn.UseVisualStyleBackColor = false;
-            this.SetGrindBlendRadiusBtn.Click += new System.EventHandler(this.SetGrindBlendRadiusBtn_Click);
+            this.SetMaxGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
+            this.SetMaxGrindBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetMaxGrindBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
+            this.SetMaxGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 56);
+            this.SetMaxGrindBlendRadiusBtn.Name = "SetMaxGrindBlendRadiusBtn";
+            this.SetMaxGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetMaxGrindBlendRadiusBtn.TabIndex = 118;
+            this.SetMaxGrindBlendRadiusBtn.Text = "Set Max Blend Radius";
+            this.SetMaxGrindBlendRadiusBtn.UseVisualStyleBackColor = false;
+            this.SetMaxGrindBlendRadiusBtn.Click += new System.EventHandler(this.SetMaxGrindBlendRadiusBtn_Click);
             // 
             // SetMaxWaitBtn
             // 
@@ -2469,7 +2469,7 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Button SetMaxWaitBtn;
         private System.Windows.Forms.Button AboutBtn;
-        private System.Windows.Forms.Button SetGrindBlendRadiusBtn;
+        private System.Windows.Forms.Button SetMaxGrindBlendRadiusBtn;
         private System.Windows.Forms.Button SetTrialSpeedBtn;
         private System.Windows.Forms.GroupBox VariableTestButtonGrp;
         private System.Windows.Forms.Label StepTimeEstimateLbl;

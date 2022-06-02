@@ -436,7 +436,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
                         ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_ms", "500")));
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_ms", "1500")));
-                        ExecuteLine(-1, string.Format("grind_blend_radius({0})", ReadVariable("grind_blend_radius_mm", "1")));
+                        ExecuteLine(-1, string.Format("grind_max_blend_radius({0})", ReadVariable("grind_max_blend_radius_mm", "4")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
@@ -1575,7 +1575,7 @@ namespace AutoGrind
 
         private void AllowRunningOfflineChk_CheckedChanged(object sender, EventArgs e)
         {
-            if(AllowRunningOfflineChk.Checked)
+            if (AllowRunningOfflineChk.Checked)
                 AllowRunningOfflineChk.BackColor = Color.Green;
             else
                 AllowRunningOfflineChk.BackColor = Color.Gray;
@@ -2010,7 +2010,6 @@ namespace AutoGrind
             // The main "send anything" command
             {"send_robot",              new CommandSpec(){nParams=-1, prefix="" } },
 
-            // SETTINGS
             {"set_linear_speed",        new CommandSpec(){nParams=1,  prefix="30,1," } },
             {"set_linear_accel",        new CommandSpec(){nParams=1,  prefix="30,2," } },
             {"set_blend_radius",        new CommandSpec(){nParams=1,  prefix="30,3," } },
@@ -2038,7 +2037,7 @@ namespace AutoGrind
             {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="35,3," } },
             {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="35,4," } },
             {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="35,5," } },
-            {"grind_blend_radius",      new CommandSpec(){nParams=1,  prefix="35,6," } },
+            {"grind_max_blend_radius",  new CommandSpec(){nParams=1,  prefix="35,6," } },
             {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="35,7," } },
             {"grind_accel",             new CommandSpec(){nParams=1,  prefix="35,8," } },
 
@@ -2081,7 +2080,7 @@ namespace AutoGrind
 
         private void ExecError(string message)
         {
-            log.Error("EXEC " + message);
+            log.Error("EXEC " + message.Replace('\n', ' '));
             PromptOperator("ERROR:\n" + message);
         }
 
@@ -2291,6 +2290,54 @@ namespace AutoGrind
                     ExecError(string.Format("Linear move failed line {0}: {1}", lineNumber, origLine));
                 return true;
             }
+            
+            // move_relative
+            if (command.StartsWith("move_relative("))
+            {
+                LogInterpret("move_relative", lineNumber, origLine);
+                string xy = ExtractParameters(command, 2);
+
+                if (xy == "")
+                    ExecError(string.Format("Relative move no parameters x,y\nline {0}: {1}", lineNumber, origLine));
+                else
+                {
+                    try
+                    {
+                        string[] p = xy.Split(',');
+                        double x = Convert.ToDouble(p[0]) / 1000.0;
+                        double y = Convert.ToDouble(p[1]) / 1000.0;
+                        if (Math.Abs(x) > 0.010 || Math.Abs(y) > 0.010)
+                            ExecError(string.Format("X and Y must be no more than +/10mm\nline {0}: {1}", lineNumber, origLine));
+                        else
+                            // This is a move relative to part
+                            switch (PartGeometryBox.Text)
+                            {
+                                case "FLAT":
+                                    RobotSend(String.Format("15,{0},{1},0,0,0,0", x, y));
+                                    break;
+                                case "CYLINDER":
+                                    // Convert y to radians!
+                                    double diam = Convert.ToDouble(DiameterLbl.Text);
+                                    RobotSend(String.Format("15,{0},0,0,{1},0,0", x, 2000 * y / diam));
+                                    break;
+                                case "SPHERE":
+                                    // Convert x and y to radians!
+                                    diam = Convert.ToDouble(DiameterLbl.Text);
+                                    RobotSend(String.Format("15,0,0,0,{0},{1},0", 2000 * x / diam, 2000 * y / diam));
+                                    break;
+                                default:
+                                    ExecError(string.Format("move_relative: Unknown geometry \"{0}\"\nline {1}: {2}", PartGeometryBox.Text, lineNumber, origLine));
+                                    break;
+                            }
+                    }
+                    catch
+                    {
+                        ExecError(string.Format("Relative move bad paramters x,y\nline {0}: {1}", lineNumber, origLine));
+                    }
+                }
+
+                return true;
+            }
 
             // save_position
             if (command.StartsWith("save_position("))
@@ -2299,7 +2346,7 @@ namespace AutoGrind
                 string positionName = ExtractParameters(command);
                 if (positionName.Length < 1)
                 {
-                    ExecError(string.Format("No position name specified line {0}: {1}", lineNumber, origLine));
+                    ExecError(string.Format("No position name specified\nline {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 copyPositionAtWrite = positionName;
@@ -2660,8 +2707,8 @@ namespace AutoGrind
 
         private void CloseSafetyPopup()
         {
-            log.Info("close popup = {0}", robotDashboardClient.InquiryResponse("close popup"), 200);
-            log.Info("close safety popup = {0}", robotDashboardClient.InquiryResponse("close safety popup"), 200);
+            log.Info("close popup = {0}", robotDashboardClient?.InquiryResponse("close popup"), 200);
+            log.Info("close safety popup = {0}", robotDashboardClient?.InquiryResponse("close safety popup"), 200);
         }
         private void RobotConnectBtn_Click(object sender, EventArgs e)
         {
@@ -2695,10 +2742,10 @@ namespace AutoGrind
             RobotConnectBtn.Text = "Dashboard OK";
 
             // Start querying the bot
-            RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model",200);
+            RobotModelLbl.Text = robotDashboardClient.InquiryResponse("get robot model", 200);
             RobotSerialNumberLbl.Text = robotDashboardClient.InquiryResponse("get serial number", 200);
             RobotPolyscopeVersionLbl.Text = robotDashboardClient.InquiryResponse("PolyscopeVersion", 200);
-            robotDashboardClient.InquiryResponse("stop",200);
+            robotDashboardClient.InquiryResponse("stop", 200);
             CloseSafetyPopup();
 
             string closeSafetyPopupResponse = robotDashboardClient.InquiryResponse("close safety popup", 1000);
@@ -2766,7 +2813,9 @@ namespace AutoGrind
                     try  // This fails if the jog thread is calling it!
                     {
                         RobotSentLbl.Text = robotSendIndex.ToString();
+                        RobotSentLbl.Refresh();
                         RobotCompletedLbl.BackColor = Color.Red;
+                        RobotCompletedLbl.Refresh();
                     }
                     catch { }
 
@@ -2869,7 +2918,7 @@ namespace AutoGrind
             ExecuteLine(-1, String.Format("set_linear_speed({0})", 200));
             ExecuteLine(-1, String.Format("set_linear_accel({0})", 500));
             ExecuteLine(-1, String.Format("set_blend_radius({0})", 3));
-            ExecuteLine(-1, String.Format("set_joint_speed({0})", 45));
+            ExecuteLine(-1, String.Format("set_joint_speed({0})", 20));
             ExecuteLine(-1, String.Format("set_joint_accel({0})", 30));
         }
 
@@ -2939,20 +2988,20 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_max_wait({0})", form.Value));
             }
         }
-        private void SetGrindBlendRadiusBtn_Click(object sender, EventArgs e)
+        private void SetMaxGrindBlendRadiusBtn_Click(object sender, EventArgs e)
         {
             SetValueForm form = new SetValueForm()
             {
-                Value = ReadVariable("grind_blend_radius_mm"),
-                Label = "Grind BLEND RADIUS, mm",
+                Value = ReadVariable("grind_max_blend_radius_mm"),
+                Label = "Grind MAX BLEND RADIUS, mm",
                 NumberOfDecimals = 1,
                 MinAllowed = 0,
-                MaxAllowed = 2.0
+                MaxAllowed = 10,
             };
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("grind_blend_radius({0})", form.Value));
+                ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", form.Value));
             }
         }
         private void SetTrialSpeedBtn_Click(object sender, EventArgs e)
@@ -3147,8 +3196,8 @@ namespace AutoGrind
             switch (nameTrimmed)
             {
                 case "robot_ready":
-                    // Getting ready to abandon this?
                     RobotReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    RobotReadyLbl.Refresh();
                     break;
                 case "robot_starting":
                     // This gets sent to us by command_validate on the UR. It means command valueTrimmed is going to start executing
@@ -3162,6 +3211,7 @@ namespace AutoGrind
                     // Color us green if we're caught up!
                     if (RobotSentLbl.Text == RobotCompletedLbl.Text)
                         RobotCompletedLbl.BackColor = Color.Green;
+                    RobotCompletedLbl.Refresh();
 
                     // Close operator "wait for robot" form if we're caught up
                     if (waitingForOperatorMessageForm != null && closeOperatorFormOnIndex && RobotSentLbl.Text == RobotCompletedLbl.Text)
@@ -3265,8 +3315,8 @@ namespace AutoGrind
                 case "grind_max_wait_ms":
                     SetMaxWaitBtn.Text = "Grind Max Wait Time\n" + valueTrimmed + " ms";
                     break;
-                case "grind_blend_radius_mm":
-                    SetGrindBlendRadiusBtn.Text = "Grind Blend Radius\n" + valueTrimmed + " mm";
+                case "grind_max_blend_radius_mm":
+                    SetMaxGrindBlendRadiusBtn.Text = "Grind Max Blend Radius\n" + valueTrimmed + " mm";
                     break;
                 case "grind_trial_speed_mmps":
                     SetTrialSpeedBtn.Text = "Grind Trial Speed\n" + valueTrimmed + " mm/s";
@@ -4068,10 +4118,9 @@ namespace AutoGrind
             System.Diagnostics.ProcessStartInfo startInfo = new System.Diagnostics.ProcessStartInfo();
             startInfo.WindowStyle = System.Diagnostics.ProcessWindowStyle.Hidden;
             startInfo.FileName = "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe";
-            startInfo.Arguments = String.Format("file:\\{0}\\AutoGrind%20User%20Manual.pdf",executionRoot);
+            startInfo.Arguments = String.Format("file:\\{0}\\AutoGrind%20User%20Manual.pdf", executionRoot);
             process.StartInfo = startInfo;
             process.Start();
-            
         }
 
     }
