@@ -1,5 +1,5 @@
 n=1
-speed=20
+speed=2
 force=5
 
 move_joint(demo_safe)

@@ -1,5 +1,5 @@
 n=1
-speed=2
+speed=10
 force=5
 
 size_x = 125
@@ -38,6 +38,10 @@ set_part_geometry(CYLINDER,1200)
 
 size_x = 85
 size_y = 100
+
+#grind_rect(40,40,1,{speed},{force},1)
+#grind_rect(30,30,1,{speed},{force},0)
+#end
 
 # Lift rects 
 repeat1c:
