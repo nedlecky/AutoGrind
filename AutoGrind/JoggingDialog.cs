@@ -189,6 +189,7 @@ namespace AutoGrind
         }
 
         // Test comment added in master branch for testing
+        // Second test comment
         static bool continueTask;
         private void Repeater()
         {
