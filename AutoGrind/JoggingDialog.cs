@@ -188,7 +188,6 @@ namespace AutoGrind
             mainForm.RobotSend(lastJogCommand);
         }
 
-
         static bool continueTask;
         private void Repeater()
         {
