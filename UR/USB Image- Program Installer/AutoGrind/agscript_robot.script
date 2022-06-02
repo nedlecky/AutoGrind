@@ -1,6 +1,6 @@
 # File: agscript_robot.cs
 # Project: AutoGrind
-# Author: Ned Lecky, Olympus Controls
+# Author: Ned Lecky, Lecky Engineering LLC www.lecky.com
 # Purpose: Robot control commands supporting the AutoGrind application
 
 global response = "unknown"
