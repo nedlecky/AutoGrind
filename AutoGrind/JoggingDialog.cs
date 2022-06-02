@@ -1,5 +1,5 @@
 ﻿// File: JoggingDialog.cs
-// Project: AutoGrind master
+// Project: AutoGrind
 // Author: Ned Lecky, Olympus Controls
 // Purpose: Jogging and Freedrive manual robot movement
 
@@ -20,7 +20,6 @@ namespace AutoGrind
 
     public partial class JoggingDialog : Form
     {
-
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
         public string Prompt { get; set; } = "General Jogging";
@@ -49,7 +48,6 @@ namespace AutoGrind
             ShouldSave = true;
             Close();
         }
-
 
         private void JoggingForm_Load(object sender, EventArgs e)
         {
