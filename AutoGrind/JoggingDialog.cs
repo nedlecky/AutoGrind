@@ -188,6 +188,7 @@ namespace AutoGrind
             mainForm.RobotSend(lastJogCommand);
         }
 
+        // Test comment added in master branch for testing
         static bool continueTask;
         private void Repeater()
         {
