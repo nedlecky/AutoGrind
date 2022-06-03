@@ -3045,7 +3045,7 @@ namespace AutoGrind
 
             ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
             ExecuteLine(-1, String.Format("grind_accel({0})", 100));
-            ExecuteLine(-1, String.Format("grind_blend_radius({0})", 1));
+            ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 1.5));
             ExecuteLine(-1, String.Format("grind_touch_speed({0})", 10));
             ExecuteLine(-1, String.Format("grind_touch_retract({0})", 3));
             ExecuteLine(-1, String.Format("grind_force_dwell({0})", 500));

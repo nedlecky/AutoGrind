@@ -1,10 +1,13 @@
-# File: agscript_grind.cs
+# File: agscript_grind-1.script
 # Project: AutoGrind
-# Author: Ned Lecky, Olympus Controls
+# Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
+
+global grind_version = "Rev 1 2022-06-02"
 
 global grind_abort_listener_thread_handle = 0
 global pattern_grind_thread_handle = 0
+
 
 global halt_count = 0
 global halt_command = [0, 0, 0, 0]
@@ -15,7 +18,8 @@ global grind_contact_enable = 0
 global grind_touch_retract_mm = 3       # How far to retract after touch  (we do 2X this for ghrind_contact_enable=1)
 global grind_touch_speed_mmps = 0.1     # How fast to go in for the touch
 global grind_force_dwell_ms = 500       # How long to dwell after turning force more on
-global grind_blend_radius_m = 0.001     # Blend radius to use while grinding
+global grind_max_blend_radius_m = 0.001 # Max blend radius to use while grinding
+global grind_blend_radius_m = 0.001     # XCurrent blend radius to use while grinding
 global grind_trial_speed_mmps = 20      # Grinding speed when not really grinding!
 global grind_accel_mmpss = 100          # Acceleration to use in grinding moves
 
@@ -98,12 +102,13 @@ def set_grind_variable():
     end
     socket_set_var("grind_max_wait_ms", grind_max_wait_ms)
   elif command[2] == 6:
-    global response = "set grind_blend_radius_mm"
+    global response = "set grind_max_blend_radius_mm"
     if command[3] >= 0:
-      global grind_blend_radius_m = command[3] / 1000.0
+      global grind_max_blend_radius_m = command[3] / 1000.0
+      global grind_blend_radius_m = grind_max_blend_radius_m
     end
-    socket_send_string("grind_blend_radius_mm=")
-    socket_send_string(grind_blend_radius_m * 1000.0)
+    socket_send_string("grind_max_blend_radius_mm=")
+    socket_send_string(grind_max_blend_radius_m * 1000.0)
     socket_send_lf()
   elif command[2] == 7:
     global response = "set grind_trial_speed_mmps"

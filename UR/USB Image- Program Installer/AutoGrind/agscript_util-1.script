@@ -1,7 +1,9 @@
-# File: agscript_grind.cs
+# File: agscript_util-1.script
 # Project: AutoGrind
-# Author: Ned Lecky, Olympus Controls
+# Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: General utility function used in AutoGrind
+
+global robot_util_version = "Rev 1 2022-06-02"
 
 # Return max of 2 numeric values
 def max(n1, n2):
