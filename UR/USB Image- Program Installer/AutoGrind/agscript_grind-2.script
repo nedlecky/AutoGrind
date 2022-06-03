@@ -45,7 +45,8 @@ def speed_setter(speed_mmps, min_feature_mm):
   speed_mmps = limiter(speed_mmps, 0.1, 200)
 
   # Figure out best blend radius to use
-  global grind_blend_radius_m = min(grind_max_blend_radius_m, (min_feature_mm / 1000.) / 4)
+  global grind_min_feature_m = min_feature_mm / 1000.0
+  global grind_blend_radius_m = min(grind_max_blend_radius_m, grind_min_feature_m / 4)
   if grind_blend_radius_m < 0.0015:
     grind_blend_radius_m = 0
   end
@@ -152,19 +153,19 @@ def grind():
   socket_set_var("grind_cycle", grind_cycle)
 
   # Defaults but any used should be set as needed below
-  global grind_dx_mm = 0
-  global grind_dy_mm = 0
-  global grind_n_cycles = 0
-  global grind_force_N = 10.0
-  global grind_continue = False
-  global grind_circle1_diam_mm = 0
-  global grind_circle2_diam_mm = 0
-  global grind_n_revolutions = 0
-  global grind_n_xsteps = 1
-  global grind_n_ysteps = 1
-  global grind_xstep_mm = 0
-  global grind_ystep_mm = 0
-  speed_setter(20, 5)
+  #global grind_dx_mm = 0
+  #global grind_dy_mm = 0
+  #global grind_n_cycles = 0
+  #global grind_force_N = 10.0
+  #global grind_continue = False
+  #global grind_circle1_diam_mm = 0
+  #global grind_circle2_diam_mm = 0
+  #global grind_n_revolutions = 0
+  #global grind_n_xsteps = 1
+  #global grind_n_ysteps = 1
+  #global grind_xstep_mm = 0
+  #global grind_ystep_mm = 0
+  #speed_setter(20, 5)
 
   # Install tcp that puts tcp at center of part (noop for flat parts!)
   set_tcp(robot_tcp_part)
@@ -259,18 +260,18 @@ def contact_part(on = False, enable = 0):
   if on:
     if enable == 0:
       # Just do a small forward motion in the direction of touchoff- this is a simulated p_contact_init
-      global p_contact_init = pose_trans(get_target_tcp_pose(), p[0, 0, 0.005, 0, 0, 0])
+      global p_contact_init = pose_trans(get_actual_tcp_pose(), p[0, 0, 0.005, 0, 0, 0])
       imovel(p_contact_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
     elif enable == 1:
       # Advance until contact but retract 2X grind distance and use this as a simulated p_contact_init
       local success = touchoff(grind_touch_speed_mmps, grind_touch_retract_mm * 2.0)
-      global p_contact_init = get_target_tcp_pose()
+      global p_contact_init = get_actual_tcp_pose()
       return success
     elif enable == 2:
       # Advance until contact
       local success = touchoff(grind_touch_speed_mmps, grind_touch_retract_mm)
       # Touchoff has backed off by grind_touch_retract_mm so we need to compute that actual p_contact_init
-      global p_contact_init = pose_trans(get_target_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
+      global p_contact_init = pose_trans(get_actual_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
       return success
     end
   else:  # Back off
@@ -351,7 +352,7 @@ end
 global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
   if on and not grind_process_state:
-    global p_operator_init = get_target_tcp_pose()
+    global p_operator_init = get_actual_tcp_pose()
 
     # Move to start position for touchoff
     shape = robot_part_geometry[0]
@@ -361,6 +362,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
 
     global dp_from_contact_center = pose_to_center[shape-1]
     local p1 = pose_trans(p_operator_init, dp_from_contact_center)
+    # TODO This should look at whether rot or linear for speed,accel
     imovel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
 
     # Touch part and set p_contact_init
@@ -514,29 +516,30 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
-  if not set_grind_process_state(True, [
-    p[-dx_m / 2.0 + grind_blend_radius_m * 1.2, -dy_m / 2.0, 0, 0, 0, 0],
-    p[-dx_m / 2.0 + grind_blend_radius_m * 1.2, 0, 0, -dry_rad / 2.0, 0, 0],
-    p[0, 0, 0, -dry_rad / 2.0 + grind_rot_blend_radius_rad * 5, -drx_rad / 2.0, 0]
-  ]):
-  return False
-end
+  if not set_grind_process_state(True,
+    [
+      p[-dx_m / 2.0 + grind_blend_radius_m * 2, -dy_m / 2.0, 0, 0, 0, 0],
+      p[-dx_m / 2.0 + grind_blend_radius_m * 2, 0, 0, -dry_rad / 2.0, 0, 0],
+      p[0, 0, 0, -dry_rad / 2.0 + grind_rot_blend_radius_rad * 8, -drx_rad / 2.0, 0]
+    ]):
+    return False
+  end
 
-# Grind the pattern
-shape = robot_part_geometry[0]
-if shape == 1:
-  pattern_rect_flat(dx_m, dy_m, n_cycles)
-elif shape == 2:
-  pattern_rect_cylinder(dx_m, dry_rad, n_cycles)
-elif shape == 3:
-  # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
-  pattern_rect_sphere(dry_rad, drx_rad, n_cycles)
-end
+  # Grind the pattern
+  shape = robot_part_geometry[0]
+  if shape == 1:
+    pattern_rect_flat(dx_m, dy_m, n_cycles)
+  elif shape == 2:
+    pattern_rect_cylinder(dx_m, dry_rad, n_cycles)
+  elif shape == 3:
+    # Swapping sphere axes here since RY is aligned with the X of the FLAT and CYLINDER geometries
+    pattern_rect_sphere(dry_rad, drx_rad, n_cycles)
+  end
 
-if not stay_in_contact or not ok_to_proceed():
-  set_grind_process_state(False)
-end
-return True
+  if not stay_in_contact or not ok_to_proceed():
+    set_grind_process_state(False)
+  end
+  return True
 end
 
 # Grind along a rect in serpentine dx_mm,dy_mm incrementing by xstep_mm,ystep_mm centered on current tool position. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
@@ -782,11 +785,13 @@ def grind_start(current_dp, speed_factor = 1.0):
 end
 
 def grind_to(dp, set_r_zero = False):
-  local process_a = grind_accel_mpss * grind_speed_factor
-  local process_v = grind_speed_mps * grind_speed_factor
-  local process_r = grind_blend_radius_m * grind_speed_factor
+  global process_a = grind_accel_mpss * grind_speed_factor
+  global process_v = grind_speed_mps * grind_speed_factor
+  global process_r = grind_blend_radius_m * grind_speed_factor
 
-  if abs(dp[3] - grind_current_dp) > 0.001 or abs(dp[4] - grind_current_dp[4]) > 0.001:
+
+
+  if abs(dp[3] - grind_current_dp[3]) > 0.001 or abs(dp[4] - grind_current_dp[4]) > 0.001:
     process_a = grind_rot_speed_rps * grind_speed_factor
     process_v = grind_rot_accel_rpss * grind_speed_factor
     process_r = grind_rot_blend_radius_rad * grind_speed_factor
@@ -903,7 +908,7 @@ def pattern_rect_flat(dx_m, dy_m, n_cycles):
   local x2 = dx_m / 2.0
   local y2 = dy_m / 2.0
 
-  local dx = grind_blend_radius_m * 1.2
+  local dx = grind_blend_radius_m * 2
 
   local dp1 = p[-x2, -y2, 0, 0, 0, 0]
   global dp1a = dp1
@@ -938,8 +943,8 @@ def pattern_rect_cylinder(dx_m, drx_rad, n_cycles):
   local x2 = dx_m / 2.0
   local rx2 = drx_rad / 2.0
 
-  local dx = grind_blend_radius_m * 1.2
-  local da = grind_rot_blend_radius_rad * 5
+  local dx = grind_blend_radius_m * 2
+  local da = grind_rot_blend_radius_rad * 8
 
   local dp1 = p[-x2, 0, 0, -rx2, 0, 0]
   global dp1a = dp1
@@ -974,7 +979,7 @@ def pattern_rect_sphere(drx_rad, dry_rad, n_cycles):
   local rx2 = drx_rad / 2.0
   local ry2 = dry_rad / 2.0
 
-  local da = grind_rot_blend_radius_rad * 5
+  local da = grind_rot_blend_radius_rad * 8
 
   local dp1 = p[0, 0, 0, -rx2, -ry2, 0]
   global dp1a = dp1

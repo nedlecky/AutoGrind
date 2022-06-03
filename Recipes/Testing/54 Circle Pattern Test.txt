@@ -1,10 +1,11 @@
+# 54 Circle Pattern Test
+
 n=1
 speed=2
 force=5
 
 move_joint(demo_safe)
 
-#Flat
 flat:
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)

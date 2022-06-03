@@ -623,13 +623,15 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False):
   imover_wait()
   global imover_param1 = param1
   global imover_param2 = param2
-  #local i = 9
-  #while i > 0:
-  #  imover_cmd_hist[i] = imover_cmd_hist[i - 1]
-  #  i = i - 1
-  #end
-  #imover_cmd_hist[0] = cmd
+  
+  local i = 9
+  while i > 0:
+    imover_cmd_hist[i] = imover_cmd_hist[i - 1]
+    i = i - 1
+  end
+  imover_cmd_hist[0] = cmd
   global imover_cmd = cmd
+  
   imover_wait(terminate_not_ok)
 end
 

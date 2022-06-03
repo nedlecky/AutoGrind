@@ -1,3 +1,5 @@
+# 51 Line Pattern Test
+
 count=1
 speed = 10
 force=5

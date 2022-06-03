@@ -26,6 +26,10 @@ save_position(p1)
 save_position() # should fail
 move_linear(p1)
 
+move_relative(5,5)
+move_relative(0,-5)
+move_relative(-5,0)
+
 move_tool_home()
 move_tool_mount()
 

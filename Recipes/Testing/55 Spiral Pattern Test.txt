@@ -1,3 +1,5 @@
+# 55 Spiral Pattern Test
+
 n=1
 speed=2
 force=5
@@ -6,7 +8,6 @@ cmd2 = grind_spiral(10,50,3,{n},{speed},{force}
 
 move_joint(demo_safe)
 
-#Flat
 flat:
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)

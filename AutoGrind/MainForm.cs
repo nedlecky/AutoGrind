@@ -2290,7 +2290,7 @@ namespace AutoGrind
                     ExecError(string.Format("Linear move failed line {0}: {1}", lineNumber, origLine));
                 return true;
             }
-            
+
             // move_relative
             if (command.StartsWith("move_relative("))
             {
@@ -3655,12 +3655,19 @@ namespace AutoGrind
 
             ToolsGrd.DataSource = tools;
         }
-        private void RefreshMountedToolBox()
+        private void RefreshMountedToolBox(int currentToolIndex = -1)
         {
+            log.Info("RefreshMountedToolBox({0})", currentToolIndex);
             MountedToolBox.Items.Clear();
             foreach (DataRow row in tools.Rows)
             {
                 MountedToolBox.Items.Add(row["Name"]);
+            }
+
+            if (currentToolIndex>=0)
+            {
+                log.Info("Selecting {0}", currentToolIndex);
+                MountedToolBox.SelectedIndex = currentToolIndex;
             }
         }
 
@@ -3693,7 +3700,7 @@ namespace AutoGrind
             log.Info("SaveTools to {0}", filename);
             tools.AcceptChanges();
             tools.WriteXml(filename, XmlWriteMode.WriteSchema, true);
-            RefreshMountedToolBox();
+            RefreshMountedToolBox(MountedToolBox.SelectedIndex);
         }
 
         private void CreateDefaultTools()
