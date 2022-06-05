@@ -1,0 +1,6 @@
+size = 20
+speed = 10
+force = 5
+
+#move_linear(demo_flat)
+grind_rect({size},{size},1,{speed},{force},0)

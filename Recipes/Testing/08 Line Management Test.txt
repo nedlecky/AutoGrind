@@ -1,11 +1,8 @@
 # 08 Line Management Test
 # BE CAREFUL: Robot will move and positions are expected to be OK
 
-# Line 3
-sleep(1)
-
-diameter = 20
-speed = 20
+diameter = 40
+speed = 5
 force = 10
 n_cycles = 2
 

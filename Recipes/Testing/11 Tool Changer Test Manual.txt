@@ -2,30 +2,30 @@
 # BE CAREFUL: Robot will move and positions are expected to be OK
 
 # Test case assumed initial conditions
-select_tool(2F85)
-move_linear(demo_sphere)
+select_tool(pen)
+move_linear(demo_flat)
 save_position(start)
 
-# Swap from 2F85 to vertest
-move_linear(2F85_home)
-move_joint(2F85_mount)
-prompt(Please remove tool=2F85)
+# Swap from pen to sander
+move_linear(spindle_home)
+move_joint(spindle_mount)
+prompt(Please remove tool={robot_tool})
 
-move_joint(vertest_mount)
-prompt(Please mount tool=vertest)
-select_tool(vertest)
-move_joint(vertest_home)
+move_joint(sander_mount)
+select_tool(sander)
+prompt(Please mount tool={robot_tool})
+move_joint(sander_home)
 
 move_linear(start)
 
-# Swap from vertest to 2F85
-move_linear(vertest_home)
-move_joint(vertest_mount)
-prompt(Please remove tool=vertest)
+# Swap from sander to pen
+move_linear(sander_home)
+move_joint(sander_mount)
+prompt(Please remove tool={robot_tool})
 
-move_joint(2F85_mount)
-prompt(Please mount tool=2F85)
-select_tool(2F85)
-move_joint(2F85_home)
+move_joint(spindle_mount)
+select_tool(pen)
+prompt(Please mount tool={robot_tool})
+move_joint(spindle_home)
 
 move_linear(start)

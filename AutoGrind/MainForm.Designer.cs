@@ -141,6 +141,7 @@
             this.SetJointAccelBtn = new System.Windows.Forms.Button();
             this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
             this.GrindingMoveSetupGrp = new System.Windows.Forms.GroupBox();
+            this.SetPointFrequencyBtn = new System.Windows.Forms.Button();
             this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
             this.SetGrindAccelBtn = new System.Windows.Forms.Button();
             this.SetTrialSpeedBtn = new System.Windows.Forms.Button();
@@ -1414,11 +1415,11 @@
             // 
             // label19
             // 
-            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(793, 1098);
+            this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label19.Location = new System.Drawing.Point(820, 1122);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(167, 50);
+            this.label19.Size = new System.Drawing.Size(130, 36);
             this.label19.TabIndex = 160;
             this.label19.Text = "Software";
             this.label19.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1426,11 +1427,11 @@
             // RobotPolyscopeVersionLbl
             // 
             this.RobotPolyscopeVersionLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotPolyscopeVersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(964, 1098);
+            this.RobotPolyscopeVersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(954, 1122);
             this.RobotPolyscopeVersionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotPolyscopeVersionLbl.Name = "RobotPolyscopeVersionLbl";
-            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(558, 50);
+            this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(718, 36);
             this.RobotPolyscopeVersionLbl.TabIndex = 159;
             this.RobotPolyscopeVersionLbl.Text = "PolyScope";
             this.RobotPolyscopeVersionLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -1438,22 +1439,22 @@
             // RobotSerialNumberLbl
             // 
             this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotSerialNumberLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(505, 1098);
+            this.RobotSerialNumberLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(495, 1122);
             this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
-            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 50);
+            this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 36);
             this.RobotSerialNumberLbl.TabIndex = 157;
             this.RobotSerialNumberLbl.Text = "Serial Number";
             this.RobotSerialNumberLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label8
             // 
-            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(420, 1098);
+            this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label8.Location = new System.Drawing.Point(427, 1122);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(81, 50);
+            this.label8.Size = new System.Drawing.Size(64, 36);
             this.label8.TabIndex = 158;
             this.label8.Text = "S/N";
             this.label8.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1461,22 +1462,22 @@
             // RobotModelLbl
             // 
             this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.RobotModelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotModelLbl.Location = new System.Drawing.Point(233, 1098);
+            this.RobotModelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.RobotModelLbl.Location = new System.Drawing.Point(223, 1122);
             this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotModelLbl.Name = "RobotModelLbl";
-            this.RobotModelLbl.Size = new System.Drawing.Size(157, 50);
+            this.RobotModelLbl.Size = new System.Drawing.Size(157, 36);
             this.RobotModelLbl.TabIndex = 153;
             this.RobotModelLbl.Text = "Model";
             this.RobotModelLbl.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label7
             // 
-            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(19, 1098);
+            this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label7.Location = new System.Drawing.Point(45, 1122);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(210, 50);
+            this.label7.Size = new System.Drawing.Size(174, 36);
             this.label7.TabIndex = 154;
             this.label7.Text = "Robot Model";
             this.label7.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
@@ -1576,6 +1577,7 @@
             // 
             // GrindingMoveSetupGrp
             // 
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetPointFrequencyBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindDefaultsBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindAccelBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTrialSpeedBtn);
@@ -1586,10 +1588,23 @@
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchRetractBtn);
             this.GrindingMoveSetupGrp.Location = new System.Drawing.Point(3, 836);
             this.GrindingMoveSetupGrp.Name = "GrindingMoveSetupGrp";
-            this.GrindingMoveSetupGrp.Size = new System.Drawing.Size(2106, 234);
+            this.GrindingMoveSetupGrp.Size = new System.Drawing.Size(2106, 283);
             this.GrindingMoveSetupGrp.TabIndex = 117;
             this.GrindingMoveSetupGrp.TabStop = false;
             this.GrindingMoveSetupGrp.Text = "Grinding Motion Parameters";
+            // 
+            // SetPointFrequencyBtn
+            // 
+            this.SetPointFrequencyBtn.BackColor = System.Drawing.Color.Green;
+            this.SetPointFrequencyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetPointFrequencyBtn.ForeColor = System.Drawing.Color.White;
+            this.SetPointFrequencyBtn.Location = new System.Drawing.Point(15, 174);
+            this.SetPointFrequencyBtn.Name = "SetPointFrequencyBtn";
+            this.SetPointFrequencyBtn.Size = new System.Drawing.Size(503, 103);
+            this.SetPointFrequencyBtn.TabIndex = 122;
+            this.SetPointFrequencyBtn.Text = "Set Point Frequency";
+            this.SetPointFrequencyBtn.UseVisualStyleBackColor = false;
+            this.SetPointFrequencyBtn.Click += new System.EventHandler(this.SetPointFrequencyBtn_Click);
             // 
             // SetGrindDefaultsBtn
             // 
@@ -1609,7 +1624,7 @@
             this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Green;
             this.SetGrindAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetGrindAccelBtn.ForeColor = System.Drawing.Color.White;
-            this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 56);
+            this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 38);
             this.SetGrindAccelBtn.Name = "SetGrindAccelBtn";
             this.SetGrindAccelBtn.Size = new System.Drawing.Size(243, 130);
             this.SetGrindAccelBtn.TabIndex = 120;
@@ -1622,7 +1637,7 @@
             this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetTrialSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTrialSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 56);
+            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 38);
             this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
             this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTrialSpeedBtn.TabIndex = 119;
@@ -1635,7 +1650,7 @@
             this.SetMaxGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
             this.SetMaxGrindBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetMaxGrindBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
-            this.SetMaxGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 56);
+            this.SetMaxGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 38);
             this.SetMaxGrindBlendRadiusBtn.Name = "SetMaxGrindBlendRadiusBtn";
             this.SetMaxGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxGrindBlendRadiusBtn.TabIndex = 118;
@@ -1648,7 +1663,7 @@
             this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Green;
             this.SetMaxWaitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetMaxWaitBtn.ForeColor = System.Drawing.Color.White;
-            this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 56);
+            this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 38);
             this.SetMaxWaitBtn.Name = "SetMaxWaitBtn";
             this.SetMaxWaitBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxWaitBtn.TabIndex = 117;
@@ -1661,7 +1676,7 @@
             this.SetForceDwellBtn.BackColor = System.Drawing.Color.Green;
             this.SetForceDwellBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetForceDwellBtn.ForeColor = System.Drawing.Color.White;
-            this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 56);
+            this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 38);
             this.SetForceDwellBtn.Name = "SetForceDwellBtn";
             this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
             this.SetForceDwellBtn.TabIndex = 116;
@@ -1674,7 +1689,7 @@
             this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetTouchSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTouchSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 56);
+            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 38);
             this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
             this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchSpeedBtn.TabIndex = 115;
@@ -1687,7 +1702,7 @@
             this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Green;
             this.SetTouchRetractBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTouchRetractBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 56);
+            this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 38);
             this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
             this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchRetractBtn.TabIndex = 114;
@@ -2513,6 +2528,7 @@
         private System.Windows.Forms.Label label7;
         private System.Windows.Forms.Label label19;
         private System.Windows.Forms.Label Time2Lbl;
+        private System.Windows.Forms.Button SetPointFrequencyBtn;
     }
 }
 

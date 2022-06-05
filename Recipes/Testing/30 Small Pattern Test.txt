@@ -1,5 +1,6 @@
 # 30 Small Pattern Test
 
+move_linear(demo_safe)
 move_linear(demo_flat)
 speed = 20
 continue = 1

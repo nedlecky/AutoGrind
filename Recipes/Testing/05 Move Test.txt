@@ -15,20 +15,37 @@ assert(grind_trial_speed_mmps,18)
 grind_trial_speed({old_speed})
 assert(grind_trial_speed_mmps,{old_speed})
 
-select_tool(2F85)
-move_linear(demo_flat)
-move_linear(demo_flatt) # should fail
+select_tool(pen_SA)
+set_part_geometry(FLAT,0)
+move_linear(demo_safe)
+move_linear(demo_safee) # should fail
 
-move_joint(demo_cyl)
-move_joint(demo_cyll) # should fail
+move_joint(demo_flat)
+move_joint(demo_flatt) # should fail
 
 save_position(p1)
 save_position() # should fail
 move_linear(p1)
 
-move_relative(5,5)
-move_relative(0,-5)
-move_relative(-5,0)
+# Test move relative with different geometries
+dist = 25
+set_part_geometry(FLAT,0)
+move_relative(26,{dist}) # should fail
+move_relative({dist},{dist})
+move_relative({dist},-{dist})
+move_relative(-{dist},{dist})
+move_relative(-{dist},-{dist})
+set_part_geometry(CYLINDER,1000)
+move_relative({dist},{dist})
+move_relative({dist},-{dist})
+move_relative(-{dist},{dist})
+move_relative(-{dist},-{dist})
+set_part_geometry(SPHERE,1200)
+move_relative({dist},{dist})
+move_relative({dist},-{dist})
+move_relative(-{dist},{dist})
+move_relative(-{dist},-{dist})
+sleep(2)
 
 move_tool_home()
 move_tool_mount()

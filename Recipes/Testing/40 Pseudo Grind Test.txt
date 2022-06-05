@@ -8,10 +8,13 @@ count=3
 speed=5
 force=10
 
+move_linear(demo_safe)
 select_tool(2F85)
+move_tool_home()
 cycleCount=0
 
 redo:
+move_linear(demo_safe)
 move_linear(demo_flat)
 
 set_part_geometry(FLAT,0)

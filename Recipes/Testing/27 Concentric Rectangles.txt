@@ -1,5 +1,7 @@
 # 27 Concentric Rectangles
+# BE CAREFUL: Robot will move and positions are expected to be OK
 
+move_linear(demo_safe)
 move_linear(demo_flat)
 
 # Old school

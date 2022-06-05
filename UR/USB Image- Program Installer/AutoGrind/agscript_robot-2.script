@@ -608,7 +608,8 @@ imover_MOVEL = 2
 imover_MOVEJ = 3
 imover_STOPL = 4
 imover_STARTFORCE = 5
-imover_ENDFORCE = 6
+imover_UPDATEFORCE = 6
+imover_ENDFORCE = 7
 
 def imover_wait(terminate_not_ok = False):
   while imover_cmd > 0:
@@ -623,7 +624,7 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False):
   imover_wait()
   global imover_param1 = param1
   global imover_param2 = param2
-  
+
   local i = 9
   while i > 0:
     imover_cmd_hist[i] = imover_cmd_hist[i - 1]
@@ -631,7 +632,7 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False):
   end
   imover_cmd_hist[0] = cmd
   global imover_cmd = cmd
-  
+
   imover_wait(terminate_not_ok)
 end
 
@@ -652,18 +653,31 @@ def istopl(a, aRot = 999):
   end
 end
 
-def iforce_mode(approach_speed_mmps):
+def iforce_mode(force_n, approach_speed_mmps):
   if imover_enable:
-    imover_cmd_exec(imover_STARTFORCE, approach_speed_mmps)
+    imover_cmd_exec(imover_STARTFORCE, force_n, approach_speed_mmps)
   else:
     sleep(0.1)
     zero_ftsensor()
     # Force is in tool frame
     # Compliant in Tool Z
-    # Applying grind_force_N in Z+
+    # Applying grind_force_n in Z+
     # 2: Force frame not transformed
     # Speed limits
-    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+  end
+end
+
+def iforce_update(force_n = 5, approach_speed_mmps = 10):
+  if imover_enable:
+    imover_cmd_exec(imover_UPDATEFORCE, force_n, approach_speed_mmps)
+  else:
+    # Force is in tool frame
+    # Compliant in Tool Z
+    # Applying grind_force_n in Z+
+    # 2: Force frame not transformed
+    # Speed limits
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   end
 end
 
@@ -743,10 +757,19 @@ thread imover_thread():
       zero_ftsensor()
       # Force is in tool frame
       # Compliant in Tool Z
-      # Applying grind_force_N in Z+
+      # Applying grind_force_n in Z+
       # 2: Force frame not transformed
       # Speed limits
-      force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, grind_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, imover_param1 / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+      force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, imover_param1, 0.0, 0.0, 0.0], 2, [0.1, 0.1, imover_param2 / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+      global imover_cmd = 0
+    elif imover_cmd == imover_UPDATEFORCE:
+      # Update force
+      # Force is in tool frame
+      # Compliant in Tool Z
+      # Applying grind_force_n in Z+
+      # 2: Force frame not transformed
+      # Speed limits
+      force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, imover_param1, 0.0, 0.0, 0.0], 2, [0.1, 0.1, imover_param2 / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
       global imover_cmd = 0
     elif imover_cmd == imover_ENDFORCE:
       end_force_mode()

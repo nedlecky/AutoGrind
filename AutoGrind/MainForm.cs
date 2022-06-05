@@ -438,6 +438,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_ms", "1500")));
                         ExecuteLine(-1, string.Format("grind_max_blend_radius({0})", ReadVariable("grind_max_blend_radius_mm", "4")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
+                        ExecuteLine(-1, string.Format("grind_point_frequency({0})", ReadVariable("grind_point_frequency_hz", "4")));
                         ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
@@ -2040,6 +2041,7 @@ namespace AutoGrind
             {"grind_max_blend_radius",  new CommandSpec(){nParams=1,  prefix="35,6," } },
             {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="35,7," } },
             {"grind_accel",             new CommandSpec(){nParams=1,  prefix="35,8," } },
+            {"grind_point_frequency",   new CommandSpec(){nParams=1,  prefix="35,9," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
@@ -2134,11 +2136,26 @@ namespace AutoGrind
                 return true;
             }
 
+            // end
+            if (command == "end()" || command == "end")
+            {
+                LogInterpret("end", lineNumber, origLine);
+                return false;
+            }
+
             // clear
             if (command == "clear()" || command == "clear")
             {
                 LogInterpret("clear", lineNumber, command);
                 ClearVariablesBtn_Click(null, null);
+                return true;
+            }
+
+            // All other commands are assignment or end with )
+            int parenIndex = command.IndexOf(')');
+            if (parenIndex >= 0 && parenIndex != command.Length - 1)
+            {
+                ExecError(string.Format("Illegal line {0}\nContains characters after ')'\n{1}", lineNumber, command));
                 return true;
             }
 
@@ -2150,10 +2167,10 @@ namespace AutoGrind
                 if (file.Length > 1)
                 {
                     if (!ImportFile(file))
-                        ExecError(string.Format("File import error: {0} file would not import", command));
+                        ExecError(string.Format("File import error\nLine {0}: {1}\nFile would not import", lineNumber, command));
                 }
                 else
-                    ExecError(String.Format("Invalid import command: {0}", command));
+                    ExecError(String.Format("Invalid import command\nLine {0}: {1}", lineNumber, command));
 
                 return true;
             }
@@ -2184,18 +2201,18 @@ namespace AutoGrind
                 string[] parameters = ExtractParameters(command, 2).Split(',');
                 if (parameters.Length != 2)
                 {
-                    ExecError(String.Format("Unknown assert command Line {0}: {1}", lineNumber, origLine));
+                    ExecError(String.Format("Unknown assert command\nLine {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 string value = ReadVariable(parameters[0], null);
                 if (value == null)
                 {
-                    ExecError(String.Format("Unknown variable in assert command Line {0}: {1}", lineNumber, origLine));
+                    ExecError(String.Format("Unknown variable in assert command\nLine {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 if (value != parameters[1])
                 {
-                    ExecError(String.Format("Assertion FAILS Line {0}: {1}", lineNumber, origLine));
+                    ExecError(String.Format("Assertion FAILS\nLine {0}: {1}", lineNumber, origLine));
                     return true;
                 }
                 return true;
@@ -2214,7 +2231,7 @@ namespace AutoGrind
                 }
                 else
                 {
-                    ExecError(String.Format("Unknown label specified in jump Line {0}: {1}", lineNumber, origLine));
+                    ExecError(String.Format("Unknown label specified in jump\nLine {0}: {1}", lineNumber, origLine));
                     return true;
                 }
             }
@@ -2235,7 +2252,7 @@ namespace AutoGrind
 
                     if (!labels.TryGetValue(labelName, out int jumpLine))
                     {
-                        ExecError(String.Format("Expected jump_gt_zero(variable,label): {0} Label not found: {1}", origLine, labelName));
+                        ExecError(String.Format("Expected jump_gt_zero(variable,label)\nLine {0} Label not found: {1}", origLine, labelName));
                         return true;
                     }
                     else
@@ -2243,7 +2260,7 @@ namespace AutoGrind
                         string value = ReadVariable(variableName);
                         if (value == null)
                         {
-                            ExecError(String.Format("Expected jump_gt_zero(variable,label): {0} Variable not found: {1}", origLine, variableName));
+                            ExecError(String.Format("Expected jump_gt_zero(variable,label)\nLine {0} Variable not found: {1}", origLine, variableName));
                             return true;
                         }
                         else
@@ -2253,14 +2270,14 @@ namespace AutoGrind
                                 double val = Convert.ToDouble(value);
                                 if (val > 0.0)
                                 {
-                                    log.Info("EXEC {0:0000}: [JUMPGTZERO] {1} --> {2:0000}", lineNumber, origLine, jumpLine);
+                                    log.Info("EXEC {0:0000}: [JUMPGTZERO] Line {1} --> {2:0000}", lineNumber, origLine, jumpLine);
                                     SetCurrentLine(jumpLine);
                                 }
                                 return true;
                             }
                             catch
                             {
-                                ExecError(String.Format("Could not convert jump_not_zero variable: {0} = {1} From: {2}", variableName, value, command));
+                                ExecError(String.Format("Could not convert jump_not_zero variable\n{0} = {1} From: {2}", variableName, value, command));
                                 return true;
                             }
                         }
@@ -2276,7 +2293,7 @@ namespace AutoGrind
                 string positionName = ExtractParameters(command);
 
                 if (!GotoPositionJoint(positionName))
-                    ExecError(string.Format("Joint move failed line {0}: {1}", lineNumber, origLine));
+                    ExecError(string.Format("Joint move failed\nLine {0}: {1}", lineNumber, origLine));
                 return true;
             }
 
@@ -2287,7 +2304,7 @@ namespace AutoGrind
                 string positionName = ExtractParameters(command);
 
                 if (!GotoPositionPose(positionName))
-                    ExecError(string.Format("Linear move failed line {0}: {1}", lineNumber, origLine));
+                    ExecError(string.Format("Linear move failed\nLine {0}: {1}", lineNumber, origLine));
                 return true;
             }
 
@@ -2303,11 +2320,12 @@ namespace AutoGrind
                 {
                     try
                     {
+                        double max_allowable_relative_move_m = 0.025;
                         string[] p = xy.Split(',');
                         double x = Convert.ToDouble(p[0]) / 1000.0;
                         double y = Convert.ToDouble(p[1]) / 1000.0;
-                        if (Math.Abs(x) > 0.010 || Math.Abs(y) > 0.010)
-                            ExecError(string.Format("X and Y must be no more than +/10mm\nline {0}: {1}", lineNumber, origLine));
+                        if (Math.Abs(x) > max_allowable_relative_move_m || Math.Abs(y) > max_allowable_relative_move_m)
+                            ExecError(string.Format("X and Y must be no more than +/{0}mm\nline {1}: {2}", max_allowable_relative_move_m * 1000.0, lineNumber, origLine));
                         else
                             // This is a move relative to part
                             switch (PartGeometryBox.Text)
@@ -2368,13 +2386,6 @@ namespace AutoGrind
                 LogInterpret("move_tool_mount", lineNumber, origLine);
                 MoveToolMountBtn_Click(null, null);
                 return true;
-            }
-
-            // end
-            if (command == "end()" || command == "end")
-            {
-                LogInterpret("end", lineNumber, origLine);
-                return false;
             }
 
             // select_tool  (Assumes operator has already installed it somehow!!)
@@ -3010,7 +3021,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("grind_trial_speed_mmps"),
                 Label = "Grind TRIAL SPEED, mm/s",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 1,
                 MaxAllowed = 200
             };
@@ -3020,6 +3031,22 @@ namespace AutoGrind
                 ExecuteLine(-1, String.Format("grind_trial_speed({0})", form.Value));
             }
         }
+        private void SetPointFrequencyBtn_Click(object sender, EventArgs e)
+        {
+            SetValueForm form = new SetValueForm()
+            {
+                Value = ReadVariable("grind_point_frequency_hz"),
+                Label = "Grind POINT FREQUENCY, Hz",
+                NumberOfDecimals = 0,
+                MinAllowed = 0,
+                MaxAllowed = 10
+            };
+
+            if (form.ShowDialog(this) == DialogResult.OK)
+            {
+                ExecuteLine(-1, String.Format("grind_point_frequency({0})", form.Value));
+            }
+        }
 
         private void SetGrindAccelBtn_Click(object sender, EventArgs e)
         {
@@ -3027,7 +3054,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("grind_accel_mmpss"),
                 Label = "Grind ACCELERATION, mm/s^2",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 10,
                 MaxAllowed = 500
             };
@@ -3045,6 +3072,7 @@ namespace AutoGrind
 
             ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
             ExecuteLine(-1, String.Format("grind_accel({0})", 100));
+            ExecuteLine(-1, String.Format("grind_point_frequency({0})", 2));
             ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 1.5));
             ExecuteLine(-1, String.Format("grind_touch_speed({0})", 10));
             ExecuteLine(-1, String.Format("grind_touch_retract({0})", 3));
@@ -3320,6 +3348,9 @@ namespace AutoGrind
                     break;
                 case "grind_trial_speed_mmps":
                     SetTrialSpeedBtn.Text = "Grind Trial Speed\n" + valueTrimmed + " mm/s";
+                    break;
+                case "grind_point_frequency_hz":
+                    SetPointFrequencyBtn.Text = "Grind Point Frequency\n" + valueTrimmed + " Hz";
                     break;
                 case "grind_accel_mmpss":
                     SetGrindAccelBtn.Text = "Grind Acceleration\n" + valueTrimmed + " mm/s^2";
@@ -3664,7 +3695,7 @@ namespace AutoGrind
                 MountedToolBox.Items.Add(row["Name"]);
             }
 
-            if (currentToolIndex>=0)
+            if (currentToolIndex >= 0)
             {
                 log.Info("Selecting {0}", currentToolIndex);
                 MountedToolBox.SelectedIndex = currentToolIndex;

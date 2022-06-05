@@ -1,10 +1,9 @@
 # File: agscript_grind-2.script
-# Project: AutoGrind
+# Project: AutoGrind Code Rev 2 IMOVER
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
 
-global grind_version = "Rev 2 2022-06-02"
-
+global grind_version = "Rev 2 2022-06-06"
 
 global grind_abort_listener_thread_handle = 0
 global pattern_grind_thread_handle = 0
@@ -19,8 +18,10 @@ global grind_touch_retract_mm = 3       # How far to retract after touch  (we do
 global grind_touch_speed_mmps = 0.1     # How fast to go in for the touch
 global grind_force_dwell_ms = 500       # How long to dwell after turning force more on
 global grind_max_blend_radius_m = 0.010 # Max blend radius to use while grinding
+global grind_blend_radius_m = 0.001     # Current blend radius to use while grinding
 global grind_trial_speed_mmps = 20      # Grinding speed when not really grinding!
 global grind_accel_mmpss = 100          # Acceleration to use in grinding moves
+global grind_point_frequency_hz = 4     # Points per second to generate in grind_movel
 
 # Planning points
 global p_operator_init = p[0, 0, 0, 0, 0, 0]    # Where we were when operator issued first grind command
@@ -47,8 +48,14 @@ def speed_setter(speed_mmps, min_feature_mm):
   # Figure out best blend radius to use
   global grind_min_feature_m = min_feature_mm / 1000.0
   global grind_blend_radius_m = min(grind_max_blend_radius_m, grind_min_feature_m / 4)
-  if grind_blend_radius_m < 0.0015:
-    grind_blend_radius_m = 0
+  if is_circle:
+    if grind_blend_radius_m < 0.0015:
+      grind_blend_radius_m = 0.002
+    end
+  else:
+    if grind_blend_radius_m < 0.0015:
+      grind_blend_radius_m = 0
+    end
   end
 
   if grind_contact_enable == 2:
@@ -82,37 +89,38 @@ def set_grind_variable():
   if command[2] == 1:
     global response = "set grind_contact_enable"
     if command[3] >= 0 and command[3] <= 2:
-      global grind_contact_enable = command[3]
+      global grind_contact_enable = ceil(command[3])
     end
     socket_set_var("grind_contact_enable", grind_contact_enable)
   elif command[2] == 2:
     global response = "set grind_touch_retract_mm"
     if command[3] >= 0:
-      global grind_touch_retract_mm = command[3]
+      global grind_touch_retract_mm = ceil(command[3])
     end
     socket_set_var("grind_touch_retract_mm", grind_touch_retract_mm)
   elif command[2] == 3:
     global response = "set grind_touch_speed_mmps"
     if command[3] >= 0:
-      global grind_touch_speed_mmps = command[3]
+      global grind_touch_speed_mmps = ceil(command[3])
     end
     socket_set_var("grind_touch_speed_mmps", grind_touch_speed_mmps)
   elif command[2] == 4:
     global response = "set grind_force_dwell_ms"
     if command[3] >= 0:
-      global grind_force_dwell_ms = command[3]
+      global grind_force_dwell_ms = ceil(command[3])
     end
     socket_set_var("grind_force_dwell_ms", grind_force_dwell_ms)
   elif command[2] == 5:
     global response = "set grind_max_wait_ms"
     if command[3] >= 0:
-      global grind_max_wait_ms = command[3]
+      global grind_max_wait_ms = ceil(command[3])
     end
     socket_set_var("grind_max_wait_ms", grind_max_wait_ms)
   elif command[2] == 6:
     global response = "set grind_max_blend_radius_mm"
     if command[3] >= 0:
       global grind_max_blend_radius_m = command[3] / 1000.0
+      global grind_blend_radius_m = grind_max_blend_radius_m
     end
     socket_send_string("grind_max_blend_radius_mm=")
     socket_send_string(grind_max_blend_radius_m * 1000.0)
@@ -120,15 +128,21 @@ def set_grind_variable():
   elif command[2] == 7:
     global response = "set grind_trial_speed_mmps"
     if command[3] > 0:
-      global grind_trial_speed_mmps = command[3]
+      global grind_trial_speed_mmps = ceil(command[3])
     end
     socket_set_var("grind_trial_speed_mmps", grind_trial_speed_mmps)
   elif command[2] == 8:
     global response = "set grind_accel_mmpss"
     if command[3] > 0:
-      global grind_accel_mmpss = command[3]
+      global grind_accel_mmpss = ceil(command[3])
     end
     socket_set_var("grind_accel_mmpss", grind_accel_mmpss)
+  elif command[2] == 9:
+    global response = "set grind_point_frequency_hz"
+    if command[3] >= 0:
+      global grind_point_frequency_hz = ceil(command[3])
+    end
+    socket_set_var("grind_point_frequency_hz", grind_point_frequency_hz)
   else:
     global response = "Unknown grind set variable command"
   end
@@ -152,21 +166,6 @@ def grind():
   global grind_cycle = 0
   socket_set_var("grind_cycle", grind_cycle)
 
-  # Defaults but any used should be set as needed below
-  #global grind_dx_mm = 0
-  #global grind_dy_mm = 0
-  #global grind_n_cycles = 0
-  #global grind_force_N = 10.0
-  #global grind_continue = False
-  #global grind_circle1_diam_mm = 0
-  #global grind_circle2_diam_mm = 0
-  #global grind_n_revolutions = 0
-  #global grind_n_xsteps = 1
-  #global grind_n_ysteps = 1
-  #global grind_xstep_mm = 0
-  #global grind_ystep_mm = 0
-  #speed_setter(20, 5)
-
   # Install tcp that puts tcp at center of part (noop for flat parts!)
   set_tcp(robot_tcp_part)
 
@@ -177,7 +176,7 @@ def grind():
     global grind_dy_mm = limiter(command[4], -1000, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6], 0)
-    global grind_force_N = limiter(command[7], 0, 100)
+    global grind_force_n = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
@@ -188,7 +187,7 @@ def grind():
     global grind_dy_mm = limiter(command[4], 0, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6], min(grind_dx_mm, grind_dy_mm))
-    global grind_force_N = limiter(command[7], 0, 100)
+    global grind_force_n = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
@@ -202,7 +201,7 @@ def grind():
     n_cycle_setter(command[7])
     local min_feature_mm = min(grind_dx_mm / grind_n_xsteps, grind_dy_mm / grind_n_ysteps)
     speed_setter(command[8], min_feature_mm)
-    global grind_force_N = limiter(command[9], 0, 10)
+    global grind_force_n = limiter(command[9], 0, 10)
     global grind_continue = command[10] > 0
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
@@ -212,8 +211,8 @@ def grind():
     global grind_circle1_diam_mm = limiter(command[3], 0, 1000)
     n_cycle_setter(command[4])
     local min_feature_mm = min(2, grind_circle1_diam_mm / 5)
-    speed_setter(command[5], min_feature_mm)
-    global grind_force_N = limiter(command[6], 0, 100)
+    speed_setter(command[5], min_feature_mm, is_circle = True)
+    global grind_force_n = limiter(command[6], 0, 100)
     global grind_continue = command[7] > 0
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
 
@@ -226,8 +225,8 @@ def grind():
     n_cycle_setter(command[6])
     local min_diam_mm = min(grind_circle1_diam_mm, grind_circle2_diam_mm)
     local min_feature_mm = min(2, min_diam_mm / 5)
-    speed_setter(command[7], min_feature_mm)
-    global grind_force_N = limiter(command[8], 0, 100)
+    speed_setter(command[7], min_feature_mm, is_circle = True)
+    global grind_force_n = limiter(command[8], 0, 100)
     global grind_continue = command[9] > 0
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_revolutions, grind_n_cycles, grind_continue)
 
@@ -330,14 +329,14 @@ def coolant_flow(on = False, enable = 0):
   return None
 end
 
-# Turn force mode on/pff if enable=2
-def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
+# Turn force mode on/off if enable=2
+def apply_force(on = False, enable = 0, force_n = 5, approach_speed_mmps = 10):
   if enable < 2:
     return None
   end
 
   if on:
-    iforce_mode(approach_speed_mmps)
+    iforce_mode(force_n, approach_speed_mmps)
     sleep(grind_force_dwell_ms / 1000.0)
   else:
     iend_force_mode()
@@ -347,11 +346,28 @@ def apply_force(on = False, enable = 0, approach_speed_mmps = 10):
   return None
 end
 
-# Start/Stop Grinding (on/off)
+# Update force applied only
+def update_force(on = False, enable = 0, force_n = 5, approach_speed_mmps = 10):
+  if enable < 2:
+    return None
+  end
+
+  if on:
+    iforce_update(force_n, approach_speed_mmps)
+  end
+
+  return None
+end
+
+# Start/Stop Grinding
 # Pose to center is the offset we should move to initial touch point [0]=FLAT [1]=CYLINDER [2]=SPHERE
 global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
-  if on and not grind_process_state:
+  if on and grind_process_state:
+    # Continuing a grind...
+    update_force(True, grind_contact_enable, grind_force_n, grind_touch_speed_mmps)
+  elif on and not grind_process_state:
+    # Need to start the grind
     global p_operator_init = get_actual_tcp_pose()
 
     # Move to start position for touchoff
@@ -385,9 +401,10 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     # Now power everything on (although these will do nothing unless conact_enable==2)
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
-    apply_force(True, grind_contact_enable, grind_touch_speed_mmps)
+    apply_force(True, grind_contact_enable, grind_force_n, grind_touch_speed_mmps)
     global grind_process_state = True
   elif not on and grind_process_state:
+    # Need to stop the grind
     # Shut everything down and return to original pose
     apply_force(False, grind_contact_enable, 0)
     contact_part(False, grind_contact_enable)
@@ -728,15 +745,19 @@ def grind_movel(dp, a, v, t, r):
     i = i + 1
   end
 
-  local n = 1
+  global grind_movel_n = 1
+  # Compute number of points we need to hit grind_point_frequency_hz
   if t > 0:
-    n = ceil(t * 2.0) # number of segments to use; 2 per second ==> can stop within 0.5s
+    grind_movel_n = ceil(t * grind_point_frequency_hz)
+    if grind_movel_n < 1:
+      global grind_movel_n = 1
+    end
   end
 
   local i = 1
-  while i <= n:
+  while i <= grind_movel_n:
     local dp = grind_movel_dp1
-    local scale = i / n
+    local scale = i / grind_movel_n
     local j = 0
     while j <= 5:
       dp[j] = grind_movel_dp1[j] + ddp[j] * scale
@@ -1271,23 +1292,18 @@ end
 #
 
 # What is a good number of points to use for a circular pattern?
-def recommend_npoints(diam_m, blend_radius_m):
+def recommend_npoints(diam_m, speed_mps):
   circum_m = diam_m * MATH_PI
-  if blend_radius_m > 0:
-    # How many blend_radii to cover the circumference
-    n_points = ceil(circum_m / blend_radius_m)
-  else:
-    # Blend radius is 0... model would be 10 points for a 10mm diameter (1000 points for 1m diameter!)
-    n_points = ceil(diam_m * 1000.0)
-  end
-  return limiter(n_points, 1, 1000)
+  global grind_circle_n_points = ceil(circum_m / speed_mps * grind_point_frequency_hz)
+  grind_circle_n_points = limiter(grind_circle_n_points, 4, 1000)
+  return grind_circle_n_points
 end
 
 # Grind along a flat circle circle_diam_m. Repeat n_cycles times.
 def pattern_circle_flat(circle_diam_m, n_cycles):
 
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
   circle_radius_m = circle_diam_m / 2.0
 
   global grind_cycle = 1
@@ -1318,7 +1334,7 @@ end
 def pattern_circle_cylinder(circle_diam_m, cylinder_radius_m, n_cycles):
 
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
   circle_radius_m = circle_diam_m / 2.0
   speed_factor = 0.5 / (robot_part_geometry[1] / 1000.0)
 
@@ -1352,7 +1368,7 @@ end
 # Move along a spherical circle circle_diam_m on a sphere_diam_m object starting at the current tool position. Repeat n_cycles times.
 def pattern_circle_sphere(circle_diam_m, sphere_diam_m, n_cycles):
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
   circle_radius_m = circle_diam_m / 2.0
   sphere_radius_m = sphere_diam_m / 2.0
 
@@ -1391,7 +1407,7 @@ end
 def pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_revolutions, n_cycles):
   # Local calculations
   max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
   n_total_points = n_revolutions * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
@@ -1430,7 +1446,7 @@ end
 def pattern_spiral_cylinder(circle1_diam_m, circle2_diam_m, n_revolutions, cylinder_radius_m, n_cycles):
   # Local calculations
   max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
   n_total_points = n_revolutions * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
@@ -1474,7 +1490,7 @@ end
 def pattern_spiral_sphere(circle1_diam_m, circle2_diam_m, n_revolutions, sphere_diam_m, n_cycles):
   # Local calculations
   max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_blend_radius_m)
+  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
   n_total_points = n_revolutions * n_points
   circle1_radius_m = circle1_diam_m / 2.0
   circle2_radius_m = circle2_diam_m / 2.0
