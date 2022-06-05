@@ -99,7 +99,7 @@ def set_variable():
     # Set speed to s if s>0. Always returns current value
     s = command[3]
     if s > 0:
-      robot_linear_speed_mps = s / 1000.0
+      robot_linear_speed_mps = ceil(s) / 1000.0
     end
     socket_set_var("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
     global response = "set_linear_speed()"
@@ -107,7 +107,7 @@ def set_variable():
     # Set accel to a if a>0. Always returns current value
     a = command[3]
     if a > 0:
-      robot_linear_accel_mpss = a / 1000.0
+      robot_linear_accel_mpss = ceil(a) / 1000.0
     end
     socket_set_var("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
     global response = "set_linear_accel()"
@@ -117,13 +117,15 @@ def set_variable():
     if b >= 0:
       robot_blend_radius_m = b / 1000.0
     end
-    socket_set_var("robot_blend_radius_mm", robot_blend_radius_m * 1000.0)
+    socket_send_string("robot_blend_radius_mm=")
+    socket_send_string(robot_blend_radius_m * 1000.0)
+    socket_send_lf()
     global response = "set_blend_radius()"
   elif command[2] == 4:
     # Set joint speed to s if s>0. Always returns current value
     s = command[3]
     if s > 0:
-      robot_joint_speed_rps = d2r(s)
+      robot_joint_speed_rps = d2r(ceil(s))
     end
     socket_set_var("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
     global response = "set_joint_speed()"
@@ -131,7 +133,7 @@ def set_variable():
     # Set joint accel to a if a>0. Always returns current value
     a = command[3]
     if a > 0:
-      robot_joint_accel_rpss = d2r(a)
+      robot_joint_accel_rpss = d2r(ceil(a))
     end
     socket_set_var("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
     global response = "set_joint_accel()"
@@ -264,7 +266,6 @@ def set_variable():
       robot_footswitch_pressed_input[0] = command[3]
       robot_footswitch_pressed_input[1] = command[4]
     end
-
     socket_send_string("robot_footswitch_pressed_input=")
     return_vector(robot_footswitch_pressed_input, 2)
     socket_send_lf()

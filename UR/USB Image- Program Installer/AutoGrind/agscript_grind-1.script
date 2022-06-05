@@ -120,7 +120,6 @@ def set_grind_variable():
     global response = "set grind_max_blend_radius_mm"
     if command[3] >= 0:
       global grind_max_blend_radius_m = command[3] / 1000.0
-      global grind_blend_radius_m = grind_max_blend_radius_m
     end
     socket_send_string("grind_max_blend_radius_mm=")
     socket_send_string(grind_max_blend_radius_m * 1000.0)
@@ -337,8 +336,13 @@ def apply_force(on = False, enable = 0, force_n = 5, approach_speed_mmps = 10):
 
   if on:
     # Settle and zero the force/torque sensor
-    sleep(0.1)
+    sleep(0.25)
     zero_ftsensor()
+
+    # Using the defaults here
+    force_mode_set_damping(0)
+    force_mode_set_gain_scaling(1)
+
     # Force is in tool frame
     # Compliant in Tool Z
     # Applying grind_force_n in Z+
@@ -438,11 +442,18 @@ end
 ######################################################################################
 # Thread to listen for abort messages while grinding
 #
+global grind_force_report_counter = 0
+global grind_force_report = p[0, 0, 0, 0, 0, 0]
+global grind_force_report_z_n = 0
 thread grind_abort_listener_thread():
   global halt_command = [0, 0, 0, 0]
   global halt_count = 0
+  global grind_force_report_counter = 0
+  global grind_zforce_n = 0
+
   while (halt_count == 0):
-    global halt_command = socket_read_ascii_float(3, timeout = 0.1)
+    # Commands should never arrive, so this will block us for 0.2s
+    global halt_command = socket_read_ascii_float(3, timeout = 0.2)
 
     # If door is open, that adds a halt count (anything >0 will stop us!)
     if not is_door_closed():
@@ -463,7 +474,17 @@ thread grind_abort_listener_thread():
         socket_set_var("robot_completed", test_index)
       end
     end
-    sync()
+
+    # Report force periodcally
+    grind_force_report_counter = grind_force_report_counter + 1
+    if grind_force_report_counter >= 5:
+      global grind_force_report = get_tcp_force()
+      global grind_force_report_z_n = grind_force_report[2]
+      socket_send_string("grind_force_report_z_n=")
+      socket_send_string(grind_force_report_z_n)
+      socket_send_lf()
+      grind_force_report_counter = 0
+    end
   end
   return None
 end

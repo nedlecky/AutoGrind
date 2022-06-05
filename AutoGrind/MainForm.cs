@@ -408,7 +408,7 @@ namespace AutoGrind
                     }
                 }
 
-            // When the robot connects, get us ready to go!  Or, if it dosconnects, put us in WAIT
+            // When the robot connects, get us ready to go!  Or, if it disconnects, put us in WAIT
             bool newRobotReady = false;
             if (robotCommandServer == null)
                 robotReady = false;
@@ -1130,7 +1130,7 @@ namespace AutoGrind
             {
                 robotDashboardClient?.Send("play");
                 // If we're starting back in the middle of something, this will abort it
-                RobotSend("10");
+                //RobotSend("10");
             }
         }
 
@@ -1189,16 +1189,12 @@ namespace AutoGrind
 
         private void GrindContactEnabledBtn_Click(object sender, EventArgs e)
         {
-            if (robotCommandServer != null)
-                if (robotCommandServer.IsConnected())
-                {
-                    string var = ReadVariable("grind_contact_enable", "0");
-                    // Increment current setting to cycle through 0, 1, 2
-                    int val = Convert.ToInt32(var);
-                    val++;
-                    val %= 3;
-                    RobotSend(String.Format("35,1,{0}", val));
-                }
+            string var = ReadVariable("grind_contact_enable", "0");
+            // Increment current setting to cycle through 0, 1, 2
+            int val = Convert.ToInt32(var);
+            val++;
+            val %= 3;
+            RobotSend(String.Format("35,1,{0}", val));
         }
 
         private bool PrepareToRun()
@@ -1231,20 +1227,32 @@ namespace AutoGrind
             return goodLabels;
         }
 
+        private bool OkToRun()
+        {
+            if (!ProgramStateBtn.Text.StartsWith("PLAYING"))
+            {
+                ErrorMessageBox("Cannot run. Program not running!");
+                return false;
+            }
+
+            if (ReadVariable("robot_door_closed", "0") != "1")
+            {
+                ErrorMessageBox("Cannot run. Door Open!");
+                return false;
+            }
+            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
+            {
+                ErrorMessageBox("Cannot run. Footswitch Pressed!");
+                return false;
+            }
+
+            return true;
+        }
         private void StartBtn_Click(object sender, EventArgs e)
         {
             log.Info("StartBtn_Click(...)");
 
-            if (ReadVariable("robot_door_closed", "0") != "1")
-            {
-                ErrorMessageBox("Cannot Start. Door Open!");
-                return;
-            }
-            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
-            {
-                ErrorMessageBox("Cannot Start. Footswitch Pressed!");
-                return;
-            }
+            if (!OkToRun()) return;
 
             if (PrepareToRun())
             {
@@ -1267,16 +1275,7 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     // Perform CONTINUE function
-                    if (ReadVariable("robot_door_closed", "0") != "1")
-                    {
-                        ErrorMessageBox("Cannot Continue. Door Open!");
-                        return;
-                    }
-                    if (ReadVariable("robot_footswitch_pressed", "0") == "1")
-                    {
-                        ErrorMessageBox("Cannot Continue. Footswitch Pressed!");
-                        return;
-                    }
+                    if (!OkToRun()) return;
 
                     MessageDialog messageForm = new MessageDialog()
                     {
@@ -1296,16 +1295,7 @@ namespace AutoGrind
         private void StepBtn_Click(object sender, EventArgs e)
         {
             log.Info("StepBtn_Click(...) STATE IS {0}", runState);
-            if (ReadVariable("robot_door_closed", "0") != "1")
-            {
-                ErrorMessageBox("Cannot Step. Door Open!");
-                return;
-            }
-            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
-            {
-                ErrorMessageBox("Cannot Step. Footswitch Pressed!");
-                return;
-            }
+            if (!OkToRun()) return;
 
             switch (runState)
             {
@@ -2689,6 +2679,9 @@ namespace AutoGrind
             RobotModeBtn.BackColor = Color.Red;
             SafetyStatusBtn.BackColor = Color.Red;
             ProgramStateBtn.BackColor = Color.Red;
+            RobotModeBtn.Text = "";
+            SafetyStatusBtn.Text = "";
+            ProgramStateBtn.Text = "";
         }
         private void CloseCommandServer()
         {
@@ -2702,7 +2695,7 @@ namespace AutoGrind
             {
                 if (robotCommandServer.IsConnected())
                 {
-                    RobotSend("98");
+                    if(ProgramStateBtn.Text.StartsWith("PLAYING")) RobotSend("98");
                     robotCommandServer.Disconnect();
                 }
                 robotCommandServer = null;
@@ -2816,26 +2809,37 @@ namespace AutoGrind
         // We send (index,x,y,z)
         public bool RobotSend(string command)
         {
-            if (robotCommandServer != null)
-                if (robotCommandServer.IsConnected())
-                {
-                    ++robotSendIndex;
-                    if (robotSendIndex > 999) robotSendIndex = 100;
-                    try  // This fails if the jog thread is calling it!
-                    {
-                        RobotSentLbl.Text = robotSendIndex.ToString();
-                        RobotSentLbl.Refresh();
-                        RobotCompletedLbl.BackColor = Color.Red;
-                        RobotCompletedLbl.Refresh();
-                    }
-                    catch { }
+            if (robotCommandServer == null)
+            {
+                ErrorMessageBox(String.Format("RobotSend({0}) failed. robotCommandServer is null.", command));
+                return false;
+            }
+            if (!robotCommandServer.IsConnected())
+            {
+                ErrorMessageBox(String.Format("RobotSend({0}) failed. robotCommandServer is not connected.", command));
+                return false;
+            }
+            if (!ProgramStateBtn.Text.StartsWith("PLAYING"))
+            {
+                ErrorMessageBox(String.Format("RobotSend({0}) failed. Program not running.", command));
+                return false;
+            }
 
-                    int checkValue = 1000 - robotSendIndex;
-                    string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
-                    robotCommandServer.Send(sendMessage);
-                    return true;
-                }
-            return false;
+            ++robotSendIndex;
+            if (robotSendIndex > 999) robotSendIndex = 100;
+            try  // This fails if the jog thread is calling it!
+            {
+                RobotSentLbl.Text = robotSendIndex.ToString();
+                RobotSentLbl.Refresh();
+                RobotCompletedLbl.BackColor = Color.Red;
+                RobotCompletedLbl.Refresh();
+            }
+            catch { }
+
+            int checkValue = 1000 - robotSendIndex;
+            string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
+            robotCommandServer.Send(sendMessage);
+            return true;
         }
         private void SetLinearSpeedBtn_Click(object sender, EventArgs e)
         {
@@ -2843,7 +2847,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("robot_linear_speed_mmps"),
                 Label = "default Robot LINEAR SPEED, mm/s",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 10,
                 MaxAllowed = 500
             };
@@ -2860,7 +2864,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("robot_linear_accel_mmpss"),
                 Label = "default Robot LINEAR ACCELERATION, mm/s^2",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 10,
                 MaxAllowed = 2000
             };
@@ -2893,7 +2897,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("robot_joint_speed_dps"),
                 Label = "default Robot JOINT SPEED, deg/s",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 2,
                 MaxAllowed = 45
             };
@@ -2910,7 +2914,7 @@ namespace AutoGrind
             {
                 Value = ReadVariable("robot_joint_accel_dpss"),
                 Label = "default Robot JOINT ACCELERATION, deg/s^2",
-                NumberOfDecimals = 1,
+                NumberOfDecimals = 0,
                 MinAllowed = 2,
                 MaxAllowed = 180
             };
@@ -3261,6 +3265,9 @@ namespace AutoGrind
                 case "grind_cycle":
                     if (valueTrimmed == "0") valueTrimmed = "-";  // Gets set to 0 initially, will go to 1 when 1st actual cycle starts
                     GrindCycleLbl.Text = valueTrimmed;
+                    break;
+                case "grind_force_report_z_n":
+                    GrindForceReportZLbl.Text = valueTrimmed;
                     break;
                 case "robot_linear_speed_mmps":
                     SetLinearSpeedBtn.Text = "Linear Speed\n" + valueTrimmed + " mm/s";

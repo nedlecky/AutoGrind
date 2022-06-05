@@ -6,7 +6,7 @@ size1=40
 size2=10
 count=3
 speed=5
-force=10
+force=7
 
 move_linear(demo_safe)
 select_tool(2F85)
@@ -15,7 +15,7 @@ cycleCount=0
 
 redo:
 move_linear(demo_safe)
-move_linear(demo_flat)
+move_linear(demo_flat2)
 
 set_part_geometry(FLAT,0)
 grind_line({size1},{size2},{count},{speed},{force},1)
