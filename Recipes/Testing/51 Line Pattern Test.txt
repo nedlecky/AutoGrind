@@ -1,6 +1,6 @@
 # 51 Line Pattern Test
 
-count=1
+count=2
 speed = 10
 force=5
 
@@ -34,7 +34,7 @@ set_part_geometry(FLAT,0)
 {cmd4a},1)
 {cmd5},1)
 {cmd6},1)
-
+end
 move_linear(demo_safe)
 
 cylinder:

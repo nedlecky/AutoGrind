@@ -759,7 +759,7 @@ def grind_movel_finish():
 end
 
 # Next waypoint in the polygon
-def grind_movel(dp, a, v, t, r):
+def grind_movel(dp, a = 1.2, v = 0.25, t = 0, r = 0):
   if not ok_to_proceed():
     return None
   end
@@ -826,6 +826,8 @@ end
 ######################################################################################
 # LINE PATTERNS
 #
+global grind_line_dp1_offset_m = 0.002
+global grind_line_dp1_offset_rad = grind_line_dp1_offset_m
 
 # Move along a flat line dx_m x dy_m centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then y
@@ -836,7 +838,7 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
   local theta = atan2(dx_m, dy_m)
   local dp1 = p[-x2, -y2, 0, 0, 0, 0]
   # Compute dp1 just a bit up from dp1 toward dp2
-  local dp1a = p[-x2 + grind_blend_radius_m * 1.2 * sin(theta), -y2 + grind_blend_radius_m * 1.2 * cos(theta), 0, 0, 0, 0]
+  local dp1a = p[-x2 + grind_line_dp1_offset_m * sin(theta), -y2 + grind_line_dp1_offset_m * cos(theta), 0, 0, 0, 0]
   local dp2 = p[x2, y2, 0, 0, 0, 0]
   local t_move = sqrt(dx_m * dx_m + dy_m * dy_m) / grind_speed_mps
 
@@ -845,12 +847,12 @@ def pattern_line_flat(p_center, dx_m, dy_m, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move, r = grind_blend_radius_m)
-    grind_movel(dp1, a = grind_accel_mpss, v = grind_speed_mps, t = t_move, r = grind_blend_radius_m)
+    grind_movel(dp2, a = grind_accel_mpss, v = grind_speed_mps, t = t_move)
+    grind_movel(dp1, a = grind_accel_mpss, v = grind_speed_mps, t = t_move)
 
     grind_cycle = grind_cycle + 1
   end
-  grind_movel(dp1a, a = grind_accel_mpss, v = grind_speed_mps, t = 0, r = 0)
+  grind_movel(dp1a, a = grind_accel_mpss, v = grind_speed_mps)
   grind_movel_finish()
 end
 
@@ -860,10 +862,13 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
   local x2 = dx_m / 2.0
   local rx2 = drx_rad / 2.0
 
+  local diam_m = robot_part_geometry[1] / 1000.0
+  global grind_line_dp1_offset_rad = grind_line_dp1_offset_m * 0.5 / diam_m
+
   # TODO The angle calc below is incorrect
   local theta = atan2(dx_m, drx_rad)
   local dp1 = p[-x2, 0, 0, -rx2, 0, 0]
-  local dp1a = p[-x2 + grind_rot_blend_radius_rad * 5 * sin(theta), 0, 0, -rx2 + grind_rot_blend_radius_rad * 5 * cos(theta), 0, 0]
+  local dp1a = p[-x2 + grind_line_dp1_offset_m * sin(theta), 0, 0, -rx2 + grind_line_dp1_offset_rad * 4 * cos(theta), 0, 0]
   local dp2 = p[x2, 0, 0, rx2, 0, 0]
   local t_move = sqrt(pow(dx_m / grind_speed_mps, 2) + pow(drx_rad / grind_rot_speed_rps / 4, 2))
 
@@ -872,12 +877,12 @@ def pattern_line_cylinder(p_center, dx_m, drx_rad, speed_factor, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    grind_movel(dp2, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = t_move, r = grind_blend_radius_m * speed_factor)
-    grind_movel(dp1, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = t_move, r = grind_blend_radius_m * speed_factor)
+    grind_movel(dp2, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = t_move)
+    grind_movel(dp1, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = t_move)
 
     grind_cycle = grind_cycle + 1
   end
-  grind_movel(dp1a, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor, t = 0, r = 0)
+  grind_movel(dp1a, a = grind_accel_mpss * speed_factor, v = grind_speed_mps * speed_factor)
   grind_movel_finish()
 end
 
@@ -887,10 +892,13 @@ def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
   local rx2 = drx_rad / 2.0
   local ry2 = dry_rad / 2.0
 
+  local diam_m = robot_part_geometry[1] / 1000.0
+  global grind_line_dp1_offset_rad = grind_line_dp1_offset_m * 0.5 / diam_m
+
   # TODO is this angle calc incorrect?
   local theta = atan2(drx_rad, dry_rad)
   local dp1 = p[0, 0, 0, -rx2, -ry2, 0]
-  local dp1a = p[0, 0, 0, -rx2 + grind_rot_blend_radius_rad * 5 * sin(theta), -ry2 + grind_rot_blend_radius_rad * 5 * cos(theta), 0]
+  local dp1a = p[0, 0, 0, -rx2 + grind_line_dp1_offset_rad * 4 * sin(theta), -ry2 + grind_line_dp1_offset_rad * 4 * cos(theta), 0]
   local dp2 = p[0, 0, 0, rx2, ry2, 0]
   local t_move = sqrt(drx_rad * drx_rad + dry_rad * dry_rad) / grind_rot_speed_rps / 4
 
@@ -899,20 +907,18 @@ def pattern_line_sphere(p_center, drx_rad, dry_rad, n_cycles):
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move, r = grind_rot_blend_radius_rad)
-    grind_movel(dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move, r = grind_rot_blend_radius_rad)
+    grind_movel(dp2, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move)
+    grind_movel(dp1, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = t_move)
 
     grind_cycle = grind_cycle + 1
   end
-  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = 0, r = 0)
+  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   grind_movel_finish()
 end
-
 
 ######################################################################################
 # RECT PATTERNS
 #
-
 # Move along a flat rect dx_m x dy_m centered on p_center. Repeat n_cycles times.
 # Move in x direction first, then y
 def pattern_rect_flat(p_center, dx_m, dy_m, n_cycles):
@@ -985,7 +991,7 @@ def pattern_rect_cylinder(p_center, dx_m, drx_rad, n_cycles):
   end
   # dp1a just barely turns the corner, larger then the blend radius
   # This stops the motion since you need to be out of bland radius and move with blend=0 to stop motion!
-  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = 0, r = 0)
+  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   grind_movel_finish()
 end
 
@@ -1017,7 +1023,7 @@ def pattern_rect_sphere(p_center, drx_rad, dry_rad, n_cycles):
   end
   # dp1a just barely turns the corner, larger then the blend radius
   # This stops the motion since you need to be out of bland radius and move with blend=0 to stop motion!
-  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps, t = 0, r = 0)
+  grind_movel(dp1a, a = grind_rot_accel_rpss, v = grind_rot_speed_rps)
   grind_movel_finish()
 end
 
@@ -1025,7 +1031,6 @@ end
 ######################################################################################
 # SERPENTINE PATTERNS
 #
-
 # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps centered on p_center. Repeat n_cycles times.
 # Move in direction of whichever nsteps is 1 first
 def pattern_serpentine_flat(p_center, dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):

@@ -42,7 +42,7 @@ def n_cycle_setter(n_cycles):
 end
 
 # Set all speed and acceleration globals based on part geometry and whether we really going to grind
-def speed_setter(speed_mmps, min_feature_mm):
+def speed_setter(speed_mmps, min_feature_mm, is_circle = True):
   speed_mmps = limiter(speed_mmps, 0.1, 200)
 
   # Figure out best blend radius to use
@@ -364,6 +364,15 @@ global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
   if on and grind_process_state:
     # Continuing a grind...
+    # Move to initial grind position relative to initial p_contact_center
+    shape = robot_part_geometry[0]
+    if shape < 1 or shape > 3:
+      return False
+    end
+    global dp_from_contact_center = pose_to_center[shape-1]
+    local p1 = pose_trans(p_contact_center, dp_from_contact_center)
+    grind_to(p1, r=0)
+
     update_force(True, grind_contact_enable, grind_force_n, grind_touch_speed_mmps)
   elif on and not grind_process_state:
     # Need to start the grind
@@ -396,6 +405,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       i = i + 1
     end
     global p_contact_center = pose_trans(p_contact_init, reverse_pose_to_center)
+    grind_start(dp_from_contact_center)
 
     # Now power everything on (although these will do nothing unless conact_enable==2)
     tool_power(True, grind_contact_enable)
@@ -820,12 +830,10 @@ def grind_start(current_dp, speed_factor = 1.0):
   grind_to(current_dp)
 end
 
-def grind_to(dp, set_r_zero = False):
+def grind_to(dp, r = -1):
   global process_a = grind_accel_mpss * grind_speed_factor
   global process_v = grind_speed_mps * grind_speed_factor
   global process_r = grind_blend_radius_m * grind_speed_factor
-
-
 
   if abs(dp[3] - grind_current_dp[3]) > 0.001 or abs(dp[4] - grind_current_dp[4]) > 0.001:
     process_a = grind_rot_speed_rps * grind_speed_factor
@@ -833,8 +841,8 @@ def grind_to(dp, set_r_zero = False):
     process_r = grind_rot_blend_radius_rad * grind_speed_factor
   end
 
-  if set_r_zero:
-    process_r = 0
+  if r >= 0:
+    process_r = r
   end
 
   global grind_current_dp = dp
@@ -842,27 +850,34 @@ def grind_to(dp, set_r_zero = False):
 end
 
 def grind_complete(p):
-  grind_to(p, True)
+  grind_to(p, r = 0)
 end
 
 ######################################################################################
 # LINE PATTERNS
 #
-
 # The line pattern sequence.
 # Assumes all point_dist are declared globally
 def pattern_line(n_cycles):
   global grind_cycle = 1
-  grind_start(dp1)
+  local dpdest = dp2
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
 
-    grind_to(dp2)
-    grind_to(dp1)
+    if grind_cycle == n_cycles:
+      grind_complete(dpdest)
+    else:
+      grind_to(dpdest, r = 0)
+    end
+
+    if dpdest == dp1:
+      dpdest = dp2
+    else:
+      dpdest = dp1
+    end
 
     grind_cycle = grind_cycle + 1
   end
-  grind_complete(dp1a)
 end
 
 # Move along a flat line dx_m x dy_m. Repeat n_cycles times.
@@ -871,10 +886,7 @@ def pattern_line_flat(dx_m, dy_m, n_cycles):
   local x2 = dx_m / 2.0
   local y2 = dy_m / 2.0
 
-  local theta = atan2(dx_m, dy_m)
   global dp1 = dp_from_contact_center
-  # Compute dp1 just a bit up from dp1 toward dp2
-  global dp1a = p[-x2 + grind_blend_radius_m * 1.2 * sin(theta), -y2 + grind_blend_radius_m * 1.2 * cos(theta), 0, 0, 0, 0]
   global dp2 = p[x2, y2, 0, 0, 0, 0]
 
   pattern_line(n_cycles)
@@ -886,10 +898,7 @@ def pattern_line_cylinder(dx_m, drx_rad, speed_factor, n_cycles):
   local x2 = dx_m / 2.0
   local rx2 = drx_rad / 2.0
 
-  # TODO The angle calc below is incorrect
-  local theta = atan2(dx_m, drx_rad)
   global dp1 = dp_from_contact_center
-  global dp1a = p[-x2 + grind_rot_blend_radius_rad * 5 * sin(theta), 0, 0, -rx2 + grind_rot_blend_radius_rad * 5 * cos(theta), 0, 0]
   global dp2 = p[x2, 0, 0, rx2, 0, 0]
 
   pattern_line(n_cycles)
@@ -901,10 +910,7 @@ def pattern_line_sphere(drx_rad, dry_rad, n_cycles):
   local rx2 = drx_rad / 2.0
   local ry2 = dry_rad / 2.0
 
-  # TODO is this angle calc incorrect?
-  local theta = atan2(drx_rad, dry_rad)
   global dp1 = dp_from_contact_center
-  global dp1a = p[0, 0, 0, -rx2 + grind_rot_blend_radius_rad * 5 * sin(theta), -ry2 + grind_rot_blend_radius_rad * 5 * cos(theta), 0]
   global dp2 = p[0, 0, 0, rx2, ry2, 0]
 
   pattern_line(n_cycles)
@@ -914,7 +920,6 @@ end
 ######################################################################################
 # RECT PATTERNS
 #
-
 # The rect pattern sequence. Assumes all points are defined globally!
 def pattern_rect(n_cycles):
   global grind_cycle = 1
