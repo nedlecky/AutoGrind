@@ -256,7 +256,7 @@ namespace AutoGrind
         // Something isn't right. If we're not stopped, select STOP
         private void EnsureStopped()
         {
-            if (runState != RunState.READY)
+            if (runState == RunState.RUNNING || runState==RunState.PAUSED)
                 StopBtn_Click(null, null);
         }
 
@@ -2683,6 +2683,7 @@ namespace AutoGrind
             SafetyStatusBtn.Text = "";
             ProgramStateBtn.Text = "";
         }
+
         private void CloseCommandServer()
         {
             // Stop us if we're running!

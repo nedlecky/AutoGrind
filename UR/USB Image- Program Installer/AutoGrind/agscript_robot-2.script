@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
 
-global robot_version = "Rev 2 2022-06-02"
+global robot_version = "Rev 2 2022-06-06"
 
 global response = "unknown"
 global robot_index = 0
@@ -28,14 +28,11 @@ global robot_coolant_on_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_coolant_off_outputs = [-1, -1, -1, -1, -1, -1, -1, -1]
 global robot_freedrive_mode = 0
 
-# Defaults get set on load... and can be queried (or changed) from C#
-set_tcp(robot_tcp)
-set_payload(robot_payload_mass_kg, robot_payload_cog_m)
-
 # command should be[nElements,index,checkval,param[0],param[1],...]
 # put index into robot_index
 # validate checkval
 # Remove both from command so we get command = [nElements-2, param[0], param[1],...]
+#global command = [0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0., 0.]
 def command_validate():
   # must be at least index, check, and 1 param
   if command[0] < 3:
@@ -54,9 +51,9 @@ def command_validate():
   # Now if we are still in the grind state and we are not getting a grind command (40) make sure we're are off the part!
   if grind_process_state and command[3] != 40:
     # Using set_grind_process_state which assumes robot_tcp_part!
-    set_tcp(robot_tcp_part)
+    iset_tcp(robot_tcp_part)
     set_grind_process_state(False)
-    set_tcp(robot_tcp)
+    iset_tcp(robot_tcp)
   end
 
   # Slide the robot commands and parameters back in command[] to remove the index and checksum
@@ -218,17 +215,17 @@ def set_variable():
     # freedrive 1=on/0=off, 0=base|1=tcp|2=tcp_part, 6 axisEnables
     if command[3] == 0:
       end_freedrive_mode()
-      set_tcp(robot_tcp)
+      iset_tcp(robot_tcp)
       robot_freedrive_mode = 0
       socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
     else:
       local coordSys = command[4]
       local freeAxes = [command[5], command[6], command[7], command[8], command[9], command[10]]
       if coordSys == 1:
-        set_tcp(robot_tcp)
+        iset_tcp(robot_tcp)
         freedrive_mode(freeAxes = freeAxes, feature = "tool")
       elif coordSys == 2:
-        set_tcp(robot_tcp_part)
+        iset_tcp(robot_tcp_part)
         freedrive_mode(freeAxes = freeAxes, feature = "tool")
       else:
         # Base
@@ -242,7 +239,7 @@ def set_variable():
     # set_tcp if command[3] > -10. Always returns robot_tcp=p[...]
     if command[3] > -10:
       robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
-      set_tcp(robot_tcp)
+      iset_tcp(robot_tcp)
     end
     return_pose("robot_tcp", get_tcp_offset())
     # Recompute robot_tcp_part based on current geometry
@@ -253,7 +250,7 @@ def set_variable():
     if command[3] > 0:
       robot_payload_mass_kg = command[3]
       robot_payload_cog_m = [command[4], command[5], command[6]]
-      set_payload(robot_payload_mass_kg, robot_payload_cog_m)
+      iset_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
     socket_set_var("robot_payload_mass_kg", robot_payload_mass_kg)
     socket_send_string("robot_payload_cog_m=")
@@ -304,22 +301,22 @@ end
 
 # Send get_actual_tcp_pose() to socket
 def return_actual_tcp_pose():
-  p = get_actual_tcp_pose()
+  p = iget_actual_tcp_pose()
   return_pose("actual_tcp_pose", p)
   global response = "return_actual_tcp_pose()"
 end
 
 # Send get_actual_joint_positions() to socket
 def return_get_actual_joint_positions():
-  p = get_actual_joint_positions()
+  p = iget_actual_joint_positions()
   return_joints("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
 end
 
 # Send both joints and pose to socket labeled position_p and position_q
 def return_both_positions():
-  return_joints("position_q", get_actual_joint_positions())
-  return_pose("position_p", get_actual_tcp_pose())
+  return_joints("position_q", iget_actual_joint_positions())
+  return_pose("position_p", iget_actual_tcp_pose())
   global response = "return_both_positions()"
 end
 
@@ -348,14 +345,14 @@ end
 
 # Movel relatively in TCP_part coordinates
 def movel_relative_tcp_part(p1):
-  set_tcp(robot_tcp_part)
+  iset_tcp(robot_tcp_part)
   local p2 = pose_trans(get_target_tcp_pose(), p1)
   if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
     imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
   else:
     imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
   end
-  set_tcp(robot_tcp)
+  iset_tcp(robot_tcp)
   global response = "movel_relative_tcp_part()"
 end
 
@@ -506,9 +503,9 @@ def no_command():
     halt_grind = False
     istopl(20)
 
-    set_tcp(robot_tcp_part)
+    iset_tcp(robot_tcp_part)
     set_grind_process_state(False)
-    set_tcp(robot_tcp)
+    iset_tcp(robot_tcp)
   end
 end
 #
@@ -600,6 +597,10 @@ global imover_a = 1.2
 global imover_v = 0.25
 global imover_t = 0
 global imover_r = 0
+global imover_f = False
+global imover_tcp = p[0, 0, 0, 0, 0, 0]
+global imover_mass = 1.0
+global imover_cog = [0, 0, 0]
 global imover_thread_handle = 0
 global imover_cmd = 0
 global imover_cmd_hist = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -612,6 +613,11 @@ imover_STOPL = 4
 imover_STARTFORCE = 5
 imover_UPDATEFORCE = 6
 imover_ENDFORCE = 7
+imover_GETACTUALTCPPOSE = 8
+imover_GETACTUALJOINTPOSITIONS = 9
+imover_SETTCP = 10
+imover_SETPAYLOAD = 11
+imover_TOUCHOFF = 12
 
 def imover_wait(terminate_not_ok = False):
   while imover_cmd > 0:
@@ -641,6 +647,7 @@ end
 def imover_abort_restart():
   kill imover_thread_handle
   imover_thread_handle = run imover_thread()
+  iset_tcp(imover_tcp)
 end
 
 def istopl(a, aRot = 999):
@@ -696,6 +703,55 @@ def iend_force_mode():
   end
 end
 
+def iget_actual_tcp_pose():
+  if imover_enable:
+    imover_cmd_exec(imover_GETACTUALTCPPOSE)
+    return imover_p
+  else:
+    return get_actual_tcp_pose()
+  end
+end
+
+def iget_actual_joint_positions():
+  if imover_enable:
+    imover_cmd_exec(imover_GETACTUALJOINTPOSITIONS)
+    return imover_q
+  else:
+    return get_actual_joint_positions()
+  end
+end
+
+def iset_tcp(tcp):
+  if imover_enable:
+    imover_tcp = tcp
+    imover_cmd_exec(imover_SETTCP)
+    return imover_q
+  else:
+    set_tcp(tcp)
+  end
+end
+
+def iset_payload(mass, cog):
+  if imover_enable:
+    imover_mass = mass
+    imover_cog = cog
+    imover_cmd_exec(imover_SETPAYLOAD)
+  else:
+    set_payload(mass, cog)
+  end
+end
+
+def itouchoff(speed_mmps, retract_mm):
+  if False: #imover_enable:
+    imover_param1 = speed_mmps
+    imover_param2 = retract_mm
+    imover_cmd_exec(imover_TOUCHOFF)
+    return imover_f
+  else:
+    return touchoff(speed_mmps, retract_mm)
+  end
+end
+
 def imovel(p, a = 1.2, v = 0.25, t = 0, r = 0):
   if imover_enable:
     imover_wait()
@@ -725,7 +781,7 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
     imover_cmd_exec(imover_MOVEL, 0, 0, True)
     if not ok_to_proceed():
       imover_abort_restart()
-      istopl(1)
+      istopl(grind_accel_mpss, grind_rot_accel_rpss)
     end
   else:
     movel(p, a = a, v = v, t = t, r = r)
@@ -750,7 +806,7 @@ thread imover_thread():
   global imover_cmd = 0
   while True:
     if imover_cmd == imover_MOVEL:
-      movel(imover_p, imover_a, imover_v, imover_t, imover_r)
+      movel(imover_p, a = imover_a, v = imover_v, t = imover_t, r = imover_r)
       global imover_cmd = 0
     elif imover_cmd == imover_MOVEJ:
       movej(imover_q, imover_a, imover_v, imover_t, imover_r)
@@ -785,6 +841,21 @@ thread imover_thread():
       global imover_cmd = 0
     elif imover_cmd == imover_ENDFORCE:
       end_force_mode()
+      global imover_cmd = 0
+    elif imover_cmd == imover_GETACTUALTCPPOSE:
+      imover_p = get_actual_tcp_pose()
+      global imover_cmd = 0
+    elif imover_cmd == imover_GETACTUALJOINTPOSITIONS:
+      imover_q = get_actual_joint_positions()
+      global imover_cmd = 0
+    elif imover_cmd == imover_SETTCP:
+      set_tcp(imover_tcp)
+      global imover_cmd = 0
+    elif imover_cmd == imover_SETPAYLOAD:
+      set_payload(imover_mass, imover_cog)
+      global imover_cmd = 0
+    elif imover_cmd == imover_TOUCHOFF:
+      imover_f = touchoff(imover_param1, imover_param2)
       global imover_cmd = 0
     elif imover_cmd == imover_PING:
       global imover_cmd = 0

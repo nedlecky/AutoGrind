@@ -1,7 +1,7 @@
-# 51 Line Pattern Test
+# 51exp Line Pattern Test
 
 count=2
-speed = 20
+speed = 10
 force=5
 
 cmd1 = grind_line(40,0,{count},{speed},{force}
@@ -13,19 +13,19 @@ cmd4a = grind_line(-4,40,{count},{speed},{force}
 cmd5 = grind_line(28.3,28.3,{count},{speed},{force}
 cmd6 = grind_line(-72,30,{count},{speed},{force}
 
-move_linear(demo_safe)
+#move_linear(demo_safe)
 
 flat:
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
-{cmd1},0)
-{cmd2},0)
-{cmd2a},0)
-{cmd3},0)
-{cmd4},0)
-{cmd4a},0)
-{cmd5},0)
-{cmd6},0)
+#{cmd1},0)
+#{cmd2},0)
+#{cmd2a},0)
+#{cmd3},0)
+#{cmd4},0)
+#{cmd4a},0)
+#{cmd5},0)
+#{cmd6},0)
 {cmd1},1)
 {cmd2},1)
 {cmd2a},1)
@@ -34,7 +34,7 @@ set_part_geometry(FLAT,0)
 {cmd4a},1)
 {cmd5},1)
 {cmd6},1)
-
+end
 move_linear(demo_safe)
 
 cylinder:

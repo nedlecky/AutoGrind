@@ -1,7 +1,7 @@
 # 53 Serp Pattern Test
 
 speed = 17
-count=1
+count=2
 force=5
 
 cmd1 = grind_serp(60,30,1,3,{count},{speed},{force}

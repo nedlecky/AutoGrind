@@ -86,7 +86,7 @@ def return_joints(name, p):
 end
 
 # Special support to receive 1-4 port,value pairs and always pad with -1s to make 4 pairs
-# Essentialy returns command[3:end] padded out with -1s to always be 8 elements
+# Essentially returns command[3:end] padded out with -1s to always be 8 elements
 # Assumes length of command is specified in command[0]
 def command_3_padded_8(command):
   ret8 = [-1, -1, -1, -1, -1, -1, -1, -1]
