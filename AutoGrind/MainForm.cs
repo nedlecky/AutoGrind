@@ -541,7 +541,7 @@ namespace AutoGrind
                     color = Color.Red;
                     break;
             }
-            SafetyStatusBtn.Text = buttonText;
+            SafetyStatusBtn.Text = buttonText.Replace('_',' ');
             SafetyStatusBtn.BackColor = color;
         }
 
@@ -1091,17 +1091,18 @@ namespace AutoGrind
         private void SafetyStatusBtn_Click(object sender, EventArgs e)
         {
             CloseSafetyPopup();
+            // Note the _ in the return values have been removed!
             switch (SafetyStatusBtn.Text)
             {
                 case "Safetystatus: NORMAL":
                     robotDashboardClient?.Send("power off");
                     break;
-                case "Safetystatus: PROTECTIVE_STOP":
+                case "Safetystatus: PROTECTIVE STOP":
                     robotDashboardClient?.InquiryResponse("unlock protective stop", 200);
                     robotDashboardClient?.InquiryResponse("close safety popup", 200);
 
                     break;
-                case "Safetystatus: ROBOT_EMERGENCY_STOP":
+                case "Safetystatus: ROBOT EMERGENCY STOP":
                     ErrorMessageBox("Release Robot E-Stop");
                     robotDashboardClient?.InquiryResponse("close safety popup", 200);
                     break;
@@ -2036,7 +2037,8 @@ namespace AutoGrind
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
             {"grind_serp",              new CommandSpec(){nParams=8,  prefix="40,30," }  },
-            {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,40," }  },
+            {"grind_poly",              new CommandSpec(){nParams=6,  prefix="40,40," }  },
+            {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,45," }  },
             {"grind_spiral",            new CommandSpec(){nParams=7,  prefix="40,50," }  },
             {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,99" } },
         };

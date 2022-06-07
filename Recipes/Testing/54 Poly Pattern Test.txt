@@ -1,8 +1,9 @@
-# 54 Circle Pattern Test
+# 54 Poly Pattern Test
 
 n=1
-speed=2
+speed=10
 force=5
+n_sides=5
 
 move_joint(demo_safe)
 
@@ -13,14 +14,14 @@ set_part_geometry(FLAT,0)
 # Lift circles 
 diam = 100
 repeat1f:
-grind_circle({diam},{n},{speed},{force},0)
+grind_poly({diam},{n_sides},{n},{speed},{force},0)
 diam -= 30
 jump_gt_zero(diam,repeat1f)
 
 # No Lift circles
 diam = 100
 repeat2f:
-grind_circle({diam},{n},{speed},{force},1)
+grind_poly({diam},{n_sides},{n},{speed},{force},1)
 diam -= 30
 jump_gt_zero(diam,repeat2f)
 
@@ -33,14 +34,14 @@ set_part_geometry(CYLINDER,1200)
 # Lift circles 
 diam = 100
 repeat1c:
-grind_circle({diam},{n},{speed},{force},0)
+grind_poly({diam},{n_sides},{n},{speed},{force},0)
 diam -= 30
 jump_gt_zero(diam,repeat1c)
 
 # No Lift circles
 diam = 100
 repeat2c:
-grind_circle({diam},{n},{speed},{force},1)
+grind_poly({diam},{n_sides},{n},{speed},{force},1)
 diam -= 30
 jump_gt_zero(diam,repeat2c)
 
@@ -51,13 +52,13 @@ set_part_geometry(SPHERE,1200)
 # Lift circles 
 diam = 100
 repeat1s:
-grind_circle({diam},{n},{speed},{force},0)
+grind_poly({diam},{n_sides},{n},{speed},{force},0)
 diam -= 30
 jump_gt_zero(diam,repeat1s)
 
 # No Lift circles
 diam = 100
 repeat2s:
-grind_circle({diam},{n},{speed},{force},1)
+grind_poly({diam},{n_sides},{n},{speed},{force},1)
 diam -= 30
 jump_gt_zero(diam,repeat2s)

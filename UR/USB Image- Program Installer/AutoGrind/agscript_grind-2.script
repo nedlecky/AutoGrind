@@ -50,7 +50,7 @@ def speed_setter(speed_mmps, min_feature_mm, is_circle = False):
   global grind_blend_radius_m = min(grind_max_blend_radius_m, grind_min_feature_m / 4)
   if is_circle:
     if grind_blend_radius_m < 0.0015:
-      grind_blend_radius_m = 0.002
+      grind_blend_radius_m = 0
     end
   else:
     if grind_blend_radius_m < 0.0015:
@@ -206,11 +206,23 @@ def grind():
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
   elif command[2] == 40:
+    # POLYGON GRIND
+    global response = "grind_poly"
+    global grind_circle1_diam_mm = limiter(command[3], 0, 1000)
+    global grind_n_sides = limiter(command[4], 1, 1000)
+    n_cycle_setter(command[5])
+    local min_feature_mm = max(2, grind_circle1_diam_mm)
+    speed_setter(command[6], min_feature_mm)
+    global grind_force_n = limiter(command[7], 0, 100)
+    global grind_continue = command[8] > 0
+    grind_poly(grind_circle1_diam_mm, grind_n_sides, grind_n_cycles, grind_continue)
+
+  elif command[2] == 45:
     # CIRCULAR GRIND
     global response = "grind_circle"
     global grind_circle1_diam_mm = limiter(command[3], 0, 1000)
     n_cycle_setter(command[4])
-    local min_feature_mm = min(2, grind_circle1_diam_mm / 5)
+    local min_feature_mm = max(2, grind_circle1_diam_mm)
     speed_setter(command[5], min_feature_mm, is_circle = True)
     global grind_force_n = limiter(command[6], 0, 100)
     global grind_continue = command[7] > 0
@@ -224,7 +236,7 @@ def grind():
     global grind_n_revolutions = limiter(command[5], 1, 100)
     n_cycle_setter(command[6])
     local min_diam_mm = min(grind_circle1_diam_mm, grind_circle2_diam_mm)
-    local min_feature_mm = min(2, min_diam_mm / 5)
+    local min_feature_mm = max(2, min_diam_mm)
     speed_setter(command[7], min_feature_mm, is_circle = True)
     global grind_force_n = limiter(command[8], 0, 100)
     global grind_continue = command[9] > 0
@@ -492,7 +504,6 @@ end
 ######################################################################################
 # TOP LEVEL GRIND FUNCTIONS
 #
-
 # Grind along a line dx_mm x dy_mm centered on current tool position. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
 def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
   if n_cycles < 1:
@@ -657,20 +668,19 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   return True
 end
 
-# Grind along a circle with circle_diam_mm centered on p_center. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
-def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
+# Grind along a polygon with circle_diam_mm and n_sides. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
+def grind_poly(circle_diam_mm, n_sides, n_cycles, stay_in_contact):
   if n_cycles < 1:
     return True
   end
 
   # Unit conversion
-  circle_diam_m = circle_diam_mm / 1000.0
-  part_diam_m = robot_part_geometry[1] / 1000.0
+  local circle_diam_m = circle_diam_mm / 1000.0
+  local part_diam_m = robot_part_geometry[1] / 1000.0
 
   # Grind time estimate
-  time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps + 1500
+  local time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
-
 
   if not set_grind_process_state(True,
     [
@@ -682,19 +692,36 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   end
 
   # Grind the pattern
-  shape = robot_part_geometry[0]
+  local shape = robot_part_geometry[0]
   if shape == 1:
-    pattern_circle_flat(circle_diam_m, n_cycles)
+    pattern_poly_flat(circle_diam_m, n_sides, n_cycles)
   elif shape == 2:
-    pattern_circle_cylinder(circle_diam_m, part_diam_m, n_cycles)
+    pattern_poly_cylinder(circle_diam_m, n_sides, part_diam_m, n_cycles)
   elif shape == 3:
-    pattern_circle_sphere(circle_diam_m, part_diam_m, n_cycles)
+    pattern_poly_sphere(circle_diam_m, n_sides, part_diam_m, n_cycles)
   end
 
   if not stay_in_contact or not ok_to_proceed():
     set_grind_process_state(False)
   end
   return True
+end
+
+def recommend_npoints(diam_m):
+  # 1 point per second?
+  local circum_m = MATH_PI * diam_m
+  local t = circum_m / grind_speed_mps
+  global grind_circle_n_sides = limiter(t * 2, 2, 1000)
+
+  # 100mm diam gets 50 points... seems about right
+  #global grind_circle_n_sides = limiter(diam_m * 500, 2, 1000)
+  return grind_circle_n_sides
+end
+
+# Grind along a circle with circle_diam_mm. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
+def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
+  grind_circle_n_sides = recommend_npoints(circle_diam_mm / 1000.0)
+  return grind_poly(circle_diam_mm, grind_circle_n_sides, n_cycles, stay_in_contact)
 end
 
 # Grind along a spiral circle1_diam_mm to circle2_diam_mm in n_revolutions with rotations centered on current tool position. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
@@ -704,13 +731,13 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_revolutions, n_cycles, stay
   end
 
   # Unit conversion
-  circle1_diam_m = circle1_diam_mm / 1000.0
-  circle2_diam_m = circle2_diam_mm / 1000.0
-  part_diam_m = robot_part_geometry[1] / 1000.0
+  local circle1_diam_m = circle1_diam_mm / 1000.0
+  local circle2_diam_m = circle2_diam_mm / 1000.0
+  local part_diam_m = robot_part_geometry[1] / 1000.0
 
   # Grind time estimate based on average diam
-  avg_diam_mm = (circle1_diam_mm + circle2_diam_mm) / 2.0
-  time_ms = MATH_PI * avg_diam_mm * n_revolutions * n_cycles / grind_speed_mps + 1500
+  local avg_diam_mm = (circle1_diam_mm + circle2_diam_mm) / 2.0
+  local time_ms = MATH_PI * avg_diam_mm * n_revolutions * n_cycles / grind_speed_mps + 1500
   socket_set_var("robot_step_time_estimate_ms", time_ms)
 
   if not set_grind_process_state(True,
@@ -723,7 +750,7 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_revolutions, n_cycles, stay
   end
 
   # Grind the pattern
-  shape = robot_part_geometry[0]
+  local shape = robot_part_geometry[0]
   if shape == 1:
     pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_revolutions, n_cycles)
   elif shape == 2:
@@ -740,11 +767,6 @@ end
 
 
 ######################################################################################
-# PATTERN GRINDING SUPPORT FUNCTIONS
-#
-
-######################################################################################
-######################################################################################
 ######################################################################################
 #
 # PATTERN GRINDING FUNCTIONS
@@ -757,7 +779,7 @@ def grind_start(current_dp):
   grind_to(current_dp)
 end
 
-def grind_to(dp, r = -1):
+def grind_to(dp, r = -1, no_wait = False):
   global grind_current_ddp0 = abs(dp[0] - grind_current_dp[0])
   global grind_current_ddp1 = abs(dp[1] - grind_current_dp[1])
   global grind_current_ddp3 = abs(dp[3] - grind_current_dp[3])
@@ -767,12 +789,10 @@ def grind_to(dp, r = -1):
   # Sphere:   RX, RX
   local shape = robot_part_geometry[0]
   if shape == 3: # Sphere
-    global process_type = "sphere"
     global process_a = grind_rot_accel_rpss
     global process_v = grind_rot_speed_rps
     global process_r = grind_rot_blend_radius_rad
   elif shape == 2: # Cylinder
-    global process_type = "cylinder"
     global process_theta = atan2(grind_current_ddp3, grind_current_ddp0)
     global process_rotational_factor = abs(sin(process_theta))
     global process_a =
@@ -791,18 +811,18 @@ def grind_to(dp, r = -1):
       grind_rot_blend_radius_rad * (process_rotational_factor)
     )
   else: # Flat
-    global process_type = "flat"
     global process_a = grind_accel_mpss
     global process_v = grind_speed_mps
     global process_r = grind_blend_radius_m
   end
 
+  global process_r_in = r
   if r >= 0:
-    process_r = r
+    global process_r = r
   end
 
   global grind_current_dp = dp
-  imovel_int(pose_trans(p_contact_center, grind_current_dp), a = process_a, v = process_v, r = process_r)
+  imovel_int(pose_trans(p_contact_center, grind_current_dp), a = process_a, v = process_v, r = process_r, no_wait = no_wait)
 end
 
 def grind_finish(p):
@@ -871,7 +891,6 @@ def pattern_line_sphere(drx_rad, dry_rad, n_cycles):
 
   pattern_line(n_cycles)
 end
-
 
 ######################################################################################
 # RECT PATTERNS
@@ -1008,11 +1027,9 @@ def pattern_rect_sphere(drx_rad, dry_rad, n_cycles):
   pattern_rect(n_cycles)
 end
 
-
 ######################################################################################
 # SERPENTINE PATTERNS
 #
-
 # Move along a flat serpentine dx_m,dy_m in n_xsteps,n_ysteps. Repeat n_cycles times.
 # Move in direction of whichever nsteps is 1 first
 def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
@@ -1239,38 +1256,27 @@ end
 
 
 ######################################################################################
-# CIRCULAR PATTERNS
+# POLYGONAL PATTERNS
 #
-
-# What is a good number of points to use for a circular pattern?
-def recommend_npoints(diam_m, speed_mps):
-  circum_m = diam_m * MATH_PI
-  global grind_circle_n_points = ceil(circum_m / speed_mps * grind_point_frequency_hz)
-  grind_circle_n_points = limiter(grind_circle_n_points, 4, 1000)
-  return grind_circle_n_points
-end
-
-# Grind along a flat circle circle_diam_m. Repeat n_cycles times.
-def pattern_circle_flat(circle_diam_m, n_cycles):
-
+# Grind along a polygon with circle_diam_m and n_sides on a flat. Repeat n_cycles times.
+def pattern_poly_flat(circle_diam_m, n_sides, n_cycles):
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
-  circle_radius_m = circle_diam_m / 2.0
+  local circle_radius_m = circle_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    i = 0
-    while ok_to_proceed() and i <= n_points:
-      theta = d2r(180.0 + 360.0 * i / n_points)
-      x = circle_radius_m * cos(theta)
-      y = circle_radius_m * sin(theta)
+    local i = 0
+    while ok_to_proceed() and i <= n_sides:
+      local theta = d2r(180.0 + 360.0 * i / n_sides)
+      local x = circle_radius_m * cos(theta)
+      local y = circle_radius_m * sin(theta)
 
-      p1 = pose_trans(p_contact_center, p[x, y, 0, 0, 0, 0])
-      if (grind_cycle == n_cycles and i == n_points) or not ok_to_proceed():
-        grind_finish(p1)
+      local dp = p[x, y, 0, 0, 0, 0]
+      if not ok_to_proceed() or i == n_sides:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
@@ -1279,29 +1285,26 @@ def pattern_circle_flat(circle_diam_m, n_cycles):
   end
 end
 
-# Grind along a cylindrical circle circle_diam_m. Repeat n_cycles times.
-def pattern_circle_cylinder(circle_diam_m, cylinder_radius_m, n_cycles):
-
+# Grind along a polygon with circle_diam_m and n_sides on a cylinder_radius_m. Repeat n_cycles times.
+def pattern_poly_cylinder(circle_diam_m, n_sides, cylinder_radius_m, n_cycles):
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
-  circle_radius_m = circle_diam_m / 2.0
-  speed_factor = 0.5 / (robot_part_geometry[1] / 1000.0)
+  local circle_radius_m = circle_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    i = 0
-    while ok_to_proceed() and i <= n_points:
-      theta = d2r(180.0 + 360.0 * i / n_points)
-      x = circle_radius_m * cos(theta)
-      y = circle_radius_m * sin(theta)
-      rx = 2.0 * y / cylinder_radius_m
+    local i = 0
+    while ok_to_proceed() and i <= n_sides:
+      local theta = d2r(180.0 + 360.0 * i / n_sides)
+      local x = circle_radius_m * cos(theta)
+      local y = circle_radius_m * sin(theta)
+      local rx = 2.0 * y / cylinder_radius_m
 
-      p1 = pose_trans(p_contact_center, p[x, 0, 0, rx, 0, 0])
-      if (grind_cycle == n_cycles and i == n_points) or not ok_to_proceed():
-        grind_finish(p1)
+      local dp = p[x, 0, 0, rx, 0, 0]
+      if not ok_to_proceed() or i == n_sides:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
@@ -1310,29 +1313,28 @@ def pattern_circle_cylinder(circle_diam_m, cylinder_radius_m, n_cycles):
   end
 end
 
-# Move along a spherical circle circle_diam_m on a sphere_diam_m object starting at the current tool position. Repeat n_cycles times.
-def pattern_circle_sphere(circle_diam_m, sphere_diam_m, n_cycles):
+# Grind along a polygon with circle_diam_m and n_sides on a sphere_diam_m. Repeat n_cycles times.
+def pattern_poly_sphere(circle_diam_m, n_sides, sphere_diam_m, n_cycles):
   # Local calculations
-  n_points = recommend_npoints(circle_diam_m, grind_speed_mps)
-  circle_radius_m = circle_diam_m / 2.0
-  sphere_radius_m = sphere_diam_m / 2.0
+  local circle_radius_m = circle_diam_m / 2.0
+  local sphere_radius_m = sphere_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    i = 0
-    while ok_to_proceed() and i <= n_points:
-      theta = d2r(180.0 + 360.0 * i / n_points)
-      x = circle_radius_m * cos(theta)
-      rx = x / sphere_radius_m
-      y = circle_radius_m * sin(theta)
-      ry = y / sphere_radius_m
+    local i = 0
+    while ok_to_proceed() and i <= n_sides:
+      local theta = d2r(180.0 + 360.0 * i / n_sides)
+      local x = circle_radius_m * cos(theta)
+      local rx = x / sphere_radius_m
+      local y = circle_radius_m * sin(theta)
+      local ry = y / sphere_radius_m
 
-      p1 = pose_trans(p_contact_center, p[0, 0, 0, rx, ry, 0])
-      if (grind_cycle == n_cycles and i == n_points) or not ok_to_proceed():
-        grind_finish(p1)
+      local dp = p[0, 0, 0, rx, ry, 0]
+      if not ok_to_proceed() or i == n_sides:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
@@ -1348,118 +1350,115 @@ end
 # Grind a flat spiral from diam1 to diam2 in n_revolutions revolutions
 def pattern_spiral_flat(circle1_diam_m, circle2_diam_m, n_revolutions, n_cycles):
   # Local calculations
-  max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
-  n_total_points = n_revolutions * n_points
-  circle1_radius_m = circle1_diam_m / 2.0
-  circle2_radius_m = circle2_diam_m / 2.0
+  local max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  local n_points = recommend_npoints(max_diam_m)
+  local n_total_points = n_revolutions * n_points
+  local circle1_radius_m = circle1_diam_m / 2.0
+  local circle2_radius_m = circle2_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
-    i = 0
+    local rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
+    local i = 0
     while ok_to_proceed() and i <= n_total_points:
-      theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
-      r_instantaneous = i * rslope + circle1_radius_m
-      x = r_instantaneous * cos(theta)
-      y = r_instantaneous * sin(theta)
+      local theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
+      local r_instantaneous = i * rslope + circle1_radius_m
+      local x = r_instantaneous * cos(theta)
+      local y = r_instantaneous * sin(theta)
 
-      p1 = pose_trans(p_contact_center, p[x, y, 0, 0, 0, 0])
-      if (grind_cycle == n_cycles and i == n_total_points) or not ok_to_proceed():
-        grind_finish(p1)
+      local dp = p[x, y, 0, 0, 0, 0]
+      if not ok_to_proceed() or i == n_points:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
-
     grind_cycle = grind_cycle + 1
+
     # Next cycle- swap diameters so we go in/out/in etc.
-    old_circle1_radius_m = circle1_radius_m
-    circle1_radius_m = circle2_radius_m
-    circle2_radius_m = old_circle1_radius_m
+    local old_circle1_radius_m = circle1_radius_m
+    local circle1_radius_m = circle2_radius_m
+    local circle2_radius_m = old_circle1_radius_m
   end
 end
 
 # Grind a spiral on a cylinder from diam1 to diam2 in n_revolutions revolutions
 def pattern_spiral_cylinder(circle1_diam_m, circle2_diam_m, n_revolutions, cylinder_radius_m, n_cycles):
   # Local calculations
-  max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
-  n_total_points = n_revolutions * n_points
-  circle1_radius_m = circle1_diam_m / 2.0
-  circle2_radius_m = circle2_diam_m / 2.0
-  speed_factor = 0.5 / (robot_part_geometry[1] / 1000.0)
+  local max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  local n_points = recommend_npoints(max_diam_m)
+  local n_total_points = n_revolutions * n_points
+  local circle1_radius_m = circle1_diam_m / 2.0
+  local circle2_radius_m = circle2_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
-    i = 0
+    local rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
+    local i = 0
     while ok_to_proceed() and i <= n_total_points:
-      theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
-      r_instantaneous = i * rslope + circle1_radius_m
-      x = r_instantaneous * cos(theta)
-      y = r_instantaneous * sin(theta)
-      rx = 2.0 * y / cylinder_radius_m
+      local theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
+      local r_instantaneous = i * rslope + circle1_radius_m
+      local x = r_instantaneous * cos(theta)
+      local y = r_instantaneous * sin(theta)
+      local rx = 2.0 * y / cylinder_radius_m
 
-      p1 = pose_trans(p_contact_center, p[x, 0, 0, rx, 0, 0])
+      local dp = p[x, 0, 0, rx, 0, 0]
 
-      # Speed_factor needs to be applied when running radially, and needs to be 1.0 when running laterally. This smooths it all the way around!
-      global this_speed_factor = (speed_factor - 1) * abs(cos(theta)) + 1.0
-      if (grind_cycle == n_cycles and i == n_total_points) or not ok_to_proceed():
-        grind_finish(p1)
+      if not ok_to_proceed() or i == n_points:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
-
     grind_cycle = grind_cycle + 1
+
     # Next cycle- swap diameters so we go in/out/in etc.
-    old_circle1_radius_m = circle1_radius_m
-    circle1_radius_m = circle2_radius_m
-    circle2_radius_m = old_circle1_radius_m
+    local old_circle1_radius_m = circle1_radius_m
+    local circle1_radius_m = circle2_radius_m
+    local circle2_radius_m = old_circle1_radius_m
   end
 end
 
 # Grind a spiral on a sphere from diam1 to diam2 in n_revolutions revolutions
 def pattern_spiral_sphere(circle1_diam_m, circle2_diam_m, n_revolutions, sphere_diam_m, n_cycles):
   # Local calculations
-  max_diam_m = max(circle1_diam_m, circle2_diam_m)
-  n_points = recommend_npoints(max_diam_m, grind_speed_mps)
-  n_total_points = n_revolutions * n_points
-  circle1_radius_m = circle1_diam_m / 2.0
-  circle2_radius_m = circle2_diam_m / 2.0
-  sphere_radius_m = sphere_diam_m / 2.0
+  local max_diam_m = max(circle1_diam_m, circle2_diam_m)
+  local n_points = recommend_npoints(max_diam_m)
+  local n_total_points = n_revolutions * n_points
+  local circle1_radius_m = circle1_diam_m / 2.0
+  local circle2_radius_m = circle2_diam_m / 2.0
+  local sphere_radius_m = sphere_diam_m / 2.0
 
   global grind_cycle = 1
   while (ok_to_proceed() and grind_cycle <= n_cycles):
     socket_set_var("grind_cycle", grind_cycle)
-    rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
-    i = 0
+    local rslope = (circle2_radius_m - circle1_radius_m) / n_total_points
+    local i = 0
     while ok_to_proceed() and i <= n_total_points:
-      theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
-      r_instantaneous = i * rslope + circle1_radius_m
-      x = r_instantaneous * cos(theta)
-      rx = x / sphere_radius_m
-      y = r_instantaneous * sin(theta)
-      ry = y / sphere_radius_m
+      local theta = d2r(180.0 + 360.0 * (i % n_points) / n_points)
+      local r_instantaneous = i * rslope + circle1_radius_m
+      local x = r_instantaneous * cos(theta)
+      local rx = x / sphere_radius_m
+      local y = r_instantaneous * sin(theta)
+      local ry = y / sphere_radius_m
 
-      p1 = pose_trans(p_contact_center, p[0, 0, 0, rx, ry, 0])
-      if (grind_cycle == n_cycles and i == n_total_points) or not ok_to_proceed():
-        grind_finish(p1)
+      local dp = p[0, 0, 0, rx, ry, 0]
+      if not ok_to_proceed() or i == n_points:
+        grind_finish(dp)
       else:
-        grind_to(p1)
+        grind_to(dp)
       end
       i = i + 1
     end
-
     grind_cycle = grind_cycle + 1
+
     # Next cycle- swap diameters so we go in/out/in etc.
-    old_circle1_radius_m = circle1_radius_m
-    circle1_radius_m = circle2_radius_m
-    circle2_radius_m = old_circle1_radius_m
+    local old_circle1_radius_m = circle1_radius_m
+    local circle1_radius_m = circle2_radius_m
+    local circle2_radius_m = old_circle1_radius_m
   end
 end

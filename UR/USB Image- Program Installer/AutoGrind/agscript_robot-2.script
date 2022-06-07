@@ -554,7 +554,7 @@ def touchoff(approach_speed_mmps, retract_mm):
     local stepsToRetract = tool_contact(direction = targetTcpDirection)
     if (stepsToRetract > 0):
       kill move_thread_han
-      imover_abort_restart()
+      imover_restart()
       istopl(20)
       local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
       local contactPose = get_forward_kin(backTrackMovement)
@@ -628,7 +628,7 @@ def imover_wait(terminate_not_ok = False):
   end
 end
 
-def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False):
+def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, no_wait = False):
   imover_wait()
   global imover_param1 = param1
   global imover_param2 = param2
@@ -641,13 +641,25 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False):
   imover_cmd_hist[0] = cmd
   global imover_cmd = cmd
 
-  imover_wait(terminate_not_ok)
+  if not no_wait:
+    imover_wait(terminate_not_ok)
+  end
 end
 
-def imover_abort_restart():
-  kill imover_thread_handle
-  imover_thread_handle = run imover_thread()
+def imover_abort():
+  if imover_thread_handle > 0:
+    kill imover_thread_handle
+    imover_thread_handle = 0
+  end
+  set_tcp(imover_tcp)
+  set_payload(imover_mass, imover_cog)
+end
+
+def imover_restart():
+  imover_abort()
+  global imover_thread_handle = run imover_thread()
   iset_tcp(imover_tcp)
+  iset_payload(imover_mass, imover_cog)
 end
 
 def istopl(a, aRot = 999):
@@ -766,7 +778,7 @@ def imovel(p, a = 1.2, v = 0.25, t = 0, r = 0):
   end
 end
 
-def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
+def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
   if not ok_to_proceed():
     return None
   end
@@ -778,9 +790,9 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0):
     global imover_v = v
     global imover_t = t
     global imover_r = r
-    imover_cmd_exec(imover_MOVEL, 0, 0, True)
+    imover_cmd_exec(imover_MOVEL, 0, 0, True, no_wait)
     if not ok_to_proceed():
-      imover_abort_restart()
+      imover_restart()
       istopl(grind_accel_mpss, grind_rot_accel_rpss)
     end
   else:
