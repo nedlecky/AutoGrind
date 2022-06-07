@@ -1,22 +1,24 @@
 # 27 Concentric Rectangles
 # BE CAREFUL: Robot will move and positions are expected to be OK
 
+count=1
+speed=10
+force=3
+
 move_linear(demo_safe)
 move_linear(demo_flat)
 
 # Old school
-grind_rect(40,40,3,5,10,1)
-grind_rect(30,30,3,5,10,1)
-grind_rect(20,20,3,5,10,1)
-grind_rect(5,5,3,5,10,0)
+grind_rect(40,40,{count},{speed},{force},1)
+grind_rect(30,30,{count},{speed},{force},1)
+grind_rect(20,20,{count},{speed},{force},1)
+grind_rect(10,10,{count},{speed},{force},0)
 
 # Use a loop
-n=3
-size=40
+size=35
 repeat:
-grind_rect({size},{size},3,5,10,1)
+grind_rect({size},{size},{count},{speed},{force},1)
 size-=10
-n--
-jump_gt_zero(n,repeat)
+jump_gt_zero(size,repeat)
 
-grind_rect(5,5,3,5,10,0)
+

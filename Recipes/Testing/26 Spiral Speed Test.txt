@@ -1,0 +1,41 @@
+# 26 Spiral Speed Test
+# BE CAREFUL: Robot will move and positions are expected to be OK
+# All should be ~5s trial, 50s grind
+
+# At trial grind speed of 20mm/s
+# 10s ==> 200m circum ==> 63.6mm diam
+diam1 = 63.6
+diam2 = {diam1}
+diam1+=2
+diam2-=2
+cmd=grind_spiral({diam1},{diam2},2,2,2,10,0)
+
+flat:
+move_linear(demo_safe)
+move_linear(demo_flat)
+set_part_geometry(FLAT,0)
+{cmd}
+
+cylinder:
+move_linear(demo_safe)
+move_linear(demo_cyl)
+set_part_geometry(CYLINDER,200)
+{cmd}
+set_part_geometry(CYLINDER,500)
+{cmd}
+set_part_geometry(CYLINDER,800)
+{cmd}
+set_part_geometry(CYLINDER,2000)
+{cmd}
+
+sphere:
+move_linear(demo_safe)
+move_linear(demo_sphere)
+set_part_geometry(SPHERE,200)
+{cmd}
+set_part_geometry(SPHERE,500)
+{cmd}
+set_part_geometry(SPHERE,800)
+{cmd}
+set_part_geometry(SPHERE,2000)
+{cmd}

@@ -2152,7 +2152,7 @@ namespace AutoGrind
             int parenIndex = command.IndexOf(')');
             if (parenIndex >= 0 && parenIndex != command.Length - 1)
             {
-                ExecError(string.Format("Illegal line {0}\nContains characters after ')'\n{1}", lineNumber, command));
+                ExecError(string.Format("Illegal line {0}\nContains characters after ')'\n{1}", lineNumber, origLine));
                 return true;
             }
 
@@ -2164,10 +2164,10 @@ namespace AutoGrind
                 if (file.Length > 1)
                 {
                     if (!ImportFile(file))
-                        ExecError(string.Format("File import error\nLine {0}: {1}\nFile would not import", lineNumber, command));
+                        ExecError(string.Format("File import error\nLine {0}: {1}\nFile would not import", lineNumber, origLine));
                 }
                 else
-                    ExecError(String.Format("Invalid import command\nLine {0}: {1}", lineNumber, command));
+                    ExecError(String.Format("Invalid import command\nLine {0}: {1}", lineNumber, origLine));
 
                 return true;
             }
@@ -2239,7 +2239,7 @@ namespace AutoGrind
                 string[] parameters = ExtractParameters(command).Split(',');
                 if (parameters.Length != 2)
                 {
-                    ExecError("Expected jump_gt_zero(variable,label):\nNot " + command);
+                    ExecError("Expected jump_gt_zero(variable,label):\nNot " + origLine);
                     return true;
                 }
                 else

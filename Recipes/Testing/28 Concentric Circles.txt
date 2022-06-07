@@ -1,20 +1,23 @@
-# 26 Concentric Circle Test
+# 28 Concentric Circle Test
 # BE CAREFUL: Robot will move and positions are expected to be OK
+
+count=1
+speed=10
+force=3
 
 move_linear(demo_safe)
 move_linear(demo_flat)
+move_relative(0,25)
+move_relative(0,25)
 
 # Old school
-grind_circle(30,2,0.9,10,1)
-grind_circle(20,2,0.9,10,1)
-grind_circle(10,2,0.9,10,0)
+grind_circle(60,{count},{speed},{force},1)
+grind_circle(50,{count},{speed},{force},1)
+grind_circle(40,{count},{speed},{force},0)
 
-
+test:
 # Do it with a loop
-size = 30
-count = 2
-speed = 0.9
-force = 10
+size = 25
 
 repeat:
 grind_circle({size},{count},{speed},{force},1)
