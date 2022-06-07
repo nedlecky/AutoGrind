@@ -6,6 +6,18 @@ a=1
 label2:
 a=2
 
+jump(_label10)
+_label10:
+
+jump(label_10)
+label_10:
+
+jump(_label_10_)
+_label_10_:
+
+jump(a)
+a:
+
 jump(xyz) # should fail
 
 jump(zzz)

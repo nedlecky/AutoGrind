@@ -1,8 +1,8 @@
 # 56 Spiral Pattern Test
 
 n=1
-speed=2
-force=5
+speed=5
+force=2
 cmd1 = grind_spiral(100,50,3,{n},{speed},{force}
 cmd2 = grind_spiral(10,50,3,{n},{speed},{force}
 

@@ -98,6 +98,9 @@
             this.DiameterDimLbl = new System.Windows.Forms.Label();
             this.MainTab = new System.Windows.Forms.TabControl();
             this.RunPage = new System.Windows.Forms.TabPage();
+            this.label22 = new System.Windows.Forms.Label();
+            this.GrindForceReportZLbl = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             this.label18 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.RobotSentLbl = new System.Windows.Forms.Label();
@@ -196,9 +199,6 @@
             this.VersionLbl = new System.Windows.Forms.Label();
             this.FootswitchPressedLbl = new System.Windows.Forms.Label();
             this.Time2Lbl = new System.Windows.Forms.Label();
-            this.GrindForceReportZLbl = new System.Windows.Forms.Label();
-            this.label21 = new System.Windows.Forms.Label();
-            this.label22 = new System.Windows.Forms.Label();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1084,6 +1084,38 @@
             this.RunPage.Text = "Run";
             this.RunPage.UseVisualStyleBackColor = true;
             // 
+            // label22
+            // 
+            this.label22.AutoSize = true;
+            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label22.Location = new System.Drawing.Point(1362, 695);
+            this.label22.Name = "label22";
+            this.label22.Size = new System.Drawing.Size(49, 46);
+            this.label22.TabIndex = 158;
+            this.label22.Text = "N";
+            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
+            // GrindForceReportZLbl
+            // 
+            this.GrindForceReportZLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.GrindForceReportZLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.GrindForceReportZLbl.Location = new System.Drawing.Point(1250, 693);
+            this.GrindForceReportZLbl.Name = "GrindForceReportZLbl";
+            this.GrindForceReportZLbl.Size = new System.Drawing.Size(112, 52);
+            this.GrindForceReportZLbl.TabIndex = 157;
+            this.GrindForceReportZLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label21.Location = new System.Drawing.Point(832, 695);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(419, 46);
+            this.label21.TabIndex = 156;
+            this.label21.Text = "Last Reported Z Force";
+            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            // 
             // label18
             // 
             this.label18.AutoSize = true;
@@ -1183,22 +1215,22 @@
             // label15
             // 
             this.label15.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label15.Location = new System.Drawing.Point(846, 957);
+            this.label15.Location = new System.Drawing.Point(1438, 957);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(273, 110);
+            this.label15.Size = new System.Drawing.Size(285, 110);
             this.label15.TabIndex = 141;
-            this.label15.Text = "Move to Tool Home Pose:";
-            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label15.Text = "Joint Move to\r\nTool Home Pose:";
+            this.label15.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label11
             // 
             this.label11.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label11.Location = new System.Drawing.Point(848, 838);
+            this.label11.Location = new System.Drawing.Point(1438, 838);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(273, 115);
+            this.label11.Size = new System.Drawing.Size(333, 115);
             this.label11.TabIndex = 139;
-            this.label11.Text = "Move to Tool Mount Pose:";
-            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label11.Text = "Joint Move to\r\nTool Mount Pose:";
+            this.label11.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // MoveToolMountBtn
             // 
@@ -1324,7 +1356,7 @@
             // 
             this.Grind.AutoSize = true;
             this.Grind.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.Grind.Location = new System.Drawing.Point(1353, 641);
+            this.Grind.Location = new System.Drawing.Point(1368, 640);
             this.Grind.Name = "Grind";
             this.Grind.Size = new System.Drawing.Size(54, 46);
             this.Grind.TabIndex = 128;
@@ -1335,7 +1367,7 @@
             // 
             this.GrindNCyclesLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.GrindNCyclesLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1417, 638);
+            this.GrindNCyclesLbl.Location = new System.Drawing.Point(1422, 638);
             this.GrindNCyclesLbl.Name = "GrindNCyclesLbl";
             this.GrindNCyclesLbl.Size = new System.Drawing.Size(100, 52);
             this.GrindNCyclesLbl.TabIndex = 127;
@@ -1347,7 +1379,7 @@
             this.GrindCycleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.GrindCycleLbl.Location = new System.Drawing.Point(1250, 638);
             this.GrindCycleLbl.Name = "GrindCycleLbl";
-            this.GrindCycleLbl.Size = new System.Drawing.Size(95, 52);
+            this.GrindCycleLbl.Size = new System.Drawing.Size(112, 52);
             this.GrindCycleLbl.TabIndex = 126;
             this.GrindCycleLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
@@ -2300,38 +2332,6 @@
             this.Time2Lbl.TabIndex = 151;
             this.Time2Lbl.Text = "Time";
             this.Time2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // GrindForceReportZLbl
-            // 
-            this.GrindForceReportZLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.GrindForceReportZLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.GrindForceReportZLbl.Location = new System.Drawing.Point(1250, 693);
-            this.GrindForceReportZLbl.Name = "GrindForceReportZLbl";
-            this.GrindForceReportZLbl.Size = new System.Drawing.Size(95, 52);
-            this.GrindForceReportZLbl.TabIndex = 157;
-            this.GrindForceReportZLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label21
-            // 
-            this.label21.AutoSize = true;
-            this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(943, 695);
-            this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(301, 46);
-            this.label21.TabIndex = 156;
-            this.label21.Text = "Current Z Force";
-            this.label21.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
-            // 
-            // label22
-            // 
-            this.label22.AutoSize = true;
-            this.label22.Font = new System.Drawing.Font("Microsoft Sans Serif", 30F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label22.Location = new System.Drawing.Point(1351, 695);
-            this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(49, 46);
-            this.label22.TabIndex = 158;
-            this.label22.Text = "N";
-            this.label22.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // MainForm
             // 

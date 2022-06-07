@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
 
-global grind_version = "Rev 2 2022-06-06"
+global grind_version = "Rev 2 2022-06-07"
 
 global grind_abort_listener_thread_handle = 0
 global pattern_grind_thread_handle = 0
@@ -178,6 +178,7 @@ def grind():
     speed_setter(command[6], 0)
     global grind_force_n = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
+    imover_realtime(True)
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 20:
@@ -189,6 +190,7 @@ def grind():
     speed_setter(command[6], min(grind_dx_mm, grind_dy_mm))
     global grind_force_n = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
+    imover_realtime(True)
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
 
   elif command[2] == 30:
@@ -203,6 +205,7 @@ def grind():
     speed_setter(command[8], min_feature_mm)
     global grind_force_n = limiter(command[9], 0, 10)
     global grind_continue = command[10] > 0
+    imover_realtime(True)
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
   elif command[2] == 40:
@@ -215,6 +218,7 @@ def grind():
     speed_setter(command[6], min_feature_mm)
     global grind_force_n = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
+    imover_realtime(True)
     grind_poly(grind_circle1_diam_mm, grind_n_sides, grind_n_cycles, grind_continue)
 
   elif command[2] == 45:
@@ -226,7 +230,9 @@ def grind():
     speed_setter(command[5], min_feature_mm, is_circle = True)
     global grind_force_n = limiter(command[6], 0, 100)
     global grind_continue = command[7] > 0
+    imover_realtime(False)
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
+    imover_realtime(True)
 
   elif command[2] == 50:
     # SPIRAL GRIND
@@ -240,7 +246,9 @@ def grind():
     speed_setter(command[7], min_feature_mm, is_circle = True)
     global grind_force_n = limiter(command[8], 0, 100)
     global grind_continue = command[9] > 0
+    imover_realtime(False)
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_revolutions, grind_n_cycles, grind_continue)
+    imover_realtime(True)
 
   elif command[2] == 99:
     # RETRACT COMMAND
@@ -452,7 +460,19 @@ thread grind_abort_listener_thread():
   global halt_command = [0, 0, 0, 0]
   global halt_count = 0
   global grind_force_report_counter = 0
-  global grind_zforce_n = 0
+  global grind_force_readings_n = 5
+  global grind_force_readings = [0., 0., 0., 0., 0.]
+
+  # Initialize force readings array
+  local i = 0
+  while i < grind_force_readings_n:
+    local f = get_tcp_force()
+    grind_force_readings[i] = f[2]
+    i = i + 1
+  end
+  global grind_force_report_z_n = grind_force_readings[grind_force_readings_n-1]
+  global grind_force_filtered_z_n = grind_force_report_z_n
+
 
   while (halt_count == 0):
     # Commands should never arrive, so this will block us for 0.2s
@@ -478,15 +498,34 @@ thread grind_abort_listener_thread():
       end
     end
 
-    # Report force periodically
+    # Increment reading counter (10000 is high enough... don't need to worry about wraparound effects)
     grind_force_report_counter = grind_force_report_counter + 1
-    if grind_force_report_counter >= 5:
-      global grind_force_report = get_tcp_force()
-      global grind_force_report_z_n = grind_force_report[2]
+    if grind_force_report_counter > 10000:
+      grind_force_report_counter = 0
+    end
+
+    # Store force in circular buffer
+    local force = get_tcp_force()
+    grind_force_readings[grind_force_report_counter % grind_force_readings_n] = force[2]
+
+    # Report force periodically (This executes at 5Hz because of timeout=0.2 in socket_read_ascii_float(...)
+    if grind_force_report_counter % 5 == 0:
+      # Compute average of the stored readings
+      local i = 0
+      local sum = 0.0
+      while i < grind_force_readings_n:
+        sum = sum + grind_force_readings[i]
+        i = i + 1
+      end
+      global grind_force_average_z_n = sum / grind_force_readings_n
+
+      # Any other filtering could be done here...
+      # Round to 2 DP
+      global grind_force_report_z_n = ceil(grind_force_average_z_n*100)/100
+
       socket_send_string("grind_force_report_z_n=")
       socket_send_string(grind_force_report_z_n)
       socket_send_lf()
-      grind_force_report_counter = 0
     end
   end
   return None
@@ -711,7 +750,7 @@ def recommend_npoints(diam_m):
   # 1 point per second?
   local circum_m = MATH_PI * diam_m
   local t = circum_m / grind_speed_mps
-  global grind_circle_n_sides = limiter(t * 2, 2, 1000)
+  global grind_circle_n_sides = limiter(ceil(t * 2), 2, 1000)
 
   # 100mm diam gets 50 points... seems about right
   #global grind_circle_n_sides = limiter(diam_m * 500, 2, 1000)
@@ -720,7 +759,13 @@ end
 
 # Grind along a circle with circle_diam_mm. Repeat n_cycles times. If stay_in_contact, stay_in_contact at end.
 def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
-  grind_circle_n_sides = recommend_npoints(circle_diam_mm / 1000.0)
+  global grind_circle_n_sides = recommend_npoints(circle_diam_mm / 1000.0)
+
+  if grind_blend_radius_m > 0.0:
+    # Try setting n_sides to 1.5 blend radii
+    local circum_m = MATH_PI * circle_diam_mm / 1000.
+    global grind_circle_n_sides = ceil(circum_m / (grind_blend_radius_m * 1.5))
+  end
   return grind_poly(circle_diam_mm, grind_circle_n_sides, n_cycles, stay_in_contact)
 end
 

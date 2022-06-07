@@ -1554,7 +1554,7 @@ namespace AutoGrind
 
             AutoGrindRoot = "C:\\AutoGrind";
             AutoGrindRootLbl.Text = AutoGrindRoot;
-            AutoGrindRootLbl.Text = "AutoGrind/AutoGrind01.urp";
+            AutoGrindRootLbl.Text = "AutoGrind/AutoGrind02.urp";
             ServerIpTxt.Text = "192.168.0.252";
             RobotIpTxt.Text = "192.168.0.2";
             AllowRunningOfflineChk.Checked = false;
@@ -1618,7 +1618,7 @@ namespace AutoGrind
             System.IO.Directory.CreateDirectory(Path.Combine(AutoGrindRoot, "Recipes"));
 
             AutoGrindRootLbl.Text = AutoGrindRoot;
-            RobotProgramTxt.Text = (string)AppNameKey.GetValue("RobotProgramTxt.Text", "AutoGrind/AutoGrind01.urp");
+            RobotProgramTxt.Text = (string)AppNameKey.GetValue("RobotProgramTxt.Text", "AutoGrind/AutoGrind02.urp");
             RobotIpTxt.Text = (string)AppNameKey.GetValue("RobotIpTxt.Text", "192.168.0.2");
             ServerIpTxt.Text = (string)AppNameKey.GetValue("ServerIpTxt.Text", "192.168.0.252");
             AllowRunningOfflineChk.Checked = Convert.ToBoolean(AppNameKey.GetValue("AllowRunningOfflineChk.Checked", "False"));
@@ -1810,7 +1810,7 @@ namespace AutoGrind
         /// <returns>(bool Success, string Value if matched else null)</returns>
         private (bool Success, string Value) IsLineALabel(string line)
         {
-            Regex regex = new Regex("^[A-Za-z][A-Za-z0-9]+:");
+            Regex regex = new Regex("^[A-Za-z_][A-Za-z0-9_]*:");
             Match match = regex.Match(line);
             if (match.Success)
                 return (true, match.Value.Trim(':'));
@@ -3085,7 +3085,7 @@ namespace AutoGrind
             ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
             ExecuteLine(-1, String.Format("grind_accel({0})", 100));
             ExecuteLine(-1, String.Format("grind_point_frequency({0})", 2));
-            ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 1.5));
+            ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 2));
             ExecuteLine(-1, String.Format("grind_touch_speed({0})", 10));
             ExecuteLine(-1, String.Format("grind_touch_retract({0})", 3));
             ExecuteLine(-1, String.Format("grind_force_dwell({0})", 500));

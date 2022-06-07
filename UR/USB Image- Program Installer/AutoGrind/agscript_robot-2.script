@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
 
-global robot_version = "Rev 2 2022-06-06"
+global robot_version = "Rev 2 2022-06-07"
 
 global response = "unknown"
 global robot_index = 0
@@ -538,6 +538,7 @@ thread move_thread():
   move_thread_flag = 2
   exit_critical
 end
+
 # Currently using speed_mmps for both approach and 2X for departure
 def touchoff(approach_speed_mmps, retract_mm):
   approach_speed_mps = approach_speed_mmps / 1000.0
@@ -590,7 +591,7 @@ end
 # ####################################################################################
 # START IMOVER SYSTEM
 #
-global imover_enable = True
+global imover_realtime_enabled = True
 global imover_p = p[0, 0, 0, 0, 0, 0]
 global imover_q = [0, 0, 0, 0, 0, 0]
 global imover_a = 1.2
@@ -619,6 +620,40 @@ imover_SETTCP = 10
 imover_SETPAYLOAD = 11
 imover_TOUCHOFF = 12
 
+def imover_realtime(f = False):
+  if f and not imover_realtime_enabled:
+    imover_realtime_enabled = True
+    imover_restart()
+  elif not f and imover_realtime_enabled:
+    imover_abort()
+    imover_realtime_enabled = False
+  end
+end
+
+def imover_abort():
+  if not imover_realtime_enabled:
+    return None
+  end
+
+  if imover_thread_handle > 0:
+    kill imover_thread_handle
+    imover_thread_handle = 0
+  end
+  set_tcp(imover_tcp)
+  set_payload(imover_mass, imover_cog)
+end
+
+def imover_restart():
+  if not imover_realtime_enabled:
+    return None
+  end
+
+  imover_abort()
+  global imover_thread_handle = run imover_thread()
+  iset_tcp(imover_tcp)
+  iset_payload(imover_mass, imover_cog)
+end
+
 def imover_wait(terminate_not_ok = False):
   while imover_cmd > 0:
     if terminate_not_ok and not ok_to_proceed():
@@ -646,24 +681,8 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, no_wa
   end
 end
 
-def imover_abort():
-  if imover_thread_handle > 0:
-    kill imover_thread_handle
-    imover_thread_handle = 0
-  end
-  set_tcp(imover_tcp)
-  set_payload(imover_mass, imover_cog)
-end
-
-def imover_restart():
-  imover_abort()
-  global imover_thread_handle = run imover_thread()
-  iset_tcp(imover_tcp)
-  iset_payload(imover_mass, imover_cog)
-end
-
 def istopl(a, aRot = 999):
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_STOPL, a, aRot)
   else:
     if aRot == 999:
@@ -675,7 +694,7 @@ def istopl(a, aRot = 999):
 end
 
 def iforce_mode(force_n, approach_speed_mmps):
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_STARTFORCE, force_n, approach_speed_mmps)
   else:
     sleep(0.25)
@@ -695,7 +714,7 @@ def iforce_mode(force_n, approach_speed_mmps):
 end
 
 def iforce_update(force_n = 5, approach_speed_mmps = 10):
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_UPDATEFORCE, force_n, approach_speed_mmps)
   else:
     # Force is in tool frame
@@ -708,7 +727,7 @@ def iforce_update(force_n = 5, approach_speed_mmps = 10):
 end
 
 def iend_force_mode():
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_ENDFORCE)
   else:
     end_force_mode()
@@ -716,7 +735,7 @@ def iend_force_mode():
 end
 
 def iget_actual_tcp_pose():
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_GETACTUALTCPPOSE)
     return imover_p
   else:
@@ -725,7 +744,7 @@ def iget_actual_tcp_pose():
 end
 
 def iget_actual_joint_positions():
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_GETACTUALJOINTPOSITIONS)
     return imover_q
   else:
@@ -734,19 +753,18 @@ def iget_actual_joint_positions():
 end
 
 def iset_tcp(tcp):
-  if imover_enable:
-    imover_tcp = tcp
+  imover_tcp = tcp
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_SETTCP)
-    return imover_q
   else:
     set_tcp(tcp)
   end
 end
 
 def iset_payload(mass, cog):
-  if imover_enable:
-    imover_mass = mass
-    imover_cog = cog
+  imover_mass = mass
+  imover_cog = cog
+  if imover_realtime_enabled:
     imover_cmd_exec(imover_SETPAYLOAD)
   else:
     set_payload(mass, cog)
@@ -754,7 +772,7 @@ def iset_payload(mass, cog):
 end
 
 def itouchoff(speed_mmps, retract_mm):
-  if False: #imover_enable:
+  if False: #imover_realtime_enabled:
     imover_param1 = speed_mmps
     imover_param2 = retract_mm
     imover_cmd_exec(imover_TOUCHOFF)
@@ -765,7 +783,7 @@ def itouchoff(speed_mmps, retract_mm):
 end
 
 def imovel(p, a = 1.2, v = 0.25, t = 0, r = 0):
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_wait()
     global imover_p = p
     global imover_a = a
@@ -783,7 +801,7 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
     return None
   end
 
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_wait()
     global imover_p = p
     global imover_a = a
@@ -801,7 +819,7 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
 end
 
 def imovej(q, a = 1.2, v = 0.25, t = 0, r = 0):
-  if imover_enable:
+  if imover_realtime_enabled:
     imover_wait()
     global imover_q = q
     global imover_a = a
