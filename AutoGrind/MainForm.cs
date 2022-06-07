@@ -110,6 +110,11 @@ namespace AutoGrind
             log.Info(caption);
             log.Info("================================================================");
 
+            // Suggested root?
+            string suggestedRoot = Path.GetFullPath(Path.Combine(executionRoot, "../../../.."));
+            log.Info("Current root is {0}", AutoGrindRoot);
+            log.Info("Suggested root is {0}", suggestedRoot);
+
 
             // 1-second tick
             HeartbeatTmr.Interval = 1000;
