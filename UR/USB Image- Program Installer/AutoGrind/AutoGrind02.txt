@@ -1,6 +1,6 @@
  Program
    BeforeStart
-     Script: agscript_util-2.script
+     Script: agscript_util.script
      Script: agscript_robot-2.script
      Script: agscript_grind-2.script
      currentTcpPose≔get_actual_tcp_pose()

@@ -513,9 +513,9 @@ end
 # ####################################################################################
 
 # ####################################################################################
-# START TOUCHOFF HANDLER
+# START OLD TOUCHOFF HANDLER
 #
-def calculate_point_to_move_towards(feature, direction, position_distance):
+def calculate_point_to_move_towards_old(feature, direction, position_distance):
   local posDir = [direction[0], direction[1], direction[2]]
   if (norm(posDir) < 1e-6):
     return get_target_waypoint()
@@ -530,17 +530,17 @@ end
 #$ 9 "Direction: Tool Z+"
 global move_thread_flag = 0
 global move_thread_approach_speed_mps = 0.01
-thread move_thread():
+thread move_thread_old():
   enter_critical
   move_thread_flag = 1
-  local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
+  local towardsPos = calculate_point_to_move_towards_old(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
   imovel(towardsPos, a = 0.5, v = move_thread_approach_speed_mps)
   move_thread_flag = 2
   exit_critical
 end
 
 # Currently using speed_mmps for both approach and 2X for departure
-def touchoff(approach_speed_mmps, retract_mm):
+def touchoff_old(approach_speed_mmps, retract_mm):
   approach_speed_mps = approach_speed_mmps / 1000.0
   global move_thread_approach_speed_mps = approach_speed_mps
 
@@ -549,14 +549,14 @@ def touchoff(approach_speed_mmps, retract_mm):
   retract_m = retract_mm / 1000.0
 
   move_thread_flag = 0
-  move_thread_han = run move_thread()
+  move_thread_han = run move_thread_old()
   while (True):
     local targetTcpDirection = get_target_tcp_speed()
     local stepsToRetract = tool_contact(direction = targetTcpDirection)
     if (stepsToRetract > 0):
       kill move_thread_han
-      imover_restart()
-      istopl(20)
+      #imover_restart()
+      #istopl(20)
       local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
       local contactPose = get_forward_kin(backTrackMovement)
       local posDir = [targetTcpDirection[0], targetTcpDirection[1], targetTcpDirection[2]]
@@ -585,20 +585,99 @@ def touchoff(approach_speed_mmps, retract_mm):
   return False
 end
 #
-# END TOUCHOFF HANDLER
+# END OLD TOUCHOFF HANDLER
+# ####################################################################################
+
+# ####################################################################################
+# START NEW TOUCHOFF HANDLER
+#
+def calculate_point_to_move_towards(feature, direction, position_distance):
+  local posDir = [direction[0], direction[1], direction[2]]
+  if (norm(posDir) < 1e-6):
+    return get_target_waypoint()
+  end
+  local direction_vector_normalized = normalize(posDir)
+  local displacement_pose = p[direction_vector_normalized[0] * position_distance, direction_vector_normalized[1] * position_distance, direction_vector_normalized[2] * position_distance, 0, 0, 0]
+  local wanted_displacement_in_base_frame = pose_sub(pose_trans(feature, displacement_pose), feature)
+  return pose_add(get_target_waypoint(), wanted_displacement_in_base_frame)
+end
+#$ 7 "Robot Program"
+#$ 8 "MoveL"
+#$ 9 "Direction: Tool Z+"
+global move_thread_flag = 0
+global move_thread_approach_speed_mps = 0.01
+def move_nowait():
+  move_thread_flag = 1
+  local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
+  imovel_int(towardsPos, a = 0.5, v = move_thread_approach_speed_mps, wait = False)
+  move_thread_flag = 2
+end
+
+# Currently using speed_mmps for both approach and 2X for departure
+def touchoff(approach_speed_mmps, retract_mm):
+  approach_speed_mps = approach_speed_mmps / 1000.0
+  global move_thread_approach_speed_mps = approach_speed_mps
+
+  retract_speed_mps = approach_speed_mps * 2.0
+
+  retract_m = retract_mm / 1000.0
+
+  # Start non-blocking move: only works with imover_realtime!
+  imover_realtime(True)
+  move_nowait()
+
+  while (True):
+    local targetTcpDirection = get_target_tcp_speed()
+    local stepsToRetract = tool_contact(direction = targetTcpDirection)
+    if (stepsToRetract > 0):
+      # Contact!
+      imover_restart()
+      local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
+      local contactPose = get_forward_kin(backTrackMovement)
+      local posDir = [targetTcpDirection[0], targetTcpDirection[1], targetTcpDirection[2]]
+      local retractTo = contactPose
+      if (norm(posDir) > 1e-6):
+        local normalizedPosDir = normalize(posDir)
+        local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
+        retractTo = pose_sub(contactPose, additionalRetraction)
+      end
+      imovel(retractTo, a = 1.0, v = retract_speed_mps)
+      #$ 10 "Until (tool_contact_detection)"
+      return True
+      break
+    end
+    sleep(1.0E-10)
+    if (imover_cmd == 0): # Done moving?
+      # No part encountered
+      return False
+      break
+    end
+    sync()
+  end
+  return False
+end
+#
+# END NEW TOUCHOFF HANDLER
 # ####################################################################################
 
 # ####################################################################################
 # START IMOVER SYSTEM
 #
 global imover_realtime_enabled = True
+global imover_restart_count = 0
+global imover_kill_count = 0
+global imover_stopl_count = 0
+global imover_stopj_count = 0
 global imover_p = p[0, 0, 0, 0, 0, 0]
 global imover_q = [0, 0, 0, 0, 0, 0]
 global imover_a = 1.2
 global imover_v = 0.25
 global imover_t = 0
 global imover_r = 0
-global imover_f = False
+global imover_ret_f = False
+global imover_force_on = False
+global imover_force_N = 5
+global imover_force_speed_mmps = 10
 global imover_tcp = p[0, 0, 0, 0, 0, 0]
 global imover_mass = 1.0
 global imover_cog = [0, 0, 0]
@@ -611,47 +690,61 @@ imover_PING = 1
 imover_MOVEL = 2
 imover_MOVEJ = 3
 imover_STOPL = 4
-imover_STARTFORCE = 5
-imover_UPDATEFORCE = 6
-imover_ENDFORCE = 7
-imover_GETACTUALTCPPOSE = 8
-imover_GETACTUALJOINTPOSITIONS = 9
-imover_SETTCP = 10
-imover_SETPAYLOAD = 11
-imover_TOUCHOFF = 12
+imover_ZEROFORCE = 5
+imover_STARTFORCE = 6
+imover_UPDATEFORCE = 7
+imover_ENDFORCE = 8
+imover_GETACTUALTCPPOSE = 9
+imover_GETACTUALJOINTPOSITIONS = 10
+imover_SETTCP = 11
+imover_SETPAYLOAD = 12
+imover_TOUCHOFF = 13
 
 def imover_realtime(f = False):
-  if f and not imover_realtime_enabled:
+  if f and (not imover_realtime_enabled):
+    # Turning on separate imover thread
     imover_realtime_enabled = True
     imover_restart()
-  elif not f and imover_realtime_enabled:
-    imover_abort()
+    #imover_state_alignment()    # Called by imover_restart()
+  elif (not f) and imover_realtime_enabled:
+    # Turning off separate imover thread
+    imover_kill()
     imover_realtime_enabled = False
+    imover_state_alignment()
   end
 end
 
-def imover_abort():
-  if not imover_realtime_enabled:
-    return None
+def imover_state_alignment():
+  # Reestablish state of motion control in current thread
+  iset_tcp(imover_tcp)
+  iset_payload(imover_mass, imover_cog)
+  if imover_force_on:
+    iforce_mode(imover_force_N, imover_force_speed_mmps)
+  else:
+    iend_force_mode()
   end
+end
 
+# Kill the imover htread and insure motion is stopped
+def imover_kill():
   if imover_thread_handle > 0:
     kill imover_thread_handle
     imover_thread_handle = 0
+    global imover_kill_count = imover_kill_count + 1
+    sleep(0.05)
+    stopl(20)
   end
-  set_tcp(imover_tcp)
-  set_payload(imover_mass, imover_cog)
 end
 
 def imover_restart():
-  if not imover_realtime_enabled:
-    return None
-  end
+  imover_kill()
 
-  imover_abort()
+  global imover_cmd = 0
   global imover_thread_handle = run imover_thread()
-  iset_tcp(imover_tcp)
-  iset_payload(imover_mass, imover_cog)
+  sleep(0.2)
+  # Reload state (tcp, payload, force mode...)
+  imover_state_alignment()
+  global imover_restart_count = imover_restart_count + 1
 end
 
 def imover_wait(terminate_not_ok = False):
@@ -663,7 +756,7 @@ def imover_wait(terminate_not_ok = False):
   end
 end
 
-def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, no_wait = False):
+def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, wait_complete = True):
   imover_wait()
   global imover_param1 = param1
   global imover_param2 = param2
@@ -674,9 +767,10 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, no_wa
     i = i - 1
   end
   imover_cmd_hist[0] = cmd
+  # This gets the thread doing something!
   global imover_cmd = cmd
 
-  if not no_wait:
+  if wait_complete:
     imover_wait(terminate_not_ok)
   end
 end
@@ -693,37 +787,55 @@ def istopl(a, aRot = 999):
   end
 end
 
-def iforce_mode(force_n, approach_speed_mmps):
+def izero_ftsensor():
   if imover_realtime_enabled:
-    imover_cmd_exec(imover_STARTFORCE, force_n, approach_speed_mmps)
+    imover_cmd_exec(imover_ZEROFORCE)
   else:
     sleep(0.25)
     zero_ftsensor()
+    zero_ftsensor()
+  end
+end
+
+def iforce_mode(force_N, approach_speed_mmps):
+  if imover_realtime_enabled:
+    imover_cmd_exec(imover_STARTFORCE, force_N, approach_speed_mmps)
+  else:
+    # Don't forget to call izero_ftsensor before this at some point when appropriate!
 
     # Using the defaults here
-    force_mode_set_damping(0)
-    force_mode_set_gain_scaling(1)
+    #force_mode_set_damping(0)
+    #force_mode_set_gain_scaling(1)
 
     # Force is in tool frame
     # Compliant in Tool Z
     # Applying grind_force_n in Z+
     # 2: Force frame not transformed
     # Speed limits
-    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   end
+  global imover_force_N = force_N
+  global imover_force_speed_mmps = approach_speed_mmps
+  global imover_force_on = True
 end
 
-def iforce_update(force_n = 5, approach_speed_mmps = 10):
+def iforce_update(force_N = 5, approach_speed_mmps = 10):
+  if not imover_force_on:
+    return None
+  end
+
   if imover_realtime_enabled:
-    imover_cmd_exec(imover_UPDATEFORCE, force_n, approach_speed_mmps)
+    imover_cmd_exec(imover_UPDATEFORCE, force_N, approach_speed_mmps)
   else:
     # Force is in tool frame
     # Compliant in Tool Z
     # Applying grind_force_n in Z+
     # 2: Force frame not transformed
     # Speed limits
-    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   end
+  global imover_force_N = force_N
+  global imover_force_speed_mmps = approach_speed_mmps
 end
 
 def iend_force_mode():
@@ -732,6 +844,7 @@ def iend_force_mode():
   else:
     end_force_mode()
   end
+  global imover_force_on = False
 end
 
 def iget_actual_tcp_pose():
@@ -776,7 +889,7 @@ def itouchoff(speed_mmps, retract_mm):
     imover_param1 = speed_mmps
     imover_param2 = retract_mm
     imover_cmd_exec(imover_TOUCHOFF)
-    return imover_f
+    return imover_ret_f
   else:
     return touchoff(speed_mmps, retract_mm)
   end
@@ -790,13 +903,13 @@ def imovel(p, a = 1.2, v = 0.25, t = 0, r = 0):
     global imover_v = v
     global imover_t = t
     global imover_r = r
-    imover_cmd_exec(imover_MOVEL, 0, 0, True)
+    imover_cmd_exec(imover_MOVEL)
   else:
     movel(p, a = a, v = v, t = t, r = r)
   end
 end
 
-def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
+def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
   if not ok_to_proceed():
     return None
   end
@@ -808,10 +921,22 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
     global imover_v = v
     global imover_t = t
     global imover_r = r
-    imover_cmd_exec(imover_MOVEL, 0, 0, True, no_wait)
-    if not ok_to_proceed():
+    imover_cmd_exec(imover_MOVEL, terminate_not_ok = True, wait_complete = wait)
+    if not ok_to_proceed():  # We got interrupted
+      # Halt any motion in progress... this is really the whole reason for imover
+      imover_kill()
+
+      # Had occasional move continuation.. added these as belt-and-suspenders!
+      sleep(0.1)
+      stopl(10)
+      global imover_stopl_count = imover_stopl_count + 1
+
+      sleep(0.1)
+      stopj(10)
+      global imover_stopj_count = imover_stopj_count + 1
+
+      # Restart the thread
       imover_restart()
-      istopl(grind_accel_mpss, grind_rot_accel_rpss)
     end
   else:
     movel(p, a = a, v = v, t = t, r = r)
@@ -844,11 +969,12 @@ thread imover_thread():
     elif imover_cmd == imover_STOPL:
       stopl(grind_speed_mps, grind_rot_speed_rps)
       global imover_cmd = 0
-    elif imover_cmd == imover_STARTFORCE:
-      # Settle and zero the force/torque sensor
+    elif imover_cmd == imover_ZEROFORCE:
       sleep(0.25)
       zero_ftsensor()
-
+      zero_ftsensor()
+      global imover_cmd = 0
+    elif imover_cmd == imover_STARTFORCE:
       # Using the defaults here
       force_mode_set_damping(0)
       force_mode_set_gain_scaling(1)
@@ -873,10 +999,10 @@ thread imover_thread():
       end_force_mode()
       global imover_cmd = 0
     elif imover_cmd == imover_GETACTUALTCPPOSE:
-      imover_p = get_actual_tcp_pose()
+      global imover_p = get_actual_tcp_pose()
       global imover_cmd = 0
     elif imover_cmd == imover_GETACTUALJOINTPOSITIONS:
-      imover_q = get_actual_joint_positions()
+      global imover_q = get_actual_joint_positions()
       global imover_cmd = 0
     elif imover_cmd == imover_SETTCP:
       set_tcp(imover_tcp)
@@ -885,7 +1011,7 @@ thread imover_thread():
       set_payload(imover_mass, imover_cog)
       global imover_cmd = 0
     elif imover_cmd == imover_TOUCHOFF:
-      imover_f = touchoff(imover_param1, imover_param2)
+      global imover_ret_f = touchoff(imover_param1, imover_param2)
       global imover_cmd = 0
     elif imover_cmd == imover_PING:
       global imover_cmd = 0
@@ -896,4 +1022,68 @@ end
 global imover_thread_handle = run imover_thread()
 #
 # END IMOVER SYSTEM
+# ####################################################################################
+
+# ####################################################################################
+# START DRAWING SYSTEM
+#
+global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+
+def draw_start(current_dp):
+  global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+
+  draw_to(current_dp)
+end
+
+def draw_to(dp, r = -1, wait = True):
+  global draw_current_ddp0 = abs(dp[0] - draw_current_dp[0])
+  global draw_current_ddp1 = abs(dp[1] - draw_current_dp[1])
+  global draw_current_ddp3 = abs(dp[3] - draw_current_dp[3])
+  global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
+  # Flat:     X, Y
+  # Cylinder: X, RX
+  # Sphere:   RX, RX
+  local shape = robot_part_geometry[0]
+  if shape == 3: # Sphere
+    global process_a = grind_rot_accel_rpss
+    global process_v = grind_rot_speed_rps
+    global process_r = grind_rot_blend_radius_rad
+  elif shape == 2: # Cylinder
+    global process_theta = atan2(draw_current_ddp3, draw_current_ddp0)
+    global process_rotational_factor = abs(sin(process_theta))
+    global process_a =
+    (
+      grind_accel_mpss * (1 - process_rotational_factor) +
+      grind_rot_accel_rpss * (process_rotational_factor)
+    )
+    global process_v =
+    (
+      grind_speed_mps * (1 - process_rotational_factor) +
+      grind_rot_speed_rps * (process_rotational_factor)
+    )
+    global process_r = 
+    (
+      grind_blend_radius_m * (1 - process_rotational_factor) +
+      grind_rot_blend_radius_rad * (process_rotational_factor)
+    )
+  else: # Flat
+    global process_a = grind_accel_mpss
+    global process_v = grind_speed_mps
+    global process_r = grind_blend_radius_m
+  end
+
+  global process_r_in = r
+  if r >= 0:
+    global process_r = r
+  end
+
+  global draw_current_dp = dp
+  imovel_int(pose_trans(p_contact_center, draw_current_dp), a = process_a, v = process_v, r = process_r, wait = wait)
+end
+
+def draw_finish(p):
+  draw_to(p, r = 0)
+end
+#
+# END DRAWING SYSTEM
 # ####################################################################################

@@ -261,7 +261,7 @@ namespace AutoGrind
         // Something isn't right. If we're not stopped, select STOP
         private void EnsureStopped()
         {
-            if (runState == RunState.RUNNING || runState==RunState.PAUSED)
+            if (runState == RunState.RUNNING || runState == RunState.PAUSED)
                 StopBtn_Click(null, null);
         }
 
@@ -546,7 +546,7 @@ namespace AutoGrind
                     color = Color.Red;
                     break;
             }
-            SafetyStatusBtn.Text = buttonText.Replace('_',' ');
+            SafetyStatusBtn.Text = buttonText.Replace('_', ' ');
             SafetyStatusBtn.BackColor = color;
         }
 
@@ -1269,6 +1269,7 @@ namespace AutoGrind
             }
         }
 
+        private bool dontSendTen = false;
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn{0}_Click(...)", PauseBtn.Text);
@@ -1276,7 +1277,10 @@ namespace AutoGrind
             {
                 case RunState.RUNNING:
                     // Perform PAUSE function
-                    RobotSend("10");  // This will cancel any grind in progress
+                    if (dontSendTen)
+                        dontSendTen = false;
+                    else
+                        RobotSend("10");  // This will cancel any grind in progress
                     SetState(RunState.PAUSED);
                     break;
                 case RunState.PAUSED:
@@ -1336,9 +1340,6 @@ namespace AutoGrind
         {
             log.Info("StopBtn_Click(...)");
             RobotSend("10");  // This will cancel any grind in progress
-
-            // Make sure we are off the part
-            ExecuteLine(-1, "grind_retract()");
 
             UnboldRecipe();
             SetState(RunState.READY);
@@ -2713,7 +2714,7 @@ namespace AutoGrind
             {
                 if (robotCommandServer.IsConnected())
                 {
-                    if(ProgramStateBtn.Text.StartsWith("PLAYING")) RobotSend("98");
+                    if (ProgramStateBtn.Text.StartsWith("PLAYING")) RobotSend("98");
                     robotCommandServer.Disconnect();
                 }
                 robotCommandServer = null;
@@ -3321,7 +3322,11 @@ namespace AutoGrind
                             DoorClosedLbl.Text = "DOOR OPEN";
                             DoorClosedLbl.BackColor = Color.Red;
                             if (runState == RunState.RUNNING)
+                            {
+                                // Trying to avoid bothering UR with a stop command... it is already stopping because it saw the door open!
+                                dontSendTen = true;
                                 PauseBtn_Click(null, null);
+                            }
                             break;
                         case "1":
                             DoorClosedLbl.Text = "DOOR CLOSED";

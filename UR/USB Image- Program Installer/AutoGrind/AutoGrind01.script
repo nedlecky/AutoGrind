@@ -1,20 +1,14 @@
 def AutoGrind01():
   global _hidden_verificationVariable=0
+  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
+  set_gravity([0.0, 0.0, 9.82])
   set_target_payload(0.980000, [0.000000, 0.002000, 0.048000], [0.001488, 0.001488, 0.001488, 0.000000, 0.000000, 0.000000])
-  step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 = 0.0
-  thread Step_Counter_Thread_a3070146_e36c_462d_8fff_e28e51f8059f():
-    while (True):
-      step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 = step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_a3070146_e36c_462d_8fff_e28e51f8059f()
+  set_safety_mode_transition_hardness(1)
   set_tool_communication(True, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(24)
-  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -31,8 +25,14 @@ def AutoGrind01():
   set_runstate_standard_digital_output_to_value(4, 4)
   set_runstate_standard_digital_output_to_value(5, 4)
   set_runstate_standard_digital_output_to_value(6, 4)
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
+  step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d = 0.0
+  thread Step_Counter_Thread_2d2bf7a9_b510_40d4_b0f2_71e37093fa82():
+    while (True):
+      step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d = step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_2d2bf7a9_b510_40d4_b0f2_71e37093fa82()
   # begin: URCap Installation Node
   #   Source: Robotiq_Grippers, 1.8.10.17249, Robotiq Inc.
   #   Type: Vacuum
@@ -2397,13 +2397,13 @@ def AutoGrind01():
   end
   # end: URCap Installation Node
   $ 1 "BeforeStart"
-  $ 2 "Script: agscript_util-1.script"
-  # File: agscript_util-1.script
+  $ 2 "Script: agscript_util.script"
+  # File: agscript_util.script
   # Project: AutoGrind
   # Author: Ned Lecky, Lecky Engineering LLC
-  # Purpose: General utility function used in AutoGrind
+  # Purpose: General utility functions used in AutoGrind
   
-  global robot_util_version = "Rev 1 2022-06-02"
+  global robot_util_version = "2022-06-07"
   
   # Return max of 2 numeric values
   def max(n1, n2):

@@ -1,20 +1,14 @@
 def AutoGrind02():
   global _hidden_verificationVariable=0
+  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
+  set_gravity([0.0, 0.0, 9.82])
   set_target_payload(0.980000, [0.000000, 0.002000, 0.048000], [0.001488, 0.001488, 0.001488, 0.000000, 0.000000, 0.000000])
-  step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 = 0.0
-  thread Step_Counter_Thread_a3070146_e36c_462d_8fff_e28e51f8059f():
-    while (True):
-      step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 = step_count_0b840938_9ae9_4dfe_a7bd_4b64621a4374 + 1.0
-      sync()
-    end
-  end
-  run Step_Counter_Thread_a3070146_e36c_462d_8fff_e28e51f8059f()
+  set_safety_mode_transition_hardness(1)
   set_tool_communication(True, 115200, 0, 1, 1.5, 3.5)
   set_tool_output_mode(0)
   set_tool_digital_output_mode(0, 1)
   set_tool_digital_output_mode(1, 1)
   set_tool_voltage(24)
-  set_tcp(p[0.0,0.0,0.175,0.0,0.0,0.0])
   set_standard_analog_input_domain(0, 1)
   set_standard_analog_input_domain(1, 1)
   set_tool_analog_input_domain(0, 1)
@@ -31,8 +25,14 @@ def AutoGrind02():
   set_runstate_standard_digital_output_to_value(4, 4)
   set_runstate_standard_digital_output_to_value(5, 4)
   set_runstate_standard_digital_output_to_value(6, 4)
-  set_gravity([0.0, 0.0, 9.82])
-  set_safety_mode_transition_hardness(1)
+  step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d = 0.0
+  thread Step_Counter_Thread_2d2bf7a9_b510_40d4_b0f2_71e37093fa82():
+    while (True):
+      step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d = step_count_68bc6a8a_71b4_4e8e_9788_651a6711282d + 1.0
+      sync()
+    end
+  end
+  run Step_Counter_Thread_2d2bf7a9_b510_40d4_b0f2_71e37093fa82()
   # begin: URCap Installation Node
   #   Source: Robotiq_Grippers, 1.8.10.17249, Robotiq Inc.
   #   Type: Vacuum
@@ -2397,13 +2397,13 @@ def AutoGrind02():
   end
   # end: URCap Installation Node
   $ 1 "BeforeStart"
-  $ 2 "Script: agscript_util-2.script"
-  # File: agscript_util-2.scripts
+  $ 2 "Script: agscript_util.script"
+  # File: agscript_util.script
   # Project: AutoGrind
   # Author: Ned Lecky, Lecky Engineering LLC
-  # Purpose: General utility function used in AutoGrind
+  # Purpose: General utility functions used in AutoGrind
   
-  global robot_util_version = "Rev 2 2022-06-02"
+  global robot_util_version = "2022-06-07"
   
   # Return max of 2 numeric values
   def max(n1, n2):
@@ -2486,7 +2486,7 @@ def AutoGrind02():
   end
   
   # Special support to receive 1-4 port,value pairs and always pad with -1s to make 4 pairs
-  # Essentialy returns command[3:end] padded out with -1s to always be 8 elements
+  # Essentially returns command[3:end] padded out with -1s to always be 8 elements
   # Assumes length of command is specified in command[0]
   def command_3_padded_8(command):
     ret8 = [-1, -1, -1, -1, -1, -1, -1, -1]
@@ -3092,13 +3092,18 @@ def AutoGrind02():
   # START IMOVER SYSTEM
   #
   global imover_realtime_enabled = True
+  global imover_restart_count = 0
+  global imover_kill_count = 0
   global imover_p = p[0, 0, 0, 0, 0, 0]
   global imover_q = [0, 0, 0, 0, 0, 0]
   global imover_a = 1.2
   global imover_v = 0.25
   global imover_t = 0
   global imover_r = 0
-  global imover_f = False
+  global imover_ret_f = False
+  global imover_force_on = False
+  global imover_force_N = 5
+  global imover_force_speed_mmps = 10
   global imover_tcp = p[0, 0, 0, 0, 0, 0]
   global imover_mass = 1.0
   global imover_cog = [0, 0, 0]
@@ -3111,47 +3116,55 @@ def AutoGrind02():
   imover_MOVEL = 2
   imover_MOVEJ = 3
   imover_STOPL = 4
-  imover_STARTFORCE = 5
-  imover_UPDATEFORCE = 6
-  imover_ENDFORCE = 7
-  imover_GETACTUALTCPPOSE = 8
-  imover_GETACTUALJOINTPOSITIONS = 9
-  imover_SETTCP = 10
-  imover_SETPAYLOAD = 11
-  imover_TOUCHOFF = 12
+  imover_ZEROFORCE = 5
+  imover_STARTFORCE = 6
+  imover_UPDATEFORCE = 7
+  imover_ENDFORCE = 8
+  imover_GETACTUALTCPPOSE = 9
+  imover_GETACTUALJOINTPOSITIONS = 10
+  imover_SETTCP = 11
+  imover_SETPAYLOAD = 12
+  imover_TOUCHOFF = 13
   
   def imover_realtime(f = False):
     if f and not imover_realtime_enabled:
+      # Turning on separate imover thread
       imover_realtime_enabled = True
       imover_restart()
+      #imover_state_alignment()    # Called by imover_restart()
     elif not f and imover_realtime_enabled:
-      imover_abort()
+      # Turning off separate imover thread
+      imover_kill()
       imover_realtime_enabled = False
+      imover_state_alignment()
     end
   end
   
-  def imover_abort():
-    if not imover_realtime_enabled:
-      return None
+  def imover_state_alignment():
+    # Reestablish state of motion control in current thread
+    iset_tcp(imover_tcp)
+    iset_payload(imover_mass, imover_cog)
+    if imover_force_on:
+      iforce_mode(imover_force_N, imover_force_speed_mmps)
+    else:
+      iend_force_mode()
     end
+  end
   
+  def imover_kill():
     if imover_thread_handle > 0:
       kill imover_thread_handle
       imover_thread_handle = 0
+      global imover_kill_count = imover_kill_count + 1
     end
-    set_tcp(imover_tcp)
-    set_payload(imover_mass, imover_cog)
   end
   
   def imover_restart():
-    if not imover_realtime_enabled:
-      return None
-    end
+    imover_kill()
   
-    imover_abort()
     global imover_thread_handle = run imover_thread()
-    iset_tcp(imover_tcp)
-    iset_payload(imover_mass, imover_cog)
+    imover_state_alignment()
+    global imover_restart_count = imover_restart_count + 1
   end
   
   def imover_wait(terminate_not_ok = False):
@@ -3163,7 +3176,7 @@ def AutoGrind02():
     end
   end
   
-  def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, no_wait = False):
+  def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, wait_complete = True):
     imover_wait()
     global imover_param1 = param1
     global imover_param2 = param2
@@ -3176,7 +3189,7 @@ def AutoGrind02():
     imover_cmd_hist[0] = cmd
     global imover_cmd = cmd
   
-    if not no_wait:
+    if wait_complete:
       imover_wait(terminate_not_ok)
     end
   end
@@ -3193,12 +3206,20 @@ def AutoGrind02():
     end
   end
   
+  def izero_ftsensor():
+    if imover_realtime_enabled:
+      imover_cmd_exec(imover_ZEROFORCE)
+    else:
+      sleep(0.25)
+      zero_ftsensor()
+    end
+  end
+  
   def iforce_mode(force_n, approach_speed_mmps):
     if imover_realtime_enabled:
       imover_cmd_exec(imover_STARTFORCE, force_n, approach_speed_mmps)
     else:
-      sleep(0.25)
-      zero_ftsensor()
+      # Don't forget to call izero_ftsensor before this at some point when appropriate!
   
       # Using the defaults here
       force_mode_set_damping(0)
@@ -3211,9 +3232,16 @@ def AutoGrind02():
       # Speed limits
       force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
     end
+    global imover_force_N = force_n
+    global imover_force_speed_mmps = approach_speed_mmps
+    global imover_force_on = True
   end
   
   def iforce_update(force_n = 5, approach_speed_mmps = 10):
+    if imover_force_on:
+      return None
+    end
+  
     if imover_realtime_enabled:
       imover_cmd_exec(imover_UPDATEFORCE, force_n, approach_speed_mmps)
     else:
@@ -3224,6 +3252,8 @@ def AutoGrind02():
       # Speed limits
       force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_n, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
     end
+    global imover_force_N = force_n
+    global imover_force_speed_mmps = approach_speed_mmps
   end
   
   def iend_force_mode():
@@ -3232,6 +3262,7 @@ def AutoGrind02():
     else:
       end_force_mode()
     end
+    global imover_force_on = False
   end
   
   def iget_actual_tcp_pose():
@@ -3276,7 +3307,7 @@ def AutoGrind02():
       imover_param1 = speed_mmps
       imover_param2 = retract_mm
       imover_cmd_exec(imover_TOUCHOFF)
-      return imover_f
+      return imover_ret_f
     else:
       return touchoff(speed_mmps, retract_mm)
     end
@@ -3290,13 +3321,13 @@ def AutoGrind02():
       global imover_v = v
       global imover_t = t
       global imover_r = r
-      imover_cmd_exec(imover_MOVEL, 0, 0, True)
+      imover_cmd_exec(imover_MOVEL)
     else:
       movel(p, a = a, v = v, t = t, r = r)
     end
   end
   
-  def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, no_wait = False):
+  def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
     if not ok_to_proceed():
       return None
     end
@@ -3308,10 +3339,11 @@ def AutoGrind02():
       global imover_v = v
       global imover_t = t
       global imover_r = r
-      imover_cmd_exec(imover_MOVEL, 0, 0, True, no_wait)
+      imover_cmd_exec(imover_MOVEL, 0, 0, True, wait)
       if not ok_to_proceed():
+        imover_kill()
+        stopl(grind_accel_mpss, grind_rot_accel_rpss)
         imover_restart()
-        istopl(grind_accel_mpss, grind_rot_accel_rpss)
       end
     else:
       movel(p, a = a, v = v, t = t, r = r)
@@ -3344,11 +3376,11 @@ def AutoGrind02():
       elif imover_cmd == imover_STOPL:
         stopl(grind_speed_mps, grind_rot_speed_rps)
         global imover_cmd = 0
-      elif imover_cmd == imover_STARTFORCE:
-        # Settle and zero the force/torque sensor
+      elif imover_cmd == imover_ZEROFORCE:
         sleep(0.25)
         zero_ftsensor()
-  
+        global imover_cmd = 0
+      elif imover_cmd == imover_STARTFORCE:
         # Using the defaults here
         force_mode_set_damping(0)
         force_mode_set_gain_scaling(1)
@@ -3373,10 +3405,10 @@ def AutoGrind02():
         end_force_mode()
         global imover_cmd = 0
       elif imover_cmd == imover_GETACTUALTCPPOSE:
-        imover_p = get_actual_tcp_pose()
+        global imover_p = get_actual_tcp_pose()
         global imover_cmd = 0
       elif imover_cmd == imover_GETACTUALJOINTPOSITIONS:
-        imover_q = get_actual_joint_positions()
+        global imover_q = get_actual_joint_positions()
         global imover_cmd = 0
       elif imover_cmd == imover_SETTCP:
         set_tcp(imover_tcp)
@@ -3385,7 +3417,7 @@ def AutoGrind02():
         set_payload(imover_mass, imover_cog)
         global imover_cmd = 0
       elif imover_cmd == imover_TOUCHOFF:
-        imover_f = touchoff(imover_param1, imover_param2)
+        global imover_ret_f = touchoff(imover_param1, imover_param2)
         global imover_cmd = 0
       elif imover_cmd == imover_PING:
         global imover_cmd = 0
@@ -3632,7 +3664,6 @@ def AutoGrind02():
       global grind_continue = command[7] > 0
       imover_realtime(False)
       grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
-      imover_realtime(True)
   
     elif command[2] == 50:
       # SPIRAL GRIND
@@ -3648,7 +3679,6 @@ def AutoGrind02():
       global grind_continue = command[9] > 0
       imover_realtime(False)
       grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_revolutions, grind_n_cycles, grind_continue)
-      imover_realtime(True)
   
     elif command[2] == 99:
       # RETRACT COMMAND
@@ -3754,6 +3784,7 @@ def AutoGrind02():
     end
   
     if on:
+      izero_ftsensor()
       iforce_mode(force_n, approach_speed_mmps)
       sleep(grind_force_dwell_ms / 1000.0)
     else:
@@ -4224,7 +4255,7 @@ def AutoGrind02():
     grind_to(current_dp)
   end
   
-  def grind_to(dp, r = -1, no_wait = False):
+  def grind_to(dp, r = -1, wait = True):
     global grind_current_ddp0 = abs(dp[0] - grind_current_dp[0])
     global grind_current_ddp1 = abs(dp[1] - grind_current_dp[1])
     global grind_current_ddp3 = abs(dp[3] - grind_current_dp[3])
@@ -4267,7 +4298,7 @@ def AutoGrind02():
     end
   
     global grind_current_dp = dp
-    imovel_int(pose_trans(p_contact_center, grind_current_dp), a = process_a, v = process_v, r = process_r, no_wait = no_wait)
+    imovel_int(pose_trans(p_contact_center, grind_current_dp), a = process_a, v = process_v, r = process_r, wait = wait)
   end
   
   def grind_finish(p):
