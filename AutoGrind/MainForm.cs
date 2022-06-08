@@ -1135,8 +1135,6 @@ namespace AutoGrind
             else
             {
                 robotDashboardClient?.Send("play");
-                // If we're starting back in the middle of something, this will abort it
-                //RobotSend("10");
             }
         }
 
@@ -1264,7 +1262,6 @@ namespace AutoGrind
             {
                 isSingleStep = false;
                 SetRecipeState(RecipeState.RUNNING);
-                RobotSend("10");  // This makes sure we're synced!
                 SetState(RunState.RUNNING);
             }
         }
@@ -1277,10 +1274,7 @@ namespace AutoGrind
             {
                 case RunState.RUNNING:
                     // Perform PAUSE function
-                    if (dontSendTen)
-                        dontSendTen = false;
-                    else
-                        RobotSend("10");  // This will cancel any grind in progress
+                    RobotSendHalt();
                     SetState(RunState.PAUSED);
                     break;
                 case RunState.PAUSED:
@@ -1296,7 +1290,7 @@ namespace AutoGrind
                     };
                     DialogResult result = messageForm.ShowDialog();
                     if (result == DialogResult.OK) lineCurrentlyExecuting--;
-                    RobotSend("10");
+                    RobotSendHalt();
                     SetState(RunState.RUNNING);
                     break;
             }
@@ -1329,7 +1323,7 @@ namespace AutoGrind
                     };
                     DialogResult result = messageForm.ShowDialog();
                     if (result == DialogResult.OK) lineCurrentlyExecuting--;
-                    RobotSend("10");
+                    RobotSendHalt();
                     isSingleStep = true;
                     SetState(RunState.RUNNING);
                     break;
@@ -1339,7 +1333,7 @@ namespace AutoGrind
         private void StopBtn_Click(object sender, EventArgs e)
         {
             log.Info("StopBtn_Click(...)");
-            RobotSend("10");  // This will cancel any grind in progress
+            RobotSendHalt();
 
             UnboldRecipe();
             SetState(RunState.READY);
@@ -2823,6 +2817,10 @@ namespace AutoGrind
             }
         }
 
+        private void RobotSendHalt()
+        {
+            robotCommandServer?.Send("(999)");
+        }
         int robotSendIndex = 100;
         // Command is a 0-n element comma-separated list "x,y,z" of doubles
         // We send (index,x,y,z)
@@ -3097,7 +3095,7 @@ namespace AutoGrind
             ExecuteLine(-1, String.Format("grind_accel({0})", 100));
             ExecuteLine(-1, String.Format("grind_point_frequency({0})", 2));
             ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 2));
-            ExecuteLine(-1, String.Format("grind_touch_speed({0})", 10));
+            ExecuteLine(-1, String.Format("grind_touch_speed({0})", 5));
             ExecuteLine(-1, String.Format("grind_touch_retract({0})", 3));
             ExecuteLine(-1, String.Format("grind_force_dwell({0})", 500));
             ExecuteLine(-1, String.Format("grind_max_wait({0})", 1500));

@@ -176,7 +176,7 @@ def grind():
     global grind_dy_mm = limiter(command[4], -1000, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6], 0)
-    global grind_force_n = limiter(command[7], 0, 100)
+    global grind_force_N = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     imover_realtime(True)
     grind_line(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
@@ -188,7 +188,7 @@ def grind():
     global grind_dy_mm = limiter(command[4], 0, 1000)
     n_cycle_setter(command[5])
     speed_setter(command[6], min(grind_dx_mm, grind_dy_mm))
-    global grind_force_n = limiter(command[7], 0, 100)
+    global grind_force_N = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     imover_realtime(True)
     grind_rect(grind_dx_mm, grind_dy_mm, grind_n_cycles, grind_continue)
@@ -203,7 +203,7 @@ def grind():
     n_cycle_setter(command[7])
     local min_feature_mm = min(grind_dx_mm / grind_n_xsteps, grind_dy_mm / grind_n_ysteps)
     speed_setter(command[8], min_feature_mm)
-    global grind_force_n = limiter(command[9], 0, 10)
+    global grind_force_N = limiter(command[9], 0, 10)
     global grind_continue = command[10] > 0
     grind_serpentine(grind_dx_mm, grind_dy_mm, grind_n_xsteps, grind_n_ysteps, grind_n_cycles, grind_continue)
 
@@ -215,7 +215,7 @@ def grind():
     n_cycle_setter(command[5])
     local min_feature_mm = max(2, grind_circle1_diam_mm)
     speed_setter(command[6], min_feature_mm)
-    global grind_force_n = limiter(command[7], 0, 100)
+    global grind_force_N = limiter(command[7], 0, 100)
     global grind_continue = command[8] > 0
     grind_poly(grind_circle1_diam_mm, grind_n_sides, grind_n_cycles, grind_continue)
 
@@ -226,7 +226,7 @@ def grind():
     n_cycle_setter(command[4])
     local min_feature_mm = max(2, grind_circle1_diam_mm)
     speed_setter(command[5], min_feature_mm, is_circle = True)
-    global grind_force_n = limiter(command[6], 0, 100)
+    global grind_force_N = limiter(command[6], 0, 100)
     global grind_continue = command[7] > 0
     grind_circle(grind_circle1_diam_mm, grind_n_cycles, grind_continue)
 
@@ -240,7 +240,7 @@ def grind():
     local min_diam_mm = min(grind_circle1_diam_mm, grind_circle2_diam_mm)
     local min_feature_mm = max(2, min_diam_mm)
     speed_setter(command[7], min_feature_mm, is_circle = True)
-    global grind_force_n = limiter(command[8], 0, 100)
+    global grind_force_N = limiter(command[8], 0, 100)
     global grind_continue = command[9] > 0
     grind_spiral(grind_circle1_diam_mm, grind_circle2_diam_mm, grind_n_revolutions, grind_n_cycles, grind_continue)
 
@@ -365,25 +365,28 @@ global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
   if on and grind_process_state:
     # Continuing a grind...
+
+    # Need to change force?
+    # Lift, rezero, and then head toward start of next pattern
+    if grind_contact_enable == 2 and imover_force_N != grind_force_N:
+      # This would be great, but the sensor drifts and forces returned by get_tcp_force() are offset
+      #iforce_update(grind_force_N, grind_touch_speed_mmps)
+
+      # So we do a full reset!
+      iend_force_mode()
+      local p1 = pose_trans(get_actual_tcp_pose(), p[0, 0, -0.004, 0, 0, 0])
+      imovel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+      sleep(1)
+      izero_ftsensor()
+      iforce_mode(grind_force_N, grind_touch_speed_mmps)
+    end
+
     # Move to initial grind position relative to initial p_contact_center
     shape = robot_part_geometry[0]
     if shape < 1 or shape > 3:
       return False
     end
     global dp_from_contact_center = pose_to_center[shape-1]
-
-    # Need to change force
-    # Lift, rezero, and then head toward start of next pattern
-    if grind_contact_enable == 2 and imover_force_N != grind_force_n:
-      iend_force_mode()
-      local p1 = pose_trans(get_actual_tcp_pose(), p[0, 0, -0.004, 0, 0, 0])
-      imovel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
-      sleep(1)
-      izero_ftsensor()
-      izero_ftsensor()
-      iforce_mode(grind_force_n, grind_touch_speed_mmps)
-    end
-
     draw_to(dp_from_contact_center, r = 0)
   elif on and not grind_process_state:
     # Need to start the grind
@@ -395,15 +398,16 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       return False
     end
 
+    global p_contact_center = p_operator_init  # Will refine this after touch-off!
     global dp_from_contact_center = pose_to_center[shape-1]
-    local p1 = pose_trans(p_operator_init, dp_from_contact_center)
-    # TODO This should look at whether rot or linear for speed,accel
-    imovel(p1, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    draw_speedup(a = 2, v = 20)
+    draw_start(dp_from_contact_center)
 
-    # Touch part and set p_contact_init
+    # Touch part and refine p_contact_init
     if not contact_part(True, grind_contact_enable):
       # Failure to contact part should abort... don't set grind_process_state and return False
-      imovel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+      draw_speedup(a = 2, v = 20)
+      draw_to(p[0, 0, 0, 0, 0, 0], r = 0)
       socket_send_line("grind_process_state=False")
       return False
     end
@@ -421,7 +425,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     # Now power everything on (although these will do nothing unless contact_enable==2)
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
-    apply_force(True, grind_contact_enable, grind_force_n, grind_touch_speed_mmps)
+    apply_force(True, grind_contact_enable, grind_force_N, grind_touch_speed_mmps)
     global grind_process_state = True
   elif not on and grind_process_state:
     # Need to stop the grind
@@ -433,7 +437,14 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
 
     # Always end with a move with the imover realtime back running
     imover_realtime(True)
-    imovel(p_operator_init, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+    # This isn't moving...
+    draw_origin(p_operator_init)
+    draw_speedup(a = 2, v = 20)
+    draw_start(p[0, 0, 0, 0, 0, 0])
+
+    # But it sets the process a, v!
+    imovel(p_operator_init, a = process_a, v = process_v)
+
     global grind_process_state = False
   end
 
@@ -479,19 +490,10 @@ thread grind_abort_listener_thread():
       global halt_count = halt_count + 1
     end
 
-    # If we've received(index,checksum,10,...) that adds a halt count (as long as checksum matches)
-    if halt_command[0] > 2:
-      global test_index = halt_command[1]
-      global test_checksum = halt_command[2]
-      global test_command = halt_command[3]
-
-      if test_checksum == 1000 - test_index and test_command == 10:
-        global halt_count = halt_count + 1
-
-        # Send an start/finish acknowledgement just for this command!
-        socket_set_var("robot_starting", test_index)
-        socket_set_var("robot_completed", test_index)
-      end
+    # If we've received anything we should halt!
+    if halt_command[0] > 0:
+      global halt_count = halt_count + 1
+      socket_set_var("halt_count", halt_count)
     end
 
     # Increment reading counter (10000 is high enough... don't need to worry about wraparound effects)
@@ -824,7 +826,6 @@ end
 # PATTERN GRINDING FUNCTIONS
 #
 
-
 ######################################################################################
 # LINE PATTERNS
 #
@@ -1062,7 +1063,7 @@ def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
 
       # Move to the corresponding position
       local dp2 = p[x_grid * grid_dx_m - x2, y_grid * grid_dy_m - y2, 0, 0, 0, 0]
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -1079,7 +1080,7 @@ def pattern_serpentine_flat(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles):
 
       # Move to the corresponding position
       local dp2 = p[x_grid * grid_dx_m - x2, y_grid * grid_dy_m - y2, 0, 0, 0, 0]
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust y direction
       if y_grid >= n_ysteps:
@@ -1138,7 +1139,7 @@ def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
       local dp2 = p[x_grid * grid_dx_m - x2, 0, 0, y_grid * grid_drx_rad - rx2, 0, 0]
       local last_a = grind_accel_mpss
       local last_v = grind_speed_mps
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust x direction
       if x_grid >= n_xsteps:
@@ -1157,7 +1158,7 @@ def pattern_serpentine_cylinder(dx_m, drx_rad, n_xsteps, n_rxsteps, n_cycles):
       local dp2 = p[x_grid * grid_dx_m - x2, 0, 0, y_grid * grid_drx_rad - rx2, 0, 0]
       local last_a = grind_rot_accel_rpss
       local last_v = grind_rot_speed_rps
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust y direction
       if y_grid >= n_rxsteps:
@@ -1212,7 +1213,7 @@ def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
 
       # Move to the corresponding position
       local dp2 = p[0, 0, 0, x_grid * grid_drx_rad - rx2, y_grid * grid_dry_rad - ry2, 0]
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust x direction
       if x_grid >= n_rxsteps:
@@ -1229,7 +1230,7 @@ def pattern_serpentine_sphere(drx_rad, dry_rad, n_rxsteps, n_rysteps, n_cycles):
 
       # Move to the corresponding position
       local dp2 = p[0, 0, 0, x_grid * grid_drx_rad - rx2, y_grid * grid_dry_rad - ry2, 0]
-      draw_finish(dp2)
+      draw_to(dp2, r = 0)
 
       # Adjust y direction
       if y_grid >= n_rysteps:
@@ -1270,7 +1271,11 @@ def pattern_poly_flat(circle_diam_m, n_sides, n_cycles):
       if not ok_to_proceed() or i == n_sides:
         draw_finish(dp)
       else:
-        draw_to(dp)
+        if imover_is_realtime():
+          draw_to(dp, r = 0)
+        else:
+          draw_to(dp)
+        end
       end
       i = i + 1
     end
@@ -1298,7 +1303,11 @@ def pattern_poly_cylinder(circle_diam_m, n_sides, cylinder_radius_m, n_cycles):
       if not ok_to_proceed() or i == n_sides:
         draw_finish(dp)
       else:
-        draw_to(dp)
+        if imover_is_realtime():
+          draw_to(dp, r = 0)
+        else:
+          draw_to(dp)
+        end
       end
       i = i + 1
     end
@@ -1328,7 +1337,11 @@ def pattern_poly_sphere(circle_diam_m, n_sides, sphere_diam_m, n_cycles):
       if not ok_to_proceed() or i == n_sides:
         draw_finish(dp)
       else:
-        draw_to(dp)
+        if imover_is_realtime():
+          draw_to(dp, r = 0)
+        else:
+          draw_to(dp)
+        end
       end
       i = i + 1
     end

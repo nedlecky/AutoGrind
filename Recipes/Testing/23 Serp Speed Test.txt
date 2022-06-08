@@ -2,9 +2,12 @@
 # BE CAREFUL: Robot will move and positions are expected to be OK
 # All should alternate 3s, 2s on long side
 
-speed = 5
-cmd1 = grind_serp(60,40,1,3,1,{speed},10,0)
-cmd2 = grind_serp(60,40,3,1,1,{speed},10,0)
+count=1
+speed=5
+force=5
+
+cmd1 = grind_serp(60,40,1,3,{count},{speed},{force},0)
+cmd2 = grind_serp(60,40,3,1,{count},{speed},{force},0)
 
 flat: 
 move_linear(demo_safe)

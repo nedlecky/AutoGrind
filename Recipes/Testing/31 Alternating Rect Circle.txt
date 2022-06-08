@@ -4,7 +4,7 @@
 count=1
 speed=10
 force_r=3
-force_c=4
+force_c=5
 stay=1
 
 #grind_rect(10,10,{count},{speed},{force_r},{stay})

@@ -714,6 +714,10 @@ def imover_realtime(f = False):
   end
 end
 
+def imover_is_realtime():
+  return imover_realtime_enabled
+end
+
 def imover_state_alignment():
   # Reestablish state of motion control in current thread
   iset_tcp(imover_tcp)
@@ -809,7 +813,7 @@ def iforce_mode(force_N, approach_speed_mmps):
 
     # Force is in tool frame
     # Compliant in Tool Z
-    # Applying grind_force_n in Z+
+    # Applying grind_force_N in Z+
     # 2: Force frame not transformed
     # Speed limits
     force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
@@ -825,14 +829,14 @@ def iforce_update(force_N = 5, approach_speed_mmps = 10):
   end
 
   if imover_realtime_enabled:
-    imover_cmd_exec(imover_UPDATEFORCE, force_N, approach_speed_mmps)
+    imover_cmd_exec(imover_UPDATEFORCE, force_N - imover_force_N, approach_speed_mmps)
   else:
     # Force is in tool frame
     # Compliant in Tool Z
-    # Applying grind_force_n in Z+
+    # Applying grind_force_N in Z+
     # 2: Force frame not transformed
     # Speed limits
-    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
+    force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, force_N - imover_force_N, 0.0, 0.0, 0.0], 2, [0.1, 0.1, approach_speed_mmps / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
   end
   global imover_force_N = force_N
   global imover_force_speed_mmps = approach_speed_mmps
@@ -981,7 +985,7 @@ thread imover_thread():
 
       # Force is in tool frame
       # Compliant in Tool Z
-      # Applying grind_force_n in Z+
+      # Applying grind_force_N in Z+
       # 2: Force frame not transformed
       # Speed limits
       force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, imover_param1, 0.0, 0.0, 0.0], 2, [0.1, 0.1, imover_param2 / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
@@ -990,7 +994,7 @@ thread imover_thread():
       # Update force
       # Force is in tool frame
       # Compliant in Tool Z
-      # Applying grind_force_n in Z+
+      # Applying grind_force_N in Z+
       # 2: Force frame not transformed
       # Speed limits
       force_mode(tool_pose(), [0, 0, 1, 0, 0, 0], [0.0, 0.0, imover_param1, 0.0, 0.0, 0.0], 2, [0.1, 0.1, imover_param2 / 1000.0, 0.3490658503988659, 0.3490658503988659, 0.3490658503988659])
@@ -1028,11 +1032,28 @@ global imover_thread_handle = run imover_thread()
 # START DRAWING SYSTEM
 #
 global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+global draw_accel_factor = 1.0
+global draw_speed_factor = 1.0
 
-def draw_start(current_dp):
+# Sets a 1-time speedup factor on velocity and acceleration
+def draw_speedup(a = 1.0, v = 1.0):
+  global draw_accel_factor = a
+  global draw_speed_factor = v
+end
+
+def draw_origin(p):
+  global p_contact_center = p
   global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+end
 
-  draw_to(current_dp)
+def draw_start(current_dp, r = -1, wait = True):
+  global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+  draw_to(current_dp, r = r, wait = wait)
+end
+
+def draw_relative(dp, r = -1, wait = True):
+  local dpdest = pose_add(draw_current_dp, dp)
+  draw_to(dpdest, r, wait)
 end
 
 def draw_to(dp, r = -1, wait = True):
@@ -1040,35 +1061,40 @@ def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp1 = abs(dp[1] - draw_current_dp[1])
   global draw_current_ddp3 = abs(dp[3] - draw_current_dp[3])
   global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
+
   # Flat:     X, Y
   # Cylinder: X, RX
   # Sphere:   RX, RX
   local shape = robot_part_geometry[0]
   if shape == 3: # Sphere
-    global process_a = grind_rot_accel_rpss
-    global process_v = grind_rot_speed_rps
+    global process_a = grind_rot_accel_rpss * draw_accel_factor
+    global process_v = grind_rot_speed_rps * draw_speed_factor
     global process_r = grind_rot_blend_radius_rad
   elif shape == 2: # Cylinder
-    global process_theta = atan2(draw_current_ddp3, draw_current_ddp0)
-    global process_rotational_factor = abs(sin(process_theta))
-    global process_a =
-    (
-      grind_accel_mpss * (1 - process_rotational_factor) +
-      grind_rot_accel_rpss * (process_rotational_factor)
-    )
-    global process_v =
-    (
-      grind_speed_mps * (1 - process_rotational_factor) +
-      grind_rot_speed_rps * (process_rotational_factor)
-    )
-    global process_r = 
-    (
-      grind_blend_radius_m * (1 - process_rotational_factor) +
-      grind_rot_blend_radius_rad * (process_rotational_factor)
-    )
+    # Cylinder: Linear speed is good for X moves, rotational speed for theta
+    # How to adjust between the two for angled lines isn't clear
+    # Here's a good guess that's close
+
+    # process_theta_deg is 0 degrees (pure X) to 90 degrees (pure RX)
+
+    global process_theta_deg = r2d(abs(atan2(draw_current_ddp3, draw_current_ddp0)))
+    if process_theta_deg > 90.0:
+      global process_theta_deg = abs(180.0 - process_theta_deg)
+    end
+
+    # define sin(angle) and 1-sin(angle)
+    # rfactor is 0 for pure X lines and 1 for pure RX lines
+    # xfactor is 1 for pure X lines and 0 for pure RX lines
+    local rfactor = process_theta_deg / 90.0
+    local xfactor = 1 - rfactor
+
+    # Choose speeds as a linear combination of the two values!
+    global process_a = draw_accel_factor * (grind_accel_mpss * xfactor + grind_rot_accel_rpss * rfactor)
+    global process_v = draw_speed_factor * (grind_speed_mps * xfactor + grind_rot_speed_rps * rfactor)
+    global process_r = grind_blend_radius_m * xfactor + grind_rot_blend_radius_rad * rfactor
   else: # Flat
-    global process_a = grind_accel_mpss
-    global process_v = grind_speed_mps
+    global process_a = grind_accel_mpss * draw_accel_factor
+    global process_v = grind_speed_mps * draw_speed_factor
     global process_r = grind_blend_radius_m
   end
 
@@ -1076,6 +1102,10 @@ def draw_to(dp, r = -1, wait = True):
   if r >= 0:
     global process_r = r
   end
+
+  # Clear 1-time speed factors!
+  global draw_accel_factor = 1.0
+  global draw_speed_factor = 1.0
 
   global draw_current_dp = dp
   imovel_int(pose_trans(p_contact_center, draw_current_dp), a = process_a, v = process_v, r = process_r, wait = wait)
