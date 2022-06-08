@@ -7,7 +7,7 @@ label2:
 a=2
 
 jump(_label10)
-_label10:
+_label10:     #  here we are
 
 jump(label_10)
 label_10:

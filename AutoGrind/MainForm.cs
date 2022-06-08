@@ -11,6 +11,7 @@ using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -114,7 +115,6 @@ namespace AutoGrind
             string suggestedRoot = Path.GetFullPath(Path.Combine(executionRoot, "../../../.."));
             log.Info("Current root is {0}", AutoGrindRoot);
             log.Info("Suggested root is {0}", suggestedRoot);
-
 
             // 1-second tick
             HeartbeatTmr.Interval = 1000;
@@ -1810,7 +1810,7 @@ namespace AutoGrind
         /// <returns>(bool Success, string Value if matched else null)</returns>
         private (bool Success, string Value) IsLineALabel(string line)
         {
-            Regex regex = new Regex("^[A-Za-z_][A-Za-z0-9_]*:");
+            Regex regex = new Regex("^[A-Za-z_][A-Za-z0-9_]*:$");
             Match match = regex.Match(line);
             if (match.Success)
                 return (true, match.Value.Trim(':'));
@@ -1828,7 +1828,17 @@ namespace AutoGrind
             int lineNo = 1;
             foreach (string line in RecipeRTB.Lines)
             {
-                var label = IsLineALabel(line);
+                string cleanLine = line;
+
+                // 1) Ignore comments: drop anything from # onward in the line
+                int index = cleanLine.IndexOf("#");
+                if (index >= 0)
+                    cleanLine = cleanLine.Substring(0, index);
+
+                // 2) Cleanup the line: drop all trailing whitespace
+                cleanLine = cleanLine.TrimEnd(' ');
+
+                var label = IsLineALabel(cleanLine);
                 if (label.Success)
                 {
                     try
