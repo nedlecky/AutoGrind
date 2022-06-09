@@ -1059,20 +1059,22 @@ end
 # Empirical correction to the rfactor... one entry for 0x deg, 1x deg, 2x deg, etc
 # Empirical correction to the rfactor... 0-2.5, 2.5-5.0, ..., 97.5-90
 global process_cyl_table_size = 36
-global process_cyl_correction = 
+# Coefficients were trained at 1100mm on UR5e from timecoeff13.csv, timecoeff13 tab in 
+# https://docs.google.com/spreadsheets/d/1p8jo_OnwVtIpL-AkrZJtMYL3z7jr9P3bIzsG_I7L1jc/edit#gid=2025929501
+global process_cyl_correction =
 [
-  0.761388,
-  0.5897,
-  0.455671,
-  0.433765,
+  0.744499,
+  0.563454,
+  0.435303,
+  0.414375,
   0.338062,
   0.38859,
   0.4,
   0.433715,
-  0.420638,
-  0.477594,
-  0.597038,
-  0.681952,
+  0.443015,
+  0.506711,
+  0.61494,
+  0.687973,
   0.750133,
   0.811298,
   0.868622,
@@ -1085,20 +1087,19 @@ global process_cyl_correction =
   1.25079,
   1.30856,
   1.35518,
-  1.40551,
+  1.40129,
   1.43943,
   1.45215,
   1.38705,
-  1.32343,
-  1.2677,
-  1.21656,
-  1.16984,
-  1.12767,
-  1.08903,
-  1.0543,
-  1.02348
+  1.32025,
+  1.26314,
+  1.21121,
+  1.16423,
+  1.12181,
+  1.08337,
+  1.0486,
+  1.01551
 ]
-
 
 def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp0 = abs(dp[0] - draw_current_dp[0])
@@ -1122,8 +1123,6 @@ def draw_to(dp, r = -1, wait = True):
     global process_r = grind_rot_blend_radius_rad
   elif shape == 2: # Cylinder
     # Cylinder: Linear speed is good for X moves, rotational speed for theta
-    # How to adjust between the two for angled lines isn't clear
-    # Here's a good guess that's close
 
     # process_theta_deg is 0 degrees (pure X) to 90 degrees (pure RX)
     global process_dx_m = draw_current_ddp0
@@ -1133,13 +1132,8 @@ def draw_to(dp, r = -1, wait = True):
       global process_theta_deg = abs(180.0 - process_theta_deg)
     end
     # rawfactor is 0 (pure X) to 1 (pure RX)
+    # corrections above are applied
     global process_rawfactor = process_theta_deg / 90.0
-    #if process_theta_deg>45:
-    #  local A = 0.8
-    #else:
-    #  A=0.7
-    #end
-    #global process_rfactor = process_rawfactor * (1.0 - A * sin(d2r(process_theta_deg*4.0)))
     global process_correction_index = limiter(floor(process_theta_deg / 2.5), 0, process_cyl_table_size-1)
     global process_rfactor = process_rawfactor * process_cyl_correction[process_correction_index]
 

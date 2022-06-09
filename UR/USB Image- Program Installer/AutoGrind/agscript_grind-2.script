@@ -939,6 +939,7 @@ def pattern_line_flat(dx_m, dy_m, n_cycles):
   global dp1 = dp_from_contact_center
   global dp2 = p[x2, y2, 0, 0, 0, 0]
 
+  # For testing and monitoring!
   start_timer()
   pattern_line(n_cycles)
   end_timer()
@@ -946,6 +947,7 @@ end
 
 # Move along a cylindrical line dx_m x dy_m. Repeat n_cycles times.
 # Move in x direction first, then y
+global rect_line_speed_training = False
 def pattern_line_cylinder(dx_m, drx_rad, n_cycles):
   local x2 = dx_m / 2.0
   local rx2 = drx_rad / 2.0
@@ -953,17 +955,23 @@ def pattern_line_cylinder(dx_m, drx_rad, n_cycles):
   global dp1 = dp_from_contact_center
   global dp2 = p[x2, 0, 0, rx2, 0, 0]
 
+
+  # For testing and monitoring!
   start_timer()
   pattern_line(n_cycles)
   local t = end_timer()
-  adjust_coefficient(t, 5.2)
-  if process_correction_index == 35:
-    socket_send_string("line_time=")
-    return_vector(line_time, 36)
-    socket_send_lf()
-    socket_send_string("process_cyl_correction=")
-    return_vector(process_cyl_correction, 36)
-    socket_send_lf()
+
+  # Support for training the rectangle speed compensation coefficients
+  if rect_line_speed_training:
+    adjust_coefficient(t, 5.2)
+    if process_correction_index == 35:
+      socket_send_string("line_time=")
+      return_vector(line_time, 36)
+      socket_send_lf()
+      socket_send_string("process_cyl_correction=")
+      return_vector(process_cyl_correction, 36)
+      socket_send_lf()
+    end
   end
 end
 
@@ -976,6 +984,7 @@ def pattern_line_sphere(drx_rad, dry_rad, n_cycles):
   global dp1 = dp_from_contact_center
   global dp2 = p[0, 0, 0, rx2, ry2, 0]
 
+  # For testing and monitoring!
   start_timer()
   pattern_line(n_cycles)
   end_timer()
