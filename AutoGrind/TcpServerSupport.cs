@@ -163,7 +163,7 @@ namespace AutoGrind
                 Thread.Sleep(10);
             fSendBusy = true;
 
-            log.Info("UR==> EXEC {0}", response);
+            log.Debug("UR==> EXEC {0}", response);
             try
             {
                 stream.Write(Encoding.ASCII.GetBytes(response + "\r"), 0, response.Length + 1);

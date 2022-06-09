@@ -1056,11 +1056,61 @@ def draw_relative(dp, r = -1, wait = True):
   draw_to(dpdest, r, wait)
 end
 
+# Empirical correction to the rfactor... one entry for 0x deg, 1x deg, 2x deg, etc
+# Empirical correction to the rfactor... 0-2.5, 2.5-5.0, ..., 97.5-90
+global process_cyl_table_size = 36
+global process_cyl_correction = 
+[
+  0.761388,
+  0.5897,
+  0.455671,
+  0.433765,
+  0.338062,
+  0.38859,
+  0.4,
+  0.433715,
+  0.420638,
+  0.477594,
+  0.597038,
+  0.681952,
+  0.750133,
+  0.811298,
+  0.868622,
+  0.927721,
+  0.996957,
+  1.05158,
+  1.09743,
+  1.15233,
+  1.20578,
+  1.25079,
+  1.30856,
+  1.35518,
+  1.40551,
+  1.43943,
+  1.45215,
+  1.38705,
+  1.32343,
+  1.2677,
+  1.21656,
+  1.16984,
+  1.12767,
+  1.08903,
+  1.0543,
+  1.02348
+]
+
+
 def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp0 = abs(dp[0] - draw_current_dp[0])
   global draw_current_ddp1 = abs(dp[1] - draw_current_dp[1])
   global draw_current_ddp3 = abs(dp[3] - draw_current_dp[3])
   global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
+
+  # Return v1 --> v2 based on x 0 --> 1
+  def linear_slider(v1, v2, x):
+    local m = v2 - v1
+    return v1 + m * x
+  end
 
   # Flat:     X, Y
   # Cylinder: X, RX
@@ -1076,22 +1126,27 @@ def draw_to(dp, r = -1, wait = True):
     # Here's a good guess that's close
 
     # process_theta_deg is 0 degrees (pure X) to 90 degrees (pure RX)
-
-    global process_theta_deg = r2d(abs(atan2(draw_current_ddp3, draw_current_ddp0)))
+    global process_dx_m = draw_current_ddp0
+    global process_dy_m = draw_current_ddp3 * robot_part_geometry[1] / 2000.
+    global process_theta_deg = abs(r2d(atan2(process_dy_m, process_dx_m)))
     if process_theta_deg > 90.0:
       global process_theta_deg = abs(180.0 - process_theta_deg)
     end
-
-    # define sin(angle) and 1-sin(angle)
-    # rfactor is 0 for pure X lines and 1 for pure RX lines
-    # xfactor is 1 for pure X lines and 0 for pure RX lines
-    local rfactor = process_theta_deg / 90.0
-    local xfactor = 1 - rfactor
+    # rawfactor is 0 (pure X) to 1 (pure RX)
+    global process_rawfactor = process_theta_deg / 90.0
+    #if process_theta_deg>45:
+    #  local A = 0.8
+    #else:
+    #  A=0.7
+    #end
+    #global process_rfactor = process_rawfactor * (1.0 - A * sin(d2r(process_theta_deg*4.0)))
+    global process_correction_index = limiter(floor(process_theta_deg / 2.5), 0, process_cyl_table_size-1)
+    global process_rfactor = process_rawfactor * process_cyl_correction[process_correction_index]
 
     # Choose speeds as a linear combination of the two values!
-    global process_a = draw_accel_factor * (grind_accel_mpss * xfactor + grind_rot_accel_rpss * rfactor)
-    global process_v = draw_speed_factor * (grind_speed_mps * xfactor + grind_rot_speed_rps * rfactor)
-    global process_r = grind_blend_radius_m * xfactor + grind_rot_blend_radius_rad * rfactor
+    global process_a = draw_accel_factor * linear_slider(grind_accel_mpss, grind_rot_accel_rpss, process_rfactor)
+    global process_v = draw_speed_factor * linear_slider(grind_speed_mps, grind_rot_speed_rps, process_rfactor)
+    global process_r = linear_slider(grind_blend_radius_m, grind_rot_blend_radius_rad, process_rfactor)
   else: # Flat
     global process_a = grind_accel_mpss * draw_accel_factor
     global process_v = grind_speed_mps * draw_speed_factor

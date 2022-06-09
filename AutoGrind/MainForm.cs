@@ -2045,6 +2045,7 @@ namespace AutoGrind
             {"grind_point_frequency",   new CommandSpec(){nParams=1,  prefix="35,9," } },
 
             {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
+            {"grind_line_deg",          new CommandSpec(){nParams=6,  prefix="40,11," }  },
             {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
             {"grind_serp",              new CommandSpec(){nParams=8,  prefix="40,30," }  },
             {"grind_poly",              new CommandSpec(){nParams=6,  prefix="40,40," }  },
@@ -2405,6 +2406,7 @@ namespace AutoGrind
                 {
                     // Kind of like a subroutine that calls all the pieces needed to effect a tool change
                     // Just in case... make sure we disable current tool
+
                     ExecuteLine(-1, String.Format("set_tcp({0},{1},{2},{3},{4},{5})", row["x_m"], row["y_m"], row["z_m"], row["rx_rad"], row["ry_rad"], row["rz_rad"]));
                     ExecuteLine(-1, String.Format("set_payload({0},{1},{2},{3})", row["mass_kg"], row["cogx_m"], row["cogy_m"], row["cogz_m"]));
 
@@ -2657,7 +2659,7 @@ namespace AutoGrind
                         }
                         if (!fContinue)
                         {
-                            log.Info("EXEC Aborting execution");
+                            log.Info("EXEC Execution ending");
                             UnboldRecipe();
                             SetRecipeState(recipeStateAtRun);
                             SetState(RunState.READY);
@@ -2855,6 +2857,7 @@ namespace AutoGrind
 
             int checkValue = 1000 - robotSendIndex;
             string sendMessage = string.Format("({0},{1},{2})", robotSendIndex, checkValue, command);
+            log.Info("UR==> EXEC {0}", sendMessage);
             robotCommandServer.Send(sendMessage);
             return true;
         }
@@ -3284,7 +3287,15 @@ namespace AutoGrind
                     GrindCycleLbl.Text = valueTrimmed;
                     break;
                 case "grind_force_report_z_n":
-                    GrindForceReportZLbl.Text = valueTrimmed;
+                    try
+                    {
+                        double f = Convert.ToDouble(valueTrimmed);
+                        GrindForceReportZLbl.Text = f.ToString("0.0");
+                    }
+                    catch
+                    {
+                        GrindForceReportZLbl.Text = "?.?";
+                    }
                     break;
                 case "robot_linear_speed_mmps":
                     SetLinearSpeedBtn.Text = "Linear Speed\n" + valueTrimmed + " mm/s";
