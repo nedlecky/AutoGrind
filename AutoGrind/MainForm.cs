@@ -2636,9 +2636,7 @@ namespace AutoGrind
                     if (lineCurrentlyExecuting >= RecipeRTB.Lines.Count())
                     {
                         log.Info("EXEC Reached end of file");
-
                         ReportStepTimeStats();
-
 
                         // Make sure we're retracted
                         ExecuteLine(-1, "grind_retract()");
