@@ -448,9 +448,6 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, "enable_cyline_cal(0)");
-                        ExecuteLine(-1, "zero_cal_timers()");
-                        ExecuteLine(-1, "default_cyline_cal(350)");
-                        ExecuteLine(-1, "report_cyline_cal()");
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -2040,12 +2037,16 @@ namespace AutoGrind
             {"zero_cal_timers",                 new CommandSpec(){nParams=0,  prefix="30,40" } },
             {"default_cyline_cal",              new CommandSpec(){nParams=1,  prefix="30,41," } },
             {"unity_cyline_cal",                new CommandSpec(){nParams=0,  prefix="30,42" } },
-            {"report_cyline_cal",               new CommandSpec(){nParams=0,  prefix="30,43" } },
+            {"return_cyline_cal",               new CommandSpec(){nParams=0,  prefix="30,43" } },
             {"enable_cyline_cal",               new CommandSpec(){nParams=1,  prefix="30,44," } },
             {"set_cyline_training_weight",      new CommandSpec(){nParams=1,  prefix="30,45," } },
             {"set_cyline_expected_time",        new CommandSpec(){nParams=1,  prefix="30,46," } },
             {"set_cyline_deadband_time",        new CommandSpec(){nParams=1,  prefix="30,47," } },
             {"new_cyline_cycle",                new CommandSpec(){nParams=0,  prefix="30,48" } },
+
+            {"enable_user_timers",              new CommandSpec(){nParams=1,  prefix="30,50," } },
+            {"zero_user_timers",                new CommandSpec(){nParams=0,  prefix="30,51" } },
+            {"return_user_timers",              new CommandSpec(){nParams=0,  prefix="30,52" } },
 
             {"grind_contact_enable",            new CommandSpec(){nParams=1,  prefix="35,1," } },
             {"grind_touch_retract",             new CommandSpec(){nParams=1,  prefix="35,2," } },

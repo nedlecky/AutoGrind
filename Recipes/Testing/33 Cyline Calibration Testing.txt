@@ -4,67 +4,67 @@ report_cyline_cal()
 prompt(Variables should show current cal)
 
 unity_cyline_cal()
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Unity)
 prompt(Variables should show unity cal)
 
 diam=1
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=51
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=51
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=149
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=152
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=360
-default_cyline_cal({diam})
+return_cyline_cal()
 report_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=500
-default_cyline_cal({diam})
+return_cyline_cal()
 report_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=1900
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=1960
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 
 diam=3000
 default_cyline_cal({diam})
-report_cyline_cal()
+return_cyline_cal()
 write_cyline_data(33 Test Default {diam}mm)
 prompt(Variables should show default cal for {diam}mm)
 

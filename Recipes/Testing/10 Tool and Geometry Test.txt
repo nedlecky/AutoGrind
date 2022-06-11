@@ -4,7 +4,9 @@ again:
 
 set_part_geometry(FLAT,0)
 set_part_geometry(CYLINDER,201)
+return_cyline_cal()
 set_part_geometry(CYLINDER,802)
+return_cyline_cal()
 set_part_geometry(SPHERE,203)
 set_part_geometry(SPHERE,804)
 

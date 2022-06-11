@@ -1,4 +1,6 @@
 # 14 Long Recipe Scroll Test
+clear()
+a=0
 
 # Test1
 a++

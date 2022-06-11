@@ -6,9 +6,9 @@ count=1
 speed=20
 force=5
 
-cmd1=grind_line(0,40,{count},{speed},{force},0)
-cmd2=grind_line(40,0,{count},{speed},{force},0)
-cmd3=grind_line(28.3,28.3,{count},{speed},{force},0)
+cmd1=grind_line_deg(40,0,{count},{speed},{force},0)
+cmd2=grind_line_deg(40,90,{count},{speed},{force},0)
+cmd3=grind_line_deg(40,45,{count},{speed},{force},0)
 
 
 flat:

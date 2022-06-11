@@ -276,9 +276,9 @@ def set_variable():
     unity_cyline_cal()
     global response = "unity_cyline_cal()"
   elif command[2] == 43:
-    # report_cyline_cal
-    report_cyline_cal()
-    global response = "report_cyline_cal()"
+    # return_cyline_cal
+    return_cyline_cal()
+    global response = "return_cyline_cal()"
   elif command[2] == 44:
     # enable_cyline_cal
     local f = command[3] > 0
@@ -307,6 +307,20 @@ def set_variable():
     # new_cyline_cycle
     new_cyline_cycle()
     global response = "new_cyline_cycle()"
+  elif command[2] == 50:
+    # enable_user_timers
+    local f = command[3] > 0
+    enable_user_timers(f)
+    global response = "enable_user_timers()"
+  elif command[2] == 51:
+    # zero_user_timers
+    zero_user_timers()
+    return_user_timers()
+    global response = "zero_user_timers()"
+  elif command[2] == 52:
+    # return_user_timers
+    return_user_timers()
+    global response = "return_user_timers()"
   else:
     global response = "set_variable ERROR"
   end
@@ -1061,9 +1075,71 @@ global imover_thread_handle = run imover_thread()
 # END IMOVER SYSTEM
 # ####################################################################################
 
+# ####################################################################################
+# START USER TIMER SUPPORT
+#
+global user_timers_enabled = False
+global user_timer_size = 36
+global user_timers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+global user_timer_count = 0
+global user_timer_index = 0
+global user_timer_handle = 0
+
+thread user_timer_thread():
+  user_timer_count = 0
+  while (True):
+    user_timer_count = user_timer_count + 1
+    sync()
+  end
+end
+
+def enable_user_timers(f = False):
+  global user_timers_enabled = f
+  socket_send_bool("user_timers_enabled", user_timers_enabled)
+  if f:
+    zero_user_timers()
+  end
+  return_user_timers()
+end
+
+def zero_user_timers():
+  global user_timer_index = 0
+  local i = 0
+  while i < user_timer_size:
+    user_timers[i] = 0
+    i = i + 1
+  end
+end
+
+def return_user_timers():
+  socket_send_vector("user_timers", user_timers, user_timer_size)
+end
+
+def start_user_timer():
+  user_timer_handle = run user_timer_thread()
+end
+
+def stop_user_timer():
+  kill user_timer_handle
+  global user_timer_handle = 0
+
+  # 2 ms per tick!
+  local t = user_timer_count * 0.002
+  user_timers[user_timer_index] = t
+
+  global user_timer_index = user_timer_index + 1
+  if user_timer_index >= user_timer_size:
+    global user_timer_index = 0
+  end
+  socket_send_num("user_time", t)
+  return t
+end
+#
+# END USER TIMER SUPPORT
+# ####################################################################################
 
 # ####################################################################################
-# START CALIBRATION SUPPORT
+# START CALIBRATION TIMER SUPPORT
 #
 global cal_timer_size = 36
 global cal_timers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
@@ -1159,7 +1235,7 @@ global cyline_latest_e = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
 
 global cyline_coeff_table_size = 20
 global cyline_coeff_table_index = -1
-global cyline_coeff_tables =
+global cyline_coeff_tables = 
 [
   [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770],
   [0.980385, 0.941538, 0.900753, 0.863069, 0.826287, 0.790784, 0.755879, 0.722168, 0.688801, 0.721886, 0.769698, 0.813443, 0.853179, 0.889338, 0.924615, 0.952692, 0.978077, 1.000000, 1.019230, 1.035770, 1.049620, 1.061150, 1.070380, 1.076920, 1.081540, 1.083850, 1.084230, 1.082690, 1.079230, 1.073850, 1.066920, 1.058080, 1.047690, 1.036150, 1.022690, 1.008080],
@@ -1191,10 +1267,10 @@ def enable_cyline_cal(f = False):
     global cyline_cal_enabled = True
     new_cyline_cycle()
     zero_cyline_calbration_counts()
-    report_cyline_cal()
+    return_cyline_cal()
   else:
     global cyline_cal_enabled = False
-    report_cyline_cal()
+    socket_send_num("cyline_cal_enabled", cyline_cal_enabled)
   end
 end
 
@@ -1233,7 +1309,7 @@ def new_cyline_cycle():
   global cyline_min_e_angle = 0.0
   zero_cal_timers()
   zero_cyline_latest_e()
-  report_cyline_cal()
+  return_cyline_cal()
 end
 
 def unity_cyline_cal():
@@ -1256,7 +1332,8 @@ def default_cyline_cal(diam_mm):
   end
 end
 
-def report_cyline_cal():
+def return_cyline_cal():
+  socket_send_num("cyline_cal_enabled", cyline_cal_enabled)
   socket_send_num("cyline_coeff_table_size", cyline_coeff_table_size)
   socket_send_num("cyline_coeff_table_index", cyline_coeff_table_index)
   socket_send_num("cyline_correction_size", cyline_correction_size)
@@ -1302,7 +1379,7 @@ def adjust_cyline_coefficient(t):
     cyline_correction[process_correction_index] = cyline_correction[process_correction_index] * adjustment_multiplier
   end
   cyline_calibration_counts[process_correction_index] = cyline_calibration_counts[process_correction_index] + 1
-  report_cyline_cal()
+  return_cyline_cal()
 end
 #
 # END CYLINE CAL SYSTEM
@@ -1354,8 +1431,8 @@ def draw_to(dp, r = -1, wait = True):
   # Sphere:   RX, RX
   local shape = robot_part_geometry[0]
   if shape == 3: # Sphere
-    global process_a = grind_rot_accel_rpss * draw_accel_factor
-    global process_v = grind_rot_speed_rps * draw_speed_factor
+    global process_a = grind_rot_accel_rpss
+    global process_v = grind_rot_speed_rps
     global process_r = grind_rot_blend_radius_rad
   elif shape == 2: # Cylinder
     # Cylinder: Linear speed is good for X moves, rotational speed for theta
@@ -1381,11 +1458,15 @@ def draw_to(dp, r = -1, wait = True):
     # Apply calibrated corrections
     global process_a = process_a * process_correctionfactor
     global process_v = process_v * process_correctionfactor
-
-    # Apply one-time scaling factors
-    global process_a = process_a * draw_accel_factor
-    global process_v = process_v * draw_speed_factor
+  else: # Flat
+    global process_a = grind_accel_mpss
+    global process_v = grind_speed_mps
+    global process_r = grind_blend_radius_m
   end
+
+  # Apply one-time scaling factors
+  global process_a = process_a * draw_accel_factor
+  global process_v = process_v * draw_speed_factor
 
   # Apply optional blend radius override
   global process_r_in = r
