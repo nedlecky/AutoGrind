@@ -447,6 +447,10 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
+                        ExecuteLine(-1, "enable_cyline_cal(0)");
+                        ExecuteLine(-1, "zero_cal_timers()");
+                        ExecuteLine(-1, "default_cyline_cal(350)");
+                        ExecuteLine(-1, "report_cyline_cal()");
 
                         // Download selected tool and part geometry by acting like a reselect of both
                         MountedToolBox_SelectedIndexChanged(null, null);
@@ -1239,12 +1243,12 @@ namespace AutoGrind
                 return false;
             }
 
-            if (ReadVariable("robot_door_closed", "0") != "1")
+            if (ReadVariable("robot_door_closed", "False") != "True")
             {
                 ErrorMessageBox("Cannot run. Door Open!");
                 return false;
             }
-            if (ReadVariable("robot_footswitch_pressed", "0") == "1")
+            if (ReadVariable("robot_footswitch_pressed", "True") == "True")
             {
                 ErrorMessageBox("Cannot run. Footswitch Pressed!");
                 return false;
@@ -2010,48 +2014,57 @@ namespace AutoGrind
         readonly Dictionary<string, CommandSpec> robotAlias = new Dictionary<string, CommandSpec>
         {
             // The main "send anything" command
-            {"send_robot",              new CommandSpec(){nParams=-1, prefix="" } },
+            {"send_robot",                      new CommandSpec(){nParams=-1, prefix="" } },
 
-            {"set_linear_speed",        new CommandSpec(){nParams=1,  prefix="30,1," } },
-            {"set_linear_accel",        new CommandSpec(){nParams=1,  prefix="30,2," } },
-            {"set_blend_radius",        new CommandSpec(){nParams=1,  prefix="30,3," } },
-            {"set_joint_speed",         new CommandSpec(){nParams=1,  prefix="30,4," } },
-            {"set_joint_accel",         new CommandSpec(){nParams=1,  prefix="30,5," } },
-            {"set_part_geometry_N",     new CommandSpec(){nParams=2,  prefix="30,6," } },
-            {"set_door_closed_input",   new CommandSpec(){nParams=2,  prefix="30,10," } },
-            {"set_tool_on_outputs",     new CommandSpec(){nParams=-1, prefix="30,11," } },
-            {"set_tool_off_outputs",    new CommandSpec(){nParams=-1, prefix="30,12," } },
-            {"set_coolant_on_outputs",  new CommandSpec(){nParams=-1, prefix="30,13," } },
-            {"set_coolant_off_outputs", new CommandSpec(){nParams=-1, prefix="30,14," } },
-            {"tool_on",                 new CommandSpec(){nParams=0,  prefix="30,15" } },
-            {"tool_off",                new CommandSpec(){nParams=0,  prefix="30,16" } },
-            {"coolant_on",              new CommandSpec(){nParams=0,  prefix="30,17" } },
-            {"coolant_off",             new CommandSpec(){nParams=0,  prefix="30,18" } },
-            {"free_drive",              new CommandSpec(){nParams=1,  prefix="30,19," } },
-            {"set_tcp",                 new CommandSpec(){nParams=6,  prefix="30,20," } },
-            {"set_payload",             new CommandSpec(){nParams=4,  prefix="30,21," } },
-            {"set_footswitch_pressed_input", new CommandSpec(){nParams=2,  prefix="30,22," } },
+            {"set_linear_speed",                new CommandSpec(){nParams=1,  prefix="30,1," } },
+            {"set_linear_accel",                new CommandSpec(){nParams=1,  prefix="30,2," } },
+            {"set_blend_radius",                new CommandSpec(){nParams=1,  prefix="30,3," } },
+            {"set_joint_speed",                 new CommandSpec(){nParams=1,  prefix="30,4," } },
+            {"set_joint_accel",                 new CommandSpec(){nParams=1,  prefix="30,5," } },
+            {"set_part_geometry_N",             new CommandSpec(){nParams=2,  prefix="30,6," } },
+            {"set_door_closed_input",           new CommandSpec(){nParams=2,  prefix="30,10," } },
+            {"set_tool_on_outputs",             new CommandSpec(){nParams=-1, prefix="30,11," } },
+            {"set_tool_off_outputs",            new CommandSpec(){nParams=-1, prefix="30,12," } },
+            {"set_coolant_on_outputs",          new CommandSpec(){nParams=-1, prefix="30,13," } },
+            {"set_coolant_off_outputs",         new CommandSpec(){nParams=-1, prefix="30,14," } },
+            {"tool_on",                         new CommandSpec(){nParams=0,  prefix="30,15" } },
+            {"tool_off",                        new CommandSpec(){nParams=0,  prefix="30,16" } },
+            {"coolant_on",                      new CommandSpec(){nParams=0,  prefix="30,17" } },
+            {"coolant_off",                     new CommandSpec(){nParams=0,  prefix="30,18" } },
+            {"free_drive",                      new CommandSpec(){nParams=1,  prefix="30,19," } },
+            {"set_tcp",                         new CommandSpec(){nParams=6,  prefix="30,20," } },
+            {"set_payload",                     new CommandSpec(){nParams=4,  prefix="30,21," } },
+            {"set_footswitch_pressed_input",    new CommandSpec(){nParams=2,  prefix="30,22," } },
+            {"set_output",                      new CommandSpec(){nParams=2,  prefix="30,30," } },
 
-            {"set_output",              new CommandSpec(){nParams=2,  prefix="30,30," } },
+            {"zero_cal_timers",                 new CommandSpec(){nParams=0,  prefix="30,40" } },
+            {"default_cyline_cal",              new CommandSpec(){nParams=1,  prefix="30,41," } },
+            {"unity_cyline_cal",                new CommandSpec(){nParams=0,  prefix="30,42" } },
+            {"report_cyline_cal",               new CommandSpec(){nParams=0,  prefix="30,43" } },
+            {"enable_cyline_cal",               new CommandSpec(){nParams=1,  prefix="30,44," } },
+            {"set_cyline_training_weight",      new CommandSpec(){nParams=1,  prefix="30,45," } },
+            {"set_cyline_expected_time",        new CommandSpec(){nParams=1,  prefix="30,46," } },
+            {"set_cyline_deadband_time",        new CommandSpec(){nParams=1,  prefix="30,47," } },
+            {"new_cyline_cycle",                new CommandSpec(){nParams=0,  prefix="30,48" } },
 
-            {"grind_contact_enable",    new CommandSpec(){nParams=1,  prefix="35,1," } },
-            {"grind_touch_retract",     new CommandSpec(){nParams=1,  prefix="35,2," } },
-            {"grind_touch_speed",       new CommandSpec(){nParams=1,  prefix="35,3," } },
-            {"grind_force_dwell",       new CommandSpec(){nParams=1,  prefix="35,4," } },
-            {"grind_max_wait",          new CommandSpec(){nParams=1,  prefix="35,5," } },
-            {"grind_max_blend_radius",  new CommandSpec(){nParams=1,  prefix="35,6," } },
-            {"grind_trial_speed",       new CommandSpec(){nParams=1,  prefix="35,7," } },
-            {"grind_accel",             new CommandSpec(){nParams=1,  prefix="35,8," } },
-            {"grind_point_frequency",   new CommandSpec(){nParams=1,  prefix="35,9," } },
+            {"grind_contact_enable",            new CommandSpec(){nParams=1,  prefix="35,1," } },
+            {"grind_touch_retract",             new CommandSpec(){nParams=1,  prefix="35,2," } },
+            {"grind_touch_speed",               new CommandSpec(){nParams=1,  prefix="35,3," } },
+            {"grind_force_dwell",               new CommandSpec(){nParams=1,  prefix="35,4," } },
+            {"grind_max_wait",                  new CommandSpec(){nParams=1,  prefix="35,5," } },
+            {"grind_max_blend_radius",          new CommandSpec(){nParams=1,  prefix="35,6," } },
+            {"grind_trial_speed",               new CommandSpec(){nParams=1,  prefix="35,7," } },
+            {"grind_accel",                     new CommandSpec(){nParams=1,  prefix="35,8," } },
+            {"grind_point_frequency",           new CommandSpec(){nParams=1,  prefix="35,9," } },
 
-            {"grind_line",              new CommandSpec(){nParams=6,  prefix="40,10," }  },
-            {"grind_line_deg",          new CommandSpec(){nParams=6,  prefix="40,11," }  },
-            {"grind_rect",              new CommandSpec(){nParams=6,  prefix="40,20," }  },
-            {"grind_serp",              new CommandSpec(){nParams=8,  prefix="40,30," }  },
-            {"grind_poly",              new CommandSpec(){nParams=6,  prefix="40,40," }  },
-            {"grind_circle",            new CommandSpec(){nParams=5,  prefix="40,45," }  },
-            {"grind_spiral",            new CommandSpec(){nParams=7,  prefix="40,50," }  },
-            {"grind_retract",           new CommandSpec(){nParams=0,  prefix="40,99" } },
+            {"grind_line",                      new CommandSpec(){nParams=6,  prefix="40,10," }  },
+            {"grind_line_deg",                  new CommandSpec(){nParams=6,  prefix="40,11," }  },
+            {"grind_rect",                      new CommandSpec(){nParams=6,  prefix="40,20," }  },
+            {"grind_serp",                      new CommandSpec(){nParams=8,  prefix="40,30," }  },
+            {"grind_poly",                      new CommandSpec(){nParams=6,  prefix="40,40," }  },
+            {"grind_circle",                    new CommandSpec(){nParams=5,  prefix="40,45," }  },
+            {"grind_spiral",                    new CommandSpec(){nParams=7,  prefix="40,50," }  },
+            {"grind_retract",                   new CommandSpec(){nParams=0,  prefix="40,99" } },
         };
         private void LogInterpret(string command, int lineNumber, string line)
         {
@@ -2399,7 +2412,7 @@ namespace AutoGrind
                 if (row == null)
                 {
                     log.Error("Unknown tool specified in EXEC: {0.000} {1}", lineNumber, command);
-                    PromptOperator("Unrecognized select_tool command: " + command);
+                    PromptOperator("Unrecognized command: " + command);
                     return true;
                 }
                 else
@@ -2506,6 +2519,60 @@ namespace AutoGrind
                 LogInterpret("prompt", lineNumber, origLine);
                 // This just displays the dialog. ExecTmr will wait for it to close
                 PromptOperator(ExtractParameters(command, -1, false));
+                return true;
+            }
+
+            // write_cyline_data
+            if (command.StartsWith("write_cyline_data("))
+            {
+                LogInterpret("write_cyline_data", lineNumber, origLine);
+
+                string filename = ExtractParameters(command);
+                if (filename.Length < 1)
+                {
+                    ExecError(string.Format("No file name specified\nline {0}: {1}", lineNumber, origLine));
+                    return true;
+                }
+
+                string full_filename = Path.Combine(AutoGrindRoot, "Logs", filename);
+                full_filename = Path.ChangeExtension(full_filename, ".csv");
+
+                try
+                {
+                    StreamWriter writer = new StreamWriter(full_filename);
+                    {
+                        writer.WriteLine("filename,{0}", full_filename);
+                        writer.WriteLine("date,{0}", DateTime.Now.ToString());
+                        writer.WriteLine("robot_geometry,{0}", ReadVariable("robot_geometry", "???"));
+                        writer.WriteLine("cyline_calibration_counts,{0}", ReadVariable("cyline_calibration_counts", "???").Trim(new char[] { '[', ']' }));
+                        writer.WriteLine("cyline_correction,{0}", ReadVariable("cyline_correction", "???").Trim(new char[] { '[', ']' }));
+                        writer.WriteLine("cyline_correction_size,{0}", ReadVariable("cyline_correction_size", "???"));
+                        writer.WriteLine("cyline_coeff_table_size,{0}", ReadVariable("cyline_coeff_table_size", "???"));
+                        writer.WriteLine("cyline_coeff_table_index,{0}", ReadVariable("cyline_coeff_table_index", "???"));
+                        writer.WriteLine("cyline_deadband_time,{0}", ReadVariable("cyline_deadband_time", "???"));
+                        writer.WriteLine("cyline_degree_slice,{0}", ReadVariable("cyline_degree_slice", "???"));
+                        writer.WriteLine("cyline_expected_time,{0}", ReadVariable("cyline_expected_time", "???"));
+                        writer.WriteLine("cyline_latest_e,{0}", ReadVariable("cyline_latest_e", "???").Trim(new char[] { '[', ']' }));
+                        writer.WriteLine("cyline_max_e,{0}", ReadVariable("cyline_max_e", "???"));
+                        writer.WriteLine("cyline_max_e_angle,{0}", ReadVariable("cyline_max_e_angle", "???"));
+                        writer.WriteLine("cyline_min_e,{0}", ReadVariable("cyline_min_e", "???"));
+                        writer.WriteLine("cyline_min_e_angle,{0}", ReadVariable("cyline_min_e_angle", "???"));
+                        writer.WriteLine("cyline_training_weight,{0}", ReadVariable("cyline_training_weight", "???"));
+                        writer.WriteLine("grind_speed_mps,{0}", ReadVariable("grind_speed_mps", "???"));
+                        writer.WriteLine("grind_accel_mpss,{0}", ReadVariable("grind_accel_mpss", "???"));
+                        writer.WriteLine("grind_blend_radius_m,{0}", ReadVariable("grind_blend_radius_m", "???"));
+                        writer.WriteLine("grind_rot_speed_rps,{0}", ReadVariable("grind_rot_speed_rps", "???"));
+                        writer.WriteLine("grind_rot_accel_rpss,{0}", ReadVariable("grind_rot_accel_rpss", "???"));
+                        writer.WriteLine("grind_rot_blend_radius_rad,{0}", ReadVariable("grind_rot_blend_radius_rad", "???"));
+
+                        writer.Close();
+                    }
+                }
+                catch
+                {
+                    ExecError(string.Format("write_cyline_data(...) cannot write to\n{0}\nline {1}: {2}", full_filename, lineNumber, origLine));
+                }
+
                 return true;
             }
 
@@ -3325,7 +3392,7 @@ namespace AutoGrind
                 case "robot_door_closed":
                     switch (valueTrimmed)
                     {
-                        case "0":
+                        case "False":
                             DoorClosedLbl.Text = "DOOR OPEN";
                             DoorClosedLbl.BackColor = Color.Red;
                             if (runState == RunState.RUNNING)
@@ -3335,7 +3402,7 @@ namespace AutoGrind
                                 PauseBtn_Click(null, null);
                             }
                             break;
-                        case "1":
+                        case "True":
                             DoorClosedLbl.Text = "DOOR CLOSED";
                             DoorClosedLbl.BackColor = Color.Green;
                             break;
@@ -3348,14 +3415,14 @@ namespace AutoGrind
                 case "robot_footswitch_pressed":
                     switch (valueTrimmed)
                     {
-                        case "0":
+                        case "False":
                             FootswitchPressedLbl.Text = "FOOTSWITCH\nNot Pressed";
                             FootswitchPressedLbl.BackColor = Color.Green;
                             if (runState != RunState.RUNNING)
                                 // Disable freedrive mode
                                 RobotSend("30,19,0");
                             break;
-                        case "1":
+                        case "True":
                             FootswitchPressedLbl.Text = "FOOTSWITCH PRESSED";
                             FootswitchPressedLbl.BackColor = Color.Red;
                             if (runState != RunState.RUNNING)

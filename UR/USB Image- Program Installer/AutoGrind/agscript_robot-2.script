@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
 
-global robot_version = "Rev 2 2022-06-07"
+global robot_version = "Rev 2 2022-06-13"
 
 global response = "unknown"
 global robot_index = 0
@@ -76,8 +76,8 @@ def command_start():
 
   # This one signifies we're starting a new command!
   global robot_starting = robot_index
-  socket_set_var("robot_starting", robot_starting)
-  socket_send_line("robot_ready=False")
+  socket_send_integer("robot_starting", robot_starting)
+  socket_send_bool("robot_ready", False)
 end
 
 # Call this when a command is complete
@@ -86,7 +86,7 @@ def command_finish():
   socket_send_line(retval)
 
   global robot_completed = robot_index
-  socket_set_var("robot_completed", robot_completed)
+  socket_send_integer("robot_completed", robot_completed)
 end
 
 # Set variable interface. Interprets command[2] to select what to set and returns result to socket
@@ -98,7 +98,7 @@ def set_variable():
     if s > 0:
       robot_linear_speed_mps = ceil(s) / 1000.0
     end
-    socket_set_var("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
+    socket_send_integer("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
     global response = "set_linear_speed()"
   elif command[2] == 2:
     # Set accel to a if a>0. Always returns current value
@@ -106,7 +106,7 @@ def set_variable():
     if a > 0:
       robot_linear_accel_mpss = ceil(a) / 1000.0
     end
-    socket_set_var("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
+    socket_send_integer("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
     global response = "set_linear_accel()"
   elif command[2] == 3:
     # Set blend to b if b>=0. Always returns current value
@@ -114,9 +114,8 @@ def set_variable():
     if b >= 0:
       robot_blend_radius_m = b / 1000.0
     end
-    socket_send_string("robot_blend_radius_mm=")
-    socket_send_string(robot_blend_radius_m * 1000.0)
-    socket_send_lf()
+    # No socket_send_integer since we allow to 0.1mm!
+    socket_send_num("robot_blend_radius_mm", robot_blend_radius_m * 1000.0)
     global response = "set_blend_radius()"
   elif command[2] == 4:
     # Set joint speed to s if s>0. Always returns current value
@@ -124,7 +123,7 @@ def set_variable():
     if s > 0:
       robot_joint_speed_rps = d2r(ceil(s))
     end
-    socket_set_var("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
+    socket_send_integer("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
     global response = "set_joint_speed()"
   elif command[2] == 5:
     # Set joint accel to a if a>0. Always returns current value
@@ -132,7 +131,7 @@ def set_variable():
     if a > 0:
       robot_joint_accel_rpss = d2r(ceil(a))
     end
-    socket_set_var("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
+    socket_send_integer("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
     global response = "set_joint_accel()"
   elif command[2] == 6:
     # Set part_geometry to [shape, diameter_mm] if shape==1,2,3. Always returns "robot_part_geometry=[current geometry]"
@@ -143,13 +142,15 @@ def set_variable():
     elif shape == 2 or shape == 3:
       diameter_mm = limiter(command[4], 50, 3000)
       robot_part_geometry = [shape, diameter_mm]
+      # Put in the cyline corrections if this is a cylinder
+      if shape == 2:
+        default_cyline_cal(diameter_mm)
+      end
     end
 
     update_robot_tcp_part()
 
-    socket_send_string("robot_part_geometry=")
-    return_vector(robot_part_geometry, 2)
-    socket_send_lf()
+    socket_send_vector("robot_part_geometry", robot_part_geometry, 2)
     global response = "set_part_geometry()"
   elif command[2] == 10:
     # Set door closed input
@@ -158,42 +159,32 @@ def set_variable():
       robot_door_closed_input[1] = command[4]
     end
 
-    socket_send_string("robot_door_closed_input=")
-    return_vector(robot_door_closed_input, 2)
-    socket_send_lf()
-    socket_set_var("robot_door_closed", is_door_closed())
+    socket_send_vector("robot_door_closed_input", robot_door_closed_input, 2)
+    socket_send_bool("robot_door_closed", is_door_closed())
     global response = "set_door_closed_input()"
   elif command[2] == 11:
     # Set tool on output
     robot_tool_on_outputs = command_3_padded_8(command)
 
-    socket_send_string("robot_tool_on_outputs=")
-    return_vector(robot_tool_on_outputs, 8)
-    socket_send_lf()
+    socket_send_vector("robot_tool_on_outputs", robot_tool_on_outputs, 8)
     global response = "set_tool_on_outputs()"
   elif command[2] == 12:
     # Set tool off output
     robot_tool_off_outputs = command_3_padded_8(command)
 
-    socket_send_string("robot_tool_off_outputs=")
-    return_vector(robot_tool_off_outputs, 8)
-    socket_send_lf()
+    socket_send_vector("robot_tool_off_outputs", robot_tool_off_outputs, 8)
     global response = "set_tool_off_outputs()"
   elif command[2] == 13:
     # Set coolant on output
     robot_coolant_on_outputs = command_3_padded_8(command)
 
-    socket_send_string("robot_coolant_on_outputs=")
-    return_vector(robot_coolant_on_outputs, 8)
-    socket_send_lf()
+    socket_send_vector("robot_coolant_on_outputs", robot_coolant_on_outputs, 8)
     global response = "set_coolant_on_outputs()"
   elif command[2] == 14:
     # Set coolant off output
     robot_coolant_off_outputs = command_3_padded_8(command)
 
-    socket_send_string("robot_coolant_off_outputs=")
-    return_vector(robot_coolant_off_outputs, 8)
-    socket_send_lf()
+    socket_send_vector("robot_coolant_off_outputs", robot_coolant_off_outputs, 8)
     global response = "set_coolant_off_outputs()"
   elif command[2] == 15:
     # tool_on
@@ -217,7 +208,7 @@ def set_variable():
       end_freedrive_mode()
       iset_tcp(robot_tcp)
       robot_freedrive_mode = 0
-      socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
+      socket_send_integer("robot_freedrive_mode", robot_freedrive_mode)
     else:
       local coordSys = command[4]
       local freeAxes = [command[5], command[6], command[7], command[8], command[9], command[10]]
@@ -232,7 +223,7 @@ def set_variable():
         freedrive_mode(freeAxes = freeAxes)
       end
       robot_freedrive_mode = 1
-      socket_set_var("robot_freedrive_mode", robot_freedrive_mode)
+      socket_send_integer("robot_freedrive_mode", robot_freedrive_mode)
     end
     global response = "freedrive_mode()"
   elif command[2] == 20:
@@ -241,7 +232,7 @@ def set_variable():
       robot_tcp = p[command[3], command[4], command[5], command[6], command[7], command[8]]
       iset_tcp(robot_tcp)
     end
-    return_pose("robot_tcp", get_tcp_offset())
+    socket_send_pose("robot_tcp", get_tcp_offset())
     # Recompute robot_tcp_part based on current geometry
     update_robot_tcp_part()
     global response = "set_tcp()"
@@ -252,10 +243,8 @@ def set_variable():
       robot_payload_cog_m = [command[4], command[5], command[6]]
       iset_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
-    socket_set_var("robot_payload_mass_kg", robot_payload_mass_kg)
-    socket_send_string("robot_payload_cog_m=")
-    return_vector(robot_payload_cog_m, 3)
-    socket_send_lf()
+    socket_send_num("robot_payload_mass_kg", robot_payload_mass_kg)
+    socket_send_vector("robot_payload_cog_m", robot_payload_cog_m, 3)
     global response = "set_payload()"
   elif command[2] == 22:
     # Set footswitch pressed input
@@ -264,10 +253,8 @@ def set_variable():
       robot_footswitch_pressed_input[1] = command[4]
     end
 
-    socket_send_string("robot_footswitch_pressed_input=")
-    return_vector(robot_footswitch_pressed_input, 2)
-    socket_send_lf()
-    socket_set_var("robot_footswitch_pressed", is_footswitch_pressed())
+    socket_send_vector("robot_footswitch_pressed_input", robot_footswitch_pressed_input, 2)
+    socket_send_bool("robot_footswitch_pressed", is_footswitch_pressed())
     global response = "set footswitch_pressed_input()"
   elif command[2] == 30:
     # set_output
@@ -275,6 +262,51 @@ def set_variable():
     local state = command[4] > 0
     set_digital_out(out, state)
     global response = "set_output()"
+  elif command[2] == 40:
+    # zero_cal_timers
+    zero_cal_timers()
+    global response = "zero_cal_timers()"
+  elif command[2] == 41:
+    # default_cyline_cal
+    local diam = limiter(command[3], 100, 3000)
+    default_cyline_cal(diam)
+    global response = "default_cyline_cal()"
+  elif command[2] == 42:
+    # unity_cyline_cal
+    unity_cyline_cal()
+    global response = "unity_cyline_cal()"
+  elif command[2] == 43:
+    # report_cyline_cal
+    report_cyline_cal()
+    global response = "report_cyline_cal()"
+  elif command[2] == 44:
+    # enable_cyline_cal
+    local f = command[3] > 0
+    enable_cyline_cal(f)
+    socket_send_bool("cyline_cal_enabled", cyline_cal_enabled)
+    global response = "enable_cyline_cal()"
+  elif command[2] == 45:
+    # set_cyline_training_weight
+    local weight = limiter(command[3], 1, 100)
+    set_cyline_training_weight(weight)
+    socket_send_num("cyline_training_weight", cyline_training_weight)
+    global response = "set_cyline_training_weight()"
+  elif command[2] == 46:
+    # set_cyline_expected_time
+    local t = limiter(command[3], 1, 1000)
+    set_cyline_expected_time(t)
+    socket_send_num("cyline_expected_time", cyline_expected_time)
+    global response = "cyline_expected_time()"
+  elif command[2] == 47:
+    # set_cyline_deadband_time
+    local t = limiter(command[3], 0, 100)
+    set_cyline_deadband_time(t)
+    socket_send_num("cyline_deadband_time", cyline_deadband_time)
+    global response = "set_cyline_deadband_time()"
+  elif command[2] == 48:
+    # new_cyline_cycle
+    new_cyline_cycle()
+    global response = "new_cyline_cycle()"
   else:
     global response = "set_variable ERROR"
   end
@@ -289,34 +321,34 @@ def update_robot_tcp_part():
   else:  # Cylinder or Sphere
     robot_tcp_part = pose_trans(robot_tcp, p[0, 0, robot_part_geometry[1] / 2000.0, 0, 0, 0])
   end
-  return_pose("robot_tcp_part", robot_tcp_part)
+  socket_send_pose("robot_tcp_part", robot_tcp_part)
 end
 
 # Send get_tcp_offset() result to socket
 def return_tcp_offset():
   p = get_tcp_offset()
-  return_pose("tcp_offset", p)
+  socket_send_pose("tcp_offset", p)
   global response = "return_tcp_offset()"
 end
 
 # Send get_actual_tcp_pose() to socket
 def return_actual_tcp_pose():
   p = iget_actual_tcp_pose()
-  return_pose("actual_tcp_pose", p)
+  socket_send_pose("actual_tcp_pose", p)
   global response = "return_actual_tcp_pose()"
 end
 
 # Send get_actual_joint_positions() to socket
 def return_get_actual_joint_positions():
   p = iget_actual_joint_positions()
-  return_joints("actual_joint_positions", p)
+  socket_send_joints("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
 end
 
 # Send both joints and pose to socket labeled position_p and position_q
 def return_both_positions():
-  return_joints("position_q", iget_actual_joint_positions())
-  return_pose("position_p", iget_actual_tcp_pose())
+  socket_send_joints("position_q", iget_actual_joint_positions())
+  socket_send_pose("position_p", iget_actual_tcp_pose())
   global response = "return_both_positions()"
 end
 
@@ -451,8 +483,8 @@ global grind_max_wait_ms = 1500
 # Also monitors footswitch!
 thread io_monitor_thread():
   # Send current state on start... in future will only be sent on change
-  socket_set_var("robot_door_closed", robot_door_closed)
-  socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
+  socket_send_bool("robot_door_closed", robot_door_closed)
+  socket_send_bool("robot_footswitch_pressed", robot_footswitch_pressed)
 
   while True:
     sleep(time_door_check_rate_s)
@@ -462,13 +494,13 @@ thread io_monitor_thread():
     # Notify host if door state has changed
     if robot_door_closed != new_door_closed:
       robot_door_closed = new_door_closed
-      socket_set_var("robot_door_closed", robot_door_closed)
+      socket_send_bool("robot_door_closed", robot_door_closed)
     end
 
     # Notify host if footswitch state has changed
     if robot_footswitch_pressed != new_footswitch_pressed:
       robot_footswitch_pressed = new_footswitch_pressed
-      socket_set_var("robot_footswitch_pressed", robot_footswitch_pressed)
+      socket_send_bool("robot_footswitch_pressed", robot_footswitch_pressed)
     end
 
     # Check for still in grind process but not executing a grind command
@@ -482,6 +514,7 @@ thread io_monitor_thread():
     else:
       time_in_uncommanded_grind = 0
     end
+    sync()
   end
 end
 global ioMonitorThread = run io_monitor_thread()
@@ -1028,6 +1061,253 @@ global imover_thread_handle = run imover_thread()
 # END IMOVER SYSTEM
 # ####################################################################################
 
+
+# ####################################################################################
+# START CALIBRATION SUPPORT
+#
+global cal_timer_size = 36
+global cal_timers = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+global cal_timer_count = 0
+global cal_timer_index = 0
+global cal_timer_handle = 0
+
+thread cal_timer_thread():
+  cal_timer_count = 0
+  while (True):
+    cal_timer_count = cal_timer_count + 1
+    sync()
+  end
+end
+
+def zero_cal_timers():
+  global cal_timer_index = 0
+  local i = 0
+  while i < cal_timer_size:
+    cal_timers[i] = 0
+    i = i + 1
+  end
+  socket_send_vector("cal_timers", cal_timers, cal_timer_size)
+end
+
+def start_cal_timer():
+  cal_timer_handle = run cal_timer_thread()
+end
+
+def stop_cal_timer():
+  kill cal_timer_handle
+  global cal_timer_handle = 0
+
+  # 2 ms per tick!
+  local t = cal_timer_count * 0.002
+  cal_timers[cal_timer_index] = t
+
+  global cal_timer_index = cal_timer_index + 1
+  if cal_timer_index >= cal_timer_size:
+    global cal_timer_index = 0
+  end
+  return t
+end
+#
+# END CALIBRATION SUPPORT
+# ####################################################################################
+
+
+# ####################################################################################
+# START CYLINE CAL SYSTEM
+#
+global cyline_cal_enabled = False
+global cyline_training_weight = 5.0
+global cyline_deadband_time = 0.02
+global cyline_expected_time = 5.2
+global cyline_max_e = -100
+global cyline_max_e_angle = 0.0
+global cyline_min_e = 100
+global cyline_min_e_angle = 0.0
+
+# Empirical correction to the rfactor... 0-2.5, 2.5-5.0, ..., 97.5-90
+global cyline_correction_size = 36
+global cyline_degree_slice = 90.0 / cyline_correction_size
+global cyline_calibration_counts = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+global cyline_latest_e = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# Calibration from unity coefficients 2022-06-11
+# See unity_100-2000mm.xls
+#global coeff_100mm = [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770]
+#global coeff_200mm = [0.980385, 0.941538, 0.900753, 0.863069, 0.826287, 0.790784, 0.755879, 0.722168, 0.688801, 0.721886, 0.769698, 0.813443, 0.853179, 0.889338, 0.924615, 0.952692, 0.978077, 1.000000, 1.019230, 1.035770, 1.049620, 1.061150, 1.070380, 1.076920, 1.081540, 1.083850, 1.084230, 1.082690, 1.079230, 1.073850, 1.066920, 1.058080, 1.047690, 1.036150, 1.022690, 1.008080]
+#global coeff_300mm = [0.991154, 0.972308, 0.952308, 0.931154, 0.905734, 0.882064, 0.857383, 0.831953, 0.805572, 0.778751, 0.751406, 0.723306, 0.702589, 0.741240, 0.777307, 0.810840, 0.842206, 0.870717, 0.896958, 0.923846, 0.944615, 0.963077, 0.979231, 0.993462, 1.005000, 1.015000, 1.022690, 1.028460, 1.031920, 1.033460, 1.033460, 1.031540, 1.027310, 1.021920, 1.014230, 1.005380]
+#global coeff_400mm = [1.000000, 0.988077, 0.978077, 0.966538, 0.953077, 0.938462, 0.921923, 0.900405, 0.880575, 0.858912, 0.836476, 0.812299, 0.787050, 0.760735, 0.733074, 0.706927, 0.740101, 0.771220, 0.800618, 0.828195, 0.853613, 0.877513, 0.899256, 0.921923, 0.939231, 0.954615, 0.967692, 0.979231, 0.988846, 1.000000, 1.000000, 1.005770, 1.007690, 1.008080, 1.006150, 1.000000]
+#global coeff_500mm = [1.000000, 1.000000, 0.994615, 0.988846, 0.981538, 0.972692, 0.961923, 0.949231, 0.935000, 0.918846, 0.897341, 0.877131, 0.855141, 0.831953, 0.807028, 0.780274, 0.752459, 0.722927, 0.722927, 0.752459, 0.780274, 0.807028, 0.831953, 0.855141, 0.877131, 0.897341, 0.918846, 0.935000, 0.949231, 0.961923, 0.972692, 0.981538, 0.988846, 0.994615, 1.000000, 1.000000]
+#global coeff_600mm = [1.000000, 1.005000, 1.005770, 1.004620, 1.000000, 1.000000, 0.990385, 0.981923, 0.971538, 0.959231, 0.945000, 0.929231, 0.907649, 0.887081, 0.864981, 0.840678, 0.814587, 0.786669, 0.756933, 0.725202, 0.718573, 0.746847, 0.773883, 0.799856, 0.824441, 0.847881, 0.869906, 0.890447, 0.912692, 0.929615, 0.945000, 0.958846, 0.970769, 0.981538, 0.990385, 1.000000]
+#global coeff_700mm = [1.000000, 1.009620, 1.013850, 1.016150, 1.016540, 1.015380, 1.011920, 1.006920, 1.000000, 0.990385, 0.979615, 0.966154, 0.951154, 0.934231, 0.911481, 0.889721, 0.865363, 0.839207, 0.810840, 0.780654, 0.747987, 0.713646, 0.723685, 0.751318, 0.777990, 0.803597, 0.828195, 0.852032, 0.874496, 0.895809, 0.918846, 0.936923, 0.953462, 0.968462, 0.982308, 0.994615]
+#global coeff_800mm = [1.005000, 1.013460, 1.020000, 1.025000, 1.028080, 1.029230, 1.028850, 1.026150, 1.021920, 1.015380, 1.006920, 1.000000, 0.983846, 0.968846, 0.951923, 0.933077, 0.908033, 0.883637, 0.857001, 0.827814, 0.796426, 0.762553, 0.726340, 0.708063, 0.736396, 0.763777, 0.790784, 0.816811, 0.842206, 0.866510, 0.890104, 0.915769, 0.936538, 0.956154, 0.974615, 0.991923]
+#global coeff_900mm = [1.005770, 1.016150, 1.025000, 1.031920, 1.037310, 1.040770, 1.042310, 1.041920, 1.040000, 1.035770, 1.029620, 1.021150, 1.010770, 1.000000, 0.983077, 0.966154, 0.946538, 0.924615, 0.896575, 0.868805, 0.838443, 0.805503, 0.769779, 0.731462, 0.698804, 0.727762, 0.756259, 0.784385, 0.811984, 0.839207, 0.866080, 0.892018, 0.920385, 0.944231, 0.967308, 0.989231]
+#global coeff_1000mm = [1.006540, 1.018460, 1.028850, 1.037690, 1.044620, 1.050000, 1.053460, 1.055000, 1.054620, 1.052690, 1.048080, 1.041920, 1.033460, 1.022690, 1.009620, 0.994231, 0.976538, 0.956154, 0.933462, 0.904584, 0.875600, 0.843351, 0.808553, 0.770539, 0.729659, 0.695018, 0.724823, 0.754359, 0.784080, 0.813824, 0.842970, 0.872201, 0.901136, 0.932308, 0.959615, 0.986923]
+#global coeff_1100mm = [1.007310, 1.020380, 1.031920, 1.042310, 1.050770, 1.057690, 1.062690, 1.065770, 1.067310, 1.066920, 1.064230, 1.059620, 1.052690, 1.043850, 1.032310, 1.018850, 1.000000, 0.983846, 0.962692, 0.938462, 0.911538, 0.877513, 0.843351, 0.805953, 0.765595, 0.721409, 0.695775, 0.726720, 0.758074, 0.789641, 0.821389, 0.853231, 0.885509, 0.920769, 0.952308, 0.984231]
+#global coeff_1200mm = [1.007690, 1.021920, 1.035000, 1.046150, 1.055770, 1.063850, 1.070380, 1.075000, 1.078080, 1.078850, 1.077690, 1.074620, 1.069620, 1.061920, 1.052310, 1.040000, 1.025380, 1.008080, 0.988077, 0.965385, 0.940000, 0.907649, 0.874835, 0.838061, 0.798021, 0.754359, 0.706272, 0.701075, 0.733739, 0.766736, 0.800618, 0.835007, 0.870288, 0.906117, 0.945385, 0.981538]
+#global coeff_1300mm = [1.008080, 1.023460, 1.037310, 1.049620, 1.060380, 1.069620, 1.077310, 1.083080, 1.087310, 1.089230, 1.089620, 1.088080, 1.084230, 1.078080, 1.069620, 1.058850, 1.045770, 1.029620, 1.011150, 0.989615, 0.965000, 0.937692, 0.903086, 0.867611, 0.828134, 0.784461, 0.736776, 0.684641, 0.710715, 0.745417, 0.781035, 0.817638, 0.855854, 0.895043, 0.938077, 0.979231]
+#global coeff_1400mm = [1.008460, 1.024620, 1.039230, 1.052310, 1.064230, 1.074230, 1.083080, 1.090000, 1.095000, 1.098460, 1.100000, 1.099620, 1.096920, 1.091920, 1.085000, 1.075380, 1.063460, 1.048850, 1.031540, 1.011150, 0.988077, 0.961538, 0.931538, 0.894277, 0.855472, 0.812365, 0.764917, 0.712610, 0.689180, 0.725202, 0.762256, 0.800999, 0.841442, 0.884019, 0.931154, 0.976538]
+#global coeff_1500mm = [1.008850, 1.025380, 1.040770, 1.055000, 1.067310, 1.078460, 1.088080, 1.096150, 1.102310, 1.106540, 1.109230, 1.109620, 1.108460, 1.104620, 1.098850, 1.090380, 1.079620, 1.066150, 1.050000, 1.031150, 1.008850, 0.983462, 0.954615, 0.921923, 0.880958, 0.838443, 0.791238, 0.739054, 0.681348, 0.705893, 0.744658, 0.785146, 0.827814, 0.873349, 0.924231, 0.973846]
+#global coeff_1600mm = [1.009230, 1.026540, 1.042310, 1.056920, 1.070380, 1.082310, 1.092690, 1.101540, 1.108460, 1.113850, 1.122030, 1.123580, 1.123190, 1.120490, 1.111150, 1.103850, 1.094230, 1.081920, 1.066920, 1.048850, 1.027690, 1.000000, 0.975385, 0.943462, 0.904201, 0.862353, 0.815731, 0.763777, 0.705893, 0.687667, 0.727478, 0.769779, 0.814587, 0.862686, 0.917692, 0.971538]
+#global coeff_1700mm = [1.009620, 1.027310, 1.043850, 1.058850, 1.073080, 1.085380, 1.096540, 1.106150, 1.114230, 1.120380, 1.129370, 1.132120, 1.132460, 1.130970, 1.127060, 1.120490, 1.107310, 1.096150, 1.081920, 1.065000, 1.045000, 1.021540, 0.994615, 0.963846, 0.928846, 0.884785, 0.838768, 0.787050, 0.729280, 0.670351, 0.711372, 0.755119, 0.801761, 0.852466, 0.910769, 0.968846]
+#global coeff_1800mm = [1.009620, 1.028080, 1.045000, 1.060770, 1.075380, 1.088460, 1.100380, 1.110380, 1.119230, 1.130920, 1.136370, 1.139850, 1.141010, 1.140240, 1.137100, 1.131690, 1.123970, 1.108850, 1.096150, 1.080000, 1.060770, 1.038460, 1.012310, 0.982308, 0.948077, 0.905734, 0.860392, 0.808934, 0.751026, 0.686154, 0.695775, 0.740861, 0.789335, 0.842588, 0.900753, 0.966538]
+#global coeff_1900mm = [[1.010000, 1.028460, 1.046150, 1.062310, 1.077310, 1.091150, 1.103460, 1.114230, 1.128210, 1.136370, 1.142610, 1.146420, 1.148740, 1.148740, 1.146860, 1.142170, 1.135170, 1.125510, 1.108850, 1.093850, 1.075770, 1.054230, 1.028850, 1.000000, 0.966154, 0.928077, 0.880575, 0.829662, 0.771980, 0.706927, 0.680970, 0.727099, 0.777307, 0.832716, 0.893932, 0.963846]
+#global coeff_2000mm = [1.010000, 1.029230, 1.046920, 1.063850, 1.079230, 1.093460, 1.106540, 1.122420, 1.132460, 1.141010, 1.148020, 1.153040, 1.155750, 1.156910, 1.155360, 1.151880, 1.145650, 1.136710, 1.125120, 1.106540, 1.089230, 1.068460, 1.044230, 1.015770, 0.983462, 0.945769, 0.899604, 0.849028, 0.791619, 0.726720, 0.666691, 0.713746, 0.765595, 0.823234, 0.887424, 0.961538]
+
+# Coefficients were trained at 350mm using 34 Cyline Calibration
+#global coeff_350mm = [0.994231, 0.981154, 0.966923, 0.951154, 0.933846, 0.911864, 0.891596, 0.86957, 0.846735, 0.822852, 0.797641, 0.7716, 0.744658, 0.716958, 0.72103, 0.755499, 0.787812, 0.817955, 0.846025, 0.872201, 0.895809, 0.920769, 0.939615, 0.956154, 0.971154, 0.983846,  0.994615, 1, 1.01, 1.01462, 1.01769, 1.01846, 1.01769, 1.015, 1.01038, 1]
+
+
+global cyline_coeff_table_size = 20
+global cyline_coeff_table_index = -1
+global cyline_coeff_tables =
+[
+  [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770],
+  [0.980385, 0.941538, 0.900753, 0.863069, 0.826287, 0.790784, 0.755879, 0.722168, 0.688801, 0.721886, 0.769698, 0.813443, 0.853179, 0.889338, 0.924615, 0.952692, 0.978077, 1.000000, 1.019230, 1.035770, 1.049620, 1.061150, 1.070380, 1.076920, 1.081540, 1.083850, 1.084230, 1.082690, 1.079230, 1.073850, 1.066920, 1.058080, 1.047690, 1.036150, 1.022690, 1.008080],
+  [0.991154, 0.972308, 0.952308, 0.931154, 0.905734, 0.882064, 0.857383, 0.831953, 0.805572, 0.778751, 0.751406, 0.723306, 0.702589, 0.741240, 0.777307, 0.810840, 0.842206, 0.870717, 0.896958, 0.923846, 0.944615, 0.963077, 0.979231, 0.993462, 1.005000, 1.015000, 1.022690, 1.028460, 1.031920, 1.033460, 1.033460, 1.031540, 1.027310, 1.021920, 1.014230, 1.005380],
+  [1.000000, 0.988077, 0.978077, 0.966538, 0.953077, 0.938462, 0.921923, 0.900405, 0.880575, 0.858912, 0.836476, 0.812299, 0.787050, 0.760735, 0.733074, 0.706927, 0.740101, 0.771220, 0.800618, 0.828195, 0.853613, 0.877513, 0.899256, 0.921923, 0.939231, 0.954615, 0.967692, 0.979231, 0.988846, 1.000000, 1.000000, 1.005770, 1.007690, 1.008080, 1.006150, 1.000000],
+  [1.000000, 1.000000, 0.994615, 0.988846, 0.981538, 0.972692, 0.961923, 0.949231, 0.935000, 0.918846, 0.897341, 0.877131, 0.855141, 0.831953, 0.807028, 0.780274, 0.752459, 0.722927, 0.722927, 0.752459, 0.780274, 0.807028, 0.831953, 0.855141, 0.877131, 0.897341, 0.918846, 0.935000, 0.949231, 0.961923, 0.972692, 0.981538, 0.988846, 0.994615, 1.000000, 1.000000],
+  [1.000000, 1.005000, 1.005770, 1.004620, 1.000000, 1.000000, 0.990385, 0.981923, 0.971538, 0.959231, 0.945000, 0.929231, 0.907649, 0.887081, 0.864981, 0.840678, 0.814587, 0.786669, 0.756933, 0.725202, 0.718573, 0.746847, 0.773883, 0.799856, 0.824441, 0.847881, 0.869906, 0.890447, 0.912692, 0.929615, 0.945000, 0.958846, 0.970769, 0.981538, 0.990385, 1.000000],
+  [1.000000, 1.009620, 1.013850, 1.016150, 1.016540, 1.015380, 1.011920, 1.006920, 1.000000, 0.990385, 0.979615, 0.966154, 0.951154, 0.934231, 0.911481, 0.889721, 0.865363, 0.839207, 0.810840, 0.780654, 0.747987, 0.713646, 0.723685, 0.751318, 0.777990, 0.803597, 0.828195, 0.852032, 0.874496, 0.895809, 0.918846, 0.936923, 0.953462, 0.968462, 0.982308, 0.994615],
+  [1.005000, 1.013460, 1.020000, 1.025000, 1.028080, 1.029230, 1.028850, 1.026150, 1.021920, 1.015380, 1.006920, 1.000000, 0.983846, 0.968846, 0.951923, 0.933077, 0.908033, 0.883637, 0.857001, 0.827814, 0.796426, 0.762553, 0.726340, 0.708063, 0.736396, 0.763777, 0.790784, 0.816811, 0.842206, 0.866510, 0.890104, 0.915769, 0.936538, 0.956154, 0.974615, 0.991923],
+  [1.005770, 1.016150, 1.025000, 1.031920, 1.037310, 1.040770, 1.042310, 1.041920, 1.040000, 1.035770, 1.029620, 1.021150, 1.010770, 1.000000, 0.983077, 0.966154, 0.946538, 0.924615, 0.896575, 0.868805, 0.838443, 0.805503, 0.769779, 0.731462, 0.698804, 0.727762, 0.756259, 0.784385, 0.811984, 0.839207, 0.866080, 0.892018, 0.920385, 0.944231, 0.967308, 0.989231],
+  [1.006540, 1.018460, 1.028850, 1.037690, 1.044620, 1.050000, 1.053460, 1.055000, 1.054620, 1.052690, 1.048080, 1.041920, 1.033460, 1.022690, 1.009620, 0.994231, 0.976538, 0.956154, 0.933462, 0.904584, 0.875600, 0.843351, 0.808553, 0.770539, 0.729659, 0.695018, 0.724823, 0.754359, 0.784080, 0.813824, 0.842970, 0.872201, 0.901136, 0.932308, 0.959615, 0.986923],
+  [1.007310, 1.020380, 1.031920, 1.042310, 1.050770, 1.057690, 1.062690, 1.065770, 1.067310, 1.066920, 1.064230, 1.059620, 1.052690, 1.043850, 1.032310, 1.018850, 1.000000, 0.983846, 0.962692, 0.938462, 0.911538, 0.877513, 0.843351, 0.805953, 0.765595, 0.721409, 0.695775, 0.726720, 0.758074, 0.789641, 0.821389, 0.853231, 0.885509, 0.920769, 0.952308, 0.984231],
+  [1.007690, 1.021920, 1.035000, 1.046150, 1.055770, 1.063850, 1.070380, 1.075000, 1.078080, 1.078850, 1.077690, 1.074620, 1.069620, 1.061920, 1.052310, 1.040000, 1.025380, 1.008080, 0.988077, 0.965385, 0.940000, 0.907649, 0.874835, 0.838061, 0.798021, 0.754359, 0.706272, 0.701075, 0.733739, 0.766736, 0.800618, 0.835007, 0.870288, 0.906117, 0.945385, 0.981538],
+  [1.008080, 1.023460, 1.037310, 1.049620, 1.060380, 1.069620, 1.077310, 1.083080, 1.087310, 1.089230, 1.089620, 1.088080, 1.084230, 1.078080, 1.069620, 1.058850, 1.045770, 1.029620, 1.011150, 0.989615, 0.965000, 0.937692, 0.903086, 0.867611, 0.828134, 0.784461, 0.736776, 0.684641, 0.710715, 0.745417, 0.781035, 0.817638, 0.855854, 0.895043, 0.938077, 0.979231],
+  [1.008460, 1.024620, 1.039230, 1.052310, 1.064230, 1.074230, 1.083080, 1.090000, 1.095000, 1.098460, 1.100000, 1.099620, 1.096920, 1.091920, 1.085000, 1.075380, 1.063460, 1.048850, 1.031540, 1.011150, 0.988077, 0.961538, 0.931538, 0.894277, 0.855472, 0.812365, 0.764917, 0.712610, 0.689180, 0.725202, 0.762256, 0.800999, 0.841442, 0.884019, 0.931154, 0.976538],
+  [1.008850, 1.025380, 1.040770, 1.055000, 1.067310, 1.078460, 1.088080, 1.096150, 1.102310, 1.106540, 1.109230, 1.109620, 1.108460, 1.104620, 1.098850, 1.090380, 1.079620, 1.066150, 1.050000, 1.031150, 1.008850, 0.983462, 0.954615, 0.921923, 0.880958, 0.838443, 0.791238, 0.739054, 0.681348, 0.705893, 0.744658, 0.785146, 0.827814, 0.873349, 0.924231, 0.973846],
+  [1.009230, 1.026540, 1.042310, 1.056920, 1.070380, 1.082310, 1.092690, 1.101540, 1.108460, 1.113850, 1.122030, 1.123580, 1.123190, 1.120490, 1.111150, 1.103850, 1.094230, 1.081920, 1.066920, 1.048850, 1.027690, 1.000000, 0.975385, 0.943462, 0.904201, 0.862353, 0.815731, 0.763777, 0.705893, 0.687667, 0.727478, 0.769779, 0.814587, 0.862686, 0.917692, 0.971538],
+  [1.009620, 1.027310, 1.043850, 1.058850, 1.073080, 1.085380, 1.096540, 1.106150, 1.114230, 1.120380, 1.129370, 1.132120, 1.132460, 1.130970, 1.127060, 1.120490, 1.107310, 1.096150, 1.081920, 1.065000, 1.045000, 1.021540, 0.994615, 0.963846, 0.928846, 0.884785, 0.838768, 0.787050, 0.729280, 0.670351, 0.711372, 0.755119, 0.801761, 0.852466, 0.910769, 0.968846],
+  [1.009620, 1.028080, 1.045000, 1.060770, 1.075380, 1.088460, 1.100380, 1.110380, 1.119230, 1.130920, 1.136370, 1.139850, 1.141010, 1.140240, 1.137100, 1.131690, 1.123970, 1.108850, 1.096150, 1.080000, 1.060770, 1.038460, 1.012310, 0.982308, 0.948077, 0.905734, 0.860392, 0.808934, 0.751026, 0.686154, 0.695775, 0.740861, 0.789335, 0.842588, 0.900753, 0.966538],
+  [1.010000, 1.028460, 1.046150, 1.062310, 1.077310, 1.091150, 1.103460, 1.114230, 1.128210, 1.136370, 1.142610, 1.146420, 1.148740, 1.148740, 1.146860, 1.142170, 1.135170, 1.125510, 1.108850, 1.093850, 1.075770, 1.054230, 1.028850, 1.000000, 0.966154, 0.928077, 0.880575, 0.829662, 0.771980, 0.706927, 0.680970, 0.727099, 0.777307, 0.832716, 0.893932, 0.963846],
+  [1.010000, 1.029230, 1.046920, 1.063850, 1.079230, 1.093460, 1.106540, 1.122420, 1.132460, 1.141010, 1.148020, 1.153040, 1.155750, 1.156910, 1.155360, 1.151880, 1.145650, 1.136710, 1.125120, 1.106540, 1.089230, 1.068460, 1.044230, 1.015770, 0.983462, 0.945769, 0.899604, 0.849028, 0.791619, 0.726720, 0.666691, 0.713746, 0.765595, 0.823234, 0.887424, 0.961538]
+]
+
+# Corrections to be used in cylinder lines... these get loaded and overwritten
+global cyline_correction = [0.994231, 0.981154, 0.966923, 0.951154, 0.933846, 0.911864, 0.891596, 0.86957, 0.846735, 0.822852, 0.797641, 0.7716, 0.744658, 0.716958, 0.72103, 0.755499, 0.787812, 0.817955, 0.846025, 0.872201, 0.895809, 0.920769, 0.939615, 0.956154, 0.971154, 0.983846, 0.994615, 1, 1.01, 1.01462, 1.01769, 1.01846, 1.01769, 1.015, 1.01038, 1]
+
+def enable_cyline_cal(f = False):
+  if (f):
+    global cyline_cal_enabled = True
+    new_cyline_cycle()
+    zero_cyline_calbration_counts()
+    report_cyline_cal()
+  else:
+    global cyline_cal_enabled = False
+    report_cyline_cal()
+  end
+end
+
+def set_cyline_training_weight(weight):
+  global cyline_training_weight = weight
+end
+
+def set_cyline_expected_time(t):
+  global cyline_expected_time = t
+end
+
+def set_cyline_deadband_time(t):
+  global cyline_deadband_time = t
+end
+
+def zero_cyline_latest_e():
+  local i = 0
+  while i < cyline_correction_size:
+    cyline_latest_e[i] = 0
+    i = i + 1
+  end
+end
+
+def zero_cyline_calbration_counts():
+  local i = 0
+  while i < cyline_correction_size:
+    cyline_calibration_counts[i] = 0
+    i = i + 1
+  end
+end
+
+def new_cyline_cycle():
+  global cyline_max_e = -999.0
+  global cyline_min_e = 999.0
+  global cyline_max_e_angle = 0.0
+  global cyline_min_e_angle = 0.0
+  zero_cal_timers()
+  zero_cyline_latest_e()
+  report_cyline_cal()
+end
+
+def unity_cyline_cal():
+  enable_cyline_cal(False)
+  local i = 0
+  while i < cyline_correction_size:
+    cyline_correction[i] = 1.0
+    i = i + 1
+  end
+  global cyline_coeff_table_index = 99
+end
+
+def default_cyline_cal(diam_mm):
+  enable_cyline_cal(False)
+  global cyline_coeff_table_index = limiter(floor(diam_mm / 100 + 0.5)-1, 0, cyline_coeff_table_size-1)
+  local i = 0
+  while i < cyline_correction_size:
+    cyline_correction[i] = cyline_coeff_tables[cyline_coeff_table_index, i]
+    i = i + 1
+  end
+end
+
+def report_cyline_cal():
+  socket_send_num("cyline_coeff_table_size", cyline_coeff_table_size)
+  socket_send_num("cyline_coeff_table_index", cyline_coeff_table_index)
+  socket_send_num("cyline_correction_size", cyline_correction_size)
+  socket_send_num("cyline_expected_time", cyline_expected_time)
+  socket_send_num("cyline_training_weight", cyline_training_weight)
+  socket_send_num("cyline_max_e", cyline_max_e)
+  socket_send_num("cyline_max_e_angle", cyline_max_e_angle)
+  socket_send_num("cyline_min_e", cyline_min_e)
+  socket_send_num("cyline_min_e_angle", cyline_min_e_angle)
+  socket_send_num("cyline_deadband_time", cyline_deadband_time)
+  socket_send_num("cyline_degree_slice", cyline_degree_slice)
+
+  socket_send_vector("cal_timers", cal_timers, cal_timer_size)
+  socket_send_vector("cyline_correction", cyline_correction, cyline_correction_size)
+  socket_send_vector("cyline_latest_e", cyline_latest_e, cyline_correction_size)
+  socket_send_vector("cyline_calibration_counts", cyline_calibration_counts, cyline_correction_size)
+end
+
+def adjust_cyline_coefficient(t):
+  local e = t - cyline_expected_time
+  cyline_latest_e[process_correction_index] = e
+
+  local abs_e = abs(e)
+  if e > cyline_max_e:
+    global cyline_max_e = e
+    global cyline_max_e_angle = process_correction_index * cyline_degree_slice
+  end
+  if e < cyline_min_e:
+    global cyline_min_e = e
+    global cyline_min_e_angle = process_correction_index * cyline_degree_slice
+  end
+
+  if abs(e) > cyline_deadband_time:
+    # Rev 1 originally trained
+    #cyline_correction[process_correction_index] = adjust_pct(cyline_correction[process_correction_index], -e * cyline_training_weight)
+    # Rev 2... seemed backwards adjustments
+    #cyline_correction[process_correction_index] = adjust_pct(cyline_correction[process_correction_index], e * cyline_training_weight)
+    # Rev 3... faster is faster, slower is slower... adjust by percent slow.
+    # Example 1. Expect 5s. Get 4s (too fast).   e = 4-5 = -1  scale_factor *= (1 + e/expected)  scale_factor *= (1 + -1/5)  scale_factor *= 0.8
+    # Example 2. Expect 5s. Get 7s (too slow).   e = 7-5 = +2  scale_factor *= (1 + e/expected)  scale_factor *= (1 + 2/5)  scale_factor *= 1.4
+    local adjustment_speed = cyline_training_weight / 100.0
+    local adjustment_multiplier = 1 + adjustment_speed * e / cyline_expected_time
+    cyline_correction[process_correction_index] = cyline_correction[process_correction_index] * adjustment_multiplier
+  end
+  cyline_calibration_counts[process_correction_index] = cyline_calibration_counts[process_correction_index] + 1
+  report_cyline_cal()
+end
+#
+# END CYLINE CAL SYSTEM
+# ####################################################################################
+
 # ####################################################################################
 # START DRAWING SYSTEM
 #
@@ -1056,50 +1336,6 @@ def draw_relative(dp, r = -1, wait = True):
   draw_to(dpdest, r, wait)
 end
 
-# Empirical correction to the rfactor... one entry for 0x deg, 1x deg, 2x deg, etc
-# Empirical correction to the rfactor... 0-2.5, 2.5-5.0, ..., 97.5-90
-global process_cyl_table_size = 36
-# Coefficients were trained at 1100mm on UR5e from timecoeff13.csv, timecoeff13 tab in 
-# https://docs.google.com/spreadsheets/d/1p8jo_OnwVtIpL-AkrZJtMYL3z7jr9P3bIzsG_I7L1jc/edit#gid=2025929501
-global process_cyl_correction =
-[
-  0.744499,
-  0.563454,
-  0.435303,
-  0.414375,
-  0.338062,
-  0.38859,
-  0.4,
-  0.433715,
-  0.443015,
-  0.506711,
-  0.61494,
-  0.687973,
-  0.750133,
-  0.811298,
-  0.868622,
-  0.927721,
-  0.996957,
-  1.05158,
-  1.09743,
-  1.15233,
-  1.20578,
-  1.25079,
-  1.30856,
-  1.35518,
-  1.40129,
-  1.43943,
-  1.45215,
-  1.38705,
-  1.32025,
-  1.26314,
-  1.21121,
-  1.16423,
-  1.12181,
-  1.08337,
-  1.0486,
-  1.01551
-]
 
 def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp0 = abs(dp[0] - draw_current_dp[0])
@@ -1131,31 +1367,37 @@ def draw_to(dp, r = -1, wait = True):
     if process_theta_deg > 90.0:
       global process_theta_deg = abs(180.0 - process_theta_deg)
     end
-    # rawfactor is 0 (pure X) to 1 (pure RX)
-    # corrections above are applied
-    global process_rawfactor = process_theta_deg / 90.0
-    global process_correction_index = limiter(floor(process_theta_deg / 2.5), 0, process_cyl_table_size-1)
-    global process_rfactor = process_rawfactor * process_cyl_correction[process_correction_index]
+
+    # process_sliderfactor is 0 (pure X) to 1 (pure RX)
+    global process_sliderfactor = process_theta_deg / 90.0
+    global process_correction_index = limiter(floor(process_theta_deg / cyline_degree_slice), 0, cyline_correction_size-1)
+    global process_correctionfactor = cyline_correction[process_correction_index]
 
     # Choose speeds as a linear combination of the two values!
-    global process_a = draw_accel_factor * linear_slider(grind_accel_mpss, grind_rot_accel_rpss, process_rfactor)
-    global process_v = draw_speed_factor * linear_slider(grind_speed_mps, grind_rot_speed_rps, process_rfactor)
-    global process_r = linear_slider(grind_blend_radius_m, grind_rot_blend_radius_rad, process_rfactor)
-  else: # Flat
-    global process_a = grind_accel_mpss * draw_accel_factor
-    global process_v = grind_speed_mps * draw_speed_factor
-    global process_r = grind_blend_radius_m
+    global process_a = linear_slider(grind_accel_mpss, grind_rot_accel_rpss, process_sliderfactor)
+    global process_v = linear_slider(grind_speed_mps, grind_rot_speed_rps, process_sliderfactor)
+    global process_r = linear_slider(grind_blend_radius_m, grind_rot_blend_radius_rad, process_sliderfactor)
+
+    # Apply calibrated corrections
+    global process_a = process_a * process_correctionfactor
+    global process_v = process_v * process_correctionfactor
+
+    # Apply one-time scaling factors
+    global process_a = process_a * draw_accel_factor
+    global process_v = process_v * draw_speed_factor
   end
 
+  # Apply optional blend radius override
   global process_r_in = r
   if r >= 0:
     global process_r = r
   end
 
-  # Clear 1-time speed factors!
+  # Clear 1-time speed factors
   global draw_accel_factor = 1.0
   global draw_speed_factor = 1.0
 
+  # Let's go!
   global draw_current_dp = dp
   imovel_int(pose_trans(p_contact_center, draw_current_dp), a = process_a, v = process_v, r = process_r, wait = wait)
 end

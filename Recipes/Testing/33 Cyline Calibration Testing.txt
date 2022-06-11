@@ -1,0 +1,82 @@
+# 33 Cyline Calibration Testing
+
+report_cyline_cal()
+prompt(Variables should show current cal)
+
+unity_cyline_cal()
+report_cyline_cal()
+write_cyline_data(33 Test Unity)
+prompt(Variables should show unity cal)
+
+diam=1
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=51
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=51
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=149
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=152
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=360
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=500
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=1900
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=1960
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+diam=3000
+default_cyline_cal({diam})
+report_cyline_cal()
+write_cyline_data(33 Test Default {diam}mm)
+prompt(Variables should show default cal for {diam}mm)
+
+enable_cyline_cal(1)
+set_part_geometry(CYLINDER,1100)
+grind_line_deg(100,10,1,20,5,0)
+grind_line_deg(100,3,1,20,5,0)
+report_cyline_cal()
+enable_cyline_cal(0)
+
+prompt(cal_timers should have 2 times)
+write_cyline_data(33 Test 2 Tests)
+
+zero_cal_timers()
+prompt(cal_timers should all be 0)
