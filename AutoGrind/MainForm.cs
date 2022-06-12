@@ -188,7 +188,7 @@ namespace AutoGrind
                     SetState(RunState.READY);
                 }
 
-            log.Info("System ready.");
+            log.Info("StartupTmr complete");
         }
         bool forceClose = false;
         private void CloseTmr_Tick(object sender, EventArgs e)
@@ -337,10 +337,9 @@ namespace AutoGrind
                 {
                     // Any responses received?
                     string dashResponse = robotDashboardClient.Receive();
-                    log.Trace("DASH received {0}", dashResponse);
-
                     if (dashResponse != null)
                     {
+                        log.Trace("DASH received {0}", dashResponse.Replace('\n', ' '));
                         string[] responses = dashResponse.Split('\n');
                         foreach (string response in responses)
                         {
@@ -651,7 +650,7 @@ namespace AutoGrind
             if (fForce || runState != s)
             {
                 runState = s;
-                log.Info("EXEC SetState({0})", s.ToString());
+                log.Debug("EXEC SetState({0},{1})", s.ToString(),fForce.ToString());
 
                 EnterRunState();
             }
@@ -875,7 +874,6 @@ namespace AutoGrind
         bool mountedToolBoxActionDisabled = false;
         private void MountedToolBox_SelectedIndexChanged(object sender, EventArgs e)
         {
-            log.Info("MountedToolBox changed to " + MountedToolBox.Text + (mountedToolBoxActionDisabled ? " UPDATE DISABLED" : ""));
             if (mountedToolBoxActionDisabled) return;
 
             ToolsGrd.ClearSelection();
@@ -1364,7 +1362,7 @@ namespace AutoGrind
         {
             if (recipeState != s)
             {
-                log.Info("SetRecipeState({0})", s.ToString());
+                log.Debug("SetRecipeState({0})", s.ToString());
 
                 RecipeState oldRecipeState = recipeState;
                 recipeState = s;
@@ -3792,7 +3790,7 @@ namespace AutoGrind
         }
         private void RefreshMountedToolBox(int currentToolIndex = -1)
         {
-            log.Info("RefreshMountedToolBox({0})", currentToolIndex);
+            log.Debug("RefreshMountedToolBox({0})", currentToolIndex);
             MountedToolBox.Items.Clear();
             foreach (DataRow row in tools.Rows)
             {
@@ -3801,7 +3799,6 @@ namespace AutoGrind
 
             if (currentToolIndex >= 0)
             {
-                log.Info("Selecting {0}", currentToolIndex);
                 MountedToolBox.SelectedIndex = currentToolIndex;
             }
         }

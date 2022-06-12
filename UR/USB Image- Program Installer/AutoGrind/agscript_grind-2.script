@@ -412,6 +412,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
   elif on and not grind_process_state:
     # Need to start the grind
     global p_operator_init = iget_actual_tcp_pose()
+    izero_ftsensor()
 
     # Move to start position for touchoff
     shape = robot_part_geometry[0]

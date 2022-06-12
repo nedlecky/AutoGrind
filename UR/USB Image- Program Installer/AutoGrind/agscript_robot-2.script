@@ -147,9 +147,7 @@ def set_variable():
         default_cyline_cal(diameter_mm)
       end
     end
-
     update_robot_tcp_part()
-
     socket_send_vector("robot_part_geometry", robot_part_geometry, 2)
     global response = "set_part_geometry()"
   elif command[2] == 10:
@@ -158,32 +156,27 @@ def set_variable():
       robot_door_closed_input[0] = command[3]
       robot_door_closed_input[1] = command[4]
     end
-
     socket_send_vector("robot_door_closed_input", robot_door_closed_input, 2)
     socket_send_bool("robot_door_closed", is_door_closed())
     global response = "set_door_closed_input()"
   elif command[2] == 11:
     # Set tool on output
     robot_tool_on_outputs = command_3_padded_8(command)
-
     socket_send_vector("robot_tool_on_outputs", robot_tool_on_outputs, 8)
     global response = "set_tool_on_outputs()"
   elif command[2] == 12:
     # Set tool off output
     robot_tool_off_outputs = command_3_padded_8(command)
-
     socket_send_vector("robot_tool_off_outputs", robot_tool_off_outputs, 8)
     global response = "set_tool_off_outputs()"
   elif command[2] == 13:
     # Set coolant on output
     robot_coolant_on_outputs = command_3_padded_8(command)
-
     socket_send_vector("robot_coolant_on_outputs", robot_coolant_on_outputs, 8)
     global response = "set_coolant_on_outputs()"
   elif command[2] == 14:
     # Set coolant off output
     robot_coolant_off_outputs = command_3_padded_8(command)
-
     socket_send_vector("robot_coolant_off_outputs", robot_coolant_off_outputs, 8)
     global response = "set_coolant_off_outputs()"
   elif command[2] == 15:
@@ -252,7 +245,6 @@ def set_variable():
       robot_footswitch_pressed_input[0] = command[3]
       robot_footswitch_pressed_input[1] = command[4]
     end
-
     socket_send_vector("robot_footswitch_pressed_input", robot_footswitch_pressed_input, 2)
     socket_send_bool("robot_footswitch_pressed", is_footswitch_pressed())
     global response = "set footswitch_pressed_input()"

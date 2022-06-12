@@ -1,6 +1,7 @@
 # 22 Rect Speed Test
 # BE CAREFUL: Robot will move and positions are expected to be OK
 # All should alternate ~3s, ~2s per side
+
 count=1
 speed=5
 force=5
