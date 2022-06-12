@@ -5,18 +5,18 @@
 # At trial grind speed of 20mm/s
 # 10s ==> 200m circum ==> 63.6mm diam
 
+clear()
 diam=63.6
 n_sides=7
 count=1
-speed=5
+speed=20
 force=3
+grind_trial_speed({speed})
+
 cmd=grind_poly({diam},{n_sides},{count},{speed},{force},0)
 
-move_linear(demo_safe)
-move_linear(demo_cyl)
-set_part_geometry(CYLINDER,1100)
-{cmd}
-end
+enable_user_timers(1)
+zero_user_timers()
 
 flat:
 move_linear(demo_safe)
@@ -48,3 +48,4 @@ set_part_geometry(SPHERE,800)
 set_part_geometry(SPHERE,2000)
 {cmd}
 
+grind_trial_speed(20)

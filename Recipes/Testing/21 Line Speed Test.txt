@@ -2,15 +2,18 @@
 # BE CAREFUL: Robot will move and positions are expected to be OK
 # All should take ~2s
 
+clear()
 count=1
 speed=20
 force=5
+grind_trial_speed({speed})
 
 cmd1=grind_line_deg(40,0,{count},{speed},{force},0)
 cmd2=grind_line_deg(40,90,{count},{speed},{force},0)
 cmd3=grind_line_deg(40,45,{count},{speed},{force},0)
 
 enable_user_timers(1)
+zero_user_timers()
 
 flat:
 move_linear(demo_safe)
@@ -77,3 +80,4 @@ set_part_geometry(SPHERE,2000)
 {cmd3}
 return_user_timers()
 
+grind_trial_speed(20)

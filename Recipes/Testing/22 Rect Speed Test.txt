@@ -2,11 +2,16 @@
 # BE CAREFUL: Robot will move and positions are expected to be OK
 # All should alternate ~3s, ~2s per side
 
+clear()
 count=1
-speed=5
+speed=20
 force=5
+grind_trial_speed({speed})
 
 cmd=grind_rect(60,40,{count},{speed},{force},0)
+
+enable_user_timers(1)
+zero_user_timers()
 
 flat:
 move_linear(demo_safe)
@@ -37,3 +42,5 @@ set_part_geometry(SPHERE,800)
 {cmd}
 set_part_geometry(SPHERE,2000)
 {cmd}
+
+grind_trial_speed(20)

@@ -32,6 +32,12 @@ def abs(n):
   end
 end
 
+# Return v1 --> v2 based on x 0 --> 1
+def linear_slider(v1, v2, x):
+  local m = v2 - v1
+  return v1 + m * x
+end
+
 # Adjust the value x by pct
 def adjust_pct(x, pct):
   return x * (1.0 + pct / 100.0)
@@ -82,7 +88,7 @@ end
 # Send name=[   ] out the secket for vector with length
 def socket_send_vector(name, vector, length, is_pose = False):
   enter_critical
-  socket_send_string(name+"=")
+  socket_send_string(name + "=")
   if is_pose:
     socket_send_string("p")
   end

@@ -443,7 +443,7 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("grind_max_blend_radius({0})", ReadVariable("grind_max_blend_radius_mm", "4")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("grind_point_frequency({0})", ReadVariable("grind_point_frequency_hz", "4")));
-                        ExecuteLine(-1, string.Format("grind_accel({0})", ReadVariable("grind_accel_mmpss", "100")));
+                        ExecuteLine(-1, string.Format("grind_lin_accel({0})", ReadVariable("grind_lin_accel_mmpss", "100")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, "enable_cyline_cal(0)");
@@ -2052,7 +2052,7 @@ namespace AutoGrind
             {"grind_max_wait",                  new CommandSpec(){nParams=1,  prefix="35,5," } },
             {"grind_max_blend_radius",          new CommandSpec(){nParams=1,  prefix="35,6," } },
             {"grind_trial_speed",               new CommandSpec(){nParams=1,  prefix="35,7," } },
-            {"grind_accel",                     new CommandSpec(){nParams=1,  prefix="35,8," } },
+            {"grind_lin_accel",                 new CommandSpec(){nParams=1,  prefix="35,8," } },
             {"grind_point_frequency",           new CommandSpec(){nParams=1,  prefix="35,9," } },
 
             {"grind_line",                      new CommandSpec(){nParams=6,  prefix="40,10," }  },
@@ -2556,12 +2556,12 @@ namespace AutoGrind
                         writer.WriteLine("cyline_min_e,{0}", ReadVariable("cyline_min_e", "???"));
                         writer.WriteLine("cyline_min_e_angle,{0}", ReadVariable("cyline_min_e_angle", "???"));
                         writer.WriteLine("cyline_training_weight,{0}", ReadVariable("cyline_training_weight", "???"));
-                        writer.WriteLine("grind_speed_mps,{0}", ReadVariable("grind_speed_mps", "???"));
-                        writer.WriteLine("grind_accel_mpss,{0}", ReadVariable("grind_accel_mpss", "???"));
-                        writer.WriteLine("grind_blend_radius_m,{0}", ReadVariable("grind_blend_radius_m", "???"));
-                        writer.WriteLine("grind_rot_speed_rps,{0}", ReadVariable("grind_rot_speed_rps", "???"));
-                        writer.WriteLine("grind_rot_accel_rpss,{0}", ReadVariable("grind_rot_accel_rpss", "???"));
-                        writer.WriteLine("grind_rot_blend_radius_rad,{0}", ReadVariable("grind_rot_blend_radius_rad", "???"));
+                        writer.WriteLine("grind_lin_vel_mps,{0}", ReadVariable("grind_lin_vel_mps", "???"));
+                        writer.WriteLine("grind_lin_accel_mpss,{0}", ReadVariable("grind_lin_accel_mpss", "???"));
+                        writer.WriteLine("grind_lin_blend_radius_m,{0}", ReadVariable("grind_lin_blend_radius_m", "???"));
+                        writer.WriteLine("grind_ang_vel_rps,{0}", ReadVariable("grind_ang_vel_rps", "???"));
+                        writer.WriteLine("grind_ang_accel_rpss,{0}", ReadVariable("grind_ang_accel_rpss", "???"));
+                        writer.WriteLine("grind_ang_blend_radius_rad,{0}", ReadVariable("grind_ang_blend_radius_rad", "???"));
 
                         writer.Close();
                     }
@@ -3139,7 +3139,7 @@ namespace AutoGrind
         {
             SetValueForm form = new SetValueForm()
             {
-                Value = ReadVariable("grind_accel_mmpss"),
+                Value = ReadVariable("grind_lin_accel_mmpss"),
                 Label = "Grind ACCELERATION, mm/s^2",
                 NumberOfDecimals = 0,
                 MinAllowed = 10,
@@ -3148,7 +3148,7 @@ namespace AutoGrind
 
             if (form.ShowDialog(this) == DialogResult.OK)
             {
-                ExecuteLine(-1, String.Format("grind_accel({0})", form.Value));
+                ExecuteLine(-1, String.Format("grind_lin_accel({0})", form.Value));
             }
         }
         private void SetGrindDefaultsBtn_Click(object sender, EventArgs e)
@@ -3158,7 +3158,7 @@ namespace AutoGrind
                 return;
 
             ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
-            ExecuteLine(-1, String.Format("grind_accel({0})", 100));
+            ExecuteLine(-1, String.Format("grind_lin_accel({0})", 100));
             ExecuteLine(-1, String.Format("grind_point_frequency({0})", 2));
             ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 2));
             ExecuteLine(-1, String.Format("grind_touch_speed({0})", 5));
@@ -3454,7 +3454,7 @@ namespace AutoGrind
                 case "grind_point_frequency_hz":
                     SetPointFrequencyBtn.Text = "Grind Point Frequency\n" + valueTrimmed + " Hz";
                     break;
-                case "grind_accel_mmpss":
+                case "grind_lin_accel_mmpss":
                     SetGrindAccelBtn.Text = "Grind Acceleration\n" + valueTrimmed + " mm/s^2";
                     break;
                 case "grind_contact_enable":

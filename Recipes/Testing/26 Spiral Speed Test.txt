@@ -4,11 +4,21 @@
 
 # At trial grind speed of 20mm/s
 # 10s ==> 200m circum ==> 63.6mm diam
+clear()
 diam1 = 63.6
 diam2 = {diam1}
 diam1+=2
 diam2-=2
-cmd=grind_spiral({diam1},{diam2},2,2,2,10,0)
+n_turns=2.5
+count=1
+speed=20
+force=5
+grind_trial_speed({speed})
+
+cmd=grind_spiral({diam1},{diam2},{n_turns},{count},{speed},{force},0)
+
+enable_user_timers(1)
+zero_user_timers()
 
 flat:
 move_linear(demo_safe)
@@ -39,3 +49,5 @@ set_part_geometry(SPHERE,800)
 {cmd}
 set_part_geometry(SPHERE,2000)
 {cmd}
+
+grind_trial_speed(20)
