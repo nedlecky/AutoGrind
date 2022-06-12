@@ -6,6 +6,7 @@ speed = 20
 continue = 1
 
 set_part_geometry(FLAT,0)
+jump(serp)
 
 line:
 grind_line(20,0,1,{speed},10,{continue})
@@ -21,9 +22,9 @@ grind_rect(1,1,1,{speed},10,{continue})
 grind_rect(0,0,1,{speed},10,{continue})
 
 serp:
-grind_serpentine(10,0,1,3,1,{speed},10,{continue})
-grind_serpentine(0,10,1,3,1,{speed},10,{continue})
-grind_serpentine(0,0,1,3,1,{speed},10,{continue})
+grind_serp(10,0,1,3,1,{speed},10,{continue})
+grind_serp(0,10,1,3,1,{speed},10,{continue})
+grind_serp(0,0,1,3,1,{speed},10,{continue})
 
 circle:
 grind_circle(1,2,{speed},10,{continue})

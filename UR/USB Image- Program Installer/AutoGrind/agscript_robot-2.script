@@ -372,28 +372,18 @@ end
 
 # Movel relatively in TCP coordinates
 def movel_relative_tcp(p1):
+  forced_speed_setter(robot_linear_speed_mps * 1000.0)
   draw_origin(iget_target_tcp_pose())
   draw_to(p1)
-  #local p2 = pose_trans(iget_target_tcp_pose(), p1)
-  #if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-  #  imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  #else:
-  #  imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  #end
   global response = "movel_relative_tcp()"
 end
 
 # Movel relatively in TCP_part coordinates
 def movel_relative_tcp_part(p1):
   iset_tcp(robot_tcp_part)
+  forced_speed_setter(robot_linear_speed_mps*1000.0)
   draw_origin(iget_target_tcp_pose())
   draw_to(p1)
-  #local p2 = pose_trans(iget_target_tcp_pose(), p1)
-  #if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-  #  imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  #else:
-  #  imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  #end
   iset_tcp(robot_tcp)
   global response = "movel_relative_tcp_part()"
 end
@@ -1028,16 +1018,16 @@ thread imover_thread():
   global imover_cmd = 0
   while True:
     if imover_cmd == imover_MOVEL:
-      socket_send_num("imover_a-thread", imover_a)
-      socket_send_num("imover_v-thread", imover_v)
-      socket_send_num("imover_r-thread", imover_r)
+      #socket_send_num("imover_a-thread", imover_a)
+      #socket_send_num("imover_v-thread", imover_v)
+      #socket_send_num("imover_r-thread", imover_r)
       movel(imover_p, a = imover_a, v = imover_v, t = imover_t, r = imover_r)
       global imover_cmd = 0
     elif imover_cmd == imover_MOVEJ:
       movej(imover_q, imover_a, imover_v, imover_t, imover_r)
       global imover_cmd = 0
     elif imover_cmd == imover_STOPL:
-      stopl(grind_lin_vel_mps, grind_ang_vel_rps)
+      stopl(grind_linear_vel_mps, grind_angular_vel_rps)
       global imover_cmd = 0
     elif imover_cmd == imover_ZEROFORCE:
       sleep(0.25)
@@ -1412,9 +1402,9 @@ def draw_to(dp, r = -1, wait = True):
   # Sphere:   RX, RX
   local shape = robot_part_geometry[0]
   if shape == 3: # Sphere
-    global process_a = grind_ang_accel_rpss
-    global process_v = grind_ang_vel_rps
-    global process_r = grind_ang_blend_radius_rad
+    global process_a = grind_angular_accel_rpss
+    global process_v = grind_angular_vel_rps
+    global process_r = grind_angular_blend_radius_rad
   elif shape == 2: # Cylinder
     # Cylinder: Linear speed is good for X moves, rotational speed for theta
 
@@ -1439,17 +1429,17 @@ def draw_to(dp, r = -1, wait = True):
     end
 
     # Choose speeds as a linear combination of the two values!
-    global process_a = linear_slider(grind_lin_accel_mpss, grind_ang_accel_rpss, process_sliderfactor)
-    global process_v = linear_slider(grind_lin_vel_mps, grind_ang_vel_rps, process_sliderfactor)
-    global process_r = linear_slider(grind_lin_blend_radius_m, grind_ang_blend_radius_rad, process_sliderfactor)
+    global process_a = linear_slider(grind_linear_accel_mpss, grind_angular_accel_rpss, process_sliderfactor)
+    global process_v = linear_slider(grind_linear_vel_mps, grind_angular_vel_rps, process_sliderfactor)
+    global process_r = linear_slider(grind_linear_blend_radius_m, grind_angular_blend_radius_rad, process_sliderfactor)
 
     # Apply calibrated corrections
     global process_a = process_a * process_correctionfactor
     global process_v = process_v * process_correctionfactor
   else: # Flat
-    global process_a = grind_lin_accel_mpss
-    global process_v = grind_lin_vel_mps
-    global process_r = grind_lin_blend_radius_m
+    global process_a = grind_linear_accel_mpss
+    global process_v = grind_linear_vel_mps
+    global process_r = grind_linear_blend_radius_m
   end
 
   # Apply one-time scaling factors
@@ -1468,7 +1458,12 @@ def draw_to(dp, r = -1, wait = True):
 
   # Let's go!
   global draw_current_dp = dp
-  imovel_int(pose_trans(p_contact_center, draw_current_dp), a = process_a, v = process_v, r = process_r, wait = wait)
+  local p = pose_trans(p_contact_center, draw_current_dp)
+  #socket_send_pose("imovel_p_center", p_contact_center)
+  #socket_send_pose("imovel_p", p)
+  #socket_send_pose("imovel_dp", dp)
+  #socket_send_pose("imovel_get", get_actual_tcp_pose())
+  imovel_int(p, a = process_a, v = process_v, r = process_r, wait = wait)
 end
 
 def draw_finish(p):

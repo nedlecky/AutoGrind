@@ -1,10 +1,12 @@
 # 56 Spiral Pattern Test
 
-n=1
-speed=5
-force=2
-cmd1 = grind_spiral(100,50,3,{n},{speed},{force}
-cmd2 = grind_spiral(10,50,3,{n},{speed},{force}
+#clear()
+cycles=1
+speed=10
+force=3
+n_turns=3
+cmd1 = grind_spiral(100,50,{n_turns},{cycles},{speed},{force}
+cmd2 = grind_spiral(10,50,{n_turns},{cycles},{speed},{force}
 
 move_joint(demo_safe)
 
