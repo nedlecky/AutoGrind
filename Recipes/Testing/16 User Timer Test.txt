@@ -6,7 +6,10 @@ force=5
 
 cmd1=grind_line_deg(40,0,{count},{speed},{force},0)
 cmd2=grind_line_deg(40,45,{count},{speed},{force},0)
-cmd3=grind_line_deg(40,90,{count},{speed},{force},0)
+cmd3=grind_line_deg(40,80,{count},{speed},{force},0)
+cmd4=grind_line_deg(40,90,{count},{speed},{force},0)
+cmd5=grind_line_deg(40,100,{count},{speed},{force},0)
+cmd6=grind_line_deg(40,170,{count},{speed},{force},0)
 
 enable_user_timers(1)
 
@@ -14,17 +17,44 @@ set_part_geometry(FLAT,0)
 {cmd1}
 {cmd2}
 {cmd3}
+{cmd4}
+{cmd5}
+{cmd6}
 
-set_part_geometry(CYLINDER,500)
+set_part_geometry(CYLINDER,350)
 return_cyline_cal()
 {cmd1}
 {cmd2}
 {cmd3}
+{cmd4}
+{cmd5}
+{cmd6}
+
+set_part_geometry(CYLINDER,1100)
+return_cyline_cal()
+{cmd1}
+{cmd2}
+{cmd3}
+{cmd4}
+{cmd5}
+{cmd6}
+
+set_part_geometry(CYLINDER,3000)
+return_cyline_cal()
+{cmd1}
+{cmd2}
+{cmd3}
+{cmd4}
+{cmd5}
+{cmd6}
 
 set_part_geometry(SPHERE,500)
 {cmd1}
 {cmd2}
 {cmd3}
+{cmd4}
+{cmd5}
+{cmd6}
 
 return_user_timers()
 

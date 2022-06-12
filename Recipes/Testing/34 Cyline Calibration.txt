@@ -1,17 +1,21 @@
 # 34 Cyline Calibration
 
+clear()
 count=1
 speed=20
 force=5
+
+# Make us move at the desired grind speed even in trial!
+grind_trial_speed({speed})
 
 move_linear(start)
 
 diam = 2000
 big_loop:
-# default cal 300mm
-unity_cyline_cal()
+# unity cal {diam}mm
 set_part_geometry(CYLINDER,{diam})
-filename=10s_unity_{diam}mm
+unity_cyline_cal()
+filename=unity2_{diam}mm
 
 # default cal 300mm
 #default_cyline_cal()
@@ -50,7 +54,7 @@ filename=10s_unity_{diam}mm
 
 enable_cyline_cal(1)
 set_cyline_training_weight(100)
-set_cyline_expected_time(10.2)
+set_cyline_expected_time(5.2)
 set_cyline_deadband_time(0.020)
 
 filenumber=1
@@ -74,7 +78,9 @@ repeat--
 jump_gt_zero(repeat,repeat)
 
 diam-=100
-jump_gt_zero(diam,big_loop)
+dstop={diam}
+dstop-=1900
+jump_gt_zero(dstop,big_loop)
 
 enable_cyline_cal(0)
 

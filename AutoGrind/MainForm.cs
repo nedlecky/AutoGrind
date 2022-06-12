@@ -1211,7 +1211,6 @@ namespace AutoGrind
             GrindNCyclesLbl.Text = "";
             StepTimeEstimateLbl.Text = "";
 
-
             // This allows offline dry runs but makes sure you know!
             if (!robotReady)
             {

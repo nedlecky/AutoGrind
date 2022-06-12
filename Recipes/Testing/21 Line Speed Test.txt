@@ -10,6 +10,7 @@ cmd1=grind_line_deg(40,0,{count},{speed},{force},0)
 cmd2=grind_line_deg(40,90,{count},{speed},{force},0)
 cmd3=grind_line_deg(40,45,{count},{speed},{force},0)
 
+enable_user_timers(1)
 
 flat:
 move_linear(demo_safe)
@@ -18,6 +19,7 @@ set_part_geometry(FLAT,0)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 cylinder:
 move_linear(demo_safe)
@@ -27,21 +29,25 @@ set_part_geometry(CYLINDER,200)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(CYLINDER,500)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(CYLINDER,800)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(CYLINDER,2000)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 sphere:
 move_linear(demo_safe)
@@ -51,19 +57,23 @@ set_part_geometry(SPHERE,200)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(SPHERE,500)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(SPHERE,800)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
 set_part_geometry(SPHERE,2000)
 {cmd1}
 {cmd2}
 {cmd3}
+return_user_timers()
 
