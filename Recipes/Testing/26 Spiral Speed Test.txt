@@ -27,7 +27,8 @@ move_linear(demo_safe)
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
 {cmd}
-end
+return_user_timers()
+
 cylinder:
 move_linear(demo_safe)
 move_linear(demo_cyl)
@@ -39,6 +40,7 @@ set_part_geometry(CYLINDER,800)
 {cmd}
 set_part_geometry(CYLINDER,2000)
 {cmd}
+return_user_timers()
 
 sphere:
 move_linear(demo_safe)
@@ -51,5 +53,6 @@ set_part_geometry(SPHERE,800)
 {cmd}
 set_part_geometry(SPHERE,2000)
 {cmd}
+return_user_timers()
 
 grind_trial_speed(20)
