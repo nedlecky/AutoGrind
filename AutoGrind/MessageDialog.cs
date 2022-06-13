@@ -3,6 +3,7 @@
 // Author: Ned Lecky, Olympus Controls
 // Purpose: Two-button dialog with relabelable buttons optimized for use with touch screen
 
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,18 +28,51 @@ namespace AutoGrind
         public string OkText { get; set; } = "OK";
         public string CancelText { get; set; } = "Cancel";
 
-        public MessageDialog()
+        public bool IsMotionWait { get; set; } = false;
+
+
+
+        MainForm mainForm;
+        public MessageDialog(MainForm _mainForm)
         {
             InitializeComponent();
+            mainForm = _mainForm;
+        }
+
+        private void SavePersistent()
+        {
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+            RegistryKey FormNameKey = AppNameKey.CreateSubKey("MessageDialog");
+
+            FormNameKey.SetValue("Left", Left);
+            FormNameKey.SetValue("Top", Top);
+            FormNameKey.SetValue("Width", Width);
+            FormNameKey.SetValue("Height", Width);
+        }
+        private void LoadPersistent()
+        {
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+            RegistryKey FormNameKey = AppNameKey.CreateSubKey("MessageDialog");
+
+            Left = (Int32)FormNameKey.GetValue("Left", 0);
+            Top = (Int32)FormNameKey.GetValue("Top", 0);
         }
 
         private void MessageDialog_Load(object sender, EventArgs e)
         {
-
             Text = Title;
             label1.Text = Label;
             OkBtn.Text = OkText;
             CancelBtn.Text = CancelText;
+            if(IsMotionWait)
+            {
+                OkBtn.BackColor = Color.Red;
+                CancelBtn.BackColor = Color.Red;
+            }
+
+            LoadPersistent();
 
             result = DialogResult.None;
             OkBtn.Select();
@@ -46,12 +80,31 @@ namespace AutoGrind
 
         private void OkBtn_Click(object sender, EventArgs e)
         {
-            result = DialogResult.OK;
+            if (IsMotionWait)
+            {
+                // Not only halt the bot but also stop any running program
+                mainForm.RobotSendHalt();
+                result = DialogResult.Cancel;
+            }
+            else
+                result = DialogResult.OK;
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            result=DialogResult.Cancel;
+            if (IsMotionWait)
+            {
+                // Not only halt the bot but also stop any running program
+                mainForm.RobotSendHalt();
+                result = DialogResult.Cancel;
+            }
+            else
+                result = DialogResult.Cancel;
+        }
+
+        private void MessageDialog_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SavePersistent();
         }
     }
 }

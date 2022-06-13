@@ -335,102 +335,116 @@ def update_robot_tcp_part():
   socket_send_pose("robot_tcp_part", robot_tcp_part)
 end
 
-# Send get_tcp_offset() result to socket
-def return_tcp_offset():
-  p = get_tcp_offset()
-  socket_send_pose("tcp_offset", p)
-  global response = "return_tcp_offset()"
-end
-
-# Send get_actual_tcp_pose() to socket
+# Command 10: Send get_actual_tcp_pose() to socket
 def return_actual_tcp_pose():
   p = iget_actual_tcp_pose()
   socket_send_pose("actual_tcp_pose", p)
   global response = "return_actual_tcp_pose()"
 end
 
-# Send get_actual_joint_positions() to socket
+# Command 12: Send get_tcp_offset() result to socket
+def return_tcp_offset():
+  p = iget_tcp_offset()
+  socket_send_pose("tcp_offset", p)
+  global response = "return_tcp_offset()"
+end
+
+# Command 13: Movel relatively in base coordinates
+def movel_relative_base(p1):
+  local p0 = get_target_tcp_pose()
+  local p2 = pose_add(p0, p1)
+  start_listen_halt_thread()
+  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+    imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+  else:
+    imovel_int(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+  end
+  stop_listen_halt_thread()
+  global response = "movel_relative_base()"
+end
+
+# Command 14: Movel relatively in TCP coordinates
+def movel_relative_tcp(p1):
+  local p2 = pose_trans(get_target_tcp_pose(), p1)
+  start_listen_halt_thread()
+  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+    imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+  else:
+    imovel_int(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+  end
+  stop_listen_halt_thread()
+  global response = "movel_relative_tcp()"
+end
+
+# Command 15: Movel relatively in TCP_part coordinates
+def movel_relative_tcp_part(p1):
+  set_tcp(robot_tcp_part)
+  local p2 = pose_trans(get_target_tcp_pose(), p1)
+  start_listen_halt_thread()
+  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+    imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+  else:
+    imovel_int(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+  end
+  stop_listen_halt_thread()
+  set_tcp(robot_tcp)
+  global response = "movel_relative_tcp_part()"
+end
+
+# Command 16: Change one element of current pose and movel there
+def movel_one_only(index = 0, val = 0):
+  local p = iget_target_tcp_pose()
+  p[index] = val
+  start_listen_halt_thread()
+  if index < 3:  # Translational
+    imovel_int(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+  else:
+    imovel_int(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
+  end
+  stop_listen_halt_thread()
+  global response = "movel_one_only()"
+end
+
+# Command 18: Change only rotation elements of current pose and movel there
+def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
+  local p = iget_target_tcp_pose()
+  p[3] = r1
+  p[4] = r2
+  p[5] = r3
+  start_listen_halt_thread()
+  imovel_int(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
+  stop_listen_halt_thread()
+  global response = "movel_rot_only()"
+end
+
+# Command 20: Send get_actual_joint_positions() to socket
 def return_get_actual_joint_positions():
   p = iget_actual_joint_positions()
   socket_send_joints("actual_joint_positions", p)
   global response = "return_get_actual_joint_positions()"
 end
 
-# Send both joints and pose to socket labeled position_p and position_q
+# Command 21: Movej to position (works with joints or poses)
+def movej_ag(p):
+  start_listen_halt_thread()
+  imovej_int(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
+  stop_listen_halt_thread()
+  global response = "movej_ag()"
+end
+
+# Command 22: Movel to position (works with joints or poses)
+def movel_ag(p):
+  start_listen_halt_thread()
+  imovel_int(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
+  stop_listen_halt_thread()
+  global response = "movel_ag()"
+end
+
+# Command 25: Send both joints and pose to socket labeled position_p and position_q
 def return_both_positions():
   socket_send_joints("position_q", iget_actual_joint_positions())
   socket_send_pose("position_p", iget_actual_tcp_pose())
   global response = "return_both_positions()"
-end
-
-# Movel relatively in base coordinates
-def movel_relative_base(p1):
-  local p0 = get_target_tcp_pose()
-  local p2 = pose_add(p0, p1)
-  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-    imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  else:
-    imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  end
-  global response = "movel_relative_base()"
-end
-
-# Movel relatively in TCP coordinates
-def movel_relative_tcp(p1):
-  local p2 = pose_trans(get_target_tcp_pose(), p1)
-  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-    imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  else:
-    imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  end
-  global response = "movel_relative_tcp()"
-end
-
-# Movel relatively in TCP_part coordinates
-def movel_relative_tcp_part(p1):
-  set_tcp(robot_tcp_part)
-  local p2 = pose_trans(get_target_tcp_pose(), p1)
-  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-    imovel(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  else:
-    imovel(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  end
-  set_tcp(robot_tcp)
-  global response = "movel_relative_tcp_part()"
-end
-
-# Change one element of current pose and movel there
-def movel_one_only(index = 0, val = 0):
-  local p = iget_target_tcp_pose()
-  p[index] = val
-  if index < 3:  # Translational
-    imovel(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
-  else:
-    imovel(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
-  end
-  global response = "movel_one_only()"
-end
-
-# Change only rotation elements of current pose and movel there
-def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
-  local p = iget_target_tcp_pose()
-  p[3] = r1
-  p[4] = r2
-  p[5] = r3
-  imovel(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
-  global response = "movel_rot_only()"
-end
-
-# Movej to position (works with joints or poses)
-def movej_ag(p):
-  imovej(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
-  global response = "movej_ag()"
-end
-
-# Movel to position (works with joints or poses)
-def movel_ag(p):
-  imovel(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
-  global response = "movel_ag()"
 end
 
 # ####################################################################################
@@ -533,6 +547,114 @@ global ioMonitorThread = run io_monitor_thread()
 # END AUTOMATED DOOR MONITORING THREAD
 # ####################################################################################
 
+######################################################################################
+# START LISTEN HALT THREAD
+#
+global listen_halt_thread_handle = 0
+global halt_count = 0
+global halt_command = [0, 0, 0, 0]
+global grind_force_report_counter = 0
+global grind_force_report = p[0, 0, 0, 0, 0, 0]
+global grind_force_report_z_n = 0
+
+def start_listen_halt_thread():
+  stop_listen_halt_thread()
+  global listen_halt_thread_handle = run listen_halt_thread()
+end
+
+def stop_listen_halt_thread():
+  if listen_halt_thread_handle > 0:
+    kill listen_halt_thread_handle
+    listen_halt_thread_handle = 0
+  end
+  set_ok_to_proceed(True)
+end
+
+# Should we proceed? halt_count==0 means no door-opens and no abort commands from host
+def ok_to_proceed():
+  return halt_count == 0
+end
+
+def set_ok_to_proceed(ok):
+  if ok:
+    global halt_count = 0
+    socket_send_integer("halt_count", halt_count)
+  else:
+    global halt_count = 99
+    socket_send_integer("halt_count", halt_count)
+  end
+end
+
+thread listen_halt_thread():
+  global halt_command = [0, 0, 0, 0]
+  global halt_count = 0
+  global grind_force_report_counter = 0
+  global grind_force_readings_n = 5
+  global grind_force_readings = [0., 0., 0., 0., 0.]
+
+  socket_send_integer("halt_count", halt_count)
+
+  # Initialize force readings array
+  local i = 0
+  while i < grind_force_readings_n:
+    local f = get_tcp_force()
+    grind_force_readings[i] = f[2]
+    i = i + 1
+  end
+  global grind_force_report_z_n = grind_force_readings[grind_force_readings_n-1]
+  global grind_force_filtered_z_n = grind_force_report_z_n
+
+
+  while (halt_count == 0):
+    # Commands should never arrive, so this will block us for 0.2s
+    global halt_command = socket_read_ascii_float(3, timeout = 0.2)
+
+    # If door is open, that adds a halt count (anything >0 will stop us!)
+    if not is_door_closed():
+      global halt_count = halt_count + 1
+      socket_send_integer("halt_count", halt_count)
+    end
+
+    # If we've received anything we should halt!
+    if halt_command[0] > 0:
+      global halt_count = halt_count + 1
+      socket_send_integer("halt_count", halt_count)
+    end
+
+    # Increment reading counter (10000 is high enough... don't need to worry about wraparound effects)
+    grind_force_report_counter = grind_force_report_counter + 1
+    if grind_force_report_counter > 10000:
+      grind_force_report_counter = 0
+    end
+
+    # Store force in circular buffer
+    local force = get_tcp_force()
+    grind_force_readings[grind_force_report_counter % grind_force_readings_n] = force[2]
+
+    # Report force periodically (This executes at 5Hz because of timeout=0.2 in socket_read_ascii_float(...)
+    if grind_force_report_counter % 5 == 0:
+      # Compute average of the stored readings
+      local i = 0
+      local sum = 0.0
+      while i < grind_force_readings_n:
+        sum = sum + grind_force_readings[i]
+        i = i + 1
+      end
+      global grind_force_average_z_n = sum / grind_force_readings_n
+
+      # Any other filtering could be done here...
+      # Round to 2 DP
+      global grind_force_report_z_n = ceil(grind_force_average_z_n * 100) / 100
+
+      socket_send_num("grind_force_report_z_n", grind_force_report_z_n)
+    end
+  end
+  return None
+end
+#
+# END LISTEN HALT THREAD
+######################################################################################
+
 # ####################################################################################
 # START NO_COMMAND HOUSEKEEPING
 # This gets called when the PolyScope receives no command (about 1/second)
@@ -555,7 +677,6 @@ end
 #
 # END NO_COMMAND HOUSEKEEPING
 # ####################################################################################
-
 
 # ####################################################################################
 # START TOUCHOFF HANDLER
@@ -667,9 +788,10 @@ imover_GETACTUALTCPPOSE = 9
 imover_GETACTUALJOINTPOSITIONS = 10
 imover_GETTARGETTCPPOSE = 11
 imover_GETTARGETJOINTPOSITIONS = 12
-imover_SETTCP = 13
-imover_SETPAYLOAD = 14
-imover_TOUCHOFF = 15
+imover_GETTCPOFFSET = 13
+imover_SETTCP = 14
+imover_SETPAYLOAD = 15
+imover_TOUCHOFF = 16
 
 def imover_realtime(f = False):
   if f and (not imover_realtime_enabled):
@@ -700,7 +822,7 @@ def imover_state_alignment():
   end
 end
 
-# Kill the imover htread and insure motion is stopped
+# Kill the imover thread and insure motion is stopped
 def imover_kill():
   if imover_thread_handle > 0:
     kill imover_thread_handle
@@ -742,7 +864,8 @@ def imover_cmd_exec(cmd, param1 = 0, param2 = 0, terminate_not_ok = False, wait_
     i = i - 1
   end
   imover_cmd_hist[0] = cmd
-  # This gets the thread doing something!
+
+  # This initiates the thread executing the specified command
   global imover_cmd = cmd
 
   if wait_complete:
@@ -867,6 +990,15 @@ def iset_tcp(tcp):
   end
 end
 
+def iget_tcp_offset():
+  if imover_realtime_enabled:
+    imover_cmd_exec(imover_GETTCPOFFSET)
+    return imover_tcp
+  else:
+    return get_tcp_offset()
+  end
+end
+
 def iset_payload(mass, cog):
   imover_mass = mass
   imover_cog = cog
@@ -950,6 +1082,40 @@ def imovej(q, a = 1.2, v = 0.25, t = 0, r = 0):
   end
 end
 
+def imovej_int(q, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
+  if not ok_to_proceed():
+    return None
+  end
+
+  if imover_realtime_enabled:
+    imover_wait()
+    global imover_q = q
+    global imover_a = a
+    global imover_v = v
+    global imover_t = t
+    global imover_r = r
+    imover_cmd_exec(imover_MOVEJ, terminate_not_ok = True, wait_complete = wait)
+    if not ok_to_proceed():  # We got interrupted
+      # Halt any motion in progress... this is really the whole reason for imover
+      imover_kill()
+
+      # Had occasional move continuation.. added these as belt-and-suspenders!
+      sleep(0.1)
+      stopl(10)
+      global imover_stopl_count = imover_stopl_count + 1
+
+      sleep(0.1)
+      stopj(10)
+      global imover_stopj_count = imover_stopj_count + 1
+
+      # Restart the thread
+      imover_restart()
+    end
+  else:
+    movej(q, a = a, v = v, t = t, r = r)
+  end
+end
+
 thread imover_thread():
   global imover_cmd = 0
   while True:
@@ -1005,6 +1171,9 @@ thread imover_thread():
       global imover_cmd = 0
     elif imover_cmd == imover_GETTARGETJOINTPOSITIONS:
       global imover_q = get_target_joint_positions()
+      global imover_cmd = 0
+    elif imover_cmd == imover_GETTCPOFFSET:
+      global imover_tcp = get_tcp_offset()
       global imover_cmd = 0
     elif imover_cmd == imover_SETTCP:
       set_tcp(imover_tcp)
@@ -1153,7 +1322,6 @@ end
 # END CALIBRATION SUPPORT
 # ####################################################################################
 
-
 # ####################################################################################
 # START CYLINE CAL SYSTEM
 #
@@ -1239,7 +1407,7 @@ def unity_cyline_cal():
 end
 
 def default_cyline_cal(diam_mm):
-  local cyline_coeff_tables =
+  local cyline_coeff_tables = 
   [
     [0.900000, 0.620000, 0.750000, 0.860000, 0.940000, 1.020000, 1.100000, 1.150000, 1.200000, 1.239652, 1.270302, 1.294257, 1.312201, 1.324502, 1.340405, 1.346328, 1.349003, 1.348860, 1.345110, 1.338750, 1.329420, 1.318790, 1.304780, 1.290500, 1.273380, 1.255610, 1.236670, 1.215670, 1.193510, 1.161530, 1.138460, 1.115000, 1.090770, 1.065390, 1.039610, 1.013460],
     [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770],
@@ -1437,13 +1605,18 @@ def draw_to(dp, r = -1, wait = True):
   end
 
   # Let's go!
-  global draw_current_dp = dp
-  local p = pose_trans(draw_p_origin, draw_current_dp)
+  local p = pose_trans(draw_p_origin, dp)
   #socket_send_pose("imovel_p_center", p_contact_center)
   #socket_send_pose("imovel_p", p)
   #socket_send_pose("imovel_dp", dp)
   #socket_send_pose("imovel_get", get_actual_tcp_pose())
   imovel_int(p, a = process_a, v = process_v, r = process_r, wait = wait)
+  if ok_to_proceed():
+    global draw_current_dp = dp
+  else:
+    global draw_current_dp = pose_sub(iget_actual_tcp_pose(), draw_p_origin)
+  end
+
   return p
 end
 

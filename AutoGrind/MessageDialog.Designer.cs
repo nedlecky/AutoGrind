@@ -90,6 +90,7 @@
             this.Name = "MessageDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "MessageForm";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MessageDialog_FormClosing);
             this.Load += new System.EventHandler(this.MessageDialog_Load);
             this.ResumeLayout(false);
 

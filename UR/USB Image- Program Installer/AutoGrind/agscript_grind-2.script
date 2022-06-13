@@ -5,11 +5,6 @@
 
 global grind_version = "Rev 2 2022-06-13"
 
-global grind_abort_listener_thread_handle = 0
-global pattern_grind_thread_handle = 0
-
-global halt_count = 0
-global halt_command = [0, 0, 0, 0]
 
 global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
@@ -111,12 +106,7 @@ def grind():
   global grind_ready = False
   socket_send_bool("grind_ready", grind_ready)
 
-  # Start listening for abort commands from host
-  if grind_abort_listener_thread_handle > 0:
-    kill grind_abort_listener_thread_handle
-    grind_abort_listener_thread_handle = 0
-  end
-  grind_abort_listener_thread_handle = run grind_abort_listener_thread()
+  start_listen_halt_thread()
 
   global grind_cycle = 0
   socket_send_integer("grind_cycle", grind_cycle)
@@ -227,11 +217,7 @@ def grind():
   # Restore tool-only tcp
   iset_tcp(robot_tcp)
 
-  # Stop listening for abort commands from host
-  if grind_abort_listener_thread_handle > 0:
-    kill grind_abort_listener_thread_handle
-    grind_abort_listener_thread_handle = 0
-  end
+  stop_listen_halt_thread()
 
   global grind_ready = True
   socket_send_bool("grind_ready", grind_ready)
@@ -398,6 +384,7 @@ global p_init_count = 1
 # Pose to center is the offset we should move to initial touch point [0]=FLAT [1]=CYLINDER [2]=SPHERE
 global grind_process_state = False
 def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0], p[0, 0, 0, 0, 0, 0]]):
+  set_ok_to_proceed(True)
   if on and grind_process_state:
     # Continuing a grind...
 
@@ -411,20 +398,30 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       iend_force_mode()
       draw_speed_once(grind_part_speed_mmps)
       draw_to(p[0, 0, -0.004, 0, 0, 0])
+      if not ok_to_proceed():
+        terminate_grind()
+        return False
+      end
       sleep(1)
+      if not ok_to_proceed():
+        terminate_grind()
+        return False
+      end
+
       izero_ftsensor()
       iforce_mode(grind_force_N, grind_touch_speed_mmps)
     end
 
     # Move to initial grind position relative to initial p_contact_center
     shape = robot_part_geometry[0]
-    if shape < 1 or shape > 3:
-      return False
-    end
-
     global dp_from_contact_center = pose_to_center[shape-1]
     draw_speed_once(grind_part_speed_mmps)
     draw_finish(dp_from_contact_center)
+    if not ok_to_proceed():
+      terminate_grind()
+      return False
+    end
+    return True
   elif on and not grind_process_state:
     # Need to start the grind
     global p_operator_init = iget_target_tcp_pose()
@@ -445,13 +442,18 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     draw_origin(p_operator_init)
     draw_speed_once(grind_part_speed_mmps)
     draw_finish(dp_from_contact_center)
+    if not ok_to_proceed():
+      set_ok_to_proceed(True)
+      draw_speed_once(grind_part_speed_mmps)
+      draw_finish(p[0, 0, 0, 0, 0, 0])
+      return False
+    end
 
     # Touch part and refine p_contact_init
     if not contact_part(True, grind_contact_enable):
-      # Failure to contact part should abort... don't set grind_process_state and return False
+      set_ok_to_proceed(True)
       draw_speed_once(grind_part_speed_mmps)
       draw_finish(p[0, 0, 0, 0, 0, 0])
-      socket_send_line("grind_process_state=False")
       return False
     end
 
@@ -481,121 +483,45 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
     apply_force(True, grind_contact_enable, grind_force_N, grind_touch_speed_mmps)
+
+    if not ok_to_proceed():
+      terminate_grind()
+      return False
+    end
+
     global grind_process_state = True
+    socket_send_bool("grind_process_state", grind_process_state)
+    return True
   elif not on and grind_process_state:
-    # Need to stop the grind
-    set_ok_to_proceed(True)
-
-    # Shut everything down and return to original pose
-    apply_force(False, grind_contact_enable, 0)
-    contact_part(False, grind_contact_enable)
-    coolant_flow(False, grind_contact_enable)
-    tool_power(False, grind_contact_enable)
-
-    # Always end with a move back to with the imover realtime back running
-    imover_realtime(True)
-    draw_speed_once(grind_part_speed_mmps)
-    local dp = p[0, 0, 0, 0, 0, 0]
-    dp[2] = dp[2] - pose_dist(p_operator_init, p_contact_center)
-    draw_finish(dp)
-
-    global grind_process_state = False
+    terminate_grind()
+    return True
   end
 
-  # Always let the host know status
-  if grind_process_state:
-    socket_send_line("grind_process_state=True")
-  else:
-    socket_send_line("grind_process_state=False")
-  end
-  return True
+  # If you fall through, send state update!
+  socket_send_bool("grind_process_state", grind_process_state)
+  return False
 end
 
-######################################################################################
-# Thread to listen for abort messages while grinding
-#
-global grind_force_report_counter = 0
-global grind_force_report = p[0, 0, 0, 0, 0, 0]
-global grind_force_report_z_n = 0
-thread grind_abort_listener_thread():
-  global halt_command = [0, 0, 0, 0]
-  global halt_count = 0
-  global grind_force_report_counter = 0
-  global grind_force_readings_n = 5
-  global grind_force_readings = [0., 0., 0., 0., 0.]
+def terminate_grind():
+  set_ok_to_proceed(True)
 
-  # Initialize force readings array
-  local i = 0
-  while i < grind_force_readings_n:
-    local f = get_tcp_force()
-    grind_force_readings[i] = f[2]
-    i = i + 1
-  end
-  global grind_force_report_z_n = grind_force_readings[grind_force_readings_n-1]
-  global grind_force_filtered_z_n = grind_force_report_z_n
+  # Shut everything down and return to original pose
+  apply_force(False, grind_contact_enable, 0)
+  contact_part(False, grind_contact_enable)
+  coolant_flow(False, grind_contact_enable)
+  tool_power(False, grind_contact_enable)
 
+  # Always end with a move back to with the imover realtime back running
+  imover_realtime(True)
+  draw_speed_once(grind_part_speed_mmps)
+  local dp = p[0, 0, 0, 0, 0, 0]
+  dp[2] = dp[2] - pose_dist(p_operator_init, p_contact_center)
+  draw_finish(dp)
 
-  while (halt_count == 0):
-    # Commands should never arrive, so this will block us for 0.2s
-    global halt_command = socket_read_ascii_float(3, timeout = 0.2)
-
-    # If door is open, that adds a halt count (anything >0 will stop us!)
-    if not is_door_closed():
-      global halt_count = halt_count + 1
-    end
-
-    # If we've received anything we should halt!
-    if halt_command[0] > 0:
-      global halt_count = halt_count + 1
-      socket_send_integer("halt_count", halt_count)
-    end
-
-    # Increment reading counter (10000 is high enough... don't need to worry about wraparound effects)
-    grind_force_report_counter = grind_force_report_counter + 1
-    if grind_force_report_counter > 10000:
-      grind_force_report_counter = 0
-    end
-
-    # Store force in circular buffer
-    local force = get_tcp_force()
-    grind_force_readings[grind_force_report_counter % grind_force_readings_n] = force[2]
-
-    # Report force periodically (This executes at 5Hz because of timeout=0.2 in socket_read_ascii_float(...)
-    if grind_force_report_counter % 5 == 0:
-      # Compute average of the stored readings
-      local i = 0
-      local sum = 0.0
-      while i < grind_force_readings_n:
-        sum = sum + grind_force_readings[i]
-        i = i + 1
-      end
-      global grind_force_average_z_n = sum / grind_force_readings_n
-
-      # Any other filtering could be done here...
-      # Round to 2 DP
-      global grind_force_report_z_n = ceil(grind_force_average_z_n * 100) / 100
-
-      socket_send_num("grind_force_report_z_n", grind_force_report_z_n)
-    end
-  end
-  return None
+  global grind_process_state = False
+  socket_send_bool("grind_process_state", grind_process_state)
 end
 
-# Should we proceed? halt_count==0 means no door-opens and no abort commands from host
-def ok_to_proceed():
-  return halt_count == 0
-end
-
-def set_ok_to_proceed(ok):
-  if ok:
-    global halt_count = 0
-  else:
-    global halt_count = 99
-  end
-end
-#
-# Thread to listen for abort messages while grinding
-######################################################################################
 
 
 ######################################################################################

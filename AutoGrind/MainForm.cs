@@ -204,7 +204,7 @@ namespace AutoGrind
 
         private DialogResult ConfirmMessageBox(string question)
         {
-            MessageDialog messageForm = new MessageDialog()
+            MessageDialog messageForm = new MessageDialog(this)
             {
                 Title = "System Confirmation",
                 Label = question,
@@ -216,7 +216,7 @@ namespace AutoGrind
         }
         private DialogResult ErrorMessageBox(string message)
         {
-            MessageDialog messageForm = new MessageDialog()
+            MessageDialog messageForm = new MessageDialog(this)
             {
                 Title = "System ERROR",
                 Label = message,
@@ -1305,7 +1305,7 @@ namespace AutoGrind
                     // Perform CONTINUE function
                     if (!OkToRun()) return;
 
-                    MessageDialog messageForm = new MessageDialog()
+                    MessageDialog messageForm = new MessageDialog(this)
                     {
                         Title = "System Question",
                         Label = "Repeat highlighted line or move on ?",
@@ -1338,7 +1338,7 @@ namespace AutoGrind
                     break;
                 case RunState.PAUSED:
                     // Perform STEP function
-                    MessageDialog messageForm = new MessageDialog()
+                    MessageDialog messageForm = new MessageDialog(this)
                     {
                         Title = "System Question",
                         Label = "Repeat highlighted line or move on to next?",
@@ -1938,15 +1938,16 @@ namespace AutoGrind
         /// Put up MessageForm dialog. Execution will pause until the operator handles the response.
         /// </summary>
         /// <param name="message">This is the message to be displayed</param>
-        private void PromptOperator(string message, bool closeOnReady = false, string heading = "AutoGrind Prompt")
+        private void PromptOperator(string message, bool closeOnReady = false, bool isMotionWait = false)
         {
-            log.Info("Prompting Operator: heading={0} message={1}", heading, message);
-            waitingForOperatorMessageForm = new MessageDialog()
+            log.Info("PromptOperator(message={0}, closeOnReady={1}, isMotioWait={2}", message, closeOnReady, isMotionWait);
+            waitingForOperatorMessageForm = new MessageDialog(this)
             {
-                Title = heading,
+                Title = "AutoGrind Prompt",
                 Label = message,
-                OkText = "&Continue Execution",
-                CancelText = "&Abort"
+                OkText = isMotionWait ? "STOP MOTION" : "&Continue Execution",
+                CancelText = isMotionWait ? "STOP MOTION" : "&Abort",
+                IsMotionWait = isMotionWait,
             };
             closeOperatorFormOnIndex = closeOnReady;
             waitingForOperatorMessageForm.ShowDialog();
@@ -2908,7 +2909,7 @@ namespace AutoGrind
             }
         }
 
-        private void RobotSendHalt()
+        public void RobotSendHalt()
         {
             robotCommandServer?.Send("(999)");
         }
@@ -3364,9 +3365,11 @@ namespace AutoGrind
                     break;
                 case "grind_ready":
                     GrindReadyLbl.BackColor = ColorFromBooleanName(valueTrimmed);
+                    RobotReadyLbl.Refresh();
                     break;
                 case "grind_process_state":
                     GrindProcessStateLbl.BackColor = ColorFromBooleanName(valueTrimmed, true);
+                    RobotReadyLbl.Refresh();
                     break;
                 case "grind_n_cycles":
                     GrindNCyclesLbl.Text = valueTrimmed;
@@ -3748,7 +3751,7 @@ namespace AutoGrind
                 string position = SelectedRow(ToolsGrd)["MountPosition"].ToString();
                 log.Info("Joint Move Tool Mount to {0}", position.ToString());
                 GotoPositionJoint(position);
-                PromptOperator("Wait for move to tool mount position complete", true);
+                PromptOperator("Wait for move to tool mount position complete", true, true);
             }
         }
 
@@ -3762,7 +3765,7 @@ namespace AutoGrind
                 string position = SelectedRow(ToolsGrd)["HomePosition"].ToString();
                 log.Info("Joint Move Tool Home to {0}", position);
                 GotoPositionJoint(position);
-                PromptOperator("Wait for move to tool home complete", true);
+                PromptOperator("Wait for move to tool home complete", true, true);
             }
         }
 
@@ -3922,13 +3925,13 @@ namespace AutoGrind
         private void MoveToolMountBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolMountBtn.Text);
-            PromptOperator("Wait for move to tool mount position complete", true);
+            PromptOperator("Wait for move to tool mount position complete", true, true);
         }
 
         private void MoveToolHomeBtn_Click(object sender, EventArgs e)
         {
             GotoPositionJoint(MoveToolHomeBtn.Text);
-            PromptOperator("Wait for move to tool home complete", true);
+            PromptOperator("Wait for move to tool home complete", true, true);
         }
 
         private void SetDoorClosedInputBtn_Click(object sender, EventArgs e)
@@ -4207,7 +4210,7 @@ namespace AutoGrind
             else
             {
                 GotoPositionPose(name);
-                PromptOperator(String.Format("Wait for robot linear move to {0} complete", name), true);
+                PromptOperator(String.Format("Wait for robot linear move to {0} complete", name), true, true);
             }
         }
 
@@ -4219,7 +4222,7 @@ namespace AutoGrind
             else
             {
                 GotoPositionJoint(name);
-                PromptOperator(String.Format("Wait for robot joint move to {0} complete", name), true);
+                PromptOperator(String.Format("Wait for robot joint move to {0} complete", name), true, true);
             }
         }
 

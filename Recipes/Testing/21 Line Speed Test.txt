@@ -55,8 +55,8 @@ set_part_geometry(CYLINDER,2000)
 return_user_timers()
 
 sphere:
-#move_linear(demo_safe)
-#move_linear(demo_sphere)
+move_linear(demo_safe)
+move_linear(demo_sphere)
 
 set_part_geometry(SPHERE,200)
 {cmd1}
