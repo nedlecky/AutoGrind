@@ -30,7 +30,7 @@ global grind_angular_vel_rps = 0
 global grind_angular_accel_rpss = 0
 global grind_angular_blend_radius_rad = 0
 
-global grind_part_speed_mmps = 50.0     # Speed used internally when adjusting and moving around part
+global grind_part_speed_mmps = 40.0     # Speed used internally when adjusting and moving around part
 
 # Planning points
 global p_operator_init = p[0, 0, 0, 0, 0, 0]    # Where we were when operator issued first grind command
@@ -279,15 +279,16 @@ def speed_setter(speed_mmps, min_feature_mm = 0.0, is_circle = False):
   end
 
   # If part is cylinder or spherical, diameter will be >0
+  # Set appropriate angular values... even flats need to now how fast to
+  # rotate on jog commands!
   local diam_m = robot_part_geometry[1] / 1000.0
-  if diam_m > 0.0:
-    # These are 1/4 the theoretical rotational speeds but we need to set them like this to get the correct speed- why??????
-    # rot_vel (rad/s) = linear_vel (m/s) * 2pi (rad/s) / pi * diam (m/s)
-    local coeff = 0.5 # Should be 2 and why 0.5 is inexplicable
-    global grind_angular_vel_rps = grind_linear_vel_mps * coeff / diam_m
-    global grind_angular_accel_rpss = grind_linear_accel_mpss * coeff / diam_m
-    global grind_angular_blend_radius_rad = grind_linear_blend_radius_m * coeff / diam_m
-  end
+  local diam_m = limiter(diam_m, 0.075, 3.0)
+  # These are 1/4 the theoretical rotational speeds but we need to set them like this to get the correct speed- why??????
+  # rot_vel (rad/s) = linear_vel (m/s) * 2pi (rad/s) / pi * diam (m/s)
+  local coeff = 0.5 # Should be 2 and why 0.5 is inexplicable
+  global grind_angular_vel_rps = grind_linear_vel_mps * coeff / diam_m
+  global grind_angular_accel_rpss = grind_linear_accel_mpss * coeff / diam_m
+  global grind_angular_blend_radius_rad = grind_linear_blend_radius_m * coeff / diam_m
 
   socket_send_num("grind_linear_vel_mmps", grind_linear_vel_mps * 1000.0)
   socket_send_num("grind_linear_accel_mmpss", grind_linear_accel_mpss * 1000.0)
@@ -301,13 +302,11 @@ end
 # Get into contact with part (or away from it)
 # enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
 def contact_part(on = False, enable = 0):
-  draw_origin(iget_actual_tcp_pose())
-
   if on:
     if enable == 0:
       # Just do a small forward motion in the direction of touchoff- this is a simulated p_contact_init
       draw_speed_once(grind_part_speed_mmps)
-      p_contact_init = draw_to(p[0, 0, 0.005, 0, 0, 0])
+      p_contact_init = draw_to(pose_add(draw_current_dp, p[0, 0, 0.005, 0, 0, 0]))
     elif enable == 1:
       # Advance until contact but retract 2X grind distance and use this as a simulated p_contact_init
       local success = itouchoff(grind_touch_speed_mmps, grind_touch_retract_mm * 2.0)
@@ -320,9 +319,11 @@ def contact_part(on = False, enable = 0):
       global p_contact_init = pose_trans(iget_actual_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
       return success
     end
-  else:  # Back off
+  else:  # Back away
     draw_speed_once(grind_part_speed_mmps)
-    draw_to(p[0, 0, -0.010, 0, 0, 0])
+    local dp = draw_current_dp
+    dp[2] = dp[2] - 0.010
+    p_contact_init = draw_to(dp)
   end
 
   return True
@@ -482,9 +483,9 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     apply_force(True, grind_contact_enable, grind_force_N, grind_touch_speed_mmps)
     global grind_process_state = True
   elif not on and grind_process_state:
+    # Need to stop the grind
     set_ok_to_proceed(True)
 
-    # Need to stop the grind
     # Shut everything down and return to original pose
     apply_force(False, grind_contact_enable, 0)
     contact_part(False, grind_contact_enable)
@@ -493,9 +494,10 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
 
     # Always end with a move back to with the imover realtime back running
     imover_realtime(True)
-    draw_origin(p_operator_init)
-    forced_speed_setter(grind_part_speed_mmps)
-    draw_finish(p[0, 0, 0, 0, 0, 0])
+    draw_speed_once(grind_part_speed_mmps)
+    local dp = p[0, 0, 0, 0, 0, 0]
+    dp[2] = dp[2] - pose_dist(p_operator_init, p_contact_center)
+    draw_finish(dp)
 
     global grind_process_state = False
   end

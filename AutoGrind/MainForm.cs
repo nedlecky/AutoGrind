@@ -434,16 +434,16 @@ namespace AutoGrind
                         ExecuteLine(-1, string.Format("set_linear_speed({0})", ReadVariable("robot_linear_speed_mmps", "200")));
                         ExecuteLine(-1, string.Format("set_linear_accel({0})", ReadVariable("robot_linear_accel_mmpss", "500")));
                         ExecuteLine(-1, string.Format("set_blend_radius({0})", ReadVariable("robot_blend_radius_mm", "3")));
-                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "30")));
-                        ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "90")));
-                        ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "10")));
+                        ExecuteLine(-1, string.Format("set_joint_speed({0})", ReadVariable("robot_joint_speed_dps", "20")));
+                        ExecuteLine(-1, string.Format("set_joint_accel({0})", ReadVariable("robot_joint_accel_dpss", "45")));
+                        ExecuteLine(-1, string.Format("grind_touch_speed({0})", ReadVariable("grind_touch_speed_mmps", "5")));
                         ExecuteLine(-1, string.Format("grind_touch_retract({0})", ReadVariable("grind_touch_retract_mm", "3")));
                         ExecuteLine(-1, string.Format("grind_force_dwell({0})", ReadVariable("grind_force_dwell_ms", "500")));
                         ExecuteLine(-1, string.Format("grind_max_wait({0})", ReadVariable("grind_max_wait_ms", "1500")));
                         ExecuteLine(-1, string.Format("grind_max_blend_radius({0})", ReadVariable("grind_max_blend_radius_mm", "2")));
                         ExecuteLine(-1, string.Format("grind_trial_speed({0})", ReadVariable("grind_trial_speed_mmps", "20")));
                         ExecuteLine(-1, string.Format("grind_point_frequency({0})", ReadVariable("grind_point_frequency_hz", "2")));
-                        ExecuteLine(-1, string.Format("grind_linear_accel({0})", ReadVariable("grind_linear_accel_mmpss", "100")));
+                        ExecuteLine(-1, string.Format("grind_linear_accel({0})", ReadVariable("grind_linear_accel_mmpss", "1000")));
                         ExecuteLine(-1, string.Format("set_door_closed_input({0})", ReadVariable("robot_door_closed_input", "1,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, string.Format("set_footswitch_pressed_input({0})", ReadVariable("robot_footswitch_pressed_input", "7,1").Trim(new char[] { '[', ']' })));
                         ExecuteLine(-1, "enable_cyline_cal(0)");
@@ -1291,7 +1291,6 @@ namespace AutoGrind
             }
         }
 
-        private bool dontSendTen = false;
         private void PauseBtn_Click(object sender, EventArgs e)
         {
             log.Info("PauseBtn{0}_Click(...)", PauseBtn.Text);
@@ -3185,7 +3184,7 @@ namespace AutoGrind
                 return;
 
             ExecuteLine(-1, String.Format("grind_trial_speed({0})", 20));
-            ExecuteLine(-1, String.Format("grind_linear_accel({0})", 100));
+            ExecuteLine(-1, String.Format("grind_linear_accel({0})", 500));
             ExecuteLine(-1, String.Format("grind_point_frequency({0})", 2));
             ExecuteLine(-1, String.Format("grind_max_blend_radius({0})", 2));
             ExecuteLine(-1, String.Format("grind_touch_speed({0})", 5));
@@ -3423,7 +3422,6 @@ namespace AutoGrind
                             if (runState == RunState.RUNNING)
                             {
                                 // Trying to avoid bothering UR with a stop command... it is already stopping because it saw the door open!
-                                dontSendTen = true;
                                 PauseBtn_Click(null, null);
                             }
                             break;

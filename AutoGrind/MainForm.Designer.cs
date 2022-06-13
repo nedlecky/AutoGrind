@@ -129,6 +129,7 @@
             this.label10 = new System.Windows.Forms.Label();
             this.RunStateLbl = new System.Windows.Forms.Label();
             this.ProgramPage = new System.Windows.Forms.TabPage();
+            this.BigEditBtn = new System.Windows.Forms.Button();
             this.SetupPage = new System.Windows.Forms.TabPage();
             this.label19 = new System.Windows.Forms.Label();
             this.RobotPolyscopeVersionLbl = new System.Windows.Forms.Label();
@@ -199,7 +200,6 @@
             this.VersionLbl = new System.Windows.Forms.Label();
             this.FootswitchPressedLbl = new System.Windows.Forms.Label();
             this.Time2Lbl = new System.Windows.Forms.Label();
-            this.BigEditBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1433,6 +1433,21 @@
             this.ProgramPage.Text = "Program";
             this.ProgramPage.UseVisualStyleBackColor = true;
             // 
+            // BigEditBtn
+            // 
+            this.BigEditBtn.BackColor = System.Drawing.Color.Gray;
+            this.BigEditBtn.Enabled = false;
+            this.BigEditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BigEditBtn.ForeColor = System.Drawing.Color.White;
+            this.BigEditBtn.Location = new System.Drawing.Point(623, 861);
+            this.BigEditBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.BigEditBtn.Name = "BigEditBtn";
+            this.BigEditBtn.Size = new System.Drawing.Size(138, 111);
+            this.BigEditBtn.TabIndex = 95;
+            this.BigEditBtn.Text = "Big Edit";
+            this.BigEditBtn.UseVisualStyleBackColor = false;
+            this.BigEditBtn.Click += new System.EventHandler(this.BigEditBtn_Click);
+            // 
             // SetupPage
             // 
             this.SetupPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
@@ -2334,21 +2349,6 @@
             this.Time2Lbl.TabIndex = 151;
             this.Time2Lbl.Text = "Time";
             this.Time2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // BigEditBtn
-            // 
-            this.BigEditBtn.BackColor = System.Drawing.Color.Gray;
-            this.BigEditBtn.Enabled = false;
-            this.BigEditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.BigEditBtn.ForeColor = System.Drawing.Color.White;
-            this.BigEditBtn.Location = new System.Drawing.Point(654, 877);
-            this.BigEditBtn.Margin = new System.Windows.Forms.Padding(2);
-            this.BigEditBtn.Name = "BigEditBtn";
-            this.BigEditBtn.Size = new System.Drawing.Size(107, 95);
-            this.BigEditBtn.TabIndex = 95;
-            this.BigEditBtn.Text = "Big Edit";
-            this.BigEditBtn.UseVisualStyleBackColor = false;
-            this.BigEditBtn.Click += new System.EventHandler(this.BigEditBtn_Click);
             // 
             // MainForm
             // 
