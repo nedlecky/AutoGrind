@@ -5,6 +5,8 @@
 
 global robot_util_version = "2022-06-13"
 
+MATH_PI = 3.1415926535
+
 # Return max of 2 numeric values
 def max(n1, n2):
   if n1 > n2:

@@ -199,6 +199,7 @@
             this.VersionLbl = new System.Windows.Forms.Label();
             this.FootswitchPressedLbl = new System.Windows.Forms.Label();
             this.Time2Lbl = new System.Windows.Forms.Label();
+            this.BigEditBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -1419,6 +1420,7 @@
             // ProgramPage
             // 
             this.ProgramPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
+            this.ProgramPage.Controls.Add(this.BigEditBtn);
             this.ProgramPage.Controls.Add(this.RecipeRTB);
             this.ProgramPage.Controls.Add(this.CurrentLineLbl);
             this.ProgramPage.Controls.Add(this.RecipeFilenameLbl);
@@ -2333,6 +2335,21 @@
             this.Time2Lbl.Text = "Time";
             this.Time2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // BigEditBtn
+            // 
+            this.BigEditBtn.BackColor = System.Drawing.Color.Gray;
+            this.BigEditBtn.Enabled = false;
+            this.BigEditBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.BigEditBtn.ForeColor = System.Drawing.Color.White;
+            this.BigEditBtn.Location = new System.Drawing.Point(654, 877);
+            this.BigEditBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.BigEditBtn.Name = "BigEditBtn";
+            this.BigEditBtn.Size = new System.Drawing.Size(107, 95);
+            this.BigEditBtn.TabIndex = 95;
+            this.BigEditBtn.Text = "Big Edit";
+            this.BigEditBtn.UseVisualStyleBackColor = false;
+            this.BigEditBtn.Click += new System.EventHandler(this.BigEditBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2570,6 +2587,7 @@
         private System.Windows.Forms.Label label22;
         private System.Windows.Forms.Label GrindForceReportZLbl;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.Button BigEditBtn;
     }
 }
 

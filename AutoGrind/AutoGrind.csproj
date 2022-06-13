@@ -112,6 +112,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BigEditDialog.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="BigEditDialog.Designer.cs">
+      <DependentUpon>BigEditDialog.cs</DependentUpon>
+    </Compile>
     <Compile Include="DirectorySelectDialog.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,6 +170,9 @@
     </Compile>
     <Compile Include="TcpClientSupport.cs" />
     <Compile Include="TcpServerSupport.cs" />
+    <EmbeddedResource Include="BigEditDialog.resx">
+      <DependentUpon>BigEditDialog.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="DirectorySelectDialog.resx">
       <DependentUpon>DirectorySelectDialog.cs</DependentUpon>
       <SubType>Designer</SubType>

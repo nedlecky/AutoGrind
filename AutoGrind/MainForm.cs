@@ -650,10 +650,36 @@ namespace AutoGrind
             if (fForce || runState != s)
             {
                 runState = s;
-                log.Debug("EXEC SetState({0},{1})", s.ToString(),fForce.ToString());
+                log.Debug("EXEC SetState({0},{1})", s.ToString(), fForce.ToString());
 
                 EnterRunState();
             }
+        }
+
+        private void SetManualMoveButtons(bool f)
+        {
+            bool enable = f && robotReady;
+
+            JogRunBtn.Enabled = enable;
+            JogBtn.Enabled = enable;
+            PositionMovePoseBtn.Enabled = enable;
+            PositionMoveArmBtn.Enabled = enable;
+            PositionSetBtn.Enabled = enable;
+            MoveToolMountBtn.Enabled = enable;
+            MoveToolHomeBtn.Enabled = enable;
+        }
+
+        private void SetVariableEditing(bool f)
+        {
+            BigEditBtn.Enabled = f;
+            LoadPositionsBtn.Enabled = f;
+            SavePositionsBtn.Enabled = f;
+            ClearAllPositionsBtn.Enabled = f;
+            ClearPositionsBtn.Enabled = f;
+            LoadVariablesBtn.Enabled = f;
+            SaveVariablesBtn.Enabled = f;
+            ClearVariablesBtn.Enabled = f;
+            ClearAllVariablesBtn.Enabled = f;
         }
 
         private void EnterRunState()
@@ -673,14 +699,9 @@ namespace AutoGrind
                     UserModeBox.Enabled = true;
 
                     ExitBtn.Enabled = true;
-                    JogRunBtn.Enabled = robotReady;
-                    JogBtn.Enabled = robotReady;
-                    PositionMovePoseBtn.Enabled = robotReady;
-                    PositionMoveArmBtn.Enabled = robotReady;
-                    PositionSetBtn.Enabled = robotReady;
 
-                    MoveToolMountBtn.Enabled = robotReady;
-                    MoveToolHomeBtn.Enabled = robotReady;
+                    SetManualMoveButtons(true);
+                    SetVariableEditing(true);
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
@@ -720,13 +741,9 @@ namespace AutoGrind
                     UserModeBox.Enabled = true;
 
                     ExitBtn.Enabled = true;
-                    JogRunBtn.Enabled = robotReady;
-                    JogBtn.Enabled = robotReady;
-                    PositionMovePoseBtn.Enabled = robotReady;
-                    PositionMoveArmBtn.Enabled = robotReady;
-                    PositionSetBtn.Enabled = robotReady;
-                    MoveToolMountBtn.Enabled = robotReady;
-                    MoveToolHomeBtn.Enabled = robotReady;
+
+                    SetManualMoveButtons(true);
+                    SetVariableEditing(true);
 
                     LoadRecipeBtn.Enabled = true;
                     NewRecipeBtn.Enabled = true;
@@ -766,13 +783,9 @@ namespace AutoGrind
                     UserModeBox.Enabled = false;
 
                     ExitBtn.Enabled = false;
-                    JogRunBtn.Enabled = false;
-                    JogBtn.Enabled = false;
-                    PositionMovePoseBtn.Enabled = false;
-                    PositionMoveArmBtn.Enabled = false;
-                    PositionSetBtn.Enabled = false;
-                    MoveToolMountBtn.Enabled = false;
-                    MoveToolHomeBtn.Enabled = false;
+
+                    SetManualMoveButtons(false);
+                    SetVariableEditing(false);
 
                     LoadRecipeBtn.Enabled = false;
                     NewRecipeBtn.Enabled = false;
@@ -816,13 +829,9 @@ namespace AutoGrind
                     UserModeBox.Enabled = false;
 
                     ExitBtn.Enabled = false;
-                    JogRunBtn.Enabled = false;
-                    JogBtn.Enabled = false;
-                    PositionMovePoseBtn.Enabled = false;
-                    PositionMoveArmBtn.Enabled = false;
-                    PositionSetBtn.Enabled = false;
-                    MoveToolMountBtn.Enabled = false;
-                    MoveToolHomeBtn.Enabled = false;
+
+                    SetManualMoveButtons(false);
+                    SetVariableEditing(false);
 
                     LoadRecipeBtn.Enabled = false;
                     NewRecipeBtn.Enabled = false;
@@ -851,24 +860,42 @@ namespace AutoGrind
                     break;
             }
 
-            ExitBtn.BackColor = ExitBtn.Enabled ? Color.Green : Color.Gray;
-            JogRunBtn.BackColor = JogRunBtn.Enabled ? Color.Green : Color.Gray;
-            JogBtn.BackColor = JogBtn.Enabled ? Color.Green : Color.Gray;
-            PositionMovePoseBtn.BackColor = PositionMovePoseBtn.Enabled ? Color.Green : Color.Gray;
-            PositionMoveArmBtn.BackColor = PositionMoveArmBtn.Enabled ? Color.Green : Color.Gray;
-            PositionSetBtn.BackColor = PositionSetBtn.Enabled ? Color.Green : Color.Gray;
-            MoveToolMountBtn.BackColor = MoveToolMountBtn.Enabled ? Color.Green : Color.Gray;
-            MoveToolHomeBtn.BackColor = MoveToolHomeBtn.Enabled ? Color.Green : Color.Gray;
+            ColorEnableButtonGreen(ExitBtn);
+            ColorEnableButtonGreen(JogRunBtn);
+            ColorEnableButtonGreen(JogBtn);
+            ColorEnableButtonGreen(PositionMovePoseBtn);
+            ColorEnableButtonGreen(PositionMoveArmBtn);
+            ColorEnableButtonGreen(PositionSetBtn);
+            ColorEnableButtonGreen(MoveToolMountBtn);
+            ColorEnableButtonGreen(MoveToolHomeBtn);
 
-            LoadRecipeBtn.BackColor = LoadRecipeBtn.Enabled ? Color.Green : Color.Gray;
-            NewRecipeBtn.BackColor = NewRecipeBtn.Enabled ? Color.Green : Color.Gray;
-            SaveRecipeBtn.BackColor = SaveRecipeBtn.Enabled ? Color.Green : Color.Gray;
-            SaveAsRecipeBtn.BackColor = SaveAsRecipeBtn.Enabled ? Color.Green : Color.Gray;
+            ColorEnableButtonGreen(LoadRecipeBtn);
+            ColorEnableButtonGreen(NewRecipeBtn);
+            ColorEnableButtonGreen(SaveRecipeBtn);
+            ColorEnableButtonGreen(SaveAsRecipeBtn);
 
-            StartBtn.BackColor = StartBtn.Enabled ? Color.Green : Color.Gray;
-            PauseBtn.BackColor = PauseBtn.Enabled ? Color.DarkOrange : Color.Gray;
-            StepBtn.BackColor = StepBtn.Enabled ? Color.Green : Color.Gray;
-            StopBtn.BackColor = StopBtn.Enabled ? Color.Red : Color.Gray;
+            ColorEnableButtonGreen(StartBtn);
+            ColorEnableButton(PauseBtn, Color.DarkOrange);
+            ColorEnableButtonGreen(StepBtn);
+            ColorEnableButton(StopBtn, Color.Red);
+
+            ColorEnableButtonGreen(BigEditBtn);
+            ColorEnableButtonGreen(LoadPositionsBtn);
+            ColorEnableButtonGreen(SavePositionsBtn);
+            ColorEnableButtonGreen(ClearAllPositionsBtn);
+            ColorEnableButtonGreen(ClearPositionsBtn);
+            ColorEnableButtonGreen(LoadVariablesBtn);
+            ColorEnableButtonGreen(SaveVariablesBtn);
+            ColorEnableButtonGreen(ClearVariablesBtn);
+            ColorEnableButtonGreen(ClearAllVariablesBtn);
+        }
+        private void ColorEnableButtonGreen(Control c)
+        {
+            ColorEnableButton(c, Color.Green);
+        }
+        private void ColorEnableButton(Control c, Color enableColor)
+        {
+            c.BackColor = c.Enabled ? enableColor : Color.Gray;
         }
 
         bool mountedToolBoxActionDisabled = false;
@@ -4262,6 +4289,27 @@ namespace AutoGrind
             process.Start();
         }
 
+        private void BigEditBtn_Click(object sender, EventArgs e)
+        {
+
+            log.Info("BigEditBtn_Click(...)");
+            BigEditDialog bigeditForm = new BigEditDialog()
+            {
+                Title = RecipeFilenameLbl.Text,
+                ScreenWidth = screenDesignWidth,
+                ScreenHeight = screenDesignHeight,
+                Recipe = RecipeRTB.Text
+            };
+            bigeditForm.ShowDialog();
+
+            log.Info("BigEditDialog returns {0}", bigeditForm.DialogResult);
+
+            if (bigeditForm.DialogResult == DialogResult.OK)
+            {
+                RecipeRTB.Text = bigeditForm.Recipe;
+                log.Info("Installing from BigEdit");
+            }
+        }
     }
     public static class RichTextBoxExtensions
     {

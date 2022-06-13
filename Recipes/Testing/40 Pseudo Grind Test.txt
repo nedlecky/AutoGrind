@@ -2,6 +2,7 @@
 # Test all the patterns on all the geometries
 # Can be run on a flat table area to test force control
 
+clear()
 size1=40
 size2=10
 count=3
@@ -12,15 +13,12 @@ contact=0
 select_tool(2F85)
 move_tool_home()
 move_linear(demo_safe)
-move_linear(demo_flat2)
 
 cycleCount=0
 
 redo:
 move_linear(demo_safe)
 move_linear(demo_flat2)
-
-jump(sphere)
 
 flat:
 set_part_geometry(FLAT,0)

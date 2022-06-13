@@ -3,6 +3,7 @@
      Script: agscript_util.script
      Script: agscript_robot-2.script
      Script: agscript_grind-2.script
+     init_autogrind()
      currentTcpPose≔get_actual_tcp_pose()
      MoveJ
        currentTcpPose
