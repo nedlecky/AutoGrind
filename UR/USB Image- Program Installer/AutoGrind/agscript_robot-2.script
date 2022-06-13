@@ -1518,7 +1518,7 @@ end
 
 # Sets a 1-time speedup factor on velocity
 def draw_scale_once(scale):
-  global draw_accel_factor = 1.0#scale
+  global draw_accel_factor = scale
   global draw_speed_factor = scale
 end
 
@@ -1540,7 +1540,14 @@ def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
 
   # If you're asking for any Z moves, we assume this is a linear move
-  local z_move_only = draw_current_ddp2 > 0.001
+  local z_move_only = 
+  (
+    draw_current_ddp0 < 0.001 and
+    draw_current_ddp1 < 0.001 and
+    draw_current_ddp2 > 0.001 and
+    draw_current_ddp3 < 0.009 and
+    draw_current_ddp4 < 0.009
+  )
 
   # Flat:     X, Y
   # Cylinder: X, RX
@@ -1569,7 +1576,7 @@ def draw_to(dp, r = -1, wait = True):
     global process_sliderfactor = process_theta_deg / 90.0
     global process_correction_index = limiter(floor(process_theta_deg / cyline_degree_slice), 0, cyline_correction_size-1)
 
-    if process_theta_deg < 0.5 or process_theta_deg > 89.5:
+    if False:#process_theta_deg < 0.5 or process_theta_deg > 89.5:
       # Pure linear or rotational moves (within 0.5 degree) need no correction
       global process_correctionfactor = 1
     else:

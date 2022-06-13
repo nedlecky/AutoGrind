@@ -15,8 +15,6 @@ cmd3=grind_line_deg(40,45,{count},{speed},{force},0)
 enable_user_timers(1)
 zero_user_timers()
 
-jump(sphere)
-
 flat:
 move_linear(demo_safe)
 move_linear(demo_flat)
@@ -47,7 +45,7 @@ set_part_geometry(CYLINDER,800)
 {cmd2}
 {cmd3}
 return_user_timers()
-cyl2000:
+
 set_part_geometry(CYLINDER,2000)
 {cmd1}
 {cmd2}

@@ -306,10 +306,11 @@ def contact_part(on = False, enable = 0):
       return success
     end
   else:  # Back away
-    draw_speed_once(grind_part_speed_mmps)
+    # Construct a move back in Z only from here
     local dp = draw_current_dp
-    dp[2] = dp[2] - 0.010
-    p_contact_init = draw_to(dp)
+    dp[2] = dp[2] - 0.020
+    draw_speed_once(grind_part_speed_mmps)
+    draw_to(dp)
   end
 
   return True
