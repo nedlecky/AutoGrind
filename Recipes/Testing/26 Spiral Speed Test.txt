@@ -22,6 +22,8 @@ cmd=grind_spiral({diam1},{diam2},{n_turns},{count},{speed},{force},0)
 enable_user_timers(1)
 zero_user_timers()
 
+jump(cylinder)
+
 flat:
 move_linear(demo_safe)
 move_linear(demo_flat)
