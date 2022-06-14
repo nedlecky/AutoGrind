@@ -1289,6 +1289,20 @@ namespace AutoGrind
                 return false;
             }
 
+            // Is the board green?
+            bool boardIsGreen =
+                RobotCommandStatusLbl.BackColor == Color.Green &&
+                RobotCompletedLbl.BackColor == Color.Green &&
+                RobotReadyLbl.BackColor == Color.Green &&
+                GrindReadyLbl.BackColor == Color.Green &&
+                GrindProcessStateLbl.BackColor == Color.Green;
+            if (!boardIsGreen)
+            {
+                ErrorMessageBox("The board is not green! Cannot run.");
+                return false;
+            }
+
+
             return true;
         }
         private void StartBtn_Click(object sender, EventArgs e)

@@ -339,10 +339,11 @@ def contact_part(on = False, enable = 0):
     end
   else:  # Back away
     # Construct a move back in Z only from here
-    local dp = draw_current_dp
-    dp[2] = dp[2] - 0.010
+    #local dp = draw_current_dp
+    #dp[2] = dp[2] - 0.010
     draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
-    draw_to(dp)
+    #draw_to(dp)
+    draw_relative(p[0,0,-0.010,0,0,0])
   end
 
   return True
@@ -421,6 +422,16 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
   if on and grind_process_state:
     # Continuing a grind...
 
+    # Move to initial grind position relative to initial p_contact_center
+    shape = robot_part_geometry[0]
+    global dp_from_contact_center = pose_to_center[shape-1]
+    # Stay at current speeds
+    draw_finish(dp_from_contact_center)
+  if not ok_to_proceed():
+      terminate_grind()
+      return False
+    end
+
     # Need to change force?
     # Lift, rezero, and then head toward start of next pattern
     if grind_contact_enable == 2 and imover_force_N != grind_force_N:
@@ -430,7 +441,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
       # So we do a full reset!
       iend_force_mode()
       draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
-      draw_to(p[0, 0, -0.004, 0, 0, 0])
+      draw_relative(p[0, 0, -0.004, 0, 0, 0])
       if not ok_to_proceed():
         terminate_grind()
         return False
@@ -443,16 +454,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
 
       izero_ftsensor()
       iforce_mode(grind_force_N, grind_touch_speed_mmps)
-    end
-
-    # Move to initial grind position relative to initial p_contact_center
-    shape = robot_part_geometry[0]
-    global dp_from_contact_center = pose_to_center[shape-1]
-    # Stay at current speeds
-    draw_finish(dp_from_contact_center)
-    if not ok_to_proceed():
-      terminate_grind()
-      return False
+      sleep(grind_force_dwell_ms / 1000.0)
     end
     return True
   elif on and not grind_process_state:
