@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: General utility functions used in AutoGrind
 
-global robot_util_version = "2022-06-13"
+global robot_util_version = "2022-06-14"
 
 MATH_PI = 3.1415926535
 
