@@ -19,13 +19,15 @@ namespace AutoGrind
     {
         private static readonly NLog.Logger log = NLog.LogManager.GetCurrentClassLogger();
 
-        // These may ne overridden prior to showing the dialog
-        public string Value { get; set; } = "0.000";
+        // These may be overridden prior to showing the dialog
+        public double Value { get; set; } = 0;
+        public string ValueOutString{ get; set; } = "??";
         public string Label { get; set; } = "Unspecified";
         public int NumberOfDecimals { get; set; } = 3;
         public bool IsPassword { get; set; } = false;
         public double MaxAllowed { get; set; } = 0;
         public double MinAllowed { get; set; } = 0;
+        public double Default { get; set; } = -999;
 
         public SetValueForm()
         {
@@ -33,23 +35,40 @@ namespace AutoGrind
         }
         private void SetValueForm_Load(object sender, EventArgs e)
         {
-            LabelLbl.Text = "Enter\n" + Label;
-            ValueTxt.Text = Value;
+            LabelLbl.Text = "ENTER\n" + Label;
+            MakeValueOutString();
+            ValueTxt.Text = ValueOutString;
+
+            string minmaxString = "";
             if (MinAllowed != 0 || MaxAllowed != 0)
             {
-                MinMaxLabel.Text = String.Format("Limit {0} to {1}", MinAllowed, MaxAllowed);
+                string formatter = String.Format("Limit {{0:F{0}}} to {{1:F{0}}}",  NumberOfDecimals);
+                minmaxString += String.Format(formatter, MinAllowed, MaxAllowed);
             }
+            if (Default != -999)
+            {
+                string formatter = String.Format("\nDefault={{0:F{0}}}", NumberOfDecimals);
+                minmaxString += String.Format(formatter, Default);
+            }
+            MinMaxLabel.Text = minmaxString;
+
             if (IsPassword) ValueTxt.PasswordChar = '*';
 
             ValueTxt.Select();
             ValueTxt.SelectAll();
         }
 
+        private void MakeValueOutString()
+        {
+            string formatter = String.Format("{{0:F{0}}}", NumberOfDecimals);
+            ValueOutString = String.Format(formatter, Value);
+        }
+
         private void EnterBtn_Click(object sender, EventArgs e)
         {
             if (ValueTxt.Text == "")
             {
-                Value = "";
+                Value = 0;
                 Close();
                 return;
             }
@@ -61,16 +80,18 @@ namespace AutoGrind
                 {
                     if (x < MinAllowed)
                     {
-                        Value = MinAllowed.ToString();
-                        ValueTxt.Text = Value;
+                        Value = MinAllowed;
+                        MakeValueOutString();
+                        ValueTxt.Text = ValueOutString;
                         ValueTxt.Select();
                         ValueTxt.SelectAll();
                         valueOk = false;
                     }
                     else if (x > MaxAllowed)
                     {
-                        Value = MaxAllowed.ToString();
-                        ValueTxt.Text = Value;
+                        Value = MaxAllowed;
+                        MakeValueOutString();
+                        ValueTxt.Text = ValueOutString;
                         ValueTxt.Select();
                         ValueTxt.SelectAll();
                         valueOk = false;
@@ -79,14 +100,8 @@ namespace AutoGrind
 
                 if (valueOk)
                 {
-                    string fmt = "0";
-                    if (NumberOfDecimals > 0)
-                    {
-                        fmt = "0.";
-                        for (int i = 0; i < NumberOfDecimals; i++)
-                            fmt += "0";
-                    }
-                    Value = x.ToString(fmt);
+                    Value = x;
+                    MakeValueOutString();
                     this.DialogResult = DialogResult.OK;
                     if (IsPassword)
                         log.Info("Setting {0} = ********", Label);

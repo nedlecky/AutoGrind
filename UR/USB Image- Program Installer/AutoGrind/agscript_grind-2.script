@@ -25,7 +25,13 @@ global grind_angular_vel_rps = 0
 global grind_angular_accel_rpss = 0
 global grind_angular_blend_radius_rad = 0
 
-global grind_part_speed_mmps = 40.0     # Speed used internally when adjusting and moving around part
+# Grinding speeds when not in contact
+global grind_jog_speed_mmps = 40     # Speed used internally when adjusting and moving around part
+global grind_jog_accel_mmpss = 100   # Accel used internally when adjusting and moving around part
+
+# Force mode parameters
+global grind_force_mode_damping = 0.0
+global grind_force_mode_gain_scaling = 1.0
 
 # Planning points
 global p_operator_init = p[0, 0, 0, 0, 0, 0]    # Where we were when operator issued first grind command
@@ -93,6 +99,30 @@ def set_grind_variable():
       global grind_point_frequency_hz = ceil(command[3])
     end
     socket_send_integer("grind_point_frequency_hz", grind_point_frequency_hz)
+  elif command[2] == 10:
+    global response = "set grind_jog_speed_mmps"
+    if command[3] >= 0:
+      global grind_jog_speed_mmps = ceil(command[3])
+    end
+    socket_send_integer("grind_jog_speed_mmps", grind_jog_speed_mmps)
+  elif command[2] == 11:
+    global response = "set grind_jog_accel_mmpss"
+    if command[3] >= 0:
+      global grind_jog_accel_mmpss = ceil(command[3])
+    end
+    socket_send_integer("grind_jog_accel_mmpss", grind_jog_accel_mmpss)
+  elif command[2] == 12:
+    global response = "set grind_force_mode_damping"
+    if command[3] >= 0:
+      global grind_force_mode_damping = limiter(command[3], 0.0, 1.0)
+    end
+    socket_send_integer("grind_force_mode_damping", grind_force_mode_damping)
+  elif command[2] == 13:
+    global response = "set grind_force_mode_gain_scaling"
+    if command[3] >= 0:
+      global grind_force_mode_gain_scaling = limiter(command[3], 0.0, 2.0)
+    end
+    socket_send_integer("grind_force_mode_gain_scaling", grind_force_mode_gain_scaling)
   else:
     global response = "Unknown grind set variable command"
   end
@@ -100,6 +130,8 @@ def set_grind_variable():
   global grind_ready = True
   socket_send_bool("grind_ready", grind_ready)
 end
+global grind_force_mode_damping = 0.0
+global grind_force_mode_gain_scaling = 1.0
 
 # Execute the desired grind operation as specified in command[2]...
 def grind():
@@ -291,7 +323,7 @@ def contact_part(on = False, enable = 0):
   if on:
     if enable == 0:
       # Just do a small forward motion in the direction of touchoff- this is a simulated p_contact_init
-      draw_speed_once(grind_part_speed_mmps)
+      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
       p_contact_init = draw_to(pose_add(draw_current_dp, p[0, 0, 0.005, 0, 0, 0]))
     elif enable == 1:
       # Advance until contact but retract 2X grind distance and use this as a simulated p_contact_init
@@ -308,8 +340,8 @@ def contact_part(on = False, enable = 0):
   else:  # Back away
     # Construct a move back in Z only from here
     local dp = draw_current_dp
-    dp[2] = dp[2] - 0.020
-    draw_speed_once(grind_part_speed_mmps)
+    dp[2] = dp[2] - 0.010
+    draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
     draw_to(dp)
   end
 
@@ -397,7 +429,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
 
       # So we do a full reset!
       iend_force_mode()
-      draw_speed_once(grind_part_speed_mmps)
+      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
       draw_to(p[0, 0, -0.004, 0, 0, 0])
       if not ok_to_proceed():
         terminate_grind()
@@ -416,7 +448,7 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     # Move to initial grind position relative to initial p_contact_center
     shape = robot_part_geometry[0]
     global dp_from_contact_center = pose_to_center[shape-1]
-    draw_speed_once(grind_part_speed_mmps)
+    # Stay at current speeds
     draw_finish(dp_from_contact_center)
     if not ok_to_proceed():
       terminate_grind()
@@ -441,19 +473,20 @@ def set_grind_process_state(on = False, pose_to_center = [p[0, 0, 0, 0, 0, 0], p
     # Think about it
     global dp_from_contact_center = pose_to_center[shape-1]
     draw_origin(p_operator_init)
-    draw_speed_once(grind_part_speed_mmps)
+    draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
     draw_finish(dp_from_contact_center)
     if not ok_to_proceed():
       set_ok_to_proceed(True)
-      draw_speed_once(grind_part_speed_mmps)
+      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
       draw_finish(p[0, 0, 0, 0, 0, 0])
       return False
     end
 
     # Touch part and refine p_contact_init
     if not contact_part(True, grind_contact_enable):
+      # Never hit the part (searches 25mm down)
       set_ok_to_proceed(True)
-      draw_speed_once(grind_part_speed_mmps)
+      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
       draw_finish(p[0, 0, 0, 0, 0, 0])
       return False
     end
@@ -514,7 +547,7 @@ def terminate_grind():
 
   # Always end with a move back to with the imover realtime back running
   imover_realtime(True)
-  draw_speed_once(grind_part_speed_mmps)
+  draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
   local dp = p[0, 0, 0, 0, 0, 0]
   dp[2] = dp[2] - pose_dist(p_operator_init, p_contact_center)
   draw_finish(dp)
@@ -522,8 +555,6 @@ def terminate_grind():
   global grind_process_state = False
   socket_send_bool("grind_process_state", grind_process_state)
 end
-
-
 
 ######################################################################################
 # TOP LEVEL GRIND FUNCTIONS

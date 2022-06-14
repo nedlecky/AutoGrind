@@ -691,11 +691,9 @@ def calculate_point_to_move_towards(feature, direction, position_distance):
   local wanted_displacement_in_base_frame = pose_sub(pose_trans(feature, displacement_pose), feature)
   return pose_add(get_target_waypoint(), wanted_displacement_in_base_frame)
 end
-#$ 7 "Robot Program"
-#$ 8 "MoveL"
-#$ 9 "Direction: Tool Z+"
+
 global move_thread_flag = 0
-global move_thread_approach_speed_mps = 0.01
+global move_thread_approach_speed_mps = 0.01  # Set by touchoff(...)
 def move_nowait():
   global move_thread_flag = 1
   local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
@@ -703,12 +701,10 @@ def move_nowait():
   global move_thread_flag = 2
 end
 
-# Currently using speed_mmps for both approach and 2X for departure
 def touchoff(approach_speed_mmps, retract_mm):
-  local approach_speed_mps = approach_speed_mmps / 1000.0
-  global move_thread_approach_speed_mps = approach_speed_mps
+  #local approach_speed_mps = approach_speed_mmps / 1000.0
+  global move_thread_approach_speed_mps = approach_speed_mmps / 1000.0
 
-  local retract_speed_mps = approach_speed_mps * 2.0
   local retract_m = retract_mm / 1000.0
 
   # Start non-blocking move: only works with imover_realtime!
@@ -731,7 +727,7 @@ def touchoff(approach_speed_mmps, retract_mm):
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
       draw_origin(retractTo)
-      forced_speed_setter(retract_speed_mps * 1000.0)
+      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
       draw_to((p[0, 0, 0, 0, 0, 0]))
       return True
       break
@@ -902,8 +898,8 @@ def iforce_mode(force_N, approach_speed_mmps):
     # Don't forget to call izero_ftsensor before this at some point when appropriate!
 
     # Using the defaults here
-    #force_mode_set_damping(0)
-    #force_mode_set_gain_scaling(1)
+    force_mode_set_damping(grind_force_mode_damping)
+    force_mode_set_gain_scaling(grind_force_mode_gain_scaling)
 
     # Force is in tool frame
     # Compliant in Tool Z
@@ -1137,9 +1133,8 @@ thread imover_thread():
       zero_ftsensor()
       global imover_cmd = 0
     elif imover_cmd == imover_STARTFORCE:
-      # Using the defaults here
-      force_mode_set_damping(0)
-      force_mode_set_gain_scaling(1)
+      force_mode_set_damping(grind_force_mode_damping)
+      force_mode_set_gain_scaling(grind_force_mode_gain_scaling)
 
       # Force is in tool frame
       # Compliant in Tool Z
@@ -1510,16 +1505,20 @@ global process_a = 1.0
 global process_v = 0.1
 global process_r = 0.002
 
-# Sets a 1-time speed for velocity
-def draw_speed_once(speed_desired_one_move_mmps):
-  local scale = (speed_desired_one_move_mmps / 1000.0) / grind_linear_vel_mps
-  draw_scale_once(scale)
+# Sets a 1-time speed for velocity (ad optionally accel if !=0 specified)
+def draw_speed_once(speed_desired_one_move_mmps, accel_desired_one_move_mmpss = 0.0):
+  local v_scale = (speed_desired_one_move_mmps / 1000.0) / grind_linear_vel_mps
+  local a_scale = 1.0
+  if accel_desired_one_move_mmpss > 0:
+    a_scale = (accel_desired_one_move_mmpss / 1000.0) / grind_linear_accel_mpss
+    draw_scale_once(a_scale, v_scale)
+  end
 end
 
 # Sets a 1-time speedup factor on velocity
-def draw_scale_once(scale):
-  global draw_accel_factor = scale
-  global draw_speed_factor = scale
+def draw_scale_once(a_scale = 1.0, v_scale = 1.0):
+  global draw_accel_factor = a_scale
+  global draw_speed_factor = v_scale
 end
 
 def draw_origin(p):

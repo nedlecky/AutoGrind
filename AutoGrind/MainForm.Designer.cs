@@ -29,10 +29,10 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle3 = new System.Windows.Forms.DataGridViewCellStyle();
-            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle4 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle5 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle6 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle7 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle8 = new System.Windows.Forms.DataGridViewCellStyle();
             this.CurrentLineLbl = new System.Windows.Forms.Label();
             this.RecipeRTB = new System.Windows.Forms.RichTextBox();
             this.StepBtn = new System.Windows.Forms.Button();
@@ -145,6 +145,8 @@
             this.SetJointAccelBtn = new System.Windows.Forms.Button();
             this.SetLinearSpeedBtn = new System.Windows.Forms.Button();
             this.GrindingMoveSetupGrp = new System.Windows.Forms.GroupBox();
+            this.SetGrindJogAccelBtn = new System.Windows.Forms.Button();
+            this.SetGrindJogSpeedBtn = new System.Windows.Forms.Button();
             this.SetPointFrequencyBtn = new System.Windows.Forms.Button();
             this.SetGrindDefaultsBtn = new System.Windows.Forms.Button();
             this.SetGrindAccelBtn = new System.Windows.Forms.Button();
@@ -187,8 +189,7 @@
             this.ChangeRootDirectoryBtn = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.LogPage = new System.Windows.Forms.TabPage();
-            this.StressChk = new System.Windows.Forms.CheckBox();
-            this.StressBtn = new System.Windows.Forms.Button();
+            this.ClearAllLogRtbBtn = new System.Windows.Forms.Button();
             this.groupBox7 = new System.Windows.Forms.GroupBox();
             this.AboutBtn = new System.Windows.Forms.Button();
             this.groupBox3 = new System.Windows.Forms.GroupBox();
@@ -200,6 +201,8 @@
             this.VersionLbl = new System.Windows.Forms.Label();
             this.FootswitchPressedLbl = new System.Windows.Forms.Label();
             this.Time2Lbl = new System.Windows.Forms.Label();
+            this.SetForceModeGainScalingBtn = new System.Windows.Forms.Button();
+            this.SetForceModeDampingBtn = new System.Windows.Forms.Button();
             this.MonitorTab.SuspendLayout();
             this.positionsPage.SuspendLayout();
             this.PositionTestButtonGrp.SuspendLayout();
@@ -618,14 +621,14 @@
             // 
             this.PositionsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.PositionsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle1.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle1.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle1.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle1.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle1.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle1;
+            dataGridViewCellStyle5.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle5.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle5.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle5.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle5.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle5.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle5.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.PositionsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle5;
             this.PositionsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.PositionsGrd.Location = new System.Drawing.Point(6, 196);
             this.PositionsGrd.Name = "PositionsGrd";
@@ -715,14 +718,14 @@
             // 
             this.VariablesGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.VariablesGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle2.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle2.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle2.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle2.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle2.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle2;
+            dataGridViewCellStyle6.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle6.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle6.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle6.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle6.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle6.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle6.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.VariablesGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle6;
             this.VariablesGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.VariablesGrd.Location = new System.Drawing.Point(6, 6);
             this.VariablesGrd.Name = "VariablesGrd";
@@ -1471,7 +1474,7 @@
             // label19
             // 
             this.label19.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label19.Location = new System.Drawing.Point(820, 1122);
+            this.label19.Location = new System.Drawing.Point(820, 1125);
             this.label19.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(130, 36);
@@ -1483,7 +1486,7 @@
             // 
             this.RobotPolyscopeVersionLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotPolyscopeVersionLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(954, 1122);
+            this.RobotPolyscopeVersionLbl.Location = new System.Drawing.Point(954, 1125);
             this.RobotPolyscopeVersionLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotPolyscopeVersionLbl.Name = "RobotPolyscopeVersionLbl";
             this.RobotPolyscopeVersionLbl.Size = new System.Drawing.Size(718, 36);
@@ -1495,7 +1498,7 @@
             // 
             this.RobotSerialNumberLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotSerialNumberLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(495, 1122);
+            this.RobotSerialNumberLbl.Location = new System.Drawing.Point(495, 1125);
             this.RobotSerialNumberLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotSerialNumberLbl.Name = "RobotSerialNumberLbl";
             this.RobotSerialNumberLbl.Size = new System.Drawing.Size(257, 36);
@@ -1506,7 +1509,7 @@
             // label8
             // 
             this.label8.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label8.Location = new System.Drawing.Point(427, 1122);
+            this.label8.Location = new System.Drawing.Point(427, 1125);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(64, 36);
@@ -1518,7 +1521,7 @@
             // 
             this.RobotModelLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.RobotModelLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.RobotModelLbl.Location = new System.Drawing.Point(223, 1122);
+            this.RobotModelLbl.Location = new System.Drawing.Point(223, 1125);
             this.RobotModelLbl.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.RobotModelLbl.Name = "RobotModelLbl";
             this.RobotModelLbl.Size = new System.Drawing.Size(157, 36);
@@ -1529,7 +1532,7 @@
             // label7
             // 
             this.label7.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label7.Location = new System.Drawing.Point(45, 1122);
+            this.label7.Location = new System.Drawing.Point(45, 1125);
             this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(174, 36);
@@ -1547,7 +1550,7 @@
             this.DefaultMoveSetupGrp.Controls.Add(this.SetLinearSpeedBtn);
             this.DefaultMoveSetupGrp.Location = new System.Drawing.Point(1188, 492);
             this.DefaultMoveSetupGrp.Name = "DefaultMoveSetupGrp";
-            this.DefaultMoveSetupGrp.Size = new System.Drawing.Size(927, 345);
+            this.DefaultMoveSetupGrp.Size = new System.Drawing.Size(927, 320);
             this.DefaultMoveSetupGrp.TabIndex = 118;
             this.DefaultMoveSetupGrp.TabStop = false;
             this.DefaultMoveSetupGrp.Text = "Default (non-Grinding) Motion Parameters";
@@ -1557,7 +1560,7 @@
             this.SetMoveDefaultsBtn.BackColor = System.Drawing.Color.Green;
             this.SetMoveDefaultsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetMoveDefaultsBtn.ForeColor = System.Drawing.Color.White;
-            this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(715, 208);
+            this.SetMoveDefaultsBtn.Location = new System.Drawing.Point(750, 27);
             this.SetMoveDefaultsBtn.Name = "SetMoveDefaultsBtn";
             this.SetMoveDefaultsBtn.Size = new System.Drawing.Size(171, 130);
             this.SetMoveDefaultsBtn.TabIndex = 122;
@@ -1570,7 +1573,7 @@
             this.SetLinearAccelBtn.BackColor = System.Drawing.Color.Green;
             this.SetLinearAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetLinearAccelBtn.ForeColor = System.Drawing.Color.White;
-            this.SetLinearAccelBtn.Location = new System.Drawing.Point(342, 59);
+            this.SetLinearAccelBtn.Location = new System.Drawing.Point(308, 40);
             this.SetLinearAccelBtn.Name = "SetLinearAccelBtn";
             this.SetLinearAccelBtn.Size = new System.Drawing.Size(286, 130);
             this.SetLinearAccelBtn.TabIndex = 110;
@@ -1583,9 +1586,9 @@
             this.SetBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
             this.SetBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
-            this.SetBlendRadiusBtn.Location = new System.Drawing.Point(678, 62);
+            this.SetBlendRadiusBtn.Location = new System.Drawing.Point(600, 176);
             this.SetBlendRadiusBtn.Name = "SetBlendRadiusBtn";
-            this.SetBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetBlendRadiusBtn.Size = new System.Drawing.Size(286, 130);
             this.SetBlendRadiusBtn.TabIndex = 111;
             this.SetBlendRadiusBtn.Text = "Set Blend Radius";
             this.SetBlendRadiusBtn.UseVisualStyleBackColor = false;
@@ -1596,9 +1599,9 @@
             this.SetJointSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetJointSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetJointSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetJointSpeedBtn.Location = new System.Drawing.Point(49, 209);
+            this.SetJointSpeedBtn.Location = new System.Drawing.Point(15, 177);
             this.SetJointSpeedBtn.Name = "SetJointSpeedBtn";
-            this.SetJointSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetJointSpeedBtn.Size = new System.Drawing.Size(286, 130);
             this.SetJointSpeedBtn.TabIndex = 112;
             this.SetJointSpeedBtn.Text = "Set Joint Speed";
             this.SetJointSpeedBtn.UseVisualStyleBackColor = false;
@@ -1609,7 +1612,7 @@
             this.SetJointAccelBtn.BackColor = System.Drawing.Color.Green;
             this.SetJointAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetJointAccelBtn.ForeColor = System.Drawing.Color.White;
-            this.SetJointAccelBtn.Location = new System.Drawing.Point(342, 208);
+            this.SetJointAccelBtn.Location = new System.Drawing.Point(308, 176);
             this.SetJointAccelBtn.Name = "SetJointAccelBtn";
             this.SetJointAccelBtn.Size = new System.Drawing.Size(286, 130);
             this.SetJointAccelBtn.TabIndex = 113;
@@ -1622,9 +1625,9 @@
             this.SetLinearSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetLinearSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetLinearSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(49, 62);
+            this.SetLinearSpeedBtn.Location = new System.Drawing.Point(15, 43);
             this.SetLinearSpeedBtn.Name = "SetLinearSpeedBtn";
-            this.SetLinearSpeedBtn.Size = new System.Drawing.Size(243, 130);
+            this.SetLinearSpeedBtn.Size = new System.Drawing.Size(286, 130);
             this.SetLinearSpeedBtn.TabIndex = 109;
             this.SetLinearSpeedBtn.Text = "Set Linear Speed";
             this.SetLinearSpeedBtn.UseVisualStyleBackColor = false;
@@ -1632,6 +1635,10 @@
             // 
             // GrindingMoveSetupGrp
             // 
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetForceModeDampingBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetForceModeGainScalingBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindJogAccelBtn);
+            this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindJogSpeedBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetPointFrequencyBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindDefaultsBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetGrindAccelBtn);
@@ -1641,21 +1648,47 @@
             this.GrindingMoveSetupGrp.Controls.Add(this.SetForceDwellBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchSpeedBtn);
             this.GrindingMoveSetupGrp.Controls.Add(this.SetTouchRetractBtn);
-            this.GrindingMoveSetupGrp.Location = new System.Drawing.Point(3, 836);
+            this.GrindingMoveSetupGrp.Location = new System.Drawing.Point(3, 820);
             this.GrindingMoveSetupGrp.Name = "GrindingMoveSetupGrp";
-            this.GrindingMoveSetupGrp.Size = new System.Drawing.Size(2106, 283);
+            this.GrindingMoveSetupGrp.Size = new System.Drawing.Size(2106, 299);
             this.GrindingMoveSetupGrp.TabIndex = 117;
             this.GrindingMoveSetupGrp.TabStop = false;
             this.GrindingMoveSetupGrp.Text = "Grinding Motion Parameters";
+            // 
+            // SetGrindJogAccelBtn
+            // 
+            this.SetGrindJogAccelBtn.BackColor = System.Drawing.Color.Green;
+            this.SetGrindJogAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetGrindJogAccelBtn.ForeColor = System.Drawing.Color.White;
+            this.SetGrindJogAccelBtn.Location = new System.Drawing.Point(275, 169);
+            this.SetGrindJogAccelBtn.Name = "SetGrindJogAccelBtn";
+            this.SetGrindJogAccelBtn.Size = new System.Drawing.Size(243, 124);
+            this.SetGrindJogAccelBtn.TabIndex = 124;
+            this.SetGrindJogAccelBtn.Text = "Set Jog Accel";
+            this.SetGrindJogAccelBtn.UseVisualStyleBackColor = false;
+            this.SetGrindJogAccelBtn.Click += new System.EventHandler(this.SetGrindJogAccel_Click);
+            // 
+            // SetGrindJogSpeedBtn
+            // 
+            this.SetGrindJogSpeedBtn.BackColor = System.Drawing.Color.Green;
+            this.SetGrindJogSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetGrindJogSpeedBtn.ForeColor = System.Drawing.Color.White;
+            this.SetGrindJogSpeedBtn.Location = new System.Drawing.Point(15, 169);
+            this.SetGrindJogSpeedBtn.Name = "SetGrindJogSpeedBtn";
+            this.SetGrindJogSpeedBtn.Size = new System.Drawing.Size(243, 124);
+            this.SetGrindJogSpeedBtn.TabIndex = 123;
+            this.SetGrindJogSpeedBtn.Text = "Set Jog Speed";
+            this.SetGrindJogSpeedBtn.UseVisualStyleBackColor = false;
+            this.SetGrindJogSpeedBtn.Click += new System.EventHandler(this.SetGrindJogSpeedBtn_Click);
             // 
             // SetPointFrequencyBtn
             // 
             this.SetPointFrequencyBtn.BackColor = System.Drawing.Color.Green;
             this.SetPointFrequencyBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetPointFrequencyBtn.ForeColor = System.Drawing.Color.White;
-            this.SetPointFrequencyBtn.Location = new System.Drawing.Point(15, 174);
+            this.SetPointFrequencyBtn.Location = new System.Drawing.Point(1575, 169);
             this.SetPointFrequencyBtn.Name = "SetPointFrequencyBtn";
-            this.SetPointFrequencyBtn.Size = new System.Drawing.Size(503, 103);
+            this.SetPointFrequencyBtn.Size = new System.Drawing.Size(243, 124);
             this.SetPointFrequencyBtn.TabIndex = 122;
             this.SetPointFrequencyBtn.Text = "Set Point Frequency";
             this.SetPointFrequencyBtn.UseVisualStyleBackColor = false;
@@ -1666,7 +1699,7 @@
             this.SetGrindDefaultsBtn.BackColor = System.Drawing.Color.Green;
             this.SetGrindDefaultsBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetGrindDefaultsBtn.ForeColor = System.Drawing.Color.White;
-            this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1900, 56);
+            this.SetGrindDefaultsBtn.Location = new System.Drawing.Point(1935, 39);
             this.SetGrindDefaultsBtn.Name = "SetGrindDefaultsBtn";
             this.SetGrindDefaultsBtn.Size = new System.Drawing.Size(171, 130);
             this.SetGrindDefaultsBtn.TabIndex = 121;
@@ -1679,7 +1712,7 @@
             this.SetGrindAccelBtn.BackColor = System.Drawing.Color.Green;
             this.SetGrindAccelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetGrindAccelBtn.ForeColor = System.Drawing.Color.White;
-            this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 38);
+            this.SetGrindAccelBtn.Location = new System.Drawing.Point(275, 39);
             this.SetGrindAccelBtn.Name = "SetGrindAccelBtn";
             this.SetGrindAccelBtn.Size = new System.Drawing.Size(243, 130);
             this.SetGrindAccelBtn.TabIndex = 120;
@@ -1692,7 +1725,7 @@
             this.SetTrialSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetTrialSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTrialSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 38);
+            this.SetTrialSpeedBtn.Location = new System.Drawing.Point(15, 39);
             this.SetTrialSpeedBtn.Name = "SetTrialSpeedBtn";
             this.SetTrialSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTrialSpeedBtn.TabIndex = 119;
@@ -1705,7 +1738,7 @@
             this.SetMaxGrindBlendRadiusBtn.BackColor = System.Drawing.Color.Green;
             this.SetMaxGrindBlendRadiusBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetMaxGrindBlendRadiusBtn.ForeColor = System.Drawing.Color.White;
-            this.SetMaxGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 38);
+            this.SetMaxGrindBlendRadiusBtn.Location = new System.Drawing.Point(535, 39);
             this.SetMaxGrindBlendRadiusBtn.Name = "SetMaxGrindBlendRadiusBtn";
             this.SetMaxGrindBlendRadiusBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxGrindBlendRadiusBtn.TabIndex = 118;
@@ -1718,7 +1751,7 @@
             this.SetMaxWaitBtn.BackColor = System.Drawing.Color.Green;
             this.SetMaxWaitBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetMaxWaitBtn.ForeColor = System.Drawing.Color.White;
-            this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 38);
+            this.SetMaxWaitBtn.Location = new System.Drawing.Point(1575, 39);
             this.SetMaxWaitBtn.Name = "SetMaxWaitBtn";
             this.SetMaxWaitBtn.Size = new System.Drawing.Size(243, 130);
             this.SetMaxWaitBtn.TabIndex = 117;
@@ -1731,7 +1764,7 @@
             this.SetForceDwellBtn.BackColor = System.Drawing.Color.Green;
             this.SetForceDwellBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetForceDwellBtn.ForeColor = System.Drawing.Color.White;
-            this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 38);
+            this.SetForceDwellBtn.Location = new System.Drawing.Point(1315, 39);
             this.SetForceDwellBtn.Name = "SetForceDwellBtn";
             this.SetForceDwellBtn.Size = new System.Drawing.Size(243, 130);
             this.SetForceDwellBtn.TabIndex = 116;
@@ -1744,7 +1777,7 @@
             this.SetTouchSpeedBtn.BackColor = System.Drawing.Color.Green;
             this.SetTouchSpeedBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTouchSpeedBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 38);
+            this.SetTouchSpeedBtn.Location = new System.Drawing.Point(795, 39);
             this.SetTouchSpeedBtn.Name = "SetTouchSpeedBtn";
             this.SetTouchSpeedBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchSpeedBtn.TabIndex = 115;
@@ -1757,7 +1790,7 @@
             this.SetTouchRetractBtn.BackColor = System.Drawing.Color.Green;
             this.SetTouchRetractBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SetTouchRetractBtn.ForeColor = System.Drawing.Color.White;
-            this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 38);
+            this.SetTouchRetractBtn.Location = new System.Drawing.Point(1055, 39);
             this.SetTouchRetractBtn.Name = "SetTouchRetractBtn";
             this.SetTouchRetractBtn.Size = new System.Drawing.Size(243, 130);
             this.SetTouchRetractBtn.TabIndex = 114;
@@ -1946,23 +1979,23 @@
             // 
             this.ToolsGrd.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.DisplayedCells;
             this.ToolsGrd.AutoSizeRowsMode = System.Windows.Forms.DataGridViewAutoSizeRowsMode.DisplayedCells;
-            dataGridViewCellStyle3.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle3.BackColor = System.Drawing.SystemColors.Control;
-            dataGridViewCellStyle3.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle3.ForeColor = System.Drawing.SystemColors.WindowText;
-            dataGridViewCellStyle3.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle3.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle3.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
-            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle3;
+            dataGridViewCellStyle7.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle7.BackColor = System.Drawing.SystemColors.Control;
+            dataGridViewCellStyle7.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle7.ForeColor = System.Drawing.SystemColors.WindowText;
+            dataGridViewCellStyle7.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle7.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle7.WrapMode = System.Windows.Forms.DataGridViewTriState.True;
+            this.ToolsGrd.ColumnHeadersDefaultCellStyle = dataGridViewCellStyle7;
             this.ToolsGrd.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridViewCellStyle4.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
-            dataGridViewCellStyle4.BackColor = System.Drawing.SystemColors.Window;
-            dataGridViewCellStyle4.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            dataGridViewCellStyle4.ForeColor = System.Drawing.SystemColors.ControlText;
-            dataGridViewCellStyle4.SelectionBackColor = System.Drawing.SystemColors.Highlight;
-            dataGridViewCellStyle4.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
-            dataGridViewCellStyle4.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
-            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle4;
+            dataGridViewCellStyle8.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleCenter;
+            dataGridViewCellStyle8.BackColor = System.Drawing.SystemColors.Window;
+            dataGridViewCellStyle8.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            dataGridViewCellStyle8.ForeColor = System.Drawing.SystemColors.ControlText;
+            dataGridViewCellStyle8.SelectionBackColor = System.Drawing.SystemColors.Highlight;
+            dataGridViewCellStyle8.SelectionForeColor = System.Drawing.SystemColors.HighlightText;
+            dataGridViewCellStyle8.WrapMode = System.Windows.Forms.DataGridViewTriState.False;
+            this.ToolsGrd.DefaultCellStyle = dataGridViewCellStyle8;
             this.ToolsGrd.Location = new System.Drawing.Point(6, 43);
             this.ToolsGrd.Name = "ToolsGrd";
             this.ToolsGrd.RowTemplate.Height = 34;
@@ -2027,7 +2060,7 @@
             this.GeneralConfigGrp.Margin = new System.Windows.Forms.Padding(2);
             this.GeneralConfigGrp.Name = "GeneralConfigGrp";
             this.GeneralConfigGrp.Padding = new System.Windows.Forms.Padding(2);
-            this.GeneralConfigGrp.Size = new System.Drawing.Size(1180, 345);
+            this.GeneralConfigGrp.Size = new System.Drawing.Size(1180, 320);
             this.GeneralConfigGrp.TabIndex = 96;
             this.GeneralConfigGrp.TabStop = false;
             this.GeneralConfigGrp.Text = "General Configuration";
@@ -2037,7 +2070,7 @@
             this.SaveConfigBtn.BackColor = System.Drawing.Color.Green;
             this.SaveConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SaveConfigBtn.ForeColor = System.Drawing.Color.White;
-            this.SaveConfigBtn.Location = new System.Drawing.Point(852, 254);
+            this.SaveConfigBtn.Location = new System.Drawing.Point(852, 223);
             this.SaveConfigBtn.Name = "SaveConfigBtn";
             this.SaveConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.SaveConfigBtn.TabIndex = 100;
@@ -2083,7 +2116,7 @@
             this.LoadConfigBtn.BackColor = System.Drawing.Color.Green;
             this.LoadConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.LoadConfigBtn.ForeColor = System.Drawing.Color.White;
-            this.LoadConfigBtn.Location = new System.Drawing.Point(679, 254);
+            this.LoadConfigBtn.Location = new System.Drawing.Point(679, 223);
             this.LoadConfigBtn.Name = "LoadConfigBtn";
             this.LoadConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.LoadConfigBtn.TabIndex = 98;
@@ -2096,7 +2129,7 @@
             this.DefaultConfigBtn.BackColor = System.Drawing.Color.Green;
             this.DefaultConfigBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DefaultConfigBtn.ForeColor = System.Drawing.Color.White;
-            this.DefaultConfigBtn.Location = new System.Drawing.Point(1015, 251);
+            this.DefaultConfigBtn.Location = new System.Drawing.Point(1015, 223);
             this.DefaultConfigBtn.Name = "DefaultConfigBtn";
             this.DefaultConfigBtn.Size = new System.Drawing.Size(157, 86);
             this.DefaultConfigBtn.TabIndex = 99;
@@ -2170,8 +2203,7 @@
             // LogPage
             // 
             this.LogPage.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.LogPage.Controls.Add(this.StressChk);
-            this.LogPage.Controls.Add(this.StressBtn);
+            this.LogPage.Controls.Add(this.ClearAllLogRtbBtn);
             this.LogPage.Controls.Add(this.groupBox7);
             this.LogPage.Controls.Add(this.groupBox6);
             this.LogPage.Controls.Add(this.AboutBtn);
@@ -2186,28 +2218,18 @@
             this.LogPage.Text = "Log";
             this.LogPage.UseVisualStyleBackColor = true;
             // 
-            // StressChk
+            // ClearAllLogRtbBtn
             // 
-            this.StressChk.AutoSize = true;
-            this.StressChk.Location = new System.Drawing.Point(1775, 992);
-            this.StressChk.Name = "StressChk";
-            this.StressChk.Size = new System.Drawing.Size(205, 41);
-            this.StressChk.TabIndex = 93;
-            this.StressChk.Text = "Stress Logs";
-            this.StressChk.UseVisualStyleBackColor = true;
-            // 
-            // StressBtn
-            // 
-            this.StressBtn.BackColor = System.Drawing.Color.Green;
-            this.StressBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.StressBtn.ForeColor = System.Drawing.Color.White;
-            this.StressBtn.Location = new System.Drawing.Point(1775, 898);
-            this.StressBtn.Name = "StressBtn";
-            this.StressBtn.Size = new System.Drawing.Size(141, 88);
-            this.StressBtn.TabIndex = 92;
-            this.StressBtn.Text = "Stress";
-            this.StressBtn.UseVisualStyleBackColor = false;
-            this.StressBtn.Click += new System.EventHandler(this.StressBtn_Click);
+            this.ClearAllLogRtbBtn.BackColor = System.Drawing.Color.Green;
+            this.ClearAllLogRtbBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 21.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.ClearAllLogRtbBtn.ForeColor = System.Drawing.Color.White;
+            this.ClearAllLogRtbBtn.Location = new System.Drawing.Point(1775, 898);
+            this.ClearAllLogRtbBtn.Name = "ClearAllLogRtbBtn";
+            this.ClearAllLogRtbBtn.Size = new System.Drawing.Size(161, 116);
+            this.ClearAllLogRtbBtn.TabIndex = 92;
+            this.ClearAllLogRtbBtn.Text = "Clear All";
+            this.ClearAllLogRtbBtn.UseVisualStyleBackColor = false;
+            this.ClearAllLogRtbBtn.Click += new System.EventHandler(this.ClearAllLogRtbBtn_Click);
             // 
             // groupBox7
             // 
@@ -2350,6 +2372,32 @@
             this.Time2Lbl.Text = "Time";
             this.Time2Lbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // SetForceModeGainScalingBtn
+            // 
+            this.SetForceModeGainScalingBtn.BackColor = System.Drawing.Color.Green;
+            this.SetForceModeGainScalingBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetForceModeGainScalingBtn.ForeColor = System.Drawing.Color.White;
+            this.SetForceModeGainScalingBtn.Location = new System.Drawing.Point(795, 169);
+            this.SetForceModeGainScalingBtn.Name = "SetForceModeGainScalingBtn";
+            this.SetForceModeGainScalingBtn.Size = new System.Drawing.Size(243, 124);
+            this.SetForceModeGainScalingBtn.TabIndex = 125;
+            this.SetForceModeGainScalingBtn.Text = "Set Force Mode Gain Scaling";
+            this.SetForceModeGainScalingBtn.UseVisualStyleBackColor = false;
+            this.SetForceModeGainScalingBtn.Click += new System.EventHandler(this.SetForceModeGainScalingBtn_Click);
+            // 
+            // SetForceModeDampingBtn
+            // 
+            this.SetForceModeDampingBtn.BackColor = System.Drawing.Color.Green;
+            this.SetForceModeDampingBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.SetForceModeDampingBtn.ForeColor = System.Drawing.Color.White;
+            this.SetForceModeDampingBtn.Location = new System.Drawing.Point(535, 169);
+            this.SetForceModeDampingBtn.Name = "SetForceModeDampingBtn";
+            this.SetForceModeDampingBtn.Size = new System.Drawing.Size(243, 124);
+            this.SetForceModeDampingBtn.TabIndex = 126;
+            this.SetForceModeDampingBtn.Text = "Set Force Mode Damping";
+            this.SetForceModeDampingBtn.UseVisualStyleBackColor = false;
+            this.SetForceModeDampingBtn.Click += new System.EventHandler(this.SetForceModeDampingBtn_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2412,7 +2460,6 @@
             this.GeneralConfigGrp.ResumeLayout(false);
             this.GeneralConfigGrp.PerformLayout();
             this.LogPage.ResumeLayout(false);
-            this.LogPage.PerformLayout();
             this.groupBox7.ResumeLayout(false);
             this.groupBox3.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -2559,8 +2606,7 @@
         private System.Windows.Forms.Button JogBtn;
         private System.Windows.Forms.Button SetMoveDefaultsBtn;
         private System.Windows.Forms.Button SetGrindDefaultsBtn;
-        private System.Windows.Forms.Button StressBtn;
-        private System.Windows.Forms.CheckBox StressChk;
+        private System.Windows.Forms.Button ClearAllLogRtbBtn;
         private System.Windows.Forms.Button SaveConfigBtn;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label18;
@@ -2588,6 +2634,10 @@
         private System.Windows.Forms.Label GrindForceReportZLbl;
         private System.Windows.Forms.Label label21;
         private System.Windows.Forms.Button BigEditBtn;
+        private System.Windows.Forms.Button SetGrindJogSpeedBtn;
+        private System.Windows.Forms.Button SetGrindJogAccelBtn;
+        private System.Windows.Forms.Button SetForceModeDampingBtn;
+        private System.Windows.Forms.Button SetForceModeGainScalingBtn;
     }
 }
 

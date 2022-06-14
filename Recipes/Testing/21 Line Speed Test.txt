@@ -4,9 +4,9 @@
 
 clear()
 count=1
-speed=20
+speed=2
 force=5
-grind_trial_speed({speed})
+#grind_trial_speed({speed})
 
 cmd1=grind_line_deg(40,0,{count},{speed},{force},0)
 cmd2=grind_line_deg(40,90,{count},{speed},{force},0)
@@ -16,7 +16,7 @@ enable_user_timers(1)
 zero_user_timers()
 
 flat:
-move_linear(demo_safe)
+move_joint(demo_safe)
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
 {cmd1}
