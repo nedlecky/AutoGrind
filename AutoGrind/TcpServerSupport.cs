@@ -1,6 +1,6 @@
 ﻿// File: TcpServerSupport.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: Implements a TcpServer which the AutoGrind program on the UR will connect to when running
 
 using System;

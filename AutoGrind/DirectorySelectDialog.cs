@@ -1,6 +1,6 @@
 ﻿// File: DirectorySelectDialog.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: Custom Directory Select dialog with large buttons for use with touch screen
 
 using System;

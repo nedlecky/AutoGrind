@@ -1,6 +1,6 @@
 ﻿// File: SetValueForm.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: A numeric data entry window for use with touch screen (or keyboard)
 
 using System;

@@ -1,0 +1,48 @@
+# 36 Small Circle Test
+
+clear()
+diam = 12
+count = 1
+speed = 5
+force = 3
+continue = 0
+
+offset_x = -20
+offset_y = 20
+
+move_joint(demo_safe)
+
+flat:
+set_part_geometry(FLAT,0)
+move_linear(demo_flat)
+move_relative({offset_x},{offset_y})
+d = {diam}
+
+loopf:
+d -= 1
+grind_circle({d},{count},{speed},{force},{continue})
+jump_gt_zero(d,loopf)
+
+move_linear(demo_safe)
+
+cylinder:
+set_part_geometry(CYLINDER,1200)
+move_linear(demo_cyl)
+move_relative({offset_x},{offset_y})
+d = {diam}
+
+loopc:
+d -= 1
+grind_circle({d},{count},{speed},{force},{continue})
+jump_gt_zero(d,loopc)
+
+sphere:
+set_part_geometry(SPHERE,1200)
+move_linear(demo_sphere)
+move_relative({offset_x},{offset_y})
+d = {diam}
+
+loops:
+d -= 1
+grind_circle({d},{count},{speed},{force},{continue})
+jump_gt_zero(d,loops)

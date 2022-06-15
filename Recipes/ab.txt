@@ -1,0 +1,7 @@
+# junk
+
+#set_part_geometry(SPHERE,400)
+
+#move_linear(demo_flat2)
+#grind_circle(2,1,5,3,0)
+grind_spiral(40,0,10,2,5,3,0)

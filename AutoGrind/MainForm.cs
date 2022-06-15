@@ -1,6 +1,6 @@
 ﻿// File: MainForm.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: The main code window for the AutoGrind program
 
 using System;
@@ -4391,6 +4391,7 @@ namespace AutoGrind
             if (runState != RunState.RUNNING)
             {
                 SetRecipeState(RecipeState.MODIFIED);
+                //UnboldRecipe();
             }
             RecipeRTBCopy.Text = RecipeRTB.Text;
         }

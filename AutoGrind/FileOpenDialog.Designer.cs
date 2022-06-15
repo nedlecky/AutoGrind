@@ -38,6 +38,8 @@
             this.PreviewRTB = new System.Windows.Forms.RichTextBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.DeleteBtn = new System.Windows.Forms.Button();
+            this.NewFolderBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // OpenBtn
@@ -45,10 +47,10 @@
             this.OpenBtn.BackColor = System.Drawing.Color.Green;
             this.OpenBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.OpenBtn.ForeColor = System.Drawing.Color.White;
-            this.OpenBtn.Location = new System.Drawing.Point(582, 997);
-            this.OpenBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.OpenBtn.Location = new System.Drawing.Point(397, 826);
+            this.OpenBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.OpenBtn.Name = "OpenBtn";
-            this.OpenBtn.Size = new System.Drawing.Size(304, 161);
+            this.OpenBtn.Size = new System.Drawing.Size(228, 131);
             this.OpenBtn.TabIndex = 79;
             this.OpenBtn.Text = "&Open";
             this.OpenBtn.UseVisualStyleBackColor = false;
@@ -60,10 +62,10 @@
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.White;
-            this.CancelBtn.Location = new System.Drawing.Point(1012, 997);
-            this.CancelBtn.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.CancelBtn.Location = new System.Drawing.Point(667, 826);
+            this.CancelBtn.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.CancelBtn.Name = "CancelBtn";
-            this.CancelBtn.Size = new System.Drawing.Size(304, 161);
+            this.CancelBtn.Size = new System.Drawing.Size(228, 131);
             this.CancelBtn.TabIndex = 78;
             this.CancelBtn.Text = "&Cancel";
             this.CancelBtn.UseVisualStyleBackColor = false;
@@ -74,21 +76,20 @@
             this.FileListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.FileListBox.FormattingEnabled = true;
             this.FileListBox.ItemHeight = 55;
-            this.FileListBox.Location = new System.Drawing.Point(523, 209);
-            this.FileListBox.Margin = new System.Windows.Forms.Padding(4);
+            this.FileListBox.Location = new System.Drawing.Point(361, 170);
             this.FileListBox.Name = "FileListBox";
-            this.FileListBox.Size = new System.Drawing.Size(859, 664);
+            this.FileListBox.Size = new System.Drawing.Size(675, 499);
             this.FileListBox.TabIndex = 80;
+            this.FileListBox.Click += new System.EventHandler(this.FileListBox_Click);
             this.FileListBox.SelectedIndexChanged += new System.EventHandler(this.FileListBox_SelectedIndexChanged);
             this.FileListBox.DoubleClick += new System.EventHandler(this.FileListBox_DoubleClick);
             // 
             // TitleLbl
             // 
             this.TitleLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TitleLbl.Location = new System.Drawing.Point(16, 11);
-            this.TitleLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.TitleLbl.Location = new System.Drawing.Point(12, 9);
             this.TitleLbl.Name = "TitleLbl";
-            this.TitleLbl.Size = new System.Drawing.Size(2005, 59);
+            this.TitleLbl.Size = new System.Drawing.Size(1504, 48);
             this.TitleLbl.TabIndex = 81;
             this.TitleLbl.Text = "TitleLbl";
             this.TitleLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -98,21 +99,20 @@
             this.DirectoryListBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DirectoryListBox.FormattingEnabled = true;
             this.DirectoryListBox.ItemHeight = 55;
-            this.DirectoryListBox.Location = new System.Drawing.Point(23, 220);
-            this.DirectoryListBox.Margin = new System.Windows.Forms.Padding(4);
+            this.DirectoryListBox.Location = new System.Drawing.Point(17, 170);
             this.DirectoryListBox.Name = "DirectoryListBox";
-            this.DirectoryListBox.Size = new System.Drawing.Size(450, 664);
+            this.DirectoryListBox.Size = new System.Drawing.Size(338, 499);
             this.DirectoryListBox.TabIndex = 82;
+            this.DirectoryListBox.Click += new System.EventHandler(this.DirectoryListBox_Click);
             this.DirectoryListBox.DoubleClick += new System.EventHandler(this.DirectoryListBox_DoubleClick);
             // 
             // DirectoryNameLbl
             // 
             this.DirectoryNameLbl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.DirectoryNameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.DirectoryNameLbl.Location = new System.Drawing.Point(23, 70);
-            this.DirectoryNameLbl.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.DirectoryNameLbl.Location = new System.Drawing.Point(17, 57);
             this.DirectoryNameLbl.Name = "DirectoryNameLbl";
-            this.DirectoryNameLbl.Size = new System.Drawing.Size(1359, 135);
+            this.DirectoryNameLbl.Size = new System.Drawing.Size(1020, 110);
             this.DirectoryNameLbl.TabIndex = 84;
             this.DirectoryNameLbl.Text = "DirectoryName";
             this.DirectoryNameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -121,51 +121,81 @@
             // 
             this.FileNameTxt.AcceptsReturn = true;
             this.FileNameTxt.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.FileNameTxt.Location = new System.Drawing.Point(523, 896);
+            this.FileNameTxt.Location = new System.Drawing.Point(361, 728);
+            this.FileNameTxt.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.FileNameTxt.Name = "FileNameTxt";
-            this.FileNameTxt.Size = new System.Drawing.Size(859, 62);
+            this.FileNameTxt.Size = new System.Drawing.Size(676, 62);
             this.FileNameTxt.TabIndex = 85;
             this.FileNameTxt.TextChanged += new System.EventHandler(this.FileNameTxt_TextChanged);
             // 
             // PreviewRTB
             // 
             this.PreviewRTB.Font = new System.Drawing.Font("Courier New", 18F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.PreviewRTB.Location = new System.Drawing.Point(1388, 118);
+            this.PreviewRTB.Location = new System.Drawing.Point(1041, 96);
+            this.PreviewRTB.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.PreviewRTB.Name = "PreviewRTB";
             this.PreviewRTB.ReadOnly = true;
-            this.PreviewRTB.Size = new System.Drawing.Size(633, 1061);
+            this.PreviewRTB.Size = new System.Drawing.Size(476, 863);
             this.PreviewRTB.TabIndex = 86;
             this.PreviewRTB.Text = "";
             // 
             // label1
             // 
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(121, 896);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(354, 692);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(395, 62);
+            this.label1.Size = new System.Drawing.Size(296, 34);
             this.label1.TabIndex = 87;
             this.label1.Text = "File Name:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label2
             // 
             this.label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(1390, 70);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(1042, 57);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(630, 45);
+            this.label2.Size = new System.Drawing.Size(472, 37);
             this.label2.TabIndex = 88;
             this.label2.Text = "Preview";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
+            // DeleteBtn
+            // 
+            this.DeleteBtn.BackColor = System.Drawing.Color.Green;
+            this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteBtn.ForeColor = System.Drawing.Color.White;
+            this.DeleteBtn.Location = new System.Drawing.Point(127, 826);
+            this.DeleteBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.DeleteBtn.Name = "DeleteBtn";
+            this.DeleteBtn.Size = new System.Drawing.Size(228, 131);
+            this.DeleteBtn.TabIndex = 89;
+            this.DeleteBtn.Text = "&Delete";
+            this.DeleteBtn.UseVisualStyleBackColor = false;
+            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            // 
+            // NewFolderBtn
+            // 
+            this.NewFolderBtn.BackColor = System.Drawing.Color.Green;
+            this.NewFolderBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NewFolderBtn.ForeColor = System.Drawing.Color.White;
+            this.NewFolderBtn.Location = new System.Drawing.Point(17, 683);
+            this.NewFolderBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.NewFolderBtn.Name = "NewFolderBtn";
+            this.NewFolderBtn.Size = new System.Drawing.Size(338, 131);
+            this.NewFolderBtn.TabIndex = 90;
+            this.NewFolderBtn.Text = "&New Folder";
+            this.NewFolderBtn.UseVisualStyleBackColor = false;
+            this.NewFolderBtn.Click += new System.EventHandler(this.NewFolderBtn_Click);
+            // 
             // FileOpenDialog
             // 
             this.AcceptButton = this.OpenBtn;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.CancelButton = this.CancelBtn;
-            this.ClientSize = new System.Drawing.Size(2033, 1191);
+            this.ClientSize = new System.Drawing.Size(1525, 968);
+            this.Controls.Add(this.NewFolderBtn);
+            this.Controls.Add(this.DeleteBtn);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.PreviewRTB);
@@ -177,7 +207,6 @@
             this.Controls.Add(this.OpenBtn);
             this.Controls.Add(this.CancelBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "FileOpenDialog";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Load += new System.EventHandler(this.FileOpenForm_Load);
@@ -198,5 +227,7 @@
         private System.Windows.Forms.RichTextBox PreviewRTB;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button DeleteBtn;
+        private System.Windows.Forms.Button NewFolderBtn;
     }
 }

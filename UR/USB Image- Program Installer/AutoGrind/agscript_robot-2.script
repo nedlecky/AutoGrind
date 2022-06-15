@@ -714,7 +714,7 @@ def touchoff(approach_speed_mmps, retract_mm):
   while (True):
     local targetTcpDirection = get_target_tcp_speed()
     local stepsToRetract = tool_contact(direction = targetTcpDirection)
-    if (stepsToRetract > 0):
+    if (stepsToRetract > 0): # This means there was contact!
       # Contact! Stop the move
       imover_restart()
       local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
@@ -726,15 +726,13 @@ def touchoff(approach_speed_mmps, retract_mm):
         local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
-      draw_origin(retractTo)
-      draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
-      draw_to((p[0, 0, 0, 0, 0, 0]))
+      imovel_int(retractTo, a = grind_jog_accel_mmpss / 1000.0, v = grind_jog_speed_mmps / 1000.0)
+      draw_sync_current_dp(iget_actual_tcp_pose())
       return True
       break
     end
     sleep(1.0E-10)
-    if (imover_cmd == 0): # Done moving?
-      # No part encountered
+    if (imover_cmd == 0): # Done moving means no part was ever contacted
       return False
       break
     end
@@ -1402,7 +1400,7 @@ def unity_cyline_cal():
 end
 
 def default_cyline_cal(diam_mm):
-  local cyline_coeff_tables =
+  local cyline_coeff_tables = 
   [
     [0.900000, 0.620000, 0.750000, 0.860000, 0.940000, 1.020000, 1.100000, 1.150000, 1.200000, 1.239652, 1.270302, 1.294257, 1.312201, 1.324502, 1.340405, 1.346328, 1.349003, 1.348860, 1.345110, 1.338750, 1.329420, 1.318790, 1.304780, 1.290500, 1.273380, 1.255610, 1.236670, 1.215670, 1.193510, 1.161530, 1.138460, 1.115000, 1.090770, 1.065390, 1.039610, 1.013460],
     [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770],
@@ -1526,6 +1524,11 @@ def draw_origin(p):
   global draw_current_dp = p[0, 0, 0, 0, 0, 0]
 end
 
+# Recalculate draw_current_dp to be at p
+def draw_sync_current_dp(p):
+  global draw_current_dp = pose_trans(pose_inv(draw_p_origin), p)
+end
+
 def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp0 = abs(dp[0] - draw_current_dp[0])
   global draw_current_ddp1 = abs(dp[1] - draw_current_dp[1])
@@ -1534,12 +1537,12 @@ def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
 
   # If you're asking for any Z moves, we assume this is a linear move
-  local z_move_only =
+  local z_move_only = 
   (
-    draw_current_ddp0 < 0.001 and 
-    draw_current_ddp1 < 0.001 and 
-    draw_current_ddp2 > 0.001 and 
-    draw_current_ddp3 < 0.009 and 
+    draw_current_ddp0 < 0.001 and
+    draw_current_ddp1 < 0.001 and
+    draw_current_ddp2 > 0.001 and
+    draw_current_ddp3 < 0.009 and
     draw_current_ddp4 < 0.009
   )
 
@@ -1586,6 +1589,7 @@ def draw_to(dp, r = -1, wait = True):
     # Apply calibrated corrections
     global process_a = process_a * process_correctionfactor
     global process_v = process_v * process_correctionfactor
+    global process_r = process_r * process_correctionfactor
   else:
     # Unknown shape!
     return p[0, 0, 0, 0, 0, 0]
@@ -1607,17 +1611,13 @@ def draw_to(dp, r = -1, wait = True):
 
   # Let's go!
   local p = pose_trans(draw_p_origin, dp)
-  #socket_send_pose("imovel_p_center", p_contact_center)
-  #socket_send_pose("imovel_p", p)
-  #socket_send_pose("imovel_dp", dp)
-  #socket_send_pose("imovel_get", get_actual_tcp_pose())
   imovel_int(p, a = process_a, v = process_v, r = process_r, wait = wait)
   if ok_to_proceed():
     global draw_current_dp = dp
   else:
     # We got interrupted!
     # Figure out what dp we wound up at after the stop
-    global draw_current_dp = pose_trans(pose_inv(draw_p_origin), iget_actual_tcp_pose())
+    draw_sync_current_dp(iget_actual_tcp_pose())
   end
 
   return p
@@ -1631,6 +1631,39 @@ def draw_relative(dp, r = 0, wait = True):
   local dpdest = pose_add(draw_current_dp, dp)
   return draw_to(dpdest, r, wait)
 end
+
+# Geometry Independent Versions
+# Pass in dc=[dX,dY,dZ]
+def drawgi_finish(dc):
+  return drawgi_to(dc, r = 0)
+end
+
+def drawgi_to(dc, r = -1, wait = True):
+  local dp = p[0, 0, 0, 0, 0, 0]
+
+  local shape = robot_part_geometry[0]
+  if shape == 1: # FLAT
+    dp[0] = dc[0]
+    dp[1] = dc[1]
+  elif shape == 2: # CYLINDER
+    local cylinder_radius_m = robot_part_geometry[1] / 1000.0 / 2.0
+    local rx = dc[1] / cylinder_radius_m
+    dp[0] = dc[0]
+    dp[3] = rx
+  elif shape == 3: # SPHERE
+    local sphere_radius_m = robot_part_geometry[1] / 1000.0 / 2.0
+    local rx = dc[0] / sphere_radius_m
+    local ry = dc[1] / sphere_radius_m
+    dp[3] = rx
+    dp[4] = ry
+  end
+
+  # Keep an Z motion as-is
+  dp[2] = dc[2]
+
+  return draw_to(dp, r = r, wait = wait)
+end
+
 #
 # END DRAWING SYSTEM
 # ####################################################################################

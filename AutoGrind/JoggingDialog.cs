@@ -1,6 +1,6 @@
 ﻿// File: JoggingDialog.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: Jogging and Freedrive manual robot movement
 
 using Microsoft.Win32;

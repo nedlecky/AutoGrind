@@ -1,9 +1,0 @@
-redo:
-
-move_tool_home()
-sleep(1)
-
-move_tool_mount()
-sleep(1)
-
-jump(redo)

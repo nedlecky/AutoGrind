@@ -1,6 +1,6 @@
 # 56 Spiral Pattern Test
 
-#clear()
+clear()
 cycles=1
 speed=10
 force=3
@@ -9,6 +9,8 @@ cmd1 = grind_spiral(100,50,{n_turns},{cycles},{speed},{force}
 cmd2 = grind_spiral(10,50,{n_turns},{cycles},{speed},{force}
 
 move_joint(demo_safe)
+
+jump(cylinder)
 
 flat:
 move_linear(demo_flat)

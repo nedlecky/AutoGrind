@@ -1,6 +1,6 @@
 ﻿// File: TcpClientSupport.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: Implements a TcpClient, used to attached to the UR Dashboard
 
 using System;

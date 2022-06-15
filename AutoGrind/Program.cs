@@ -1,6 +1,6 @@
 ﻿// File: Program.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: The main rouutine (unmodified from default) for AutoGrind
 
 using System;

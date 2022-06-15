@@ -1,6 +1,6 @@
 ﻿// File: SplashForm.cs
 // Project: AutoGrind
-// Author: Ned Lecky, Olympus Controls
+// Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: Implements the splash screen (also used as the About dialog)
 
 using System;
