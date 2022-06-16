@@ -118,7 +118,7 @@ namespace AutoGrind
                     ZminusBtn.Text = "UP";
                     YplusBtn.Text = "LEFT";
                     YminusBtn.Text = "RIGHT";
-                    XplusBtn.Text = "FORE";
+                    XplusBtn.Text = "FWD";
                     XminusBtn.Text = "BACK";
                     break;
                 case "TOOL":
@@ -132,7 +132,7 @@ namespace AutoGrind
                     ZminusBtn.Text = "OUT";
                     YplusBtn.Text = "LEFT";
                     YminusBtn.Text = "RIGHT";
-                    XplusBtn.Text = "FORE";
+                    XplusBtn.Text = "FWD";
                     XminusBtn.Text = "BACK";
                     break;
                 case "PART":
@@ -141,7 +141,7 @@ namespace AutoGrind
                     ZminusBtn.Text = "OUT";
                     YplusBtn.Text = "LEFT";
                     YminusBtn.Text = "RIGHT";
-                    XplusBtn.Text = "FORE";
+                    XplusBtn.Text = "FWD";
                     XminusBtn.Text = "BACK";
                     if (Part.StartsWith("SPHERE"))
                     {
