@@ -1,0 +1,122 @@
+# 37 Small Rect Test
+
+clear()
+x_max = 20
+y_max = 20
+count = 1
+speed = 5
+force = 3
+continue = 0 
+
+offset_x = 0
+offset_y = 0
+
+move_joint(demo_safe)
+
+flat:
+set_part_geometry(FLAT,0)
+move_linear(demo_flat)
+move_relative({offset_x},{offset_y})
+x = {x_max}
+y = {y_max}
+
+loopf1:
+x -= 2
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loopf1)
+
+move_linear(demo_flat)
+move_relative({offset_x},{offset_y})
+move_relative(20,0)
+x = {x_max}
+y = {y_max}
+
+loopf2:
+x -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loopf2)
+
+move_linear(demo_flat)
+move_relative({offset_x},{offset_y})
+move_relative(0,20)
+x = {x_max}
+y = {y_max}
+
+loopf3:
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(y,loopf3)
+
+move_linear(demo_safe)
+
+cylinder:
+set_part_geometry(CYLINDER,1200)
+move_linear(demo_cyl)
+move_relative({offset_x},{offset_y})
+x = {x_max}
+y = {y_max}
+
+loopc1:
+x -= 2
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loopc1)
+
+move_linear(demo_cyl)
+move_relative({offset_x},{offset_y})
+move_relative(20,0)
+x = {x_max}
+y = {y_max}
+
+loopc2:
+x -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loopc2)
+
+move_linear(demo_cyl)
+move_relative({offset_x},{offset_y})
+move_relative(0,20)
+x = {x_max}
+y = {y_max}
+
+loopc3:
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(y,loopc3)
+
+sphere:
+set_part_geometry(SPHERE,1200)
+move_linear(demo_sphere)
+move_relative({offset_x},{offset_y})
+x = {x_max}
+y = {y_max}
+
+loops1:
+x -= 2
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loops1)
+
+move_linear(demo_sphere)
+move_relative({offset_x},{offset_y})
+move_relative(20,0)
+x = {x_max}
+y = {y_max}
+
+loops2:
+x -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(x,loops2)
+
+move_linear(demo_sphere)
+move_relative({offset_x},{offset_y})
+move_relative(0,20)
+x = {x_max}
+y = {y_max}
+
+loops3:
+y -= 2
+grind_rect({x},{y},{count},{speed},{force},{continue})
+jump_gt_zero(y,loops3)
+

@@ -60,37 +60,45 @@ namespace AutoGrind
             FreedriveGrp.Enabled = false;
             ClickJogGrp.Enabled = true;
 
-            LoadJogPersistent();
+            LoadPersistent();
         }
         private void JoggingDialog_FormClosing(object sender, FormClosingEventArgs e)
         {
-            SaveJogPersistent();
+            SavePersistent();
         }
-        void SaveJogPersistent()
+        private RegistryKey MyRegistryKey()
         {
-            log.Debug("SaveJogPersistent()");
-
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
-            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind_jog");
-
-            AppNameKey.SetValue("XyJogDistanceBox.SelectedIndex", XyJogDistanceBox.SelectedIndex);
-            AppNameKey.SetValue("ZJogDistanceBox.SelectedIndex", ZJogDistanceBox.SelectedIndex);
-            AppNameKey.SetValue("AngleBox.SelectedIndex", AngleBox.SelectedIndex);
-            AppNameKey.SetValue("CoordBox.SelectedIndex", CoordBox.SelectedIndex);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+            RegistryKey FormNameKey = AppNameKey.CreateSubKey("JoggingDialog");
+            return FormNameKey;
         }
-        void LoadJogPersistent()
+
+        void SavePersistent()
         {
-            // Pull setup info from registry.... these are overwritten on exit or with various config save operations
-            // Note default values are specified here as well
-            log.Debug("LoadJogPersistent()");
+            RegistryKey FormNameKey = MyRegistryKey();
 
-            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
-            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind_jog");
+            FormNameKey.SetValue("Left", Left);
+            FormNameKey.SetValue("Top", Top);
+            FormNameKey.SetValue("Width", Width);
+            FormNameKey.SetValue("Height", Width);
 
-            XyJogDistanceBox.SelectedIndex = (int)AppNameKey.GetValue("XyJogDistanceBox.SelectedIndex", 2);
-            ZJogDistanceBox.SelectedIndex = (int)AppNameKey.GetValue("ZJogDistanceBox.SelectedIndex", 1);
-            AngleBox.SelectedIndex = (int)AppNameKey.GetValue("AngleBox.SelectedIndex", 2);
-            CoordBox.SelectedIndex = (int)AppNameKey.GetValue("CoordBox.SelectedIndex", 0);
+            FormNameKey.SetValue("XyJogDistanceBox.SelectedIndex", XyJogDistanceBox.SelectedIndex);
+            FormNameKey.SetValue("ZJogDistanceBox.SelectedIndex", ZJogDistanceBox.SelectedIndex);
+            FormNameKey.SetValue("AngleBox.SelectedIndex", AngleBox.SelectedIndex);
+            FormNameKey.SetValue("CoordBox.SelectedIndex", CoordBox.SelectedIndex);
+        }
+        void LoadPersistent()
+        {
+            RegistryKey FormNameKey = MyRegistryKey();
+
+            Left = (Int32)FormNameKey.GetValue("Left", (MainForm.screenDesignWidth - Width) / 2);
+            Top = (Int32)FormNameKey.GetValue("Top", (MainForm.screenDesignHeight - Height) / 2);
+
+            XyJogDistanceBox.SelectedIndex = (int)FormNameKey.GetValue("XyJogDistanceBox.SelectedIndex", 2);
+            ZJogDistanceBox.SelectedIndex = (int)FormNameKey.GetValue("ZJogDistanceBox.SelectedIndex", 1);
+            AngleBox.SelectedIndex = (int)FormNameKey.GetValue("AngleBox.SelectedIndex", 2);
+            CoordBox.SelectedIndex = (int)FormNameKey.GetValue("CoordBox.SelectedIndex", 0);
         }
 
         // Enable/Hide buttons based on type of jog
@@ -106,6 +114,12 @@ namespace AutoGrind
                     FreeRxChk.Checked = true;
                     FreeRyChk.Checked = true;
                     FreeRzChk.Checked = true;
+                    ZplusBtn.Text = "DOWN";
+                    ZminusBtn.Text = "UP";
+                    YplusBtn.Text = "LEFT";
+                    YminusBtn.Text = "RIGHT";
+                    XplusBtn.Text = "FORE";
+                    XminusBtn.Text = "BACK";
                     break;
                 case "TOOL":
                     FreeXChk.Checked = true;
@@ -114,9 +128,21 @@ namespace AutoGrind
                     FreeRxChk.Checked = true;
                     FreeRyChk.Checked = true;
                     FreeRzChk.Checked = true;
+                    ZplusBtn.Text = "IN";
+                    ZminusBtn.Text = "OUT";
+                    YplusBtn.Text = "LEFT";
+                    YminusBtn.Text = "RIGHT";
+                    XplusBtn.Text = "FORE";
+                    XminusBtn.Text = "BACK";
                     break;
                 case "PART":
                     log.Info("PART: {0}", Part);
+                    ZplusBtn.Text = "IN";
+                    ZminusBtn.Text = "OUT";
+                    YplusBtn.Text = "LEFT";
+                    YminusBtn.Text = "RIGHT";
+                    XplusBtn.Text = "FORE";
+                    XminusBtn.Text = "BACK";
                     if (Part.StartsWith("SPHERE"))
                     {
                         FreeXChk.Checked = false;
@@ -207,12 +233,17 @@ namespace AutoGrind
             log.Info("MouseUp");
             continueTask = false;
         }
+        // Return 1 for Base Coordinates Selected, else -1
+        private double BaseSign()
+        {
+            return CoordBox.Text == "BASE" ? 1 : -1;
+        }
 
         private void ZplusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             log.Info("ZplusBtn_MouseDown");
             double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, distance / 1000.0, 0, 0, 0 };
+            double[] p = new double[] { 0, 0, distance / 1000.0 * -BaseSign(), 0, 0, 0 };
             Jog(p);
             Repeater();
         }
@@ -221,7 +252,7 @@ namespace AutoGrind
         {
             log.Info("ZminusBtn_MouseDown");
             double distance = Convert.ToDouble(ZJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { 0, 0, -distance / 1000.0, 0, 0, 0 };
+            double[] p = new double[] { 0, 0, -distance / 1000.0 * -BaseSign(), 0, 0, 0 };
             Jog(p);
             Repeater();
         }
@@ -229,7 +260,7 @@ namespace AutoGrind
         private void XplusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { distance / 1000.0, 0, 0, 0, 0, 0 };
+            double[] p = new double[] { distance / 1000.0 * -BaseSign(), 0, 0, 0, 0, 0 };
             Jog(p);
             Repeater();
         }
@@ -237,7 +268,7 @@ namespace AutoGrind
         private void XminusBtn_MouseDown(object sender, MouseEventArgs e)
         {
             double distance = Convert.ToDouble(XyJogDistanceBox.SelectedItem.ToString());
-            double[] p = new double[] { -distance / 1000.0, 0, 0, 0, 0, 0 };
+            double[] p = new double[] { -distance / 1000.0 * -BaseSign(), 0, 0, 0, 0, 0 };
             Jog(p);
             Repeater();
         }
@@ -307,7 +338,10 @@ namespace AutoGrind
 
         private void ALignButton_Click(object sender, EventArgs e)
         {
+            //mainForm.RobotSend(string.Format("18,0,{0},0", Deg2Rad(180)));
             mainForm.RobotSend(string.Format("18,0,{0},0", Deg2Rad(180)));
+            //mainForm.RobotSend("16,3,0");
+            //mainForm.RobotSend($"16,4,{Deg2Rad(180)}");
         }
 
         [DllImport("user32.dll")]
@@ -414,5 +448,6 @@ namespace AutoGrind
             FreeRyChk.Checked = true;
             FreeRzChk.Checked = true;
         }
+
     }
 }

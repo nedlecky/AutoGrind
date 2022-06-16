@@ -334,6 +334,7 @@
             this.Name = "SetValueForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Set Value";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.SetValueForm_FormClosing);
             this.Load += new System.EventHandler(this.SetValueForm_Load);
             this.ResumeLayout(false);
             this.PerformLayout();

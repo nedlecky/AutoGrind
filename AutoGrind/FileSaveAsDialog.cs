@@ -118,7 +118,7 @@ namespace AutoGrind
             MessageDialog messageForm = new MessageDialog()
             {
                 Title = "System Confirmation",
-                Label = "Create new folder?",
+                Label = $"Create new folder in\n{DirectoryNameLbl.Text}?",
                 OkText = "&Yes",
                 CancelText = "&No",
                 IsTypeIn = true,
@@ -159,7 +159,7 @@ namespace AutoGrind
                     LoadFiles(DirectoryNameLbl.Text);
                 }
             }
-            // Delete a fdirectory?
+            // Delete a directory?
             else if (DirectoryListBox.SelectedIndex >= 0)
             {
                 if (DirectoryListBox.SelectedItem.ToString() != "..") // Don't delete your parent directory!

@@ -28,6 +28,101 @@ namespace AutoGrind
             InitializeComponent();
         }
 
+        private void DirectorySelectDialog_Load(object sender, EventArgs e)
+        {
+            TitleLbl.Text = Title;
+            LoadDirectory(SelectedPath);
+        }
+
+        // **********************************************************************************************
+        // DirectoryListBox Methods
+        // **********************************************************************************************
+
+        private void DirectoryListBox_Click(object sender, EventArgs e)
+        {
+            //DirectoryNameLbl.Text = directoryList[DirectoryListBox.SelectedIndex];
+        }
+
+        private void DirectoryListBox_DoubleClick(object sender, EventArgs e)
+        {
+            if (DirectoryListBox.SelectedIndex >= 0)
+            {
+                SelectedPath = directoryList[DirectoryListBox.SelectedIndex];
+                LoadDirectory(SelectedPath);
+            }
+        }
+
+        // **********************************************************************************************
+        // Button Methods
+        // **********************************************************************************************
+
+        private void SelectBtn_Click(object sender, EventArgs e)
+        {
+            SelectedPath = DirectoryNameLbl.Text;
+            log.Debug("SelectBtn_Click(...) SelectedPath={0}", SelectedPath);
+            DialogResult = DialogResult.OK;
+        }
+        private void CancelBtn_Click(object sender, EventArgs e)
+        {
+            SelectedPath = "";
+            log.Debug("CancelBtn_Click(...)");
+            DialogResult = DialogResult.Cancel;
+        }
+
+
+        private void DeleteBtn_Click(object sender, EventArgs e)
+        {
+            log.Debug("DeleteBtn_Click(...)");
+
+            // Delete a directory?
+            if (DirectoryListBox.SelectedIndex >= 0)
+            {
+                if (DirectoryListBox.SelectedItem.ToString() != "..") // Don't delete your parent directory!
+                {
+                    string deleteDirectory = Path.Combine(DirectoryNameLbl.Text, DirectoryListBox.SelectedItem.ToString());
+                    MessageDialog messageForm = new MessageDialog()
+                    {
+                        Title = "System Confirmation",
+                        Label = $"Delete DIRECTORY AND CONTENTS\n{deleteDirectory}",
+                        OkText = "&Yes",
+                        CancelText = "&No"
+                    };
+                    DialogResult result = messageForm.ShowDialog();
+                    if (result == DialogResult.OK)
+                    {
+                        Directory.Delete(deleteDirectory, true);
+                        log.Info("Deleted directory {0}", deleteDirectory);
+                        LoadDirectory(DirectoryNameLbl.Text);
+                    }
+                }
+            }
+        }
+        private void NewFolderBtn_Click(object sender, EventArgs e)
+        {
+            MessageDialog messageForm = new MessageDialog()
+            {
+                Title = "System Confirmation",
+                Label = $"Create new folder in\n{DirectoryNameLbl.Text}?",
+                OkText = "&Yes",
+                CancelText = "&No",
+                IsTypeIn = true,
+                TypeInLabel = "New Folder:",
+                TypeInText = ""
+            };
+            DialogResult result = messageForm.ShowDialog();
+            if (result == DialogResult.OK)
+            {
+                string createDirectory = Path.Combine(DirectoryNameLbl.Text, messageForm.TypeInText);
+                Directory.CreateDirectory(createDirectory);
+                log.Info("Folder Created: {0}", createDirectory);
+                LoadDirectory(DirectoryNameLbl.Text);
+            }
+        }
+
+        // **********************************************************************************************
+        // Support Functions
+        // **********************************************************************************************
+
         private void LoadDirectory(string path)
         {
             string[] subDirectoryList;
@@ -56,37 +151,7 @@ namespace AutoGrind
                 DirectoryListBox.Items.Add(Path.GetFileName(directory));
                 directoryList.Add(directory);
             }
-
-            SelectedDirectoryLbl.Text = path;
+            DirectoryNameLbl.Text = path;
         }
-        private void AgDirectorySelectDialog_Load(object sender, EventArgs e)
-        {
-            TitleLbl.Text = Title;
-            LoadDirectory(SelectedPath);
-        }
-        private void DirectoryListBox_Click(object sender, EventArgs e)
-        {
-            SelectedDirectoryLbl.Text = directoryList[DirectoryListBox.SelectedIndex];
-        }
-
-        private void DirectoryListBox_DoubleClick(object sender, EventArgs e)
-        {
-            SelectedPath = directoryList[DirectoryListBox.SelectedIndex];
-            LoadDirectory(SelectedPath);
-        }
-        private void SelectBtn_Click(object sender, EventArgs e)
-        {
-            SelectedPath = SelectedDirectoryLbl.Text;
-            log.Debug("SelectBtn_Click(...) SelectedPath={0}", SelectedPath);
-            DialogResult = DialogResult.OK;
-
-        }
-        private void CancelBtn_Click(object sender, EventArgs e)
-        {
-            SelectedPath = "";
-            log.Debug("CancelBtn_Click(...)");
-            DialogResult = DialogResult.Cancel;
-        }
-
     }
 }

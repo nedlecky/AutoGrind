@@ -45,13 +45,13 @@ namespace AutoGrind
 
         private void MessageDialog_Load(object sender, EventArgs e)
         {
+            LoadPersistent();
             Text = Title;
             label1.Text = Label;
             OkBtn.Text = OkText;
             CancelBtn.Text = CancelText;
             result = DialogResult.None;
             OkBtn.Select();
-            LoadPersistent();
 
             // Setup for type in
             if (IsTypeIn)
@@ -109,11 +109,18 @@ namespace AutoGrind
                 result = DialogResult.Cancel;
         }
 
-        private void SavePersistent()
+        private RegistryKey MyRegistryKey()
         {
             RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
             RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
             RegistryKey FormNameKey = AppNameKey.CreateSubKey("MessageDialog");
+
+            return FormNameKey;
+        }
+
+        private void SavePersistent()
+        {
+            RegistryKey FormNameKey = MyRegistryKey();
 
             FormNameKey.SetValue("Left", Left);
             FormNameKey.SetValue("Top", Top);
@@ -122,13 +129,10 @@ namespace AutoGrind
         }
         private void LoadPersistent()
         {
-            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
-            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
-            RegistryKey FormNameKey = AppNameKey.CreateSubKey("MessageDialog");
+            RegistryKey FormNameKey = MyRegistryKey();
 
-            Left = (Int32)FormNameKey.GetValue("Left", 0);
-            Top = (Int32)FormNameKey.GetValue("Top", 0);
+            Left = (Int32)FormNameKey.GetValue("Left", (MainForm.screenDesignWidth - Width) / 2);
+            Top = (Int32)FormNameKey.GetValue("Top", (MainForm.screenDesignHeight - Height) / 2);
         }
-
     }
 }

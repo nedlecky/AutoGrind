@@ -3,8 +3,8 @@
 # All should take ~2s
 
 clear()
-count=1
-speed=2
+count=3
+speed=10
 force=5
 #grind_trial_speed({speed})
 

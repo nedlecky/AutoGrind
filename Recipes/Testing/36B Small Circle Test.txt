@@ -1,0 +1,25 @@
+# 36B Small Circle Special
+
+clear()
+diam = 9
+count = 1
+speed = 5
+force = 3
+continue = 0
+
+offset_x = 25
+offset_y = -25
+
+set_part_geometry(CYLINDER,1200)
+move_linear(demo_safe)
+move_linear(demo_cyl)
+move_relative({offset_x},{offset_y})
+move_relative({offset_x},0)
+
+d = {diam}
+
+loopc:
+d -= 1
+grind_circle({d},{count},{speed},{force},{continue})
+move_relative(10,0)
+jump_gt_zero(d,loopc)

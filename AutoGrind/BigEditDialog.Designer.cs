@@ -47,7 +47,7 @@
             this.KeepBtn.Name = "KeepBtn";
             this.KeepBtn.Size = new System.Drawing.Size(247, 164);
             this.KeepBtn.TabIndex = 8;
-            this.KeepBtn.Text = "&Keep";
+            this.KeepBtn.Text = "&Keep\r\nEdits";
             this.KeepBtn.UseVisualStyleBackColor = false;
             this.KeepBtn.Click += new System.EventHandler(this.KeepBtn_Click);
             // 
@@ -95,7 +95,7 @@
             this.ReloadBtn.Name = "ReloadBtn";
             this.ReloadBtn.Size = new System.Drawing.Size(247, 164);
             this.ReloadBtn.TabIndex = 11;
-            this.ReloadBtn.Text = "&Reload";
+            this.ReloadBtn.Text = "&Abandon\r\nEdits";
             this.ReloadBtn.UseVisualStyleBackColor = false;
             this.ReloadBtn.Click += new System.EventHandler(this.ReloadBtn_Click);
             // 

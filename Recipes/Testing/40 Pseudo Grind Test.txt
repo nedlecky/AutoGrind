@@ -1,6 +1,7 @@
 # 40 Pseudo Grind Test
 # Test all the patterns on all the geometries
 # Can be run on a flat table area to test force control
+prompt(abc)
 
 clear()
 size1=40

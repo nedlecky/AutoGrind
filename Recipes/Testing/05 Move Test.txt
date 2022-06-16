@@ -27,24 +27,34 @@ save_position(p1)
 save_position() # should fail
 move_linear(p1)
 
+relative_test:
 # Test move relative with different geometries
 dist = 25
+move_joint(demo_flat)
 set_part_geometry(FLAT,0)
 move_relative(26,{dist}) # should fail
-move_relative({dist},{dist})
-move_relative({dist},-{dist})
-move_relative(-{dist},{dist})
+move_relative({dist},0)
+move_relative(-{dist},0)
+move_relative(0,{dist})
+move_relative(0,-{dist})
 move_relative(-{dist},-{dist})
+move_relative({dist},{dist})
+
 set_part_geometry(CYLINDER,1000)
-move_relative({dist},{dist})
-move_relative({dist},-{dist})
-move_relative(-{dist},{dist})
+move_relative({dist},0)
+move_relative(-{dist},0)
+move_relative(0,{dist})
+move_relative(0,-{dist})
 move_relative(-{dist},-{dist})
+move_relative({dist},{dist})
+
 set_part_geometry(SPHERE,1200)
-move_relative({dist},{dist})
-move_relative({dist},-{dist})
-move_relative(-{dist},{dist})
+move_relative({dist},0)
+move_relative(-{dist},0)
+move_relative(0,{dist})
+move_relative(0,-{dist})
 move_relative(-{dist},-{dist})
+move_relative({dist},{dist})
 sleep(2)
 
 move_tool_home()

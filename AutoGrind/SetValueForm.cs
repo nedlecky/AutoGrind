@@ -3,6 +3,7 @@
 // Author: Ned Lecky, Lecky Engineering LLC
 // Purpose: A numeric data entry window for use with touch screen (or keyboard)
 
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -35,6 +36,7 @@ namespace AutoGrind
         }
         private void SetValueForm_Load(object sender, EventArgs e)
         {
+            LoadPersistent();
             LabelLbl.Text = "ENTER\n" + Label;
             MakeValueOutString();
             ValueTxt.Text = ValueOutString;
@@ -56,6 +58,10 @@ namespace AutoGrind
 
             ValueTxt.Select();
             ValueTxt.SelectAll();
+        }
+        private void SetValueForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            SavePersistent();
         }
 
         private void MakeValueOutString()
@@ -104,9 +110,9 @@ namespace AutoGrind
                     MakeValueOutString();
                     this.DialogResult = DialogResult.OK;
                     if (IsPassword)
-                        log.Info("Setting {0} = ********", Label);
+                        log.Debug("SetValueForm: Setting {0} = ********", Label);
                     else
-                        log.Info("Setting {0} = {1}", Label, Value);
+                        log.Debug("SetValueForm: Setting {0} = {1}", Label, Value);
                     Close();
                 }
             }
@@ -146,6 +152,26 @@ namespace AutoGrind
             if (val == "<<")
                 val = "\b";
             SendKeys.Send(val);
+        }
+        private void SavePersistent()
+        {
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+            RegistryKey FormNameKey = AppNameKey.CreateSubKey("SetValueForm");
+
+            FormNameKey.SetValue("Left", Left);
+            FormNameKey.SetValue("Top", Top);
+            FormNameKey.SetValue("Width", Width);
+            FormNameKey.SetValue("Height", Width);
+        }
+        private void LoadPersistent()
+        {
+            RegistryKey SoftwareKey = Registry.CurrentUser.OpenSubKey("Software", true);
+            RegistryKey AppNameKey = SoftwareKey.CreateSubKey("AutoGrind");
+            RegistryKey FormNameKey = AppNameKey.CreateSubKey("SetValueForm");
+
+            Left = (Int32)FormNameKey.GetValue("Left", (MainForm.screenDesignWidth - Width) / 2);
+            Top = (Int32)FormNameKey.GetValue("Top", (MainForm.screenDesignHeight - Height) / 2);
         }
     }
 }

@@ -57,61 +57,56 @@ def limiter(param, loLim, hiLim):
 end
 
 # Send LF out the socket
-def socket_send_lf():
-  socket_send_byte(10)
-end
+#def socket_send_lf():
+#  socket_send_byte(10)
+#end
 
 # Send "SET name ivalue" out the socket. Assumes ints
 # Built-in function does this!
-def socket_send_integer(name, ivalue):
-  socket_set_var(name, ivalue)
-end
+#def socket_send_integer(name, ivalue):
+#  socket_set_var(name, ivalue)
+#end
 
 # Send "name=value" out the socket. Works on ints or floats
-def socket_send_num(name, value):
-  enter_critical
-  socket_send_string(name + "=")
-  socket_send_line(value)
-  exit_critical
+def socket_send_number(name, value):
+  local string = name + "=" + to_str(value)
+  socket_send_line(string)
 end
 
 # Send "name=True" or "name=False" out the socket based on f
 def socket_send_bool(name, f):
-  enter_critical
-  socket_send_string(name + "=")
+  local string = name
   if (f):
-    socket_send_line("True")
+    local string = string + "=True"
   else:
-    socket_send_line("False")
+    local string = string + "=False"
   end
-  exit_critical
+  socket_send_line(string)
 end
 
 # Send name=[   ] out the secket for vector with length
 def socket_send_vector(name, vector, length, is_pose = False):
-  enter_critical
-  socket_send_string(name + "=")
+  local string = name + "="
   if is_pose:
-    socket_send_string("p")
+    local string = string + "p"
   end
-  socket_send_vector_only(vector, length)
-  socket_send_lf()
-  exit_critical
+  local string = string + vector_string(vector, length)
+  socket_send_line(string)
 end
 
-
-# Send n-vectors back to socket as [n,n,n,n,n,n]
-def socket_send_vector_only(p, n = 6):
-  socket_send_string("[")
+# Return n-vectors back as string [n,n,n,n,n,n]
+def vector_string(p, n = 6):
+  local string = "["
   i = 0
   while i < n:
     if i > 0:
-      socket_send_string(",")
+      local string = string + ","
     end
-    socket_send_string(p[i])
+    local string = string + to_str(p[i])
     i = i + 1
   end
-  socket_send_string("]")
+  local string = string + "]"
+  return string
 end
 
 # Return a 6-element vector to socket as a pose name=p[.....]

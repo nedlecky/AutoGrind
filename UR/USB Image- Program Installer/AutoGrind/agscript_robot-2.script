@@ -81,7 +81,7 @@ def command_start():
 
   # This one signifies we're starting a new command!
   global robot_starting = robot_index
-  socket_send_integer("robot_starting", robot_starting)
+  socket_send_number("robot_starting", robot_starting)
   socket_send_bool("robot_ready", False)
 end
 
@@ -91,7 +91,7 @@ def command_finish():
   socket_send_line(retval)
 
   global robot_completed = robot_index
-  socket_send_integer("robot_completed", robot_completed)
+  socket_send_number("robot_completed", robot_completed)
 end
 
 # Set variable interface. Interprets command[2] to select what to set and returns result to socket
@@ -103,7 +103,7 @@ def set_variable():
     if s > 0:
       robot_linear_speed_mps = ceil(s) / 1000.0
     end
-    socket_send_integer("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
+    socket_send_number("robot_linear_speed_mmps", robot_linear_speed_mps * 1000.0)
     global response = "set_linear_speed()"
   elif command[2] == 2:
     # Set accel to a if a>0. Always returns current value
@@ -111,7 +111,7 @@ def set_variable():
     if a > 0:
       robot_linear_accel_mpss = ceil(a) / 1000.0
     end
-    socket_send_integer("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
+    socket_send_number("robot_linear_accel_mmpss", robot_linear_accel_mpss * 1000.0)
     global response = "set_linear_accel()"
   elif command[2] == 3:
     # Set blend to b if b>=0. Always returns current value
@@ -119,8 +119,8 @@ def set_variable():
     if b >= 0:
       robot_blend_radius_m = b / 1000.0
     end
-    # No socket_send_integer since we allow to 0.1mm!
-    socket_send_num("robot_blend_radius_mm", robot_blend_radius_m * 1000.0)
+    # No socket_send_number since we allow to 0.1mm!
+    socket_send_number("robot_blend_radius_mm", robot_blend_radius_m * 1000.0)
     global response = "set_blend_radius()"
   elif command[2] == 4:
     # Set joint speed to s if s>0. Always returns current value
@@ -128,7 +128,7 @@ def set_variable():
     if s > 0:
       robot_joint_speed_rps = d2r(ceil(s))
     end
-    socket_send_integer("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
+    socket_send_number("robot_joint_speed_dps", r2d(robot_joint_speed_rps))
     global response = "set_joint_speed()"
   elif command[2] == 5:
     # Set joint accel to a if a>0. Always returns current value
@@ -136,7 +136,7 @@ def set_variable():
     if a > 0:
       robot_joint_accel_rpss = d2r(ceil(a))
     end
-    socket_send_integer("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
+    socket_send_number("robot_joint_accel_dpss", r2d(robot_joint_accel_rpss))
     global response = "set_joint_accel()"
   elif command[2] == 6:
     # Set part_geometry to [shape, diameter_mm] if shape==1,2,3. Always returns "robot_part_geometry=[current geometry]"
@@ -206,7 +206,7 @@ def set_variable():
       end_freedrive_mode()
       iset_tcp(robot_tcp)
       robot_freedrive_mode = 0
-      socket_send_integer("robot_freedrive_mode", robot_freedrive_mode)
+      socket_send_number("robot_freedrive_mode", robot_freedrive_mode)
     else:
       local coordSys = command[4]
       local freeAxes = [command[5], command[6], command[7], command[8], command[9], command[10]]
@@ -221,7 +221,7 @@ def set_variable():
         freedrive_mode(freeAxes = freeAxes)
       end
       robot_freedrive_mode = 1
-      socket_send_integer("robot_freedrive_mode", robot_freedrive_mode)
+      socket_send_number("robot_freedrive_mode", robot_freedrive_mode)
     end
     global response = "freedrive_mode()"
   elif command[2] == 20:
@@ -241,7 +241,7 @@ def set_variable():
       robot_payload_cog_m = [command[4], command[5], command[6]]
       iset_payload(robot_payload_mass_kg, robot_payload_cog_m)
     end
-    socket_send_num("robot_payload_mass_kg", robot_payload_mass_kg)
+    socket_send_number("robot_payload_mass_kg", robot_payload_mass_kg)
     socket_send_vector("robot_payload_cog_m", robot_payload_cog_m, 3)
     global response = "set_payload()"
   elif command[2] == 22:
@@ -286,19 +286,19 @@ def set_variable():
     # set_cyline_training_weight
     local weight = limiter(command[3], 1, 100)
     set_cyline_training_weight(weight)
-    socket_send_num("cyline_training_weight", cyline_training_weight)
+    socket_send_number("cyline_training_weight", cyline_training_weight)
     global response = "set_cyline_training_weight()"
   elif command[2] == 46:
     # set_cyline_expected_time
     local t = limiter(command[3], 1, 1000)
     set_cyline_expected_time(t)
-    socket_send_num("cyline_expected_time", cyline_expected_time)
+    socket_send_number("cyline_expected_time", cyline_expected_time)
     global response = "cyline_expected_time()"
   elif command[2] == 47:
     # set_cyline_deadband_time
     local t = limiter(command[3], 0, 100)
     set_cyline_deadband_time(t)
-    socket_send_num("cyline_deadband_time", cyline_deadband_time)
+    socket_send_number("cyline_deadband_time", cyline_deadband_time)
     global response = "set_cyline_deadband_time()"
   elif command[2] == 48:
     # new_cyline_cycle
@@ -378,16 +378,22 @@ end
 
 # Command 15: Movel relatively in TCP_part coordinates
 def movel_relative_tcp_part(p1):
-  set_tcp(robot_tcp_part)
-  local p2 = pose_trans(get_target_tcp_pose(), p1)
   start_listen_halt_thread()
-  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
-    imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
-  else:
-    imovel_int(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
-  end
+  iset_tcp(robot_tcp_part)
+
+  speed_setter(robot_linear_speed_mps*1000.0)
+  draw_origin(get_target_tcp_pose())
+  drawgi_finish(p1)
+
+  #  local p2 = pose_trans(get_target_tcp_pose(), p1)
+  #  if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
+  #    imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
+  #  else:
+  #    imovel_int(p2, robot_linear_accel_mpss, robot_linear_speed_mps)
+  #  end
+
   stop_listen_halt_thread()
-  set_tcp(robot_tcp)
+  iset_tcp(robot_tcp)
   global response = "movel_relative_tcp_part()"
 end
 
@@ -406,13 +412,23 @@ def movel_one_only(index = 0, val = 0):
 end
 
 # Command 18: Change only rotation elements of current pose and movel there
-def movel_rot_only(r1 = 0, r2 = 0, r3 = 0):
-  local p = iget_target_tcp_pose()
-  p[3] = r1
-  p[4] = r2
-  p[5] = r3
+# Angles set to 999 are ignored!
+def movel_rot_only(r1 = 999, r2 = 999, r3 = 999):
+  local p1 = iget_target_tcp_pose()
+  if r1 != 999:
+    p1[3] = r1
+  end
+  if r2 != 999:
+    p1[4] = r2
+  end
+  if r3 != 999:
+    p1[5] = r3
+  end
+
+  local p2 = p1#pose_trans(pose_inv(get_target_tcp_pose()), p1)
+
   start_listen_halt_thread()
-  imovel_int(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
+  imovel_int(p2, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
   stop_listen_halt_thread()
   global response = "movel_rot_only()"
 end
@@ -578,10 +594,10 @@ end
 def set_ok_to_proceed(ok):
   if ok:
     global halt_count = 0
-    socket_send_integer("halt_count", halt_count)
+    socket_send_number("halt_count", halt_count)
   else:
     global halt_count = 99
-    socket_send_integer("halt_count", halt_count)
+    socket_send_number("halt_count", halt_count)
   end
 end
 
@@ -592,7 +608,7 @@ thread listen_halt_thread():
   global grind_force_readings_n = 5
   global grind_force_readings = [0., 0., 0., 0., 0.]
 
-  socket_send_integer("halt_count", halt_count)
+  socket_send_number("halt_count", halt_count)
 
   # Initialize force readings array
   local i = 0
@@ -612,13 +628,13 @@ thread listen_halt_thread():
     # If door is open, that adds a halt count (anything >0 will stop us!)
     if not is_door_closed():
       global halt_count = halt_count + 1
-      socket_send_integer("halt_count", halt_count)
+      socket_send_number("halt_count", halt_count)
     end
 
     # If we've received anything we should halt!
     if halt_command[0] > 0:
       global halt_count = halt_count + 1
-      socket_send_integer("halt_count", halt_count)
+      socket_send_number("halt_count", halt_count)
     end
 
     # Increment reading counter (10000 is high enough... don't need to worry about wraparound effects)
@@ -630,7 +646,6 @@ thread listen_halt_thread():
     # Store force in circular buffer
     local force = get_tcp_force()
     grind_force_readings[grind_force_report_counter % grind_force_readings_n] = force[2]
-
     # Report force periodically (This executes at 5Hz because of timeout=0.2 in socket_read_ascii_float(...)
     if grind_force_report_counter % 5 == 0:
       # Compute average of the stored readings
@@ -646,8 +661,9 @@ thread listen_halt_thread():
       # Round to 2 DP
       global grind_force_report_z_n = ceil(grind_force_average_z_n * 100) / 100
 
-      socket_send_num("grind_force_report_z_n", grind_force_report_z_n)
+      socket_send_number("grind_force_report_z_n", grind_force_report_z_n)
     end
+    sync()
   end
   return None
 end
@@ -1114,9 +1130,9 @@ thread imover_thread():
   global imover_cmd = 0
   while True:
     if imover_cmd == imover_MOVEL:
-      #socket_send_num("imover_a-thread", imover_a)
-      #socket_send_num("imover_v-thread", imover_v)
-      #socket_send_num("imover_r-thread", imover_r)
+      #socket_send_number("imover_a-thread", imover_a)
+      #socket_send_number("imover_v-thread", imover_v)
+      #socket_send_number("imover_r-thread", imover_r)
       movel(imover_p, a = imover_a, v = imover_v, t = imover_t, r = imover_r)
       global imover_cmd = 0
     elif imover_cmd == imover_MOVEJ:
@@ -1232,7 +1248,7 @@ def zero_user_timers():
 end
 
 def return_user_timers():
-  socket_send_num("user_time_latest", user_time_latest)
+  socket_send_number("user_time_latest", user_time_latest)
   socket_send_vector("user_timers", user_timers, user_timer_size)
 end
 
@@ -1347,7 +1363,7 @@ def enable_cyline_cal(f = False):
     return_cyline_cal()
   else:
     global cyline_cal_enabled = False
-    socket_send_num("cyline_cal_enabled", cyline_cal_enabled)
+    socket_send_number("cyline_cal_enabled", cyline_cal_enabled)
   end
 end
 
@@ -1445,18 +1461,18 @@ def default_cyline_cal(diam_mm):
 end
 
 def return_cyline_cal():
-  socket_send_num("cyline_cal_enabled", cyline_cal_enabled)
-  socket_send_num("cyline_coeff_table_size", cyline_coeff_table_size)
-  socket_send_num("cyline_coeff_table_index", cyline_coeff_table_index)
-  socket_send_num("cyline_correction_size", cyline_correction_size)
-  socket_send_num("cyline_expected_time", cyline_expected_time)
-  socket_send_num("cyline_training_weight", cyline_training_weight)
-  socket_send_num("cyline_max_e", cyline_max_e)
-  socket_send_num("cyline_max_e_angle", cyline_max_e_angle)
-  socket_send_num("cyline_min_e", cyline_min_e)
-  socket_send_num("cyline_min_e_angle", cyline_min_e_angle)
-  socket_send_num("cyline_deadband_time", cyline_deadband_time)
-  socket_send_num("cyline_degree_slice", cyline_degree_slice)
+  socket_send_number("cyline_cal_enabled", cyline_cal_enabled)
+  socket_send_number("cyline_coeff_table_size", cyline_coeff_table_size)
+  socket_send_number("cyline_coeff_table_index", cyline_coeff_table_index)
+  socket_send_number("cyline_correction_size", cyline_correction_size)
+  socket_send_number("cyline_expected_time", cyline_expected_time)
+  socket_send_number("cyline_training_weight", cyline_training_weight)
+  socket_send_number("cyline_max_e", cyline_max_e)
+  socket_send_number("cyline_max_e_angle", cyline_max_e_angle)
+  socket_send_number("cyline_min_e", cyline_min_e)
+  socket_send_number("cyline_min_e_angle", cyline_min_e_angle)
+  socket_send_number("cyline_deadband_time", cyline_deadband_time)
+  socket_send_number("cyline_degree_slice", cyline_degree_slice)
 
   socket_send_vector("cal_timers", cal_timers, cal_timer_size)
   socket_send_vector("cyline_correction", cyline_correction, cyline_correction_size)
@@ -1521,7 +1537,7 @@ end
 
 def draw_origin(p):
   global draw_p_origin = p
-  global draw_current_dp = p[0, 0, 0, 0, 0, 0]
+  global draw_current_dp = p[0,0,0,0,0,0]
 end
 
 # Recalculate draw_current_dp to be at p
@@ -1633,12 +1649,7 @@ def draw_relative(dp, r = 0, wait = True):
 end
 
 # Geometry Independent Versions
-# Pass in dc=[dX,dY,dZ]
-def drawgi_finish(dc):
-  return drawgi_to(dc, r = 0)
-end
-
-def drawgi_to(dc, r = -1, wait = True):
+def draw_geometry_compensate(dc):
   local dp = p[0, 0, 0, 0, 0, 0]
 
   local shape = robot_part_geometry[0]
@@ -1654,14 +1665,25 @@ def drawgi_to(dc, r = -1, wait = True):
     local sphere_radius_m = robot_part_geometry[1] / 1000.0 / 2.0
     local rx = dc[0] / sphere_radius_m
     local ry = dc[1] / sphere_radius_m
-    dp[3] = rx
-    dp[4] = ry
+    # Axis swapping here keeps orientation of X,Y same: [+towards operator, +towards left]
+    dp[3] = ry
+    dp[4] = -rx
   end
 
-  # Keep an Z motion as-is
+  # Keep any Z motion as-is
   dp[2] = dc[2]
 
-  return draw_to(dp, r = r, wait = wait)
+  return dp
+end
+
+global drawgi_dp = p[0, 0, 0, 0, 0, 0]
+def drawgi_to(dc, r = -1, wait = True):
+  global drawgi_dp = draw_geometry_compensate(dc)
+  return draw_to(drawgi_dp, r, wait)
+end
+
+def drawgi_finish(dc):
+  return drawgi_to(dc, r = 0)
 end
 
 #

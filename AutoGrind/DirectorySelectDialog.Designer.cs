@@ -32,7 +32,9 @@
             this.DirectoryListBox = new System.Windows.Forms.ListBox();
             this.SelectBtn = new System.Windows.Forms.Button();
             this.CancelBtn = new System.Windows.Forms.Button();
-            this.SelectedDirectoryLbl = new System.Windows.Forms.Label();
+            this.DirectoryNameLbl = new System.Windows.Forms.Label();
+            this.NewFolderBtn = new System.Windows.Forms.Button();
+            this.DeleteBtn = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // TitleLbl
@@ -62,7 +64,7 @@
             this.SelectBtn.BackColor = System.Drawing.Color.Green;
             this.SelectBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.SelectBtn.ForeColor = System.Drawing.Color.White;
-            this.SelectBtn.Location = new System.Drawing.Point(378, 869);
+            this.SelectBtn.Location = new System.Drawing.Point(792, 907);
             this.SelectBtn.Margin = new System.Windows.Forms.Padding(2);
             this.SelectBtn.Name = "SelectBtn";
             this.SelectBtn.Size = new System.Drawing.Size(228, 131);
@@ -77,7 +79,7 @@
             this.CancelBtn.DialogResult = System.Windows.Forms.DialogResult.Cancel;
             this.CancelBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.CancelBtn.ForeColor = System.Drawing.Color.White;
-            this.CancelBtn.Location = new System.Drawing.Point(660, 869);
+            this.CancelBtn.Location = new System.Drawing.Point(1039, 907);
             this.CancelBtn.Margin = new System.Windows.Forms.Padding(2);
             this.CancelBtn.Name = "CancelBtn";
             this.CancelBtn.Size = new System.Drawing.Size(228, 131);
@@ -86,29 +88,59 @@
             this.CancelBtn.UseVisualStyleBackColor = false;
             this.CancelBtn.Click += new System.EventHandler(this.CancelBtn_Click);
             // 
-            // SelectedDirectoryLbl
+            // DirectoryNameLbl
             // 
-            this.SelectedDirectoryLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.SelectedDirectoryLbl.Location = new System.Drawing.Point(22, 733);
-            this.SelectedDirectoryLbl.Name = "SelectedDirectoryLbl";
-            this.SelectedDirectoryLbl.Size = new System.Drawing.Size(1245, 112);
-            this.SelectedDirectoryLbl.TabIndex = 91;
-            this.SelectedDirectoryLbl.Text = "SelectedDirectoryLbl";
-            this.SelectedDirectoryLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.DirectoryNameLbl.Font = new System.Drawing.Font("Microsoft Sans Serif", 24F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DirectoryNameLbl.Location = new System.Drawing.Point(22, 733);
+            this.DirectoryNameLbl.Name = "DirectoryNameLbl";
+            this.DirectoryNameLbl.Size = new System.Drawing.Size(1245, 112);
+            this.DirectoryNameLbl.TabIndex = 91;
+            this.DirectoryNameLbl.Text = "DirectoryNameLbl";
+            this.DirectoryNameLbl.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
-            // AgDirectorySelectDialog
+            // NewFolderBtn
+            // 
+            this.NewFolderBtn.BackColor = System.Drawing.Color.Green;
+            this.NewFolderBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.NewFolderBtn.ForeColor = System.Drawing.Color.White;
+            this.NewFolderBtn.Location = new System.Drawing.Point(22, 907);
+            this.NewFolderBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.NewFolderBtn.Name = "NewFolderBtn";
+            this.NewFolderBtn.Size = new System.Drawing.Size(338, 131);
+            this.NewFolderBtn.TabIndex = 93;
+            this.NewFolderBtn.Text = "&New Folder";
+            this.NewFolderBtn.UseVisualStyleBackColor = false;
+            this.NewFolderBtn.Click += new System.EventHandler(this.NewFolderBtn_Click);
+            // 
+            // DeleteBtn
+            // 
+            this.DeleteBtn.BackColor = System.Drawing.Color.Green;
+            this.DeleteBtn.Font = new System.Drawing.Font("Microsoft Sans Serif", 36F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.DeleteBtn.ForeColor = System.Drawing.Color.White;
+            this.DeleteBtn.Location = new System.Drawing.Point(373, 907);
+            this.DeleteBtn.Margin = new System.Windows.Forms.Padding(2);
+            this.DeleteBtn.Name = "DeleteBtn";
+            this.DeleteBtn.Size = new System.Drawing.Size(228, 131);
+            this.DeleteBtn.TabIndex = 92;
+            this.DeleteBtn.Text = "&Delete";
+            this.DeleteBtn.UseVisualStyleBackColor = false;
+            this.DeleteBtn.Click += new System.EventHandler(this.DeleteBtn_Click);
+            // 
+            // DirectorySelectDialog
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1279, 1049);
-            this.Controls.Add(this.SelectedDirectoryLbl);
+            this.Controls.Add(this.NewFolderBtn);
+            this.Controls.Add(this.DeleteBtn);
+            this.Controls.Add(this.DirectoryNameLbl);
             this.Controls.Add(this.TitleLbl);
             this.Controls.Add(this.DirectoryListBox);
             this.Controls.Add(this.SelectBtn);
             this.Controls.Add(this.CancelBtn);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Name = "AgDirectorySelectDialog";
-            this.Load += new System.EventHandler(this.AgDirectorySelectDialog_Load);
+            this.Name = "DirectorySelectDialog";
+            this.Load += new System.EventHandler(this.DirectorySelectDialog_Load);
             this.ResumeLayout(false);
 
         }
@@ -118,6 +150,8 @@
         private System.Windows.Forms.ListBox DirectoryListBox;
         private System.Windows.Forms.Button SelectBtn;
         private System.Windows.Forms.Button CancelBtn;
-        private System.Windows.Forms.Label SelectedDirectoryLbl;
+        private System.Windows.Forms.Label DirectoryNameLbl;
+        private System.Windows.Forms.Button NewFolderBtn;
+        private System.Windows.Forms.Button DeleteBtn;
     }
 }
