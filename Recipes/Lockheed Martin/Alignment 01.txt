@@ -1,0 +1,25 @@
+# Alignment 01
+# 4x9 Grid
+
+#select_tool(Gocator)
+set_part_geometry(CYLINDER, 1000)
+
+move_linear(cylinder_zero)
+
+n_rows = 9
+n_cols = 4
+
+row = {n_rows}
+row_loop:
+
+
+col = {n_cols}
+col_loop:
+move_relative(0,25)
+
+col--
+jump_gt_zero(col, col_loop)
+
+move_relative(25,-100)
+row--
+jump_gt_zero(row, row_loop)
