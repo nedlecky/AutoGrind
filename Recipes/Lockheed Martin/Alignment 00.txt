@@ -1,9 +1,0 @@
-# Alignment 00
-# 1 hole
-
-#select_tool(Gocator)
-set_part_geometry(CYLINDER, 1000)
-
-move_linear(cylinder_zero)
-end
-move_relative(0,100)
