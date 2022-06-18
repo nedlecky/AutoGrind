@@ -196,13 +196,13 @@ namespace AutoGrind
             switch (CoordBox.Text)
             {
                 case "BASE":
-                    lastJogCommand = "13";
+                    lastJogCommand = "1,13";
                     break;
                 case "TOOL":
-                    lastJogCommand = "14";
+                    lastJogCommand = "1,14";
                     break;
                 case "PART":
-                    lastJogCommand = "15";
+                    lastJogCommand = "1,15";
                     break;
             }
 
@@ -338,10 +338,10 @@ namespace AutoGrind
 
         private void ALignButton_Click(object sender, EventArgs e)
         {
-            //mainForm.RobotSend(string.Format("18,0,{0},0", Deg2Rad(180)));
-            mainForm.RobotSend(string.Format("18,0,{0},0", Deg2Rad(180)));
-            //mainForm.RobotSend("16,3,0");
-            //mainForm.RobotSend($"16,4,{Deg2Rad(180)}");
+            //mainForm.RobotSend(string.Format("1,18,0,{0},0", Deg2Rad(180)));
+            mainForm.RobotSend(string.Format("1,18,0,{0},0", Deg2Rad(180)));
+            //mainForm.RobotSend("1,16,3,0");
+            //mainForm.RobotSend($"1,16,4,{Deg2Rad(180)}");
         }
 
         [DllImport("user32.dll")]

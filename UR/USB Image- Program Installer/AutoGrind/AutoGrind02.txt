@@ -23,28 +23,8 @@
        command_start()
        Set Stacklight=On
        Switch command[1]
-         Case 10
-           return_actual_tcp_pose()
-         Case 12
-           return_tcp_offset()
-         Case 13
-           movel_relative_base(p[command[2], command[3], command[4], command[5], command[6], command[7]])
-         Case 14
-           movel_relative_tcp(p[command[2], command[3], command[4], command[5], command[6], command[7]])
-         Case 15
-           movel_relative_tcp_part(p[command[2], command[3], command[4], command[5], command[6], command[7]])
-         Case 16
-           movel_one_only(command[2],command[3])
-         Case 18
-           movel_rot_only(command[2],command[3],command[4])
-         Case 20
-           return_get_actual_joint_positions()
-         Case 21
-           movej_ag([command[2], command[3], command[4], command[5], command[6], command[7]])
-         Case 22
-           movel_ag(p[command[2], command[3], command[4], command[5], command[6], command[7]])
-         Case 25
-           return_both_positions()
+         Case 1
+           move_interface()
          Case 30
            set_variable()
          Case 35

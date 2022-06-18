@@ -94,6 +94,35 @@ def command_finish():
   socket_send_number("robot_completed", robot_completed)
 end
 
+# Move Interface
+def move_interface():
+  if command[2] == 10:
+    return_actual_tcp_pose()
+  elif command[2] == 12:
+    return_tcp_offset()
+  elif command[2] == 13:
+    movel_relative_base(p[command[3], command[4], command[5], command[6], command[7], command[8]])
+  elif command[2] == 14:
+    movel_relative_tcp(p[command[3], command[4], command[5], command[6], command[7], command[8]])
+  elif command[2] == 15:
+    movel_relative_tcp_part(p[command[3], command[4], command[5], command[6], command[7], command[8]])
+  elif command[2] == 16:
+    movel_one_only(command[3], command[4])
+  elif command[2] == 18:
+    movel_rot_only(command[3], command[4], command[5])
+  elif command[2] == 20:
+    return_get_actual_joint_positions()
+  elif command[2] == 21:
+    movej_ag([command[3], command[4], command[5], command[6], command[7], command[8]])
+  elif command[2] == 22:
+    movel_ag(p[command[3], command[4], command[5], command[6], command[7], command[8]])
+  elif command[2] == 25:
+    return_both_positions()
+  else:
+    global response = "set_variable ERROR"
+  end
+end
+
 # Set variable interface. Interprets command[2] to select what to set and returns result to socket
 # Can also be used for validation and enforcing limits
 def set_variable():
