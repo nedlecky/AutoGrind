@@ -3,7 +3,7 @@
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
 
-global grind_version = "Rev 2 2022-06-20"
+global grind_version = "Rev 2 2022-06-14"
 
 
 global grind_ready = True
@@ -343,29 +343,17 @@ def contact_part(on = False, enable = 0):
     if enable == 0:
       # Just do a small forward motion in the direction of touchoff- this is a simulated p_contact_init
       draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
-      global p_contact_init = draw_relative(p[0, 0, 0.005, 0, 0, 0])
+      p_contact_init = draw_relative(p[0, 0, 0.005, 0, 0, 0])
     elif enable == 1:
-      if grind_force_N > 0:
-        # Advance until contact but retract 2X grind distance and use this as a simulated p_contact_init
-        local success = itouchoff(grind_touch_speed_mmps, grind_touch_retract_mm * 2.0)
-        global p_contact_init = iget_actual_tcp_pose()
-      else:
-        # No Touchoff: p_contact_init is just assumed to be where you are!
-        global p_contact_init = iget_actual_tcp_pose()
-        local success = True
-      end
+      # Advance until contact but retract 2X grind distance and use this as a simulated p_contact_init
+      local success = itouchoff(grind_touch_speed_mmps, grind_touch_retract_mm * 2.0)
+      global p_contact_init = iget_actual_tcp_pose()
       return success
     elif enable == 2:
-      if grind_force_N > 0:
-        # Advance until contact
-        local success = itouchoff(grind_touch_speed_mmps, grind_touch_retract_mm)
-        # Touchoff has backed off by grind_touch_retract_mm so we need to compute that actual p_contact_init
-        global p_contact_init = pose_trans(iget_actual_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
-      else:
-        # No Touchoff: p_contact_init is just assumed to be right in front of you!
-        global p_contact_init = pose_trans(iget_actual_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
-        local success = True
-      end
+      # Advance until contact
+      local success = itouchoff(grind_touch_speed_mmps, grind_touch_retract_mm)
+      # Touchoff has backed off by grind_touch_retract_mm so we need to compute that actual p_contact_init
+      global p_contact_init = pose_trans(iget_actual_tcp_pose(), p[0, 0, grind_touch_retract_mm / 1000.0, 0, 0, 0])
       return success
     end
   else:  # Back away
@@ -431,16 +419,8 @@ def apply_force(on = False, enable = 0, force_n = 5, approach_speed_mmps = 10):
 
   if on:
     izero_ftsensor()
-    if force_n > 0:
-      # Standard force mode
-      iforce_mode(force_n, approach_speed_mmps)
-      sleep(grind_force_dwell_ms / 1000.0)
-    else:
-      # Move straight to previously estimated p_contact_init (grind_retract_mm ahead of you)
-      draw_speed_once(grind_touch_speed_mmps, grind_jog_accel_mmpss)
-      draw_relative(p[0, 0, 0, 0, 0, 0])
-      global imover_force_N = 0
-    end
+    iforce_mode(force_n, approach_speed_mmps)
+    sleep(grind_force_dwell_ms / 1000.0)
   else:
     iend_force_mode()
     sleep(0.1)
@@ -494,10 +474,12 @@ def set_grind_process_state(on = False, coord_to_center = p[0, 0, 0, 0, 0, 0]):
     # All remaining grind moves will be relative to this computed center point
     draw_origin(p_contact_center)
 
+    # Should already be here? (Should be using the speeds set by the grind() command)
+    drawgi_finish(coord_to_center)
+
     # Now power everything on (although these will do nothing unless contact_enable==2)
     tool_power(True, grind_contact_enable)
     coolant_flow(True, grind_contact_enable)
-    drawgi_finish(coord_to_center)
     apply_force(True, grind_contact_enable, grind_force_N, grind_touch_speed_mmps)
 
     if not ok_to_proceed():
@@ -539,16 +521,9 @@ def set_grind_process_state(on = False, coord_to_center = p[0, 0, 0, 0, 0, 0]):
         return False
       end
 
-      if grind_force_N > 0:
-        # Switching to force>0
-        izero_ftsensor()
-        iforce_mode(grind_force_N, grind_touch_speed_mmps)
-        sleep(grind_force_dwell_ms / 1000.0)
-      else:
-        # Switching to force=0
-        draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
-        draw_relative(p[0, 0, 0.004, 0, 0, 0])
-      end
+      izero_ftsensor()
+      iforce_mode(grind_force_N, grind_touch_speed_mmps)
+      sleep(grind_force_dwell_ms / 1000.0)
     end
     return True
   elif not on and grind_process_state:
