@@ -2410,8 +2410,8 @@ namespace AutoGrind
                         double y_mm = Convert.ToDouble(p[1]);
                         if (Math.Abs(x_mm) > DEFAULT_max_allowable_relative_move_mm || Math.Abs(y_mm) > DEFAULT_max_allowable_relative_move_mm)
                             ExecError($"X and Y must be no more than +/{DEFAULT_max_allowable_relative_move_mm}mm\nline {lineNumber}: {origLine}");
-                        // Command 1,15 uses drawgi_finish(p) so all geometry correction should be automatic
-                        RobotSend($"1,15,{x_mm / 1000.0},{y_mm / 1000.0},0,0,0,0");
+                        // Command 15 uses drawgi_finish(p) so all geometry correction should be automatic
+                        RobotSend($"15,{x_mm / 1000.0},{y_mm / 1000.0},0,0,0,0");
                     }
                     catch
                     {
@@ -2433,7 +2433,7 @@ namespace AutoGrind
                     return true;
                 }
                 copyPositionAtWrite = positionName;
-                RobotSend("1,25");
+                RobotSend("25");
                 return true;
             }
 
@@ -4280,7 +4280,7 @@ namespace AutoGrind
                 if (robotReady)
                 {
                     copyPositionAtWrite = varName;
-                    RobotSend("1,25");
+                    RobotSend("25");
                 }
 
             }
@@ -4293,7 +4293,7 @@ namespace AutoGrind
                 string q = ReadPositionJoint(varName);
                 if (q != null)
                 {
-                    string msg = "1,21," + ExtractScalars(q);
+                    string msg = "21," + ExtractScalars(q);
                     log.Trace("Sending {0}", msg);
                     RobotSend(msg);
                     return true;
@@ -4309,7 +4309,7 @@ namespace AutoGrind
                 string q = ReadPositionPose(varName);
                 if (q != null)
                 {
-                    string msg = "1,22," + ExtractScalars(q);
+                    string msg = "22," + ExtractScalars(q);
                     log.Trace("Sending {0}", msg);
                     RobotSend(msg);
                     return true;
