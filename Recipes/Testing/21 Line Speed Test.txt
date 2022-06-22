@@ -16,7 +16,7 @@ enable_user_timers(1)
 zero_user_timers()
 
 flat:
-move_joint(demo_safe)
+move_linear(demo_safe)
 move_linear(demo_flat)
 set_part_geometry(FLAT,0)
 {cmd1}

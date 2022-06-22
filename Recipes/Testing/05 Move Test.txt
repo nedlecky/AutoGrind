@@ -15,13 +15,12 @@ assert(grind_trial_speed_mmps,18)
 grind_trial_speed({old_speed})
 assert(grind_trial_speed_mmps,{old_speed})
 
-select_tool(pen_SA)
 set_part_geometry(FLAT,0)
 move_linear(demo_safe)
 move_linear(demo_safee) # should fail
 
-move_joint(demo_flat)
-move_joint(demo_flatt) # should fail
+move_linear(demo_flat)
+move_linear(demo_flatt) # should fail
 
 save_position(p1)
 save_position() # should fail
@@ -30,7 +29,7 @@ move_linear(p1)
 relative_test:
 # Test move relative with different geometries
 dist = 25
-move_joint(demo_flat)
+move_linear(demo_flat)
 set_part_geometry(FLAT,0)
 move_relative(26,{dist}) # should fail
 move_relative({dist},0)

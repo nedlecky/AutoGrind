@@ -7,10 +7,10 @@ speed = 5
 force = 3
 continue = 0
 
-offset_x = -20
-offset_y = 20
+offset_x = 0
+offset_y = 0
 
-move_joint(demo_safe)
+move_linear(demo_safe)
 
 flat:
 set_part_geometry(FLAT,0)
