@@ -139,7 +139,7 @@ namespace AutoGrind
             log.Info("================================================================");
 
             // Suggested root?
-            string suggestedRoot = Path.GetFullPath(Path.Combine(executionRoot, "../../../.."));
+            string suggestedRoot = Path.GetFullPath(Path.Combine(executionRoot, "../../.."));
             log.Info("Current root is {0}", AutoGrindRoot);
             log.Info("Suggested root is {0}", suggestedRoot);
 

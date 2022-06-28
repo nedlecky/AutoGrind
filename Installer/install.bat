@@ -1,7 +1,7 @@
 @echo off
 set filename=install.bat
 set title=AutoGrind Installer
-set version=2022-06-07
+set version=2022-06-28
 set description=Put latest development binaries, test recipes, and UR code into c:\AutoGrind
 
 echo.

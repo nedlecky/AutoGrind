@@ -1,7 +1,7 @@
 @echo off
 set filename=get_latest.bat
 set title=AutoGrind Get Latest
-set version=2022-06-07
+set version=2022-06-28
 set description=Pulls latest development binaries, recipes, and UR code into this directory
 
 echo.
@@ -25,9 +25,6 @@ if %choice%==y (
     rmdir /s /q Recipes
     rmdir /s /q UR
     robocopy %AutoGrindRoot%\AutoGrind\bin AutoGrind\bin /MIR
-    rem Just need the x64 subdirectory here
-    rmdir /s /q AutoGrind\bin\Debug
-    rmdir /s/ q AutoGrind\bin\Release
     robocopy %AutoGrindRoot%\Recipes Recipes /MIR
     robocopy %AutoGrindRoot%\UR UR /MIR
     echo.
