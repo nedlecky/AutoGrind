@@ -2,9 +2,7 @@
 # Project: AutoGrind
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
-
-global grind_version = "2022-06-22"
-
+global AGversion_grind = "agscript_grind-2 2022-06-22"
 
 global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force

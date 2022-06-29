@@ -364,7 +364,7 @@
             this.LoadRecipeBtn.Name = "LoadRecipeBtn";
             this.LoadRecipeBtn.Size = new System.Drawing.Size(663, 95);
             this.LoadRecipeBtn.TabIndex = 73;
-            this.LoadRecipeBtn.Text = "Load";
+            this.LoadRecipeBtn.Text = "Untitled";
             this.LoadRecipeBtn.UseVisualStyleBackColor = false;
             this.LoadRecipeBtn.Click += new System.EventHandler(this.LoadRecipeBtn_Click);
             // 

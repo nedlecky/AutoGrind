@@ -1519,6 +1519,7 @@ namespace AutoGrind
                 initialDirectory = Path.GetDirectoryName(RecipeFilenameLbl.Text);
             else
                 initialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
+
             FileOpenDialog dialog = new FileOpenDialog()
             {
                 Title = "Open an AutoGrind Recipe",
@@ -1555,14 +1556,11 @@ namespace AutoGrind
         {
             log.Info("SaveAsRecipeBtn_Click(...)");
 
-            // Default directory to save in
-            string initialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
-
-            // If we have a recipe loaded from some other folder, that should be the default directory
-            string recipeDirectoryName = Path.GetDirectoryName(RecipeFilenameLbl.Text);
-            if (recipeDirectoryName != "")
-                initialDirectory = recipeDirectoryName;
-
+            string initialDirectory;
+            if (RecipeFilenameLbl.Text != "Untitled" && RecipeFilenameLbl.Text.Length > 0)
+                initialDirectory = Path.GetDirectoryName(RecipeFilenameLbl.Text);
+            else
+                initialDirectory = Path.Combine(AutoGrindRoot, "Recipes");
 
             FileSaveAsDialog dialog = new FileSaveAsDialog()
             {

@@ -2,8 +2,7 @@
 # Project: AutoGrind
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
-
-global robot_version = "2022-06-22"
+global AGversion_robot = "agscript_robot-2 2022-06-22"
 
 global response = "unknown"
 global robot_index = 0
