@@ -8,6 +8,9 @@
 		},
 		{
 			"path": "Recipes"
+		},
+		{
+			"path": "..\\..\\Desktop"
 		}
 	],
 	"settings": {}

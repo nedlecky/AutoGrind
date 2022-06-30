@@ -2,7 +2,7 @@
 # Project: AutoGrind
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
-global AGversion_robot = "agscript_robot-2 2022-06-22"
+global AGversion_robot = "agscript_robot-2 2022-06-30"
 
 global response = "unknown"
 global robot_index = 0
@@ -682,7 +682,7 @@ def no_command():
 
   if grind_process_state and grind_ready and halt_grind:
     halt_grind = False
-    istopl(20)
+    istopl(robot_linear_accel_mpss, robot_joint_accel_rpss)
 
     iset_tcp(robot_tcp_part)
     set_grind_process_state(False)
@@ -789,18 +789,19 @@ imover_PING = 1
 imover_MOVEL = 2
 imover_MOVEJ = 3
 imover_STOPL = 4
-imover_ZEROFORCE = 5
-imover_STARTFORCE = 6
-imover_UPDATEFORCE = 7
-imover_ENDFORCE = 8
-imover_GETACTUALTCPPOSE = 9
-imover_GETACTUALJOINTPOSITIONS = 10
-imover_GETTARGETTCPPOSE = 11
-imover_GETTARGETJOINTPOSITIONS = 12
-imover_GETTCPOFFSET = 13
-imover_SETTCP = 14
-imover_SETPAYLOAD = 15
-imover_TOUCHOFF = 16
+imover_STOPJ = 5
+imover_ZEROFORCE = 6
+imover_STARTFORCE = 7
+imover_UPDATEFORCE = 8
+imover_ENDFORCE = 9
+imover_GETACTUALTCPPOSE = 10
+imover_GETACTUALJOINTPOSITIONS = 11
+imover_GETTARGETTCPPOSE = 12
+imover_GETTARGETJOINTPOSITIONS = 13
+imover_GETTCPOFFSET = 14
+imover_SETTCP = 15
+imover_SETPAYLOAD = 16
+imover_TOUCHOFF = 17
 
 def imover_realtime(f = False):
   if f and (not imover_realtime_enabled):
@@ -853,8 +854,10 @@ def imover_restart():
   global imover_restart_count = imover_restart_count + 1
 end
 
+global imover_wait_count = 0
 def imover_wait(terminate_not_ok = False):
   while imover_cmd > 0:
+    global imover_wait_count = imover_wait_count + 1
     if terminate_not_ok and not ok_to_proceed():
       return None
     end
@@ -891,6 +894,14 @@ def istopl(a, aRot = 999):
     else:
       stopl(a, aRot)
     end
+  end
+end
+
+def istopj(a):
+  if imover_realtime_enabled:
+    imover_cmd_exec(imover_STOPJ, a)
+  else:
+    stopj(a)
   end
 end
 
@@ -1114,7 +1125,7 @@ def imovej_int(q, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
       global imover_stopl_count = imover_stopl_count + 1
 
       sleep(0.1)
-      stopj(10)
+      istopj(robot_joint_accel_rpss)
       global imover_stopj_count = imover_stopj_count + 1
 
       # Restart the thread
@@ -1138,7 +1149,10 @@ thread imover_thread():
       movej(imover_q, imover_a, imover_v, imover_t, imover_r)
       global imover_cmd = 0
     elif imover_cmd == imover_STOPL:
-      stopl(grind_linear_vel_mps, grind_angular_vel_rps)
+      stopl(imover_param1, imover_param2)
+      global imover_cmd = 0
+    elif imover_cmd == imover_STOPJ:
+      stopj(imover_param1)
       global imover_cmd = 0
     elif imover_cmd == imover_ZEROFORCE:
       sleep(0.25)

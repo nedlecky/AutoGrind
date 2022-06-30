@@ -2,7 +2,7 @@
 # Project: AutoGrind
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: All grinding functions used in AutoGrind
-global AGversion_grind = "agscript_grind-2 2022-06-22"
+global AGversion_grind = "agscript_grind-2 2022-06-30"
 
 global grind_ready = True
 # grind_contact_enable:  0=No Contact   1=Touch but no tool/coolant on or force  2=Touch, Tool, Coolant, and Force
@@ -561,6 +561,7 @@ end
 
 def terminate_grind():
   set_ok_to_proceed(True)
+  imover_realtime(True)
 
   # Shut everything down and return to original pose
   apply_force(False, grind_contact_enable, 0)
@@ -568,8 +569,7 @@ def terminate_grind():
   coolant_flow(False, grind_contact_enable)
   tool_power(False, grind_contact_enable)
 
-  # Always end with a move back to with the imover realtime back running
-  imover_realtime(True)
+  # Always end with a move back to origin
   draw_speed_once(grind_jog_speed_mmps, grind_jog_accel_mmpss)
   draw_origin(p_operator_init)
   draw_sync_current_dp(iget_actual_tcp_pose())
