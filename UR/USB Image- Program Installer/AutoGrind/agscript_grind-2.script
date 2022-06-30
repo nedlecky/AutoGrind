@@ -561,7 +561,7 @@ end
 
 def terminate_grind():
   set_ok_to_proceed(True)
-  imover_realtime(True)
+  #imover_realtime(True)
 
   # Shut everything down and return to original pose
   apply_force(False, grind_contact_enable, 0)
@@ -595,12 +595,12 @@ def grind_line(dx_mm, dy_mm, n_cycles, stay_in_contact):
   local time_ms = sqrt(dx_mm * dx_mm + dy_mm * dy_mm) * n_cycles / grind_linear_vel_mps + 1500
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(True)
   if not set_grind_process_state(True, pattern_line(dx_m, dy_m, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(True)
   start_user_timer()
   pattern_line(dx_m, dy_m, n_cycles)
   stop_user_timer()
@@ -678,12 +678,12 @@ def grind_rect(dx_mm, dy_mm, n_cycles, stay_in_contact):
   time_ms = 2 * (dx_mm + dy_mm) * n_cycles / grind_linear_vel_mps + 1500
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(True)
   if not set_grind_process_state(True, pattern_rect(dx_m, dy_m, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(True)
   start_user_timer()
   pattern_rect(dx_m, dy_m, n_cycles)
   stop_user_timer()
@@ -823,12 +823,12 @@ def grind_serpentine(dx_mm, dy_mm, n_xsteps, n_ysteps, n_cycles, stay_in_contact
   end
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(True)
   if not set_grind_process_state(True, pattern_serpentine(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(True)
   start_user_timer()
   pattern_serpentine(dx_m, dy_m, n_xsteps, n_ysteps, n_cycles)
   stop_user_timer()
@@ -943,12 +943,12 @@ def grind_poly(circle_diam_mm, n_sides, n_cycles, stay_in_contact):
   local time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_linear_vel_mps + 1500
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(True)
   if not set_grind_process_state(True, pattern_poly(circle_diam_m, n_sides, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(True)
   start_user_timer()
   pattern_poly(circle_diam_m, n_sides, n_cycles)
   stop_user_timer()
@@ -1007,12 +1007,12 @@ def grind_circle(circle_diam_mm, n_cycles, stay_in_contact):
   local time_ms = MATH_PI * circle_diam_mm * n_cycles / grind_linear_vel_mps + 1500
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(False) # True seems to workl!?
   if not set_grind_process_state(True, pattern_circle(circle_diam_m, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(False) # True seems to workl!?
   start_user_timer()
   pattern_circle(circle_diam_m, n_cycles)
   stop_user_timer()
@@ -1081,12 +1081,12 @@ def grind_spiral(circle1_diam_mm, circle2_diam_mm, n_revolutions, n_cycles, stay
   local time_ms = MATH_PI * avg_diam_mm * n_revolutions * n_cycles / grind_linear_vel_mps + 1500
   socket_send_number("robot_step_time_estimate_ms", time_ms)
 
+  imover_realtime(False) # True fails!?
   if not set_grind_process_state(True, pattern_spiral(circle1_diam_m, circle2_diam_m, n_revolutions, n_cycles, True)):
     return False
   end
 
   # Grind the pattern
-  imover_realtime(False) # True fails!?
   start_user_timer()
   pattern_spiral(circle1_diam_m, circle2_diam_m, n_revolutions, n_cycles)
   stop_user_timer()
