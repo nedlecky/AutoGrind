@@ -352,6 +352,7 @@ end
 def movel_relative_base(p1):
   local p0 = get_target_tcp_pose()
   local p2 = pose_add(p0, p1)
+  imover_realtime(True)
   start_listen_halt_thread()
   if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
     imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
@@ -365,6 +366,7 @@ end
 # Command 14: Movel relatively in TCP coordinates
 def movel_relative_tcp(p1):
   local p2 = pose_trans(get_target_tcp_pose(), p1)
+  imover_realtime(True)
   start_listen_halt_thread()
   if p1[0] == 0 and p1[1] == 0 and p1[2] == 0:  # Rotational move
     imovel_int(p2, robot_joint_accel_rpss, robot_joint_speed_rps)
@@ -377,6 +379,7 @@ end
 
 # Command 15: Movel relatively in TCP_part coordinates
 def movel_relative_tcp_part(p1):
+  imover_realtime(True)
   start_listen_halt_thread()
   iset_tcp(robot_tcp_part)
 
@@ -400,6 +403,7 @@ end
 def movel_one_only(index = 0, val = 0):
   local p = iget_target_tcp_pose()
   p[index] = val
+  imover_realtime(True)
   start_listen_halt_thread()
   if index < 3:  # Translational
     imovel_int(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
@@ -426,6 +430,7 @@ def movel_rot_only(r1 = 999, r2 = 999, r3 = 999):
 
   local p2 = p1#pose_trans(pose_inv(get_target_tcp_pose()), p1)
 
+  imover_realtime(True)
   start_listen_halt_thread()
   imovel_int(p2, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
   stop_listen_halt_thread()
@@ -441,6 +446,7 @@ end
 
 # Command 21: Movej to position (works with joints or poses)
 def movej_ag(p):
+  imover_realtime(True)
   start_listen_halt_thread()
   imovej_int(p, a = robot_joint_accel_rpss, v = robot_joint_speed_rps)
   stop_listen_halt_thread()
@@ -449,6 +455,7 @@ end
 
 # Command 22: Movel to position (works with joints or poses)
 def movel_ag(p):
+  imover_realtime(True)
   start_listen_halt_thread()
   imovel_int(p, a = robot_linear_accel_mpss, v = robot_linear_speed_mps)
   stop_listen_halt_thread()
@@ -762,11 +769,14 @@ end
 # ####################################################################################
 # START IMOVER SYSTEM
 #
-global imover_realtime_enabled = True
+global imover_realtime_enabled = False
 global imover_restart_count = 0
 global imover_kill_count = 0
 global imover_stopl_count = 0
 global imover_stopj_count = 0
+global imover_thread_count = 0
+global imover_wait_count = 0
+
 global imover_p = p[0, 0, 0, 0, 0, 0]
 global imover_q = [0, 0, 0, 0, 0, 0]
 global imover_a = 1.2
@@ -808,7 +818,6 @@ def imover_realtime(f = False):
     # Turning on separate imover thread
     imover_realtime_enabled = True
     imover_restart()
-    #imover_state_alignment()    # Called by imover_restart()
   elif (not f) and imover_realtime_enabled:
     # Turning off separate imover thread
     imover_kill()
@@ -839,7 +848,7 @@ def imover_kill():
     imover_thread_handle = 0
     global imover_kill_count = imover_kill_count + 1
     sleep(0.05)
-    stopl(20)
+    stopl(robot_linear_accel_mpss, robot_joint_accel_rpss)
   end
 end
 
@@ -848,13 +857,13 @@ def imover_restart():
 
   global imover_cmd = 0
   global imover_thread_handle = run imover_thread()
+
   sleep(0.2)
   # Reload state (tcp, payload, force mode...)
   imover_state_alignment()
   global imover_restart_count = imover_restart_count + 1
 end
 
-global imover_wait_count = 0
 def imover_wait(terminate_not_ok = False):
   while imover_cmd > 0:
     global imover_wait_count = imover_wait_count + 1
@@ -1072,12 +1081,11 @@ def imovel_int(p, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
       imover_kill()
 
       # Had occasional move continuation.. added these as belt-and-suspenders!
-      sleep(0.1)
-      stopl(10)
+      stopl(robot_linear_accel_mpss, robot_joint_accel_rpss)
       global imover_stopl_count = imover_stopl_count + 1
 
       sleep(0.1)
-      stopj(0.01)
+      stopj(robot_joint_accel_rpss)
       global imover_stopj_count = imover_stopj_count + 1
 
       # Restart the thread
@@ -1120,12 +1128,7 @@ def imovej_int(q, a = 1.2, v = 0.25, t = 0, r = 0, wait = True):
       imover_kill()
 
       # Had occasional move continuation.. added these as belt-and-suspenders!
-      sleep(0.1)
-      stopl(10)
-      global imover_stopl_count = imover_stopl_count + 1
-
-      sleep(0.1)
-      istopj(robot_joint_accel_rpss)
+      stopj(robot_joint_accel_rpss)
       global imover_stopj_count = imover_stopj_count + 1
 
       # Restart the thread
@@ -1138,7 +1141,10 @@ end
 
 thread imover_thread():
   global imover_cmd = 0
+  global imover_wait_count = 0
+  global imover_thread_count = 0
   while True:
+    global imover_thread_count = imover_thread_count + 1
     if imover_cmd == imover_MOVEL:
       #socket_send_number("imover_a-thread", imover_a)
       #socket_send_number("imover_v-thread", imover_v)
@@ -1212,7 +1218,6 @@ thread imover_thread():
     sync()
   end
 end
-global imover_thread_handle = run imover_thread()
 #
 # END IMOVER SYSTEM
 # ####################################################################################
