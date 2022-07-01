@@ -6,7 +6,6 @@ speed = 20
 continue = 1
 
 set_part_geometry(FLAT,0)
-jump(serp)
 
 line:
 grind_line(20,0,1,{speed},10,{continue})

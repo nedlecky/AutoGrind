@@ -14,7 +14,7 @@ grind_retract()
 
 delays:
 # Now trip limits so we reset in between
-delay = 2
+delay = 1.55
 
 grind_rect(5,5,1,1,10,1)
 sleep({delay})

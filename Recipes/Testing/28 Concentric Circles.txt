@@ -7,9 +7,9 @@ speed=10
 force=3
 
 move_linear(demo_safe)
-move_linear(demo_flat)
-#move_relative(0,25)
-#move_relative(0,25)
+move_linear(demo_cyl)
+#move_linear(demo_sphere)
+move_relative(30,-35)
 
 # Old school
 grind_circle(60,{count},{speed},{force},1)

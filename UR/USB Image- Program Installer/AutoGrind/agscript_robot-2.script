@@ -2,7 +2,7 @@
 # Project: AutoGrind
 # Author: Ned Lecky, Lecky Engineering LLC
 # Purpose: Robot control commands supporting the AutoGrind application
-global AGversion_robot = "agscript_robot-2 2022-06-30"
+global AGversion_robot = "agscript_robot-2 2022-07-01"
 
 global response = "unknown"
 global robot_index = 0
@@ -714,31 +714,23 @@ def calculate_point_to_move_towards(feature, direction, position_distance):
   return pose_add(get_target_waypoint(), wanted_displacement_in_base_frame)
 end
 
-global move_thread_flag = 0
-global move_thread_approach_speed_mps = 0.01  # Set by touchoff(...)
-def move_nowait():
-  global move_thread_flag = 1
-  local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
-  imovel_int(towardsPos, a = 2.0, v = move_thread_approach_speed_mps, wait = False)
-  global move_thread_flag = 2
-end
-
 def touchoff(approach_speed_mmps, retract_mm):
-  #local approach_speed_mps = approach_speed_mmps / 1000.0
-  global move_thread_approach_speed_mps = approach_speed_mmps / 1000.0
-
+  local approach_speed_mps = approach_speed_mmps / 1000.0
   local retract_m = retract_mm / 1000.0
 
-  # Start non-blocking move: only works with imover_realtime!
-  imover_realtime(True)
-  move_nowait()
+  # NMake sure you are imover_realtime(True) before coming in here!
+  local towardsPos = calculate_point_to_move_towards(get_forward_kin(), [0.0, 0.0, 1.0], 0.025)
+  imovel_int(towardsPos, a = 2.0, v = approach_speed_mps, wait = False)
 
   while (True):
     local targetTcpDirection = get_target_tcp_speed()
     local stepsToRetract = tool_contact(direction = targetTcpDirection)
     if (stepsToRetract > 0): # This means there was contact!
       # Contact! Stop the move
-      imover_restart()
+      imover_kill()
+      stopl(1,1)
+      imover_realtime(False)
+
       local backTrackMovement = get_actual_joint_positions_history(stepsToRetract)
       local contactPose = get_forward_kin(backTrackMovement)
       local posDir = [targetTcpDirection[0], targetTcpDirection[1], targetTcpDirection[2]]
@@ -748,15 +740,13 @@ def touchoff(approach_speed_mmps, retract_mm):
         local additionalRetraction = p[normalizedPosDir[0] * retract_m, normalizedPosDir[1] * retract_m, normalizedPosDir[2] * retract_m, 0, 0, 0]
         retractTo = pose_sub(contactPose, additionalRetraction)
       end
-      imovel_int(retractTo, a = grind_jog_accel_mmpss / 1000.0, v = grind_jog_speed_mmps / 1000.0)
+      imovel(retractTo, a = grind_jog_accel_mmpss / 1000.0, v = grind_jog_speed_mmps / 1000.0)
       draw_sync_current_dp(iget_actual_tcp_pose())
       return True
-      break
     end
     sleep(1.0E-10)
     if (imover_cmd == 0): # Done moving means no part was ever contacted
       return False
-      break
     end
     sync()
   end
@@ -811,7 +801,6 @@ imover_GETTARGETJOINTPOSITIONS = 13
 imover_GETTCPOFFSET = 14
 imover_SETTCP = 15
 imover_SETPAYLOAD = 16
-imover_TOUCHOFF = 17
 
 def imover_realtime(f = False):
   if f and (not imover_realtime_enabled):
@@ -1053,14 +1042,16 @@ def iset_payload(mass, cog):
 end
 
 def itouchoff(speed_mmps, retract_mm):
-  if False: #imover_realtime_enabled:
-    imover_param1 = speed_mmps
-    imover_param2 = retract_mm
-    imover_cmd_exec(imover_TOUCHOFF)
-    return imover_ret_f
-  else:
-    return touchoff(speed_mmps, retract_mm)
-  end
+  # This doesn't run through our thread since it requires killng our thread!
+
+  # Ensure we can use imover_realtime for a non-blocking move!
+  local imover_realtime_enabled_ori = imover_realtime_enabled
+
+  imover_realtime(True)
+  local ret = touchoff(speed_mmps, retract_mm)
+  imover_realtime(imover_realtime_enabled_ori)
+
+  return ret
 end
 
 def imovel(p, a = 1.2, v = 0.25, t = 0, r = 0):
@@ -1216,9 +1207,6 @@ thread imover_thread():
       global imover_cmd = 0
     elif imover_cmd == imover_SETPAYLOAD:
       set_payload(imover_mass, imover_cog)
-      global imover_cmd = 0
-    elif imover_cmd == imover_TOUCHOFF:
-      global imover_ret_f = touchoff(imover_param1, imover_param2)
       global imover_cmd = 0
     elif imover_cmd == imover_PING:
       global imover_cmd = 0
@@ -1442,7 +1430,7 @@ def unity_cyline_cal():
 end
 
 def default_cyline_cal(diam_mm):
-  local cyline_coeff_tables = 
+  local cyline_coeff_tables =
   [
     [0.900000, 0.620000, 0.750000, 0.860000, 0.940000, 1.020000, 1.100000, 1.150000, 1.200000, 1.239652, 1.270302, 1.294257, 1.312201, 1.324502, 1.340405, 1.346328, 1.349003, 1.348860, 1.345110, 1.338750, 1.329420, 1.318790, 1.304780, 1.290500, 1.273380, 1.255610, 1.236670, 1.215670, 1.193510, 1.161530, 1.138460, 1.115000, 1.090770, 1.065390, 1.039610, 1.013460],
     [0.949231, 0.855854, 0.778371, 0.712231, 0.654475, 0.738294, 0.812746, 0.877131, 0.934615, 0.980769, 1.020000, 1.053850, 1.082690, 1.106920, 1.132510, 1.149510, 1.163540, 1.174430, 1.182170, 1.187260, 1.189520, 1.189970, 1.187580, 1.183710, 1.177460, 1.169730, 1.160450, 1.149180, 1.136370, 1.117690, 1.102690, 1.086540, 1.069230, 1.050770, 1.031150, 1.010770],
@@ -1579,12 +1567,12 @@ def draw_to(dp, r = -1, wait = True):
   global draw_current_ddp4 = abs(dp[4] - draw_current_dp[4])
 
   # If you're asking for any Z moves, we assume this is a linear move
-  local z_move_only = 
+  local z_move_only =
   (
-    draw_current_ddp0 < 0.001 and
-    draw_current_ddp1 < 0.001 and
-    draw_current_ddp2 > 0.001 and
-    draw_current_ddp3 < 0.009 and
+    draw_current_ddp0 < 0.001 and 
+    draw_current_ddp1 < 0.001 and 
+    draw_current_ddp2 > 0.001 and 
+    draw_current_ddp3 < 0.009 and 
     draw_current_ddp4 < 0.009
   )
 

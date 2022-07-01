@@ -7,9 +7,7 @@ speed=10
 force=3
 
 move_linear(demo_safe)
-move_linear(demo_flat)
-#move_relative(0,25)
-#move_relative(0,25)
+move_linear(demo_sphere)
 
 # Old school
 grind_rect(40,40,{count},{speed},{force},1)
@@ -17,9 +15,7 @@ grind_rect(30,30,{count},{speed},{force},1)
 grind_rect(20,20,{count},{speed},{force},1)
 grind_rect(10,10,{count},{speed},{force},0)
 
-#move_linear(demo_flat)
-#move_relative(0,25)
-#move_relative(0,25)
+#move_relative(0,50)
 
 # Use a loop
 size=35

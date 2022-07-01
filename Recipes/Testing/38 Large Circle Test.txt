@@ -26,7 +26,7 @@ jump_gt_zero(d,loopf)
 move_linear(demo_safe)
 
 cylinder:
-set_part_geometry(CYLINDER,1200)
+set_part_geometry(CYLINDER,762)
 move_linear(demo_cyl)
 move_relative({offset_x},{offset_y})
 d = {diam}
@@ -37,7 +37,7 @@ grind_circle({d},{count},{speed},{force},{continue})
 jump_gt_zero(d,loopc)
 
 sphere:
-set_part_geometry(SPHERE,1200)
+set_part_geometry(SPHERE,762)
 move_linear(demo_sphere)
 move_relative({offset_x},{offset_y})
 d = {diam}
